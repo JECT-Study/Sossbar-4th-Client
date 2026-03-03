@@ -93,4 +93,3 @@
     - `.next/**`, `out/**`, `build/**`, `next-env.d.ts`
   - TS 프로젝트 서비스와 충돌을 피하기 위한 설정 파일:
     - `eslint.config.mjs`, `postcss.config.mjs`
-
