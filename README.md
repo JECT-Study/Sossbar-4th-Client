@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ject
 
-## Getting Started
+Next.js 16 + TypeScript + pnpm 기반의 웹 프로젝트입니다.  
+코드 품질은 **ESLint/Prettier + Husky + GitHub Actions + Git Flow**로 관리합니다.
 
-First, run the development server:
+## 전체 흐름 (Big Picture)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```text
+로컬 개발
+  ├─ ESLint + Prettier (저장/수동 실행)
+  ├─ Husky pre-commit (lint-staged)
+  ├─ Husky commit-msg (commitlint)
+  └─ Git Flow 브랜치 (feature / release / hotfix)
+        └─ GitHub PR  →  GitHub Actions CI (lint + build)  →  main 태그 → 배포
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+자세한 규칙은 다음 문서를 참고해주세요.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 코드 스타일 & 설계: `docs/coding-convention.md`
+- ESLint 규칙 상세: `docs/eslint-convention.md`
+- 커밋 메시지 규칙: `docs/commit-convention.md`
+- 브랜치 전략 & PR 플로우: `docs/workflow-and-gitflow.md`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 개발 서버 실행
 
-## Learn More
+```bash
+pnpm install
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+브라우저에서 `http://localhost:3000`을 열어 결과를 확인할 수 있습니다.
