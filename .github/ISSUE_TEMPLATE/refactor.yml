@@ -1,15 +1,15 @@
-name: "♻️ 리팩토링"
-description: "코드 구조 개선 및 기술 부채 해결"
-title: "[refactor] "
-labels: ["♻️ Refactor", "⚠️ P2: Medium"]
+name: '♻️ 리팩토링'
+description: '코드 구조 개선 및 기술 부채 해결'
+title: '[refactor] '
+labels: ['♻️ Refactor', '⚠️ P2: Medium']
 body:
   - type: textarea
     id: background
     attributes:
-      label: "리팩토링이 필요한 이유"
-      description: "현재 코드의 어떤 부분이 가독성이나 확장성을 저해하고 있나요?"
+      label: '리팩토링이 필요한 이유'
+      description: '현재 코드의 어떤 부분이 가독성이나 확장성을 저해하고 있나요?'
   - type: textarea
     id: plan
     attributes:
-      label: "작업 계획"
-      description: "어떤 아키텍처나 패턴을 도입할 예정인가요?"
+      label: '작업 계획'
+      description: '어떤 아키텍처나 패턴을 도입할 예정인가요?'

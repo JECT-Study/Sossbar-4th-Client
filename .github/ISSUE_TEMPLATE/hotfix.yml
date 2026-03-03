@@ -1,18 +1,18 @@
-name: "🔥 핫픽스 (긴급 버그)"
-description: "서비스 장애나 치명적인 버그를 보고합니다."
-title: "[hotfix] "
-labels: ["🐞 Bug", "🔥 P0: Critical"]
+name: '🔥 핫픽스 (긴급 버그)'
+description: '서비스 장애나 치명적인 버그를 보고합니다.'
+title: '[hotfix] '
+labels: ['🐞 Bug', '🔥 P0: Critical']
 body:
   - type: textarea
     id: steps
     attributes:
-      label: "재현 단계"
-      description: "버그를 어떻게 하면 다시 볼 수 있나요?"
-      placeholder: "1. 로그인을 한다. 2. 마이페이지를 누른다..."
+      label: '재현 단계'
+      description: '버그를 어떻게 하면 다시 볼 수 있나요?'
+      placeholder: '1. 로그인을 한다. 2. 마이페이지를 누른다...'
     validations:
       required: true
   - type: textarea
     id: expected_vs_actual
     attributes:
-      label: "예상 결과 vs 실제 결과"
-      description: "원래 어때야 하는데, 지금 어떻게 나오나요?"
+      label: '예상 결과 vs 실제 결과'
+      description: '원래 어때야 하는데, 지금 어떻게 나오나요?'
