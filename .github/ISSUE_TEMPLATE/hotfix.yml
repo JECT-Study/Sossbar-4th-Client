@@ -1,5 +1,6 @@
 name: "🔥 핫픽스 (긴급 버그)"
 description: "서비스 장애나 치명적인 버그를 보고합니다."
+title: "[hotfix] "
 labels: ["🐞 Bug", "🔥 P0: Critical"]
 body:
   - type: textarea

@@ -1,6 +1,7 @@
 name: "♻️ 리팩토링"
 description: "코드 구조 개선 및 기술 부채 해결"
-labels: ["♻️ Refactor"]
+title: "[refactor] "
+labels: ["♻️ Refactor", "⚠️ P2: Medium"]
 body:
   - type: textarea
     id: background

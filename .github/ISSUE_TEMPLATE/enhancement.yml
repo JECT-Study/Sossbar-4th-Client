@@ -1,6 +1,7 @@
 name: "🚀 기능 개선"
 description: "이미 있는 기능을 더 좋게 발전시켜요."
-labels: ["🚀 Enhancement"]
+title: "[improve] "
+labels: ["🚀 Enhancement", "⚠️ P2: Medium"]
 body:
   - type: textarea
     id: current_state

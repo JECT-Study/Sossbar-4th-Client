@@ -1,5 +1,6 @@
 name: "✨ 기능 요청"
 description: "새로운 아이디어나 기능을 제안해주세요."
+title: "[feat] "
 labels: ["✨ Feature", "⚠️ P2: Medium"]
 body:
   - type: markdown
