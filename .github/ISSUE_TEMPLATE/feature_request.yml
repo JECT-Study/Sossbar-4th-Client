@@ -1,0 +1,21 @@
+name: "✨ 기능 요청"
+description: "새로운 아이디어나 기능을 제안해주세요."
+labels: ["✨ Feature", "⚠️ P2: Medium"]
+body:
+  - type: markdown
+    attributes:
+      value: "### 💡 새로운 기능에 대한 제안"
+  - type: textarea
+    id: problem
+    attributes:
+      label: "어떤 문제를 해결하고 싶나요?"
+      description: "이 기능이 왜 필요한지, 현재 겪고 있는 불편함이 무엇인지 설명해주세요."
+      placeholder: "예: 현재 ~한 상황에서 ~하는 기능이 없어서 불편해요."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: "구체적인 제안 내용"
+      description: "생각하시는 기능의 작동 방식이나 UI 시안이 있다면 알려주세요."
+      placeholder: "예: 유저 프로필 옆에 ~ 버튼을 추가해서 ~할 수 있게 하면 좋겠어요."

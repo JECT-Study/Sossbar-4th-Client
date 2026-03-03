@@ -1,0 +1,14 @@
+name: "🚀 기능 개선"
+description: "이미 있는 기능을 더 좋게 발전시켜요."
+labels: ["🚀 Enhancement"]
+body:
+  - type: textarea
+    id: current_state
+    attributes:
+      label: "현재 상태"
+      description: "지금 기능이 어떻게 동작하고 있나요?"
+  - type: textarea
+    id: improvement
+    attributes:
+      label: "어떻게 개선하면 좋을까요?"
+      description: "성능 최적화 포인트나 UX 개선안을 제안해주세요."
