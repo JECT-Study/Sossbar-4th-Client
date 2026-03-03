@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky"
   },
   "dependencies": {
     "next": "16.1.6",
@@ -15,6 +16,8 @@
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -23,6 +26,8 @@
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-unused-imports": "^4.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.1",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
