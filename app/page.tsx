@@ -1,14 +1,5 @@
-import { Button } from './Button';
-
 const Home = () => {
-  return (
-    <div>
-      <div>Home</div>
-      <div>
-        <Button />
-      </div>
-    </div>
-  );
+  return <div>Home</div>;
 };
 
 export default Home;
