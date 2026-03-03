@@ -1,0 +1,15 @@
+# 빌드/캐시 결과물
+.next
+out
+dist
+.vercel
+.turbo
+coverage
+
+# 의존성
+node_modules
+
+# 로그, 환경변수
+*.log
+.env
+.env.*
