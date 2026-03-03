@@ -1,5 +1,6 @@
-import type { NextConfig } from 'next';
 import path from 'path';
+
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -7,4 +8,5 @@ const nextConfig: NextConfig = {
   },
 };
 
+// eslint-disable-next-line import/no-default-export
 export default nextConfig;

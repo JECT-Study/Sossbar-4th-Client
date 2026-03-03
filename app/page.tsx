@@ -1,3 +1,14 @@
-export default function Home() {
-  return <div>Home</div>;
-}
+import { Button } from './Button';
+
+const Home = () => {
+  return (
+    <div>
+      <div>Home</div>
+      <div>
+        <Button />
+      </div>
+    </div>
+  );
+};
+
+export default Home;
