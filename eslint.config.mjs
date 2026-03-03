@@ -93,7 +93,15 @@ const eslintConfig = defineConfig([
       'import/no-default-export': 'off',
     },
   },
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'eslint.config.mjs', 'postcss.config.mjs']),
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    'eslint.config.mjs',
+    'postcss.config.mjs',
+    'commitlint.config.mjs',
+  ]),
   eslintConfigPrettier,
 ]);
 
