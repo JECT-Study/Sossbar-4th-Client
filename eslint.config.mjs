@@ -9,6 +9,7 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   ...pluginQuery.configs['flat/recommended'],
+  eslintConfigPrettier,
   {
     plugins: {
       'unused-imports': unusedImports,
@@ -104,7 +105,6 @@ const eslintConfig = defineConfig([
     'postcss.config.mjs',
     'commitlint.config.mjs',
   ]),
-  eslintConfigPrettier,
 ]);
 
 export default eslintConfig;
