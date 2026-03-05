@@ -3,10 +3,12 @@ import nextTs from 'eslint-config-next/typescript';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import unusedImports from 'eslint-plugin-unused-imports';
 import { defineConfig, globalIgnores } from 'eslint/config';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  ...pluginQuery.configs['flat/recommended'],
   {
     plugins: {
       'unused-imports': unusedImports,
