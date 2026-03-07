@@ -23,6 +23,9 @@ importers:
       react-dom:
         specifier: 19.2.3
         version: 19.2.3(react@19.2.3)
+      tailwind-merge:
+        specifier: ^3.5.0
+        version: 3.5.0
     devDependencies:
       '@commitlint/cli':
         specifier: ^20.4.2
@@ -3363,6 +3366,10 @@ snapshots:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
 
+  class-variance-authority@0.7.1:
+    dependencies:
+      clsx: 2.1.1
+
   cli-cursor@5.0.0:
     dependencies:
       restore-cursor: 5.1.0
@@ -3379,6 +3386,8 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wrap-ansi: 7.0.0
+
+  clsx@2.1.1: {}
 
   color-convert@2.0.1:
     dependencies:
@@ -4796,6 +4805,8 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  tailwind-merge@3.5.0: {}
 
   tailwindcss@4.2.1: {}
 
