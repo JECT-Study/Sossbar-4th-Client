@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 
+import { MswProvider } from '@/shared/providers/msw-provider';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
 import type { Metadata } from 'next';
@@ -19,7 +20,9 @@ const RootLayout = ({
   return (
     <html lang="ko">
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <MswProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </MswProvider>
       </body>
     </html>
   );
