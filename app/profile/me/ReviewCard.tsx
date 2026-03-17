@@ -4,12 +4,12 @@ import type { ProfileReview } from '@/shared/api/types/profile';
 
 import { ReactionButton } from './ReactionButton';
 
-type ReviewCardProps = {
+interface Props {
   review: ProfileReview;
-  onReaction: (reviewId: string) => void;
-};
+  onToggleReaction: (reviewId: string) => void;
+}
 
-const ReviewCard = ({ review, onReaction }: ReviewCardProps) => {
+const ReviewCard = ({ review, onToggleReaction }: Props) => {
   return (
     <article className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
       <p className="mb-2 text-gray-800">{review.content}</p>
@@ -20,7 +20,7 @@ const ReviewCard = ({ review, onReaction }: ReviewCardProps) => {
           </span>
         ))}
       </div>
-      <ReactionButton review={review} onReact={onReaction} />
+      <ReactionButton review={review} onToggleReaction={onToggleReaction} />
     </article>
   );
 };

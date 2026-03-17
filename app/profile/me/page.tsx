@@ -47,7 +47,7 @@ const ProfileMePage = () => {
       <ul className="flex flex-col gap-4" aria-label="후기 목록">
         {profile.reviews.map((review) => (
           <li key={review.id}>
-            <ReviewCard review={review} onReaction={toggleReaction} />
+            <ReviewCard review={review} onToggleReaction={toggleReaction} />
           </li>
         ))}
       </ul>
