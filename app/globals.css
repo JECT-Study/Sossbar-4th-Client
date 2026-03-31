@@ -241,6 +241,33 @@
   --color-link-default: var(--color-primary-500);
   --color-link-hover: var(--color-primary-600);
   --color-link-active: var(--color-tertiary-500);
+
+  /* --- Typography --- */
+
+  /* Display */
+  --text-display-base: 3.5rem;
+  --text-display-sm: 2.25rem;
+
+  /* Heading */
+  --text-heading-2xl: 3rem;
+  --text-heading-xl: 2.5rem;
+  --text-heading-lg: 2rem;
+  --text-heading-base: 1.5rem;
+  --text-heading-sm: 1.25rem;
+  --text-heading-xs: 1rem;
+
+  /* Body */
+  --text-body-xl: 1.25rem;
+  --text-body-lg: 1.125rem;
+  --text-body-base: 1rem;
+  --text-body-sm: 0.875rem;
+  --text-body-xs: 0.75rem;
+
+  /* Detail */
+  --text-detail-lg: 1.125rem;
+  --text-detail-base: 1rem;
+  --text-detail-sm: 0.875rem;
+  --text-detail-xs: 0.75rem;
 }
 
 @layer base {
@@ -248,65 +275,4 @@
     font-family: var(--font-sans);
     line-height: 1.5;
   }
-}
-
-/* --- Typography --- */
-
-/* Display */
-@utility display-base {
-  font-size: 3.5rem;
-}
-@utility display-sm {
-  font-size: 2.25rem;
-}
-
-/* Heading */
-@utility heading-2xl {
-  font-size: 3rem;
-}
-@utility heading-xl {
-  font-size: 2.5rem;
-}
-@utility heading-lg {
-  font-size: 2rem;
-}
-@utility heading-base {
-  font-size: 1.5rem;
-}
-@utility heading-sm {
-  font-size: 1.25rem;
-}
-@utility heading-xs {
-  font-size: 1rem;
-}
-
-/* Body */
-@utility body-xl {
-  font-size: 1.25rem;
-}
-@utility body-lg {
-  font-size: 1.125rem;
-}
-@utility body-base {
-  font-size: 1rem;
-}
-@utility body-sm {
-  font-size: 0.875rem;
-}
-@utility body-xs {
-  font-size: 0.75rem;
-}
-
-/* Detail */
-@utility detail-lg {
-  font-size: 1.125rem;
-}
-@utility detail-base {
-  font-size: 1rem;
-}
-@utility detail-sm {
-  font-size: 0.875rem;
-}
-@utility detail-xs {
-  font-size: 0.75rem;
 }
