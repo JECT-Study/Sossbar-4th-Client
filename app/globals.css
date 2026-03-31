@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
+  --font-sans: var(--font-pretendard), sans-serif;
+
   /* --- Primitive --- */
 
   /* Gray */
@@ -241,13 +243,14 @@
   --color-link-active: var(--color-tertiary-500);
 }
 
-/* --- Typography --- */
-
 @layer base {
   * {
+    font-family: var(--font-sans);
     line-height: 1.5;
   }
 }
+
+/* --- Typography --- */
 
 /* Display */
 @utility display-base {
