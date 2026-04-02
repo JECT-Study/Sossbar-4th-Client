@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import './primitive-color.css';
+@import './semantic-color.css';
+@import './typography.css';
+
+@layer base {
+  * {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+}
