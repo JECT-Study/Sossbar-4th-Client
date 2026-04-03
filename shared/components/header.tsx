@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { buttonVariants } from './button';
+
 const navLinks = [
   { href: '#', label: '기능' },
   { href: '#', label: '이용방법' },
@@ -20,10 +22,7 @@ export const Header = () => {
             <ul className="flex items-center gap-4">
               {navLinks.map(({ href, label }) => (
                 <li key={href}>
-                  <Link
-                    href={href}
-                    className="text-body-base inline-flex rounded-lg px-2 py-2 whitespace-nowrap text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 sm:px-3"
-                  >
+                  <Link href={href} className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
                     {label}
                   </Link>
                 </li>
@@ -31,10 +30,7 @@ export const Header = () => {
             </ul>
           </nav>
 
-          <Link
-            href="/login"
-            className="bg-button-primary-fill text-body-base text-button-text-fill hover:bg-button-primary-fill-hover active:bg-button-primary-fill-pressed flex h-[40px] w-[90px] shrink-0 items-center justify-center rounded-lg text-center leading-none font-medium transition-colors"
-          >
+          <Link href="/login" className={buttonVariants({ variant: 'primary' })}>
             로그인
           </Link>
         </div>
