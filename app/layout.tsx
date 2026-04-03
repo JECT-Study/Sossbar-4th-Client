@@ -3,8 +3,7 @@ import type { ReactNode } from 'react';
 import localFont from 'next/font/local';
 
 import { QueryProvider } from '@/shared/providers/query-provider';
-import { Footer } from '@/widgets/footer';
-import { Header } from '@/widgets/header';
+import { AppShell } from '@/widgets/app-shell';
 
 import type { Metadata } from 'next';
 
@@ -30,9 +29,7 @@ const RootLayout = ({
     <html lang="ko" className={pretendard.variable}>
       <body className="bg-gray-0 flex min-h-screen flex-col text-gray-900 antialiased">
         <QueryProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <AppShell>{children}</AppShell>
         </QueryProvider>
       </body>
     </html>
