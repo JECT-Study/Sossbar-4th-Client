@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-const navItems = [
+const navLinks = [
   { href: '#', label: '기능' },
   { href: '#', label: '이용방법' },
   { href: '#', label: '데모 프로필' },
@@ -18,8 +18,8 @@ export const Header = () => {
         <div className="flex min-w-0 items-center gap-4">
           <nav aria-label="주요 메뉴">
             <ul className="flex items-center gap-4">
-              {navItems.map(({ href, label }) => (
-                <li key={label}>
+              {navLinks.map(({ href, label }) => (
+                <li key={href}>
                   <Link
                     href={href}
                     className="text-body-base inline-flex rounded-lg px-2 py-2 whitespace-nowrap text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 sm:px-3"

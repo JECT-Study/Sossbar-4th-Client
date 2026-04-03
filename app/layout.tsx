@@ -2,9 +2,9 @@ import type { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
+import { Footer } from '@/shared/components/footer';
+import { Header } from '@/shared/components/header';
 import { QueryProvider } from '@/shared/providers/query-provider';
-import { Footer } from '@/widgets/footer';
-import { Header } from '@/widgets/header';
 
 import type { Metadata } from 'next';
 
