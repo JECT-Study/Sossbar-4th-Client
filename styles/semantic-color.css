@@ -137,7 +137,7 @@
   --color-button-tertiary-fill-hover: var(--color-gray-100);
   --color-button-tertiary-fill-pressed: var(--color-gray-200);
   --color-button-tertiary-border: var(--color-gray-600);
-  --color-button-text-fill: var(--color-gray-0);
+  --color-button-text-fill: var(--color-white-0);
   --color-button-text-fill-hover: var(--color-secondary-50);
   --color-button-text-fill-pressed: var(--color-secondary-100);
   --color-button-text-border: var(--color-black-0);

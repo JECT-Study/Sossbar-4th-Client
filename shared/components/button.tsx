@@ -10,7 +10,7 @@ export const buttonVariants = cva('inline-flex items-center justify-center round
   variants: {
     variant: {
       primary:
-        'bg-button-primary-fill text-button-text-fill hover:bg-button-primary-fill-hover active:bg-button-primary-fill-pressed',
+        'bg-button-primary-fill text-body-base font-medium text-text-basic-inverse hover:bg-button-primary-fill-hover active:bg-button-primary-fill-pressed',
       ghost: 'whitespace-nowrap text-gray-600 hover:bg-gray-100 hover:text-gray-900',
     },
     size: {
