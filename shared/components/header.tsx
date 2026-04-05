@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Button } from './button';
+import { cn } from '@/shared/lib/cn';
+
+import { buttonVariants } from './button';
 
 const navLinks = [
   { href: '#', label: '기능' },
@@ -22,17 +24,17 @@ export const Header = () => {
             <ul className="flex items-center gap-4">
               {navLinks.map(({ href, label }) => (
                 <li key={href}>
-                  <Button asChild variant="ghost" size="sm">
-                    <Link href={href}>{label}</Link>
-                  </Button>
+                  <Link href={href} className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+                    {label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <Button asChild variant="primary">
-            <Link href="/login">로그인</Link>
-          </Button>
+          <Link href="/login" className={cn(buttonVariants({ variant: 'primary' }))}>
+            로그인
+          </Link>
         </div>
       </div>
     </header>
