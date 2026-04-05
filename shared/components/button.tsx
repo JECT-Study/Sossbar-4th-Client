@@ -1,10 +1,9 @@
 import type { ButtonHTMLAttributes } from 'react';
 
-import { cva } from 'class-variance-authority';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/shared/lib/cn';
-
-import type { VariantProps } from 'class-variance-authority';
 
 export const buttonVariants = cva('inline-flex items-center justify-center rounded-lg font-medium transition-colors', {
   variants: {
@@ -24,8 +23,17 @@ export const buttonVariants = cva('inline-flex items-center justify-center round
   },
 });
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof buttonVariants>;
+export type Props = ButtonHTMLAttributes<HTMLButtonElement> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  };
 
-export const Button = ({ className, variant, size, ...props }: ButtonProps) => {
-  return <button className={cn(buttonVariants({ variant, size }), className)} {...props} />;
+export const Button = ({ className, variant, size, asChild = false, children, ...restProps }: Props) => {
+  const Comp = asChild ? Slot : 'button';
+
+  return (
+    <Comp className={cn(buttonVariants({ variant, size }), className)} {...restProps}>
+      {children}
+    </Comp>
+  );
 };
