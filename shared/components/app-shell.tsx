@@ -4,12 +4,12 @@ import type { ReactNode } from 'react';
 
 import { usePathname } from 'next/navigation';
 
-import { Footer } from '@/widgets/footer';
-import { Header } from '@/widgets/header';
+import { Footer } from '@/shared/components/footer';
+import { Header } from '@/shared/components/header';
 
 export const AppShell = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
-  const hideChrome = pathname?.startsWith('/login') ?? false;
+  const hideChrome = (pathname?.startsWith('/login') || pathname?.startsWith('/signup')) ?? false;
 
   if (hideChrome) {
     return children;

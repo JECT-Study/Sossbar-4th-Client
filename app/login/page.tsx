@@ -1,6 +1,10 @@
+'use client';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
+  const router = useRouter();
   return (
     <div className="flex min-h-screen items-center justify-center bg-black/70">
       <div className="flex h-[480px] w-[560px] flex-col items-center rounded-2xl border border-[0.5px] border-(--color-divider-gray) bg-white px-10">
@@ -22,6 +26,7 @@ const LoginPage = () => {
         {/* 카카오 로그인 버튼 */}
         <button
           type="button"
+          onClick={() => router.push('/signup')}
           className="relative mt-5 flex h-14 w-full cursor-pointer items-center justify-center rounded-xl bg-[#FAE100] transition-[filter] hover:brightness-95 active:brightness-90"
         >
           <div className="absolute left-4">

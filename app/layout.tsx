@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
+import { AppShell } from '@/shared/components/app-shell';
 import { QueryProvider } from '@/shared/providers/query-provider';
-import { AppShell } from '@/widgets/app-shell';
 
 import type { Metadata } from 'next';
 
