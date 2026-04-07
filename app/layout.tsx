@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
+import { Footer } from '@/shared/components/footer';
+import { Header } from '@/shared/components/header';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
 import type { Metadata } from 'next';
@@ -26,8 +28,12 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="ko" className={pretendard.variable}>
-      <body>
-        <QueryProvider>{children}</QueryProvider>
+      <body className="bg-gray-0 flex min-h-screen flex-col text-gray-900 antialiased">
+        <QueryProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   );
