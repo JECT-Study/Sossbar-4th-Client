@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 type Props = {
   name: string;
   className?: string;
@@ -12,7 +14,7 @@ export const ModalType = ({ name, className, onConfirm }: Props) => {
     >
       <div className="flex flex-col items-center text-center">
         <div className="h-[120px] w-[120px]" aria-hidden="true">
-          <img src="/signup_image.svg" alt="" className="h-full w-full" />
+          <Image src="/signup_image.svg" alt="" width={120} height={120} className="h-full w-full" />
         </div>
 
         <div className="mt-6 text-[20px] leading-snug font-bold text-(--color-text-basic)">
