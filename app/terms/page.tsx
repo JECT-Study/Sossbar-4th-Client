@@ -2,12 +2,12 @@ const TermsPage = () => {
   return (
     <div className="bg-gray-0 flex w-full flex-col">
       <header className="mx-auto flex h-[136px] w-full max-w-[1200px] flex-col justify-center px-4 sm:px-6">
-        <h1 className="text-display-base text-center font-bold tracking-tight text-(--color-text-basic)">
+        <h1 className="text-heading-2xl text-center font-bold tracking-tight text-(--color-text-basic)">
           약관 및 정책
         </h1>
       </header>
       <hr className="border-t border-gray-200" />
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col px-4 py-3 sm:px-6 sm:py-4">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col px-4 pt-3 pb-10 sm:px-6 sm:pt-4 sm:pb-10">
         <section className="mt-7 flex w-full max-w-[1200px] flex-col p-0">
           <h2 className="text-display-sm shrink-0 font-bold text-(--color-text-basic)">개인정보처리방침</h2>
 

@@ -2,12 +2,12 @@ const TermsPage = () => {
   return (
     <div className="bg-gray-0 w-full">
       <header className="mx-auto flex h-[136px] w-full max-w-[1000px] flex-col justify-center px-6 md:px-8">
-        <h1 className="text-display-base text-center font-bold tracking-tight text-(--color-text-basic)">
+        <h1 className="text-heading-2xl text-center font-bold tracking-tight text-(--color-text-basic)">
           개인정보처리방침
         </h1>
       </header>
       <hr className="border-t border-gray-200" />
-      <div className="mx-auto w-full max-w-[1000px] px-6 py-3 md:px-8 md:py-4">
+      <div className="mx-auto w-full max-w-[1000px] px-6 pt-3 pb-10 md:px-8 md:pt-4 md:pb-10">
         <main className="mx-auto mt-7 max-w-[940px] text-(--color-text-basic)">
           <p className="text-body-md leading-8 text-(--color-text-secondary)">
             Sossbar(이하 ‘회사’)는 이용자의 개인정보를 중요시하며, ‘개인정보 보호법’ 등 관련 법령을 준수하고 있습니다.
