@@ -1,8 +1,11 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+import { ModalType } from '@/shared/components/modal-type';
 
 const BIO_MAX_LENGTH = 50;
 
@@ -10,6 +13,7 @@ const SignupPage = () => {
   const router = useRouter();
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
+  const [isCompleted, setIsCompleted] = useState(false);
   const [agreeAll, setAgreeAll] = useState(false);
   const [agreements, setAgreements] = useState({
     age: false,
@@ -35,7 +39,7 @@ const SignupPage = () => {
     if (!isSubmittable) {
       return;
     }
-    router.push('/');
+    setIsCompleted(true);
   };
 
   return (
@@ -60,29 +64,29 @@ const SignupPage = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="입력해주세요."
-            className="w-full rounded-xl border border-(--color-border-gray) px-4 py-3 text-[16px] text-(--color-text-basic) outline-none placeholder:text-(--color-text-disabled) focus:border-(--color-border-primary)"
+            className="w-full rounded-xl border border-(--color-input-border) px-4 py-3 text-[16px] text-(--color-text-basic) outline-none placeholder:text-(--color-text-disabled) focus:border-(--color-border-primary)"
           />
         </div>
 
         {/* 한 줄 소개 */}
         <div className="mt-[40px] flex flex-col gap-1">
           <label className="text-detail-base block pb-1 font-bold text-(--color-text-basic)">한 줄 소개</label>
-          <div className="relative">
+          <div className="flex flex-col gap-2">
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value.slice(0, BIO_MAX_LENGTH))}
               placeholder="내용을 입력해 주세요. (기본상태)"
               rows={4}
-              className="w-full resize-none rounded-xl border border-(--color-border-gray) px-4 py-3 text-[16px] text-(--color-text-basic) outline-none placeholder:text-(--color-text-disabled) focus:border-(--color-border-primary)"
+              className="w-full resize-none rounded-xl border border-(--color-input-border) px-4 py-3 text-[16px] text-(--color-text-basic) outline-none placeholder:text-(--color-text-disabled) focus:border-(--color-border-primary)"
             />
-            <span className="absolute right-4 bottom-3 text-[13px] text-(--color-text-disabled)">
+            <span className="self-end text-[13px] text-(--color-text-disabled)">
               {bio.length}/{BIO_MAX_LENGTH}
             </span>
           </div>
         </div>
 
         {/* 약관 동의 */}
-        <div className="mt-[40px] space-y-3 rounded-xl border border-(--color-border-gray-light) p-4">
+        <div className="mt-[40px] space-y-4 rounded-xl border border-(--color-border-gray-light) p-4">
           {/* 전체 동의 */}
           <label className="flex cursor-pointer items-center gap-3">
             <Checkbox checked={agreeAll} onChange={handleAgreeAll} />
@@ -99,13 +103,27 @@ const SignupPage = () => {
           <label className="flex cursor-pointer items-center gap-3">
             <Checkbox checked={agreements.terms} onChange={(v) => handleAgreement('terms', v)} />
             <span className="text-[14px] text-(--color-text-basic)">
-              서비스 이용약관에 동의합니다. <span className="text-(--color-text-primary)">(필수)</span>
+              <Link
+                href="/terms"
+                className="text-black underline underline-offset-2"
+                onClick={(e) => e.stopPropagation()}
+              >
+                서비스 이용약관
+              </Link>
+              에 동의합니다. <span className="text-(--color-text-primary)">(필수)</span>
             </span>
           </label>
           <label className="flex cursor-pointer items-center gap-3">
             <Checkbox checked={agreements.privacy} onChange={(v) => handleAgreement('privacy', v)} />
             <span className="text-[14px] text-(--color-text-basic)">
-              개인정보 수집/이용에 동의합니다. <span className="text-(--color-text-primary)">(필수)</span>
+              <Link
+                href="/personal"
+                className="text-[14px] text-black underline underline-offset-2"
+                onClick={(e) => e.stopPropagation()}
+              >
+                개인정보 수집/이용
+              </Link>
+              에 동의합니다. <span className="text-(--color-text-primary)">(필수)</span>
             </span>
           </label>
           <label className="flex cursor-pointer items-center gap-3">
@@ -121,11 +139,25 @@ const SignupPage = () => {
           type="button"
           onClick={handleSubmit}
           disabled={!isSubmittable}
-          className="mt-[40px] w-full rounded-xl py-4 text-[18px] font-semibold transition-colors enabled:bg-(--color-button-primary-fill) enabled:text-(--color-text-basic-inverse) enabled:hover:bg-(--color-button-primary-fill-hover) enabled:active:bg-(--color-button-primary-fill-pressed) disabled:cursor-not-allowed disabled:bg-(--color-button-disabled-fill) disabled:text-(--color-text-basic-inverse)"
+          className="mt-[40px] w-full rounded-xl py-4 text-[18px] font-semibold transition-colors enabled:bg-(--color-button-primary-fill) enabled:text-(--color-text-basic-inverse) enabled:hover:bg-(--color-button-primary-fill-hover) enabled:active:bg-(--color-button-primary-fill-pressed) disabled:cursor-not-allowed disabled:bg-(--color-button-disabled-fill) disabled:text-(--color-text-disabled)"
         >
           가입완료
         </button>
       </div>
+
+      {!!isCompleted && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="회원가입 완료"
+          onClick={() => setIsCompleted(false)}
+        >
+          <div className="w-[360px]" onClick={(e) => e.stopPropagation()}>
+            <ModalType name={name.trim()} onConfirm={() => router.push('/')} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

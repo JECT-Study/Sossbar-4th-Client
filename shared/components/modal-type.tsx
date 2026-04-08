@@ -1,0 +1,37 @@
+type Props = {
+  name: string;
+  className?: string;
+  onConfirm: () => void;
+};
+
+export const ModalType = ({ name, className, onConfirm }: Props) => {
+  return (
+    <div
+      className={`h-[353px] w-[360px] rounded-2xl bg-white px-8 pt-6 pb-10 shadow-xl ${className ?? ''}`}
+      role="document"
+    >
+      <div className="flex flex-col items-center text-center">
+        <div className="h-[120px] w-[120px]" aria-hidden="true">
+          <img src="/signup_image.svg" alt="" className="h-full w-full" />
+        </div>
+
+        <div className="mt-6 text-[20px] leading-snug font-bold text-(--color-text-basic)">
+          <span className="text-(--color-text-primary)">{name || '회원'}</span>
+          <span className="text-(--color-text-basic)">님</span>
+          <br />
+          가입이 완료되었습니다!
+        </div>
+
+        <p className="text-body-sm mt-2 font-normal text-(--color-text-basic)">협업 프로필을 공유해보세요!</p>
+
+        <button
+          type="button"
+          onClick={onConfirm}
+          className="text-body-base mt-6 h-[48px] w-[312px] rounded-xl bg-(--color-button-primary-fill) font-semibold text-(--color-text-basic-inverse) transition-colors hover:bg-(--color-button-primary-fill-hover) active:bg-(--color-button-primary-fill-pressed)"
+        >
+          프로필 공유하러 가기
+        </button>
+      </div>
+    </div>
+  );
+};
