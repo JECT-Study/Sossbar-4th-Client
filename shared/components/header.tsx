@@ -6,10 +6,8 @@ import { cn } from '@/shared/lib/cn';
 import { buttonVariants } from './button';
 
 const navLinks = [
-  { href: '/', label: '홈' },
-  // NOTE: 로그인/인증 구현 전까지는 로그인 화면으로 연결합니다.
-  { href: '/login', label: '내 프로필' },
-  { href: '/login', label: '프로젝트 관리' },
+  { href: '#', label: '기능' },
+  { href: '#', label: '이용방법' },
   { href: '#', label: '데모 프로필' },
 ] as const;
 
@@ -25,8 +23,8 @@ export const Header = () => {
           <nav aria-label="주요 메뉴">
             <ul className="flex items-center gap-4">
               {navLinks.map(({ href, label }) => (
-                <li key={`${label}-${href}`}>
-                  <Link href={href} className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+                <li key={href}>
+                  <Link href={href} className={cn(buttonVariants({ variant: 'tertiary', size: 'small' }))}>
                     {label}
                   </Link>
                 </li>
@@ -34,10 +32,7 @@ export const Header = () => {
             </ul>
           </nav>
 
-          <Link
-            href="/login"
-            className={cn(buttonVariants({ variant: 'primary' }), 'text-(--color-text-basic-inverse)')}
-          >
+          <Link href="/login" className={cn(buttonVariants({ variant: 'primary' }))}>
             로그인
           </Link>
         </div>
