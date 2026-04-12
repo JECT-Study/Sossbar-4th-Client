@@ -24,7 +24,7 @@ export const Header = () => {
             <ul className="flex items-center gap-4">
               {navLinks.map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+                  <Link href={href} className={cn(buttonVariants({ variant: 'tertiary', size: 'small' }))}>
                     {label}
                   </Link>
                 </li>
