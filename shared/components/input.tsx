@@ -4,7 +4,6 @@ import { forwardRef, useId } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
-/** KRDS input_message(error): 아이콘 + 텍스트 */
 const InputErrorLeadIcon = () => {
   return (
     <svg
@@ -23,12 +22,10 @@ const InputErrorLeadIcon = () => {
 
 export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   leftSlot?: ReactNode;
-  /** 삭제(clear) 등 — 박스 안 오른쪽 */
   rightSlot?: ReactNode;
   className?: string;
   inputClassName?: string;
   variant?: 'default' | 'error';
-  /** `variant="error"`일 때 하단 안내 문구 */
   errorMessage?: string;
 };
 

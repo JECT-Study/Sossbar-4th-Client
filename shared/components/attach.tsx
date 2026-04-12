@@ -6,16 +6,9 @@ import { forwardRef, useCallback, useEffect, useId, useRef, useState } from 'rea
 
 import { cn } from '@/shared/lib/cn';
 
-/** Figma secondary / left icon — `color/icon/primary` */
 const FileAttachLeadIcon = ({ className }: { className?: string }) => {
   return (
-    <svg
-      width={20}
-      height={20}
-      viewBox="0 0 20 20"
-      className={cn('shrink-0 text-(--color-icon-primary)', className)}
-      aria-hidden
-    >
+    <svg width={20} height={20} viewBox="0 0 20 20" className={cn('text-text-primary shrink-0', className)} aria-hidden>
       <rect x={2.5} y={3.5} width={15} height={13} rx={1.5} fill="none" stroke="currentColor" strokeWidth={1.25} />
       <path
         d="M6 12.5 9 9.5l2 2 3.5-4.5"
@@ -32,21 +25,14 @@ const FileAttachLeadIcon = ({ className }: { className?: string }) => {
 
 export type FileAttachProps = {
   className?: string;
-  /** 제어 모드: 선택된 파일 */
   value?: File | null;
-  /** 파일 선택·해제 시 (해제는 상위에서 `value={null}`로 비우면 됨) */
   onChange?: (file: File | null) => void;
   accept?: string;
   disabled?: boolean;
-  /** 기본: 파일 첨부하기 */
   label?: string;
-  /** 숨김 file input에 붙일 name (폼 제출용) */
   name?: string;
 };
 
-/**
- * 파일 첨부: 초기에는 세컨더리 버튼(Figma), 첨부 후에는 `Input` 5번과 동일한 박스 + 파일명.
- */
 export const FileAttach = forwardRef<HTMLInputElement, FileAttachProps>(function FileAttach(
   { className, value, onChange, accept, disabled, label = '파일 첨부하기', name },
   ref,
@@ -116,7 +102,7 @@ export const FileAttach = forwardRef<HTMLInputElement, FileAttachProps>(function
           disabled={disabled}
           onClick={openPicker}
           className={cn(
-            'border-button-secondary-border inline-flex h-10 w-fit shrink-0 items-center justify-center gap-1 rounded-md border',
+            'border-button-secondary-border box-border inline-flex h-10 w-fit shrink-0 items-center justify-center gap-1 rounded-md border',
             'bg-button-secondary-fill text-body-base text-text-primary px-4 py-0 font-medium',
             'transition-colors',
             'hover:bg-button-secondary-fill-hover',

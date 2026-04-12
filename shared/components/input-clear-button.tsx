@@ -7,12 +7,10 @@ import { cn } from '@/shared/lib/cn';
 export type InputClearButtonProps = {
   onClick: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
-  /** 기본: 입력 지우기 */
   'aria-label'?: string;
   className?: string;
 };
 
-/** 20×20 — 연한 원 + 진한 X */
 export const InputClearButton = ({
   onClick,
   disabled,
