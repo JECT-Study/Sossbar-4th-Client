@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { Input } from '@/shared/components/input';
+import { InputClearButton } from '@/shared/components/input-clear-button';
 import { ModalType } from '@/shared/components/modal-type';
 
 const BIO_MAX_LENGTH = 50;
@@ -59,12 +61,17 @@ const SignupPage = () => {
         {/* 이름 */}
         <div className="flex flex-col gap-1">
           <label className="text-detail-base block font-bold text-(--color-text-basic)">이름</label>
-          <input
+          <Input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="입력해주세요."
-            className="w-full rounded-xl border border-(--color-input-border) px-4 py-3 text-[16px] text-(--color-text-basic) outline-none placeholder:text-(--color-text-disabled) focus:border-(--color-border-primary)"
+            className="w-full max-w-none"
+            rightSlot={
+              name.length > 0 ? (
+                <InputClearButton onClick={() => setName('')} aria-label="이름 입력 지우기" />
+              ) : undefined
+            }
           />
         </div>
 
