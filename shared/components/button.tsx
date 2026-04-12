@@ -1,33 +1,79 @@
-import type { ButtonHTMLAttributes } from 'react';
+import type { ComponentProps, ReactElement } from 'react';
 
 import { cva, type VariantProps } from 'class-variance-authority';
+import { Slot } from 'radix-ui';
 
 import { cn } from '@/shared/lib/cn';
 
-export const buttonVariants = cva('inline-flex items-center justify-center rounded-lg font-medium transition-colors', {
+export const buttonVariants = cva('inline-flex items-center justify-center font-medium transition-colors gap-1', {
   variants: {
     variant: {
       primary:
-        'bg-button-primary-fill text-body-base font-medium text-text-basic-inverse hover:bg-button-primary-fill-hover active:bg-button-primary-fill-pressed',
-      ghost: 'whitespace-nowrap text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+        'bg-button-primary-fill hover:bg-button-primary-fill-hover focus:bg-button-primary-fill-focus active:bg-button-primary-fill-pressed text-text-basic-inverse',
+      secondary:
+        'border border-button-secondary-border text-text-primary bg-button-secondary-fill hover:bg-button-secondary-fill-hover focus:bg-button-secondary-fill-focus active:bg-button-secondary-fill-pressed',
+      tertiary:
+        'bg-button-tertiary-fill hover:bg-button-tertiary-fill-hover focus:bg-button-tertiary-fill-focus active:bg-button-tertiary-fill-pressed text-text-basic',
     },
     size: {
-      default: 'h-[40px] w-[90px] text-body-base leading-none',
-      sm: 'px-2 py-2 text-body-base sm:px-3',
+      large: 'px-7 py-3 text-body-xl rounded-lg',
+      medium: 'py-2 px-[18px] rounded-md text-body-base',
+      small: 'px-4 py-2 text-body-sm rounded-sm',
+    },
+    disabled: {
+      true: 'bg-button-disabled-fill text-text-disabled cursor-not-allowed hover:bg-button-disabled-fill hover:text-text-disabled focus:bg-button-disabled-fill focus:text-text-disabled active:bg-button-disabled-fill active:text-text-disabled border-none',
+      false: '',
     },
   },
+  compoundVariants: [
+    {
+      variant: 'primary',
+      disabled: true,
+    },
+    {
+      variant: 'secondary',
+      disabled: true,
+    },
+    {
+      variant: 'tertiary',
+      disabled: true,
+    },
+  ],
   defaultVariants: {
     variant: 'primary',
-    size: 'default',
+    size: 'medium',
+    disabled: false,
   },
 });
 
-export type Props = ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof buttonVariants>;
+interface Props extends Omit<ComponentProps<'button'>, 'disabled'>, VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  leftIcon?: ReactElement;
+  rightIcon?: ReactElement;
+}
 
-export const Button = ({ className, variant, size, children, ...restProps }: Props) => {
+export const Button = ({
+  className,
+  variant,
+  size,
+  children,
+  disabled,
+  asChild,
+  leftIcon,
+  rightIcon,
+  ...restProps
+}: Props) => {
+  const Component = asChild ? Slot.Root : 'button';
+
   return (
-    <button className={cn(buttonVariants({ variant, size }), className)} {...restProps}>
-      {children}
-    </button>
+    <Component
+      className={cn(buttonVariants({ variant, size, disabled }), className)}
+      disabled={disabled ?? false}
+      {...restProps}
+    >
+      {Boolean(leftIcon) && leftIcon}
+      <Slot.Slottable>{children}</Slot.Slottable>
+      {Boolean(rightIcon) && rightIcon}
+    </Component>
   );
 };
