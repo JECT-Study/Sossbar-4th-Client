@@ -46,7 +46,7 @@ export const buttonVariants = cva('inline-flex items-center justify-center font-
   },
 });
 
-interface Props extends Omit<ComponentProps<'button'>, 'disabled'>, VariantProps<typeof buttonVariants> {
+interface Props extends ComponentProps<'button'>, Omit<VariantProps<typeof buttonVariants>, 'disabled'> {
   asChild?: boolean;
   leftIcon?: ReactElement;
   rightIcon?: ReactElement;
@@ -68,7 +68,7 @@ export const Button = ({
   return (
     <Component
       className={cn(buttonVariants({ variant, size, disabled }), className)}
-      disabled={disabled ?? false}
+      disabled={disabled}
       {...restProps}
     >
       {Boolean(leftIcon) && leftIcon}
