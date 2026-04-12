@@ -13,6 +13,7 @@ export { default as EllipsisVerticalIcon } from './ellipsis-vertical.svg';
 export { default as EmergencyIcon } from './emergency.svg';
 export { default as ImgIcon } from './img.svg';
 export { default as InfoIcon } from './info.svg';
+export { default as KakaoTalkIcon } from './kakao-talk.svg';
 export { default as OpenNewWindowIcon } from './open-new-window.svg';
 export { default as PlusIcon } from './plus.svg';
 export { default as RoundCheckIcon } from './round-check.svg';
