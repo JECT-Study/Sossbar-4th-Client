@@ -1,12 +1,11 @@
 'use client';
 
-import type { ChangeEvent, MutableRefObject } from 'react';
+import type { ChangeEvent, ComponentProps } from 'react';
 
-import { forwardRef, useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
-/** Figma secondary / left icon — `color/icon/primary` */
 const FileAttachLeadIcon = ({ className }: { className?: string }) => {
   return (
     <svg
@@ -30,87 +29,46 @@ const FileAttachLeadIcon = ({ className }: { className?: string }) => {
   );
 };
 
-export type FileAttachProps = {
-  className?: string;
-  /** 제어 모드: 선택된 파일 */
-  value?: File | null;
-  /** 파일 선택·해제 시 (해제는 상위에서 `value={null}`로 비우면 됨) */
+export type FileAttachProps = Omit<ComponentProps<'input'>, 'type' | 'value' | 'onChange'> & {
   onChange?: (file: File | null) => void;
-  accept?: string;
-  disabled?: boolean;
   /** 기본: 파일 첨부하기 */
   label?: string;
-  /** 숨김 file input에 붙일 name (폼 제출용) */
-  name?: string;
 };
 
-/**
- * 파일 첨부: 초기에는 세컨더리 버튼(Figma), 첨부 후에는 `Input` 5번과 동일한 박스 + 파일명.
- */
-export const FileAttach = forwardRef<HTMLInputElement, FileAttachProps>(function FileAttach(
-  { className, value, onChange, accept, disabled, label = '파일 첨부하기', name },
-  ref,
-) {
+export const FileAttach = ({ className, onChange, disabled, label = '파일 첨부하기', ...props }: FileAttachProps) => {
   const generatedId = useId();
   const inputId = `file-attach-${generatedId}`;
-  const innerInputRef = useRef<HTMLInputElement | null>(null);
-
-  const setInputRef = useCallback(
-    (node: HTMLInputElement | null) => {
-      innerInputRef.current = node;
-      if (typeof ref === 'function') {
-        ref(node);
-      } else if (ref) {
-        (ref as MutableRefObject<HTMLInputElement | null>).current = node;
-      }
-    },
-    [ref],
-  );
-
-  const isControlled = value !== undefined;
-  const [uncontrolledFile, setUncontrolledFile] = useState<File | null>(null);
-  const selectedFile = isControlled ? (value ?? null) : uncontrolledFile;
-
-  useEffect(() => {
-    if (value === null && innerInputRef.current) {
-      innerInputRef.current.value = '';
-    }
-  }, [value]);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const openPicker = () => {
-    if (disabled) {
-      return;
+    if (!disabled) {
+      inputRef.current?.click();
     }
-    innerInputRef.current?.click();
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const next = e.target.files?.[0] ?? null;
     e.target.value = '';
-    if (!isControlled) {
-      setUncontrolledFile(next);
-    }
+    setSelectedFile(next);
     onChange?.(next);
   };
-
-  const hasFile = selectedFile != null;
 
   return (
     <div className={cn('flex w-full max-w-[360px] flex-col', className)}>
       <input
         id={inputId}
-        ref={setInputRef}
+        ref={inputRef}
         type="file"
-        name={name}
-        accept={accept}
         disabled={disabled}
         className="sr-only"
         tabIndex={-1}
         onChange={handleChange}
         aria-hidden
+        {...props}
       />
 
-      {!hasFile ? (
+      {selectedFile === null ? (
         <button
           type="button"
           disabled={disabled}
@@ -149,4 +107,4 @@ export const FileAttach = forwardRef<HTMLInputElement, FileAttachProps>(function
       )}
     </div>
   );
-});
+};

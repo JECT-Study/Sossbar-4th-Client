@@ -3,7 +3,7 @@ import { extendTailwindMerge } from 'tailwind-merge';
 
 import type { ClassValue } from 'clsx';
 
-const twMerge = extendTailwindMerge({
+const twMerge = extendTailwindMerge<'fill-color'>({
   extend: {
     classGroups: {
       'font-size': [
@@ -32,6 +32,7 @@ const twMerge = extendTailwindMerge({
       'text-color': [
         {
           text: [
+            // text tokens
             'text-basic',
             'text-basic-inverse',
             'text-subtle',
