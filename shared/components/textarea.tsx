@@ -4,20 +4,34 @@ import { forwardRef, useId, useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
-export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> & {
+/** `bottomText`가 "숫자/숫자" 형태일 때 카운터로 파싱 */
+const resolveCounterFromBottomText = (bottomText?: string) => {
+  if (bottomText == null) {
+    return null;
+  }
+
+  const normalized = bottomText.replace(/\s+/g, '');
+  const matched = /^(\d+)\/(\d+)$/.exec(normalized);
+  if (matched == null) {
+    return null;
+  }
+
+  return {
+    currentCount: Number(matched[1]),
+    totalCount: Number(matched[2]),
+  };
+};
+
+export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   className?: string;
   textareaClassName?: string;
   variant?: 'default' | 'error';
   isCompleted?: boolean;
   /** 텍스트영역 상단 라벨 */
   label?: string;
-  /** 박스 하단 보조 문구 */
   bottomText?: string;
-  /** 현재 입력 글자 수 */
   currentCount?: number;
-  /** 전체 글자 수 */
   totalCount?: number;
-  /** `variant="error"`일 때 하단 안내 문구 */
   errorMessage?: string;
 };
 
@@ -55,7 +69,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   const hasCounter = resolvedCounter != null;
   const hasHelper = hasErrorMessage || resolvedCounter != null || bottomText != null;
   const resolvedPlaceholder = props.placeholder ?? '내용을 입력해주세요';
-  const currentCountColorClassName = disabled
+  const counterColorCls = disabled
     ? 'text-text-subtle'
     : isError
       ? 'text-(--color-border-error)'
@@ -123,15 +137,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
           <div id={helperId} className="mt-2 flex w-full items-start justify-between gap-2">
             {!!hasErrorMessage && <p className="text-body-sm text-text-error">{errorMessage}</p>}
             {!!hasCounter && (
-              <p className="text-body-sm text-right whitespace-nowrap">
-                <span className={cn(currentCountColorClassName, 'mr-[2px]')}>{resolvedCounter.currentCount}</span>
+              <p className="text-body-sm ml-auto text-right whitespace-nowrap">
+                <span className={cn(counterColorCls, 'mr-[2px]')}>{resolvedCounter.currentCount}</span>
                 <span className="text-text-subtle">/{resolvedCounter.totalCount}</span>
               </p>
             )}
           </div>
         ) : resolvedCounter != null ? (
           <p id={helperId} className="text-body-sm mt-2 flex w-full justify-end text-right">
-            <span className={cn(currentCountColorClassName, 'mr-[2px]')}>{resolvedCounter.currentCount}</span>
+            <span className={cn(counterColorCls, 'mr-[2px]')}>{resolvedCounter.currentCount}</span>
             <span className="text-text-subtle">/{resolvedCounter.totalCount}</span>
           </p>
         ) : (
@@ -142,20 +156,3 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
     </div>
   );
 });
-
-const resolveCounterFromBottomText = (bottomText?: string) => {
-  if (bottomText == null) {
-    return null;
-  }
-
-  const normalized = bottomText.replace(/\s+/g, '');
-  const matched = /^(\d+)\/(\d+)$/.exec(normalized);
-  if (matched == null) {
-    return null;
-  }
-
-  return {
-    currentCount: Number(matched[1]),
-    totalCount: Number(matched[2]),
-  };
-};
