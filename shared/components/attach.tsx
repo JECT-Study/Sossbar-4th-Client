@@ -2,7 +2,7 @@
 
 import type { ChangeEvent, ComponentProps } from 'react';
 
-import { useId, useRef, useState } from 'react';
+import { useId, useRef } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
@@ -30,16 +30,24 @@ const FileAttachLeadIcon = ({ className }: { className?: string }) => {
 };
 
 export type FileAttachProps = Omit<ComponentProps<'input'>, 'type' | 'value' | 'onChange'> & {
+  /** 현재 선택된 파일. 외부에서 상태를 제어할 때 사용 */
+  value?: File | null;
   onChange?: (file: File | null) => void;
   /** 기본: 파일 첨부하기 */
   label?: string;
 };
 
-export const FileAttach = ({ className, onChange, disabled, label = '파일 첨부하기', ...props }: FileAttachProps) => {
+export const FileAttach = ({
+  className,
+  value = null,
+  onChange,
+  disabled,
+  label = '파일 첨부하기',
+  ...props
+}: FileAttachProps) => {
   const generatedId = useId();
   const inputId = `file-attach-${generatedId}`;
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const openPicker = () => {
     if (!disabled) {
@@ -50,7 +58,6 @@ export const FileAttach = ({ className, onChange, disabled, label = '파일 첨�
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const next = e.target.files?.[0] ?? null;
     e.target.value = '';
-    setSelectedFile(next);
     onChange?.(next);
   };
 
@@ -68,7 +75,7 @@ export const FileAttach = ({ className, onChange, disabled, label = '파일 첨�
         {...props}
       />
 
-      {selectedFile === null ? (
+      {value === null ? (
         <button
           type="button"
           disabled={disabled}
@@ -98,10 +105,10 @@ export const FileAttach = ({ className, onChange, disabled, label = '파일 첨�
             'bg-(--color-surface-gray-subtler) px-4 py-0 text-left transition-[border-color,box-shadow,background-color]',
             disabled && 'pointer-events-none cursor-not-allowed',
           )}
-          aria-label={`첨부 파일: ${selectedFile.name}`}
+          aria-label={`첨부 파일: ${value.name}`}
         >
           <span className="text-body-base min-w-0 flex-1 truncate text-start leading-normal text-(--color-text-subtle)">
-            {selectedFile.name}
+            {value.name}
           </span>
         </button>
       )}
