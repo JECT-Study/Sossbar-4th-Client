@@ -1,28 +1,26 @@
-import type { TextareaHTMLAttributes } from 'react';
+import type { Ref, TextareaHTMLAttributes } from 'react';
 
-import { forwardRef, useId, useState } from 'react';
+import { cva } from 'class-variance-authority';
+import { useId, useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
+import { parseCounterText } from '@/shared/lib/parse-counter-text';
 
-/** `bottomText`가 "숫자/숫자" 형태일 때 카운터로 파싱 */
-const resolveCounterFromBottomText = (bottomText?: string) => {
-  if (bottomText == null) {
-    return null;
-  }
+const counterColorVariants = cva('', {
+  variants: {
+    inputState: {
+      disabled: 'text-text-subtle',
+      error: 'text-(--color-border-error)',
+      completed: 'text-input-border',
+      focused: 'text-(--color-border-primary)',
+      idle: 'text-text-disabled',
+    },
+  },
+  defaultVariants: { inputState: 'idle' as const },
+});
 
-  const normalized = bottomText.replace(/\s+/g, '');
-  const matched = /^(\d+)\/(\d+)$/.exec(normalized);
-  if (matched == null) {
-    return null;
-  }
-
-  return {
-    currentCount: Number(matched[1]),
-    totalCount: Number(matched[2]),
-  };
-};
-
-export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  ref?: Ref<HTMLTextAreaElement>;
   className?: string;
   textareaClassName?: string;
   variant?: 'default' | 'error';
@@ -33,51 +31,55 @@ export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   currentCount?: number;
   totalCount?: number;
   errorMessage?: string;
-};
+}
 
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  {
-    className,
-    textareaClassName,
-    disabled,
-    variant = 'default',
-    isCompleted = false,
-    label,
-    bottomText,
-    currentCount,
-    totalCount,
-    errorMessage,
-    id,
-    'aria-describedby': ariaDescribedBy,
-    onFocus,
-    onBlur,
-    ...props
-  },
+export const Textarea = ({
   ref,
-) {
+  className,
+  textareaClassName,
+  disabled,
+  variant = 'default',
+  isCompleted = false,
+  label,
+  bottomText,
+  currentCount,
+  totalCount,
+  errorMessage,
+  id,
+  placeholder = '내용을 입력해주세요',
+  'aria-describedby': ariaDescribedBy,
+  onFocus,
+  onBlur,
+  ...props
+}: Props) => {
+  // IDs
   const generatedId = useId();
   const textareaId = id ?? `textarea-${generatedId}`;
   const helperId = `${textareaId}-helper`;
-  const isError = variant === 'error';
-  const hasErrorMessage = isError && !!errorMessage?.trim();
+
+  // State
   const [isFocused, setIsFocused] = useState(false);
+
+  // Derived state
+  const isError = variant === 'error';
   const resolvedCounter =
-    currentCount != null && totalCount != null
-      ? { currentCount, totalCount }
-      : resolveCounterFromBottomText(bottomText);
-  const helperText = isError ? errorMessage : bottomText;
+    currentCount != null && totalCount != null ? { currentCount, totalCount } : parseCounterText(bottomText);
+
+  // Helper 영역 노출 조건
+  const hasErrorMessage = isError && !!errorMessage?.trim();
   const hasCounter = resolvedCounter != null;
-  const hasHelper = hasErrorMessage || resolvedCounter != null || bottomText != null;
-  const resolvedPlaceholder = props.placeholder ?? '내용을 입력해주세요';
-  const counterColorCls = disabled
-    ? 'text-text-subtle'
+  const hasHelper = hasErrorMessage || hasCounter || bottomText != null;
+
+  const inputState = disabled
+    ? 'disabled'
     : isError
-      ? 'text-(--color-border-error)'
+      ? 'error'
       : isCompleted
-        ? 'text-input-border'
+        ? 'completed'
         : isFocused
-          ? 'text-(--color-border-primary)'
-          : 'text-text-disabled';
+          ? 'focused'
+          : 'idle';
+  const counterColorCls = counterColorVariants({ inputState });
 
   const describedBy = [ariaDescribedBy, hasHelper ? helperId : undefined].filter(Boolean).join(' ') || undefined;
 
@@ -95,7 +97,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         disabled={disabled}
         aria-invalid={isError || undefined}
         aria-describedby={describedBy}
-        placeholder={resolvedPlaceholder}
+        placeholder={placeholder}
         onFocus={(e) => {
           setIsFocused(true);
           onFocus?.(e);
@@ -143,16 +145,16 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
               </p>
             )}
           </div>
-        ) : resolvedCounter != null ? (
+        ) : hasCounter ? (
           <p id={helperId} className="text-body-sm mt-2 flex w-full justify-end text-right">
             <span className={cn(counterColorCls, 'mr-[2px]')}>{resolvedCounter.currentCount}</span>
             <span className="text-text-subtle">/{resolvedCounter.totalCount}</span>
           </p>
         ) : (
           <p id={helperId} className="text-body-sm text-text-subtle mt-2">
-            {helperText}
+            {bottomText}
           </p>
         ))}
     </div>
   );
-});
+};
