@@ -1,29 +1,29 @@
 'use client';
 
+import { cva } from 'class-variance-authority';
 import { useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
-type StepVariant = 'default' | 'active' | 'active-yellow';
+import type { VariantProps } from 'class-variance-authority';
 
-type StepIndicatorProps = {
-  variant?: StepVariant;
+const stepIndicatorVariants = cva('block h-[18px] w-[18px] shrink-0 rounded-full border-2', {
+  variants: {
+    variant: {
+      default: 'bg-(--color-element-disabled-dark) border-(--color-element-disabled-light)',
+      active: 'bg-(--color-element-primary) border-border-primary-light',
+      'active-yellow': 'bg-(--color-graphic-yellow) border-(--color-graphic-yellow-subtler)',
+    },
+  },
+  defaultVariants: { variant: 'default' },
+});
+
+interface StepIndicatorProps extends VariantProps<typeof stepIndicatorVariants> {
   className?: string;
-};
-
-const stepIndicatorStyles: Record<StepVariant, string> = {
-  default: 'bg-(--color-element-disabled-dark) border-(--color-element-disabled-light)',
-  active: 'bg-(--color-element-primary) border-border-primary-light',
-  'active-yellow': 'bg-(--color-graphic-yellow) border-(--color-graphic-yellow-subtler)',
-};
+}
 
 export const StepIndicator = ({ variant = 'default', className }: StepIndicatorProps) => {
-  return (
-    <span
-      aria-hidden
-      className={cn('block h-[18px] w-[18px] shrink-0 rounded-full border-2', stepIndicatorStyles[variant], className)}
-    />
-  );
+  return <span aria-hidden className={cn(stepIndicatorVariants({ variant }), className)} />;
 };
 
 const DEFAULT_STEP_COUNT = 6;
@@ -52,7 +52,7 @@ export const ProgressStepper = ({
   const selectedIndex = value ?? internalSelectedIndex;
   const totalSteps = Math.max(stepCount, 0);
 
-  const getVariant = (index: number): StepVariant => {
+  const getVariant = (index: number) => {
     if (selectedIndex !== index) {
       return 'default';
     }
