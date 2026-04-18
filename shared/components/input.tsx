@@ -2,21 +2,17 @@ import type { InputHTMLAttributes, ReactElement } from 'react';
 
 import { forwardRef, useId } from 'react';
 
+import { DeleteIcon } from '@/shared/assets/icons';
 import { cn } from '@/shared/lib/cn';
 
 const InputErrorLeadIcon = () => {
   return (
-    <svg
+    <DeleteIcon
       width={16}
       height={16}
-      viewBox="0 0 16 16"
-      className="text-icon-inverse pointer-events-none mt-0.5 shrink-0"
+      className="[&_rect]:fill-element-error [&_path]:fill-icon-inverse pointer-events-none mt-0.5 shrink-0"
       aria-hidden
-    >
-      <circle cx={8} cy={8} r={8} className="fill-element-error" />
-      <line x1="5" y1="5" x2="11" y2="11" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" />
-      <line x1="11" y1="5" x2="5" y2="11" stroke="currentColor" strokeWidth={1.2} strokeLinecap="round" />
-    </svg>
+    />
   );
 };
 
