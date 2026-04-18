@@ -1,11 +1,10 @@
-import type { ComponentProps, ReactElement, ReactNode } from 'react';
+import type { ComponentPropsWithRef, ReactElement, ReactNode } from 'react';
 
 import { cva } from 'class-variance-authority';
-import { Slot } from 'radix-ui';
+
+import { cn } from '@/shared/lib/cn';
 
 import type { VariantProps } from 'class-variance-authority';
-
-import { cn } from '../lib/cn';
 
 const projectStateBadgeVariants = cva(
   'w-fit px-2 py-1 rounded-full inline-flex items-center justify-center gap-1 text-detail-xs font-medium',
@@ -23,29 +22,18 @@ const projectStateBadgeVariants = cva(
   },
 );
 
-interface Props extends ComponentProps<'span'>, VariantProps<typeof projectStateBadgeVariants> {
-  children: ReactNode;
-  asChild?: boolean;
+interface Props extends ComponentPropsWithRef<'span'>, VariantProps<typeof projectStateBadgeVariants> {
   leftIcon?: ReactElement;
   rightIcon?: ReactElement;
+  children: ReactNode;
 }
 
-export const ProjectStateBadge = ({
-  status,
-  children,
-  leftIcon,
-  rightIcon,
-  className,
-  asChild,
-  ...restProps
-}: Props) => {
-  const Component = asChild ? Slot.Root : 'span';
-
+export const ProjectStateBadge = ({ status, children, leftIcon, rightIcon, className, ...restProps }: Props) => {
   return (
-    <Component className={cn(projectStateBadgeVariants({ status }), className)} {...restProps}>
+    <span className={cn(projectStateBadgeVariants({ status }), className)} {...restProps}>
       {leftIcon}
-      <Slot.Slottable>{children}</Slot.Slottable>
+      {children}
       {rightIcon}
-    </Component>
+    </span>
   );
 };
