@@ -12,6 +12,7 @@
   --color-text-basic: var(--color-gray-900);
   --color-text-basic-inverse: var(--color-gray-0);
   --color-text-subtle: var(--color-gray-600);
+  --color-text-subtler: var(--color-gray-500);
   --color-text-disabled: var(--color-gray-400);
   --color-text-primary: var(--color-primary-600);
   --color-text-secondary: var(--color-secondary-800);
@@ -42,6 +43,7 @@
 
   /* Surface */
   --color-surface-white: var(--color-gray-0);
+  --color-surface-transparency: var(--color-white-0);
   --color-surface-inverse: var(--color-gray-900);
   --color-surface-gray-subtler: var(--color-gray-50);
   --color-surface-gray-subtle: var(--color-gray-100);
@@ -107,23 +109,36 @@
   --color-icon-disabled: var(--color-gray-400);
   --color-icon-primary: var(--color-primary-500);
   --color-icon-secondary: var(--color-secondary-800);
+  --color-icon-success: var(--color-success-500);
+  --color-icon-warning: var(--color-warning-500);
+  --color-icon-error: var(--color-error-500);
 
   /* Action */
   --color-action-white: var(--color-gray-0);
   --color-action-gray-light: var(--color-gray-100);
-  --color-action-primary: transparent;
+  --color-action-primary: var(--color-white-0);
   --color-action-primary-hover: var(--color-primary-50);
   --color-action-primary-pressed: var(--color-primary-100);
   --color-action-primary-selected: var(--color-primary-50);
   --color-action-primary-active: var(--color-primary-500);
   --color-action-tag-secondary: var(--color-primary-300);
   --color-action-tag-tertiary: var(--color-primary-100);
-  --color-action-secondary: transparent;
+  --color-action-secondary: var(--color-white-0);
+  --color-action-secondary-on: var(--color-white-0);
+  --color-action-secondary-on-selected: var(--color-gray-0);
   --color-action-secondary-hover: var(--color-secondary-50);
   --color-action-secondary-pressed: var(--color-secondary-100);
   --color-action-secondary-selected: var(--color-secondary-50);
   --color-action-secondary-active: var(--color-secondary-800);
   --color-action-disabled: var(--color-gray-200);
+
+  /* Input */
+  --color-input-surface: var(--color-gray-0);
+  --color-input-border: var(--color-gray-600);
+  --color-input-border-active: var(--color-primary-500);
+  --color-input-border-error: var(--color-error-500);
+  --color-input-surface-disabled: var(--color-gray-200);
+  --color-input-border-disabled: var(--color-gray-300);
 
   /* Button */
   --color-button-primary-fill: var(--color-primary-500);
@@ -158,6 +173,7 @@
   --color-text-basic: var(--color-text-basic);
   --color-text-basic-inverse: var(--color-text-basic-inverse);
   --color-text-subtle: var(--color-text-subtle);
+  --color-text-subtler: var(--color-text-subtler);
   --color-text-disabled: var(--color-text-disabled);
   --color-text-primary: var(--color-text-primary);
   --color-text-secondary: var(--color-text-secondary);
@@ -188,6 +204,7 @@
 
   /* Surface */
   --color-surface-white: var(--color-surface-white);
+  --color-surface-transparency: var(--color-surface-transparency);
   --color-surface-inverse: var(--color-surface-inverse);
   --color-surface-gray-subtler: var(--color-surface-gray-subtler);
   --color-surface-gray-subtle: var(--color-surface-gray-subtle);
@@ -253,6 +270,9 @@
   --color-icon-disabled: var(--color-icon-disabled);
   --color-icon-primary: var(--color-icon-primary);
   --color-icon-secondary: var(--color-icon-secondary);
+  --color-icon-success: var(--color-icon-success);
+  --color-icon-warning: var(--color-icon-warning);
+  --color-icon-error: var(--color-icon-error);
 
   /* Action */
   --color-action-white: var(--color-action-white);
@@ -265,11 +285,21 @@
   --color-action-tag-secondary: var(--color-action-tag-secondary);
   --color-action-tag-tertiary: var(--color-action-tag-tertiary);
   --color-action-secondary: var(--color-action-secondary);
+  --color-action-secondary-on: var(--color-action-secondary-on);
+  --color-action-secondary-on-selected: var(--color-action-secondary-on-selected);
   --color-action-secondary-hover: var(--color-action-secondary-hover);
   --color-action-secondary-pressed: var(--color-action-secondary-pressed);
   --color-action-secondary-selected: var(--color-action-secondary-selected);
   --color-action-secondary-active: var(--color-action-secondary-active);
   --color-action-disabled: var(--color-action-disabled);
+
+  /* Input */
+  --color-input-surface: var(--color-input-surface);
+  --color-input-border: var(--color-input-border);
+  --color-input-border-active: var(--color-input-border-active);
+  --color-input-border-error: var(--color-input-border-error);
+  --color-input-surface-disabled: var(--color-input-surface-disabled);
+  --color-input-border-disabled: var(--color-input-border-disabled);
 
   /* Button */
   --color-button-primary-fill: var(--color-button-primary-fill);
