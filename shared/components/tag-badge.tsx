@@ -55,7 +55,7 @@ export const TagBadge = ({ disabled, children, className, asChild, count, size, 
       <div className="flex items-center gap-1">
         <span>#</span>
         <span>{children}</span>
-        {Boolean(count) && <span className={countColor}>{count}</span>}
+        {Number(count) > 1 ? <span className={countColor}>{count}</span> : null}
       </div>
     </Component>
   );
