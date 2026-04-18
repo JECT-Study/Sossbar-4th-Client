@@ -32,6 +32,7 @@ const twMerge = extendTailwindMerge({
       'text-color': [
         {
           text: [
+            // text tokens
             'text-basic',
             'text-basic-inverse',
             'text-subtle',
