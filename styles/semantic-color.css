@@ -121,6 +121,7 @@
   --color-action-primary-pressed: var(--color-primary-100);
   --color-action-primary-selected: var(--color-primary-50);
   --color-action-primary-active: var(--color-primary-500);
+  --color-action-tag-primary: var(--color-primary-500);
   --color-action-tag-secondary: var(--color-primary-300);
   --color-action-tag-tertiary: var(--color-primary-100);
   --color-action-secondary: var(--color-white-0);
@@ -282,6 +283,7 @@
   --color-action-primary-pressed: var(--color-action-primary-pressed);
   --color-action-primary-selected: var(--color-action-primary-selected);
   --color-action-primary-active: var(--color-action-primary-active);
+  --color-action-tag-primary: var(--color-action-tag-primary);
   --color-action-tag-secondary: var(--color-action-tag-secondary);
   --color-action-tag-tertiary: var(--color-action-tag-tertiary);
   --color-action-secondary: var(--color-action-secondary);
