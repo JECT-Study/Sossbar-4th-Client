@@ -108,6 +108,7 @@ const twMerge = extendTailwindMerge({
             'action-primary-pressed',
             'action-primary-selected',
             'action-primary-active',
+            'action-tag-primary',
             'action-tag-secondary',
             'action-tag-tertiary',
             'action-secondary',
