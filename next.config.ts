@@ -7,7 +7,14 @@ const nextConfig: NextConfig = {
     root: path.join(__dirname, '..'),
     rules: {
       '*.svg': {
-        loaders: ['@svgr/webpack'],
+        loaders: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              icon: true,
+            },
+          },
+        ],
         as: '*.js',
       },
     },
