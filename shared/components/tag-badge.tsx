@@ -41,7 +41,17 @@ interface Props extends ComponentPropsWithRef<'span'>, VariantProps<typeof tagBa
   count: string | number;
 }
 
-export const TagBadge = ({ disabled, children, className, asChild, count, size, priority, ...restProps }: Props) => {
+export const TagBadge = ({
+  disabled,
+  children,
+  className,
+  asChild,
+  count,
+  size,
+  priority,
+  ref,
+  ...restProps
+}: Props) => {
   const Component = asChild ? Slot.Root : 'span';
   const hasRanking = priority !== 'default';
   const countColor = disabled || hasRanking ? 'text-inherit' : 'text-text-subtle';
@@ -50,6 +60,7 @@ export const TagBadge = ({ disabled, children, className, asChild, count, size, 
     <Component
       className={cn(tagBadgeVariants({ disabled, size, priority }), className)}
       aria-disabled={Boolean(disabled)}
+      ref={ref}
       {...restProps}
     >
       <div className="flex items-center gap-1">
