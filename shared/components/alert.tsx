@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps, ReactElement } from 'react';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -28,7 +28,7 @@ const defaultMessageByVariant = {
 type AlertVariant = NonNullable<VariantProps<typeof alertVariants>['variant']>;
 const iconBaseClassName = 'h-6 w-6 shrink-0';
 
-const iconByVariant: Record<AlertVariant, JSX.Element> = {
+const iconByVariant: Record<AlertVariant, ReactElement> = {
   warning: <TimeIcon aria-hidden className={cn(iconBaseClassName, '[&_path]:fill-icon-warning')} />,
   success: <SuccessIcon aria-hidden className={iconBaseClassName} />,
 };
