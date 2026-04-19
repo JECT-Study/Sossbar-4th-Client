@@ -1,8 +1,11 @@
-import type { ComponentPropsWithRef, ReactNode } from 'react';
+'use client';
+
+import type { ComponentPropsWithRef, MouseEventHandler, ReactNode } from 'react';
 
 import { cva } from 'class-variance-authority';
-import { Slot } from 'radix-ui';
 
+import { DeleteIcon } from '@/shared/assets/icons';
+import { useControllableState } from '@/shared/hooks/use-controllable-state';
 import { cn } from '@/shared/lib/cn';
 
 import type { VariantProps } from 'class-variance-authority';
@@ -22,6 +25,14 @@ const tagBadgeVariants = cva(
         true: 'bg-action-disabled border-none cursor-not-allowed text-text-disabled hover:bg-action-disabled active:bg-action-disabled focus-visible:outline-none',
         false: '',
       },
+      readOnly: {
+        true: 'cursor-default pointer-events-none',
+        false: '',
+      },
+      checked: {
+        true: 'bg-action-secondary-selected border border-action-primary-active hover:border-action-primary-active',
+        false: '',
+      },
       size: {
         medium: 'px-3 py-2 text-detail-base',
         small: 'px-2.5 py-1.5 text-detail-sm',
@@ -31,43 +42,74 @@ const tagBadgeVariants = cva(
       priority: 'default',
       size: 'medium',
       disabled: false,
+      checked: false,
+      readOnly: false,
     },
   },
 );
 
-interface Props extends ComponentPropsWithRef<'span'>, VariantProps<typeof tagBadgeVariants> {
+interface Props
+  extends
+    Omit<ComponentPropsWithRef<'button'>, 'checked' | 'defaultChecked' | 'disabled'>,
+    VariantProps<typeof tagBadgeVariants> {
   children: ReactNode;
-  asChild?: boolean;
-  count: string | number;
+  count?: string | number;
+  disabled?: boolean;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  readOnly?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 export const TagBadge = ({
+  ref,
   disabled,
   children,
   className,
-  asChild,
   count,
   size,
   priority,
-  ref,
+  checked: checkedProp,
+  defaultChecked,
+  readOnly,
+  onCheckedChange,
+  onClick,
   ...restProps
 }: Props) => {
-  const Component = asChild ? Slot.Root : 'span';
   const hasRanking = priority !== 'default';
   const countColor = disabled || hasRanking ? 'text-inherit' : 'text-text-subtle';
+  const isToggleable = !hasRanking;
+
+  const [checked, setChecked] = useControllableState({
+    prop: isToggleable ? checkedProp : false,
+    defaultProp: isToggleable ? (defaultChecked ?? false) : false,
+    onChange: onCheckedChange,
+  });
+
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    setChecked((prev) => !prev);
+    onClick?.(event);
+  };
 
   return (
-    <Component
-      className={cn(tagBadgeVariants({ disabled, size, priority }), className)}
-      aria-disabled={Boolean(disabled)}
+    <button
+      type="button"
       ref={ref}
+      className={cn(tagBadgeVariants({ disabled, size, priority, checked, readOnly }), className)}
+      disabled={Boolean(disabled)}
+      onClick={handleClick}
       {...restProps}
     >
       <div className="flex items-center gap-1">
         <span>#</span>
         <span>{children}</span>
-        {Number(count) > 1 ? <span className={countColor}>{count}</span> : null}
+        {count !== undefined && Number(count) > 1 ? <span className={countColor}>{count}</span> : null}
+        {checked && !disabled && !readOnly ? (
+          <span aria-hidden className="ml-0.5 leading-none">
+            <DeleteIcon />
+          </span>
+        ) : null}
       </div>
-    </Component>
+    </button>
   );
 };
