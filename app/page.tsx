@@ -1,5 +1,7 @@
+import { First } from './mainfirst';
+
 const Home = () => {
-  return <div>Home</div>;
+  return <First />;
 };
 
 export default Home;
