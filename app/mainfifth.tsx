@@ -8,7 +8,7 @@ export const Fifth = () => {
   return (
     <section
       id="main-fifth"
-      className="py-[120px]"
+      className="relative z-10 bg-[#050814] py-[120px]"
       style={{
         backgroundImage: 'url("/MainFIfth_background.svg")',
         backgroundPosition: 'center',
@@ -19,6 +19,13 @@ export const Fifth = () => {
       <div className="mx-auto w-full max-w-[1200px]">
         <div className="relative flex h-[438px] w-full items-start justify-start gap-6 overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(24,30,52,0.28)] p-0 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-[24px]">
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(168,183,246,0.24)_0%,rgba(30,36,64,0.2)_44%,rgba(16,20,34,0.5)_100%)]" />
+          <Image
+            src="/Overlay+Blur left.svg"
+            alt=""
+            width={586}
+            height={438}
+            className="pointer-events-none absolute top-0 -left-4 h-[438px] w-[586px] select-none"
+          />
           <Image
             src="/Overlay+Blur left.svg"
             alt=""
