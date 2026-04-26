@@ -1,4 +1,10 @@
-const STEPS: { step: number; title: string; description: string }[] = [
+interface Step {
+  step: number;
+  title: string;
+  description: string;
+}
+
+const STEPS: Step[] = [
   {
     step: 1,
     title: '프로필 생성',
@@ -23,20 +29,20 @@ export const Third = () => {
       className="bg-gray-0 box-border flex h-[800px] w-full items-center justify-center p-[80px]"
     >
       <div className="box-border flex h-[434px] w-full max-w-[1200px] min-w-0 shrink-0 flex-col">
-        <div className="flex w-[1200px] flex-col items-center">
+        <div className="flex w-full flex-col items-center">
           <div className="text-element-primary bg-button-secondary-fill box-border flex h-[32px] w-[69px] shrink-0 items-center justify-center overflow-hidden rounded-[24px] text-center text-[14px] leading-none font-normal whitespace-nowrap">
             사용법
           </div>
-          <h2 className="text-text-basic mt-6 w-[1200px] text-center text-[48px] leading-[150%] font-bold">
+          <h2 className="text-text-basic mt-6 w-full text-center text-[48px] leading-[150%] font-bold">
             Sossbar 이용 방법
           </h2>
         </div>
 
-        <div className="mt-[40px] w-[1200px] max-w-full shrink-0">
+        <div className="mt-[40px] w-full shrink-0">
           <ol className="box-border flex h-max w-full list-none flex-row items-start justify-center gap-[24px] p-0">
-            {STEPS.map((item) => (
+            {STEPS.map((step) => (
               <li
-                key={item.step}
+                key={step.step}
                 className="relative box-border flex min-w-0 flex-1 flex-col items-start py-[16px] text-left"
               >
                 <div
@@ -48,11 +54,11 @@ export const Third = () => {
                     className="text-text-basic bg-bg-white text-heading-base flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full text-center font-bold shadow-md"
                     aria-hidden
                   >
-                    {item.step}
+                    {step.step}
                   </div>
-                  <h3 className="text-text-basic text-heading-base mt-[16px] w-full font-bold">{item.title}</h3>
+                  <h3 className="text-text-basic text-heading-base mt-[16px] w-full font-bold">{step.title}</h3>
                   <p className="text-text-subtle text-body-base mt-[16px] w-full leading-normal font-normal">
-                    {item.description}
+                    {step.description}
                   </p>
                 </div>
               </li>

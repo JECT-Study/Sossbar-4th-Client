@@ -2,19 +2,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { buttonVariants } from '@/shared/components/button';
+import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
 export const Fifth = () => {
   return (
     <section
       id="main-fifth"
-      className="relative z-10 bg-[#050814] py-[120px]"
-      style={{
-        backgroundImage: 'url("/MainFIfth_background.svg")',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      }}
+      className="relative z-10 bg-[#050814] bg-[url('/MainFIfth_background.svg')] bg-cover bg-center bg-no-repeat py-[120px]"
     >
       <div className="mx-auto w-full max-w-[1200px]">
         <div className="relative flex h-[438px] w-full items-start justify-start gap-6 overflow-hidden rounded-[24px] border border-white/10 bg-[rgba(24,30,52,0.28)] p-0 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-[24px]">
@@ -61,7 +56,7 @@ export const Fifth = () => {
             </div>
 
             <Link
-              href="/login"
+              href={ROUTES.LOGIN}
               className={cn(
                 buttonVariants({ variant: 'primary' }),
                 'text-text-basic-inverse mt-10 h-[56px] w-[201px] px-0 text-[20px] font-medium',
