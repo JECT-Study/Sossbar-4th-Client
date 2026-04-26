@@ -5,7 +5,7 @@ export const Fourth = () => {
     <section id="main-fourth" className="overflow-hidden bg-white pt-[120px] pb-0">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center text-center">
         <div className="flex h-[150px] w-[1200px] flex-col items-center">
-          <div className="bg-element-primary text-body-sm text-text-basic-inverse inline-flex h-8 w-[93px] items-center justify-center gap-1 rounded-[24px] px-4 py-2 leading-none font-normal opacity-100">
+          <div className="text-element-primary bg-button-secondary-fill box-border flex h-[32px] w-[93px] shrink-0 items-center justify-center overflow-hidden rounded-[24px] text-center text-[14px] leading-none font-normal whitespace-nowrap">
             메인페이지
           </div>
           <h2 className="text-text-basic mt-2 h-[72px] w-[1200px] text-center text-[48px] leading-[150%] font-bold">
