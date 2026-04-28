@@ -5,9 +5,9 @@ import { buttonVariants } from '@/shared/components/button';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
-export const First = () => {
+export const HomeHeroSection = () => {
   return (
-    <section className="bg-gray-0 pt-[80px] pb-[246px]">
+    <section id="home-hero-section" className="bg-gray-0 pt-[80px] pb-[246px]">
       <div className="mx-auto flex h-[498px] w-full max-w-[1200px] items-center justify-start gap-[24px]">
         <div className="flex w-[588px] self-stretch py-[84px]">
           <div className="w-[544px]">

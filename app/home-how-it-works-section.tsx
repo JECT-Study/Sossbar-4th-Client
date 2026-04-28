@@ -22,10 +22,10 @@ const STEPS: Step[] = [
   },
 ];
 
-export const Third = () => {
+export const HomeHowItWorksSection = () => {
   return (
     <section
-      id="main-third"
+      id="home-how-it-works-section"
       className="bg-gray-0 box-border flex h-[800px] w-full items-center justify-center p-[80px]"
     >
       <div className="box-border flex h-[434px] w-full max-w-[1200px] min-w-0 shrink-0 flex-col">

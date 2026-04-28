@@ -1,17 +1,17 @@
-import { Fifth } from './mainfifth';
-import { First } from './mainfirst';
-import { Fourth } from './mainfourth';
-import { Second } from './mainsecond';
-import { Third } from './mainthird';
+import { HomeCtaSection } from './home-cta-section';
+import { HomeFeaturesSection } from './home-features-section';
+import { HomeHeroSection } from './home-hero-section';
+import { HomeHowItWorksSection } from './home-how-it-works-section';
+import { HomeShowcaseSection } from './home-showcase-section';
 
 const Home = () => {
   return (
     <>
-      <First />
-      <Second />
-      <Third />
-      <Fourth />
-      <Fifth />
+      <HomeHeroSection />
+      <HomeFeaturesSection />
+      <HomeHowItWorksSection />
+      <HomeShowcaseSection />
+      <HomeCtaSection />
     </>
   );
 };

@@ -10,28 +10,28 @@ const FEATURES: Feature[] = [
   {
     title: '프로필 생성 및 관리',
     description: '닉네임, 한 줄 소개 등 기본 프로필을 등록하고 받은 협업 후기와 태그를 한 눈에',
-    imageSrc: '/mainsecond-search.svg',
+    imageSrc: '/home-features-search.svg',
   },
   {
     title: '팩트 기반 피드백',
     description: '좋았던 점 아쉬웠던 점을 균형있게 전달하는 후기 시스템입니다.',
-    imageSrc: '/mainsecond-target.svg',
+    imageSrc: '/home-features-target.svg',
   },
   {
     title: '소프트 스킬 스펙트럼',
     description: '원칙 vs 혁신, 유연함 vs 계획 등 협업 스타일을 다각도로 시각화합니다.',
-    imageSrc: '/mainsecond-spectrum.svg',
+    imageSrc: '/home-features-spectrum.svg',
   },
   {
     title: '프로필 외부 공유',
     description: '프로필 공유 URL을 생성하여 이력서 및 포트폴리오 그리고 노션 등에 첨부가 가능합니다.',
-    imageSrc: '/mainsecond-share.svg',
+    imageSrc: '/home-features-share.svg',
   },
 ];
 
-export const Second = () => {
+export const HomeFeaturesSection = () => {
   return (
-    <section id="main-second" className="bg-gray-0 flex h-[800px] w-full items-center py-[80px]">
+    <section id="home-features-section" className="bg-gray-0 flex h-[800px] w-full items-center py-[80px]">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center self-center">
         <div className="flex w-full flex-col items-center">
           <div className="text-element-primary bg-button-secondary-fill box-border flex h-[32px] w-[84px] shrink-0 items-center justify-center overflow-hidden rounded-[24px] text-center text-[14px] leading-none font-normal whitespace-nowrap">
