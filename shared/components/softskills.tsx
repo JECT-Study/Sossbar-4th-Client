@@ -45,7 +45,13 @@ const MIN_BAR_HEIGHT = 15;
 
 const MAX_BAR_HEIGHT = CHART_TOTAL_HEIGHT - COUNT_TEXT_HEIGHT - COUNT_TO_BAR_GAP - LABEL_GAP - LABEL_HEIGHT;
 
-const hexToRgb = (hex: string) => {
+type RgbColor = {
+  r: number;
+  g: number;
+  b: number;
+};
+
+const hexToRgb = (hex: string): RgbColor => {
   const normalizedHex = hex.replace('#', '');
 
   return {
@@ -55,13 +61,13 @@ const hexToRgb = (hex: string) => {
   };
 };
 
-const rgbToHex = ({ r, g, b }: { r: number; g: number; b: number }) => {
+const rgbToHex = ({ r, g, b }: RgbColor): string => {
   const toHex = (value: number) => value.toString(16).padStart(2, '0');
 
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
-const mixHexColors = (from: string, to: string, ratio: number) => {
+const mixHexColors = (from: string, to: string, ratio: number): string => {
   const start = hexToRgb(from);
   const end = hexToRgb(to);
 
@@ -72,7 +78,7 @@ const mixHexColors = (from: string, to: string, ratio: number) => {
   });
 };
 
-const getBarHeight = (count: number, maxDistributionCount: number) => {
+const getBarHeight = (count: number, maxDistributionCount: number): number => {
   if (count <= 0) {
     return 1;
   }
@@ -80,7 +86,7 @@ const getBarHeight = (count: number, maxDistributionCount: number) => {
   return Math.round((count / maxDistributionCount) * (MAX_BAR_HEIGHT - MIN_BAR_HEIGHT) + MIN_BAR_HEIGHT);
 };
 
-const getBarColor = (tone: DistributionBarTone, count: number, maxDistributionCount: number) => {
+const getBarColor = (tone: DistributionBarTone, count: number, maxDistributionCount: number): string => {
   const { min, max } = barToneColors[tone];
 
   if (maxDistributionCount <= 0) {
