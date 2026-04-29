@@ -3,7 +3,7 @@ type DistributionBarTone = 'accent' | 'light' | 'gray' | 'strong';
 export type SoftSkillsDistributionBar = {
   label: string;
   count: number;
-  tone: DistributionBarTone;
+  tone?: DistributionBarTone;
 };
 
 type SoftSkillsProps = {
@@ -19,21 +19,21 @@ const spectrumRows = [
 ];
 
 const defaultDistributionBars: SoftSkillsDistributionBar[] = [
-  { label: '서포트형', count: 5, tone: 'accent' as const },
-  { label: '리드형', count: 1, tone: 'gray' as const },
-  { label: '빠른 작업\n속도 중시', count: 4, tone: 'light' as const },
-  { label: '천천히 신중\n한 고민 중시', count: 2, tone: 'gray' as const },
-  { label: '상황별\n유연한 대처', count: 4, tone: 'light' as const },
-  { label: '철저한 계획\n기반 실행', count: 2, tone: 'gray' as const },
-  { label: '냉철한\n결과 지향', count: 0, tone: 'gray' as const },
-  { label: '따뜻한\n관계 지향', count: 6, tone: 'strong' as const },
+  { label: '서포트형', count: 5 },
+  { label: '리드형', count: 1 },
+  { label: '빠른 작업\n속도 중시', count: 4 },
+  { label: '천천히 신중\n한 고민 중시', count: 2 },
+  { label: '상황별\n유연한 대처', count: 4 },
+  { label: '철저한 계획\n기반 실행', count: 2 },
+  { label: '냉철한\n결과 지향', count: 0 },
+  { label: '따뜻한\n관계 지향', count: 6 },
 ];
 
-const barToneColors: Record<DistributionBarTone, { min: string; max: string }> = {
-  accent: { min: '#FFF3CF', max: '#FFD27A' },
-  light: { min: '#FFF9EA', max: '#FFE8BC' },
-  gray: { min: '#ECEFF3', max: '#C9CDD3' },
-  strong: { min: '#FFE4A6', max: '#FFB22E' },
+const barToneColors: Record<DistributionBarTone, string> = {
+  strong: '#FFB22E',
+  accent: '#FFD27A',
+  light: '#FFE8BC',
+  gray: '#C9CDD3',
 };
 
 const CHART_TOTAL_HEIGHT = 235;
@@ -45,39 +45,6 @@ const MIN_BAR_HEIGHT = 15;
 
 const MAX_BAR_HEIGHT = CHART_TOTAL_HEIGHT - COUNT_TEXT_HEIGHT - COUNT_TO_BAR_GAP - LABEL_GAP - LABEL_HEIGHT;
 
-type RgbColor = {
-  r: number;
-  g: number;
-  b: number;
-};
-
-const hexToRgb = (hex: string): RgbColor => {
-  const normalizedHex = hex.replace('#', '');
-
-  return {
-    r: Number.parseInt(normalizedHex.slice(0, 2), 16),
-    g: Number.parseInt(normalizedHex.slice(2, 4), 16),
-    b: Number.parseInt(normalizedHex.slice(4, 6), 16),
-  };
-};
-
-const rgbToHex = ({ r, g, b }: RgbColor): string => {
-  const toHex = (value: number) => value.toString(16).padStart(2, '0');
-
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-};
-
-const mixHexColors = (from: string, to: string, ratio: number): string => {
-  const start = hexToRgb(from);
-  const end = hexToRgb(to);
-
-  return rgbToHex({
-    r: Math.round(start.r + (end.r - start.r) * ratio),
-    g: Math.round(start.g + (end.g - start.g) * ratio),
-    b: Math.round(start.b + (end.b - start.b) * ratio),
-  });
-};
-
 const getBarHeight = (count: number, maxDistributionCount: number): number => {
   if (count <= 0) {
     return 1;
@@ -86,16 +53,16 @@ const getBarHeight = (count: number, maxDistributionCount: number): number => {
   return Math.round((count / maxDistributionCount) * (MAX_BAR_HEIGHT - MIN_BAR_HEIGHT) + MIN_BAR_HEIGHT);
 };
 
-const getBarColor = (tone: DistributionBarTone, count: number, maxDistributionCount: number): string => {
-  const { min, max } = barToneColors[tone];
+const getTopBarTones = (distributionBars: SoftSkillsDistributionBar[]): DistributionBarTone[] => {
+  const rankTones: DistributionBarTone[] = ['strong', 'accent', 'light'];
+  const uniqueCounts = Array.from(new Set(distributionBars.map((bar) => bar.count))).sort((a, b) => b - a);
+  const toneByCount = new Map<number, DistributionBarTone>();
 
-  if (maxDistributionCount <= 0) {
-    return min;
-  }
+  uniqueCounts.slice(0, rankTones.length).forEach((count, index) => {
+    toneByCount.set(count, rankTones[index]);
+  });
 
-  const ratio = Math.max(0, Math.min(1, count / maxDistributionCount));
-
-  return mixHexColors(min, max, ratio);
+  return distributionBars.map((bar) => toneByCount.get(bar.count) ?? 'gray');
 };
 
 export const SoftSkills = ({
@@ -104,6 +71,7 @@ export const SoftSkills = ({
 }: SoftSkillsProps) => {
   const maxDistributionCount = Math.max(...distributionBars.map((bar) => bar.count), 0);
   const hasDistributionData = distributionBars.some((bar) => bar.count > 0);
+  const distributionBarTones = getTopBarTones(distributionBars);
 
   return (
     <section className="border-border-gray relative h-[652px] w-[588px] overflow-hidden rounded-[16px] border bg-white px-[24px] py-[24px]">
@@ -163,7 +131,7 @@ export const SoftSkills = ({
           <h3 className="text-heading-sm leading-[30px] font-bold text-[#4B5563]">받은 평가 분포(6명 응답)</h3>
 
           <div className="mx-auto mt-[16px] flex h-[235px] w-[513px] items-end justify-between">
-            {distributionBars.map((bar) => (
+            {distributionBars.map((bar, index) => (
               <div key={bar.label} className="flex w-[61px] flex-col items-center">
                 <span className="text-body-xs mb-[6px] text-center leading-[150%] font-medium text-[#4B5563]">
                   {bar.count}명
@@ -172,7 +140,7 @@ export const SoftSkills = ({
                   className="w-[50px] rounded-t-[4px]"
                   style={{
                     height: `${getBarHeight(bar.count, maxDistributionCount)}px`,
-                    backgroundColor: getBarColor(bar.tone, bar.count, maxDistributionCount),
+                    backgroundColor: barToneColors[distributionBarTones[index]],
                   }}
                 />
                 <div className="text-body-xs text-text-subtle mt-[12px] flex h-[36px] items-start justify-center text-center leading-[150%] font-medium break-keep whitespace-pre-line">
