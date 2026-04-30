@@ -1,5 +1,8 @@
 import Image from 'next/image';
 
+import { Button } from '@/shared/components/button';
+import { cn } from '@/shared/lib/cn';
+
 type Props = {
   name: string;
   className?: string;
@@ -9,7 +12,7 @@ type Props = {
 export const ModalType = ({ name, className, onConfirm }: Props) => {
   return (
     <div
-      className={`h-[353px] w-[360px] rounded-2xl bg-white px-8 pt-6 pb-10 shadow-xl ${className ?? ''}`}
+      className={cn('h-[353px] w-[360px] rounded-2xl bg-white px-8 pt-6 pb-10 shadow-xl', className)}
       role="document"
     >
       <div className="flex flex-col items-center text-center">
@@ -26,13 +29,14 @@ export const ModalType = ({ name, className, onConfirm }: Props) => {
 
         <p className="text-body-sm mt-2 font-normal text-(--color-text-basic)">협업 프로필을 공유해보세요!</p>
 
-        <button
+        <Button
           type="button"
           onClick={onConfirm}
-          className="text-body-base mt-6 h-[48px] w-[312px] rounded-xl bg-(--color-button-primary-fill) font-semibold text-(--color-text-basic-inverse) transition-colors hover:bg-(--color-button-primary-fill-hover) active:bg-(--color-button-primary-fill-pressed)"
+          size="large"
+          className="text-body-base mt-6 h-12 w-full max-w-[312px] rounded-xl font-semibold"
         >
           프로필 공유하러 가기
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -9,8 +9,8 @@ import { Header } from '@/shared/components/header';
 
 export const AppShell = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
-  const hideChrome = (pathname?.startsWith('/login') || pathname?.startsWith('/signup')) ?? false;
-  const isHome = pathname === '/';
+  const hideChrome = pathname?.startsWith('/signup') ?? false;
+  const isHome = pathname === '/' || pathname === '/login';
 
   if (hideChrome) {
     return children;
