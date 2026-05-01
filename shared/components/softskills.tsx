@@ -1,3 +1,5 @@
+import { cn } from '@/shared/lib/cn';
+
 type DistributionBarTone = 'accent' | 'light' | 'gray' | 'strong';
 
 export type SoftSkillsDistributionBar = {
@@ -29,33 +31,45 @@ const defaultDistributionBars: SoftSkillsDistributionBar[] = [
   { label: '따뜻한\n관계 지향', count: 6 },
 ];
 
-const barToneColors: Record<DistributionBarTone, string> = {
-  strong: '#FFB22E',
-  accent: '#FFD27A',
-  light: '#FFE8BC',
-  gray: '#C9CDD3',
+const barToneBgClasses: Record<DistributionBarTone, string> = {
+  strong: 'bg-(--color-graphic-yellow)',
+  accent: 'bg-(--color-graphic-yellow-subtle)',
+  light: 'bg-(--color-graphic-yellow-subtler)',
+  gray: 'bg-(--color-gray-300)',
 };
 
-const CHART_TOTAL_HEIGHT = 235;
-const COUNT_TEXT_HEIGHT = 18;
-const COUNT_TO_BAR_GAP = 6;
-const LABEL_GAP = 12;
-const LABEL_HEIGHT = 36;
-const MIN_BAR_HEIGHT = 15;
+const BAR_HEIGHT_MIN_PX = 1;
 
-const MAX_BAR_HEIGHT = CHART_TOTAL_HEIGHT - COUNT_TEXT_HEIGHT - COUNT_TO_BAR_GAP - LABEL_GAP - LABEL_HEIGHT;
+const STACK_COUNT_AND_BAR_TOTAL_PX = 198;
+
+const COUNT_TEXT_HEIGHT = 18;
+const COUNT_TO_BAR_GAP = 0;
+
+const BAR_HEIGHT_MAX_PX = STACK_COUNT_AND_BAR_TOTAL_PX - COUNT_TEXT_HEIGHT - COUNT_TO_BAR_GAP;
+
+const LABEL_GAP = 8;
+const LABEL_HEIGHT = 36;
+
+const CHART_TOTAL_HEIGHT = STACK_COUNT_AND_BAR_TOTAL_PX + LABEL_GAP + LABEL_HEIGHT;
+
+const spectrumTrackWidthPx = 286;
+
+const spectrumVerticalDashPercents = [20, 40, 60, 80] as const;
 
 const getBarHeight = (count: number, maxDistributionCount: number): number => {
-  if (count <= 0) {
-    return 1;
+  if (count <= 0 || maxDistributionCount <= 0) {
+    return BAR_HEIGHT_MIN_PX;
   }
 
-  return Math.round((count / maxDistributionCount) * (MAX_BAR_HEIGHT - MIN_BAR_HEIGHT) + MIN_BAR_HEIGHT);
+  const ratio = count / maxDistributionCount;
+
+  return Math.round(BAR_HEIGHT_MIN_PX + ratio * (BAR_HEIGHT_MAX_PX - BAR_HEIGHT_MIN_PX));
 };
 
 const getTopBarTones = (distributionBars: SoftSkillsDistributionBar[]): DistributionBarTone[] => {
   const rankTones: DistributionBarTone[] = ['strong', 'accent', 'light'];
   const uniqueCounts = Array.from(new Set(distributionBars.map((bar) => bar.count))).sort((a, b) => b - a);
+
   const toneByCount = new Map<number, DistributionBarTone>();
 
   uniqueCounts.slice(0, rankTones.length).forEach((count, index) => {
@@ -64,6 +78,18 @@ const getTopBarTones = (distributionBars: SoftSkillsDistributionBar[]): Distribu
 
   return distributionBars.map((bar) => toneByCount.get(bar.count) ?? 'gray');
 };
+
+const SpectrumVerticalDashOverlay = ({ widthPx }: { widthPx: number }) => (
+  <svg aria-hidden className="pointer-events-none absolute top-0 left-0 select-none" height={136} width={widthPx}>
+    <g stroke="var(--color-border-gray)" strokeLinecap="round" strokeWidth={1} vectorEffect="non-scaling-stroke">
+      {spectrumVerticalDashPercents.map((pct) => {
+        const x = (widthPx * pct) / 100;
+
+        return <line key={pct} strokeDasharray="2 6" x1={x} x2={x} y1={0} y2={136} />;
+      })}
+    </g>
+  </svg>
+);
 
 export const SoftSkills = ({
   title = '소프트 스킬 스펙트럼',
@@ -74,50 +100,45 @@ export const SoftSkills = ({
   const distributionBarTones = getTopBarTones(distributionBars);
 
   return (
-    <section className="border-border-gray relative h-[652px] w-[588px] overflow-hidden rounded-[16px] border bg-white px-[24px] py-[24px]">
-      <div className="absolute top-[24px] left-1/2 h-[24px] w-[540px] -translate-x-1/2 text-left">
-        <h2 className="text-heading-sm leading-[24px] font-bold text-black">{title}</h2>
-      </div>
+    <section className="border-border-gray h-[652px] w-[588px] overflow-hidden rounded-2xl border bg-white p-6">
+      <h2 className="text-heading-sm h-6 leading-6 font-bold text-black">{title}</h2>
 
-      <div className="mt-[52px] w-[540px]">
-        <h3 className="text-detail-base text-text-subtle h-[24px] leading-[150%] font-bold">평균 지표</h3>
+      <div className="mt-7 w-[540px]">
+        <h3 className="text-detail-base text-text-subtle h-6 leading-[150%] font-bold">평균 지표</h3>
 
-        <div className="mt-[12px] flex h-[136px] items-start">
-          <div className="flex h-[136px] w-[93px] flex-col gap-[8px]">
+        <div className="mt-3 flex h-[136px] items-start">
+          <div className="flex h-[136px] w-[93px] flex-col gap-2">
             {spectrumRows.map((row) => (
               <p
                 key={`${row.left}-left`}
-                className="text-body-xs text-text-subtle flex h-[28px] items-center leading-[150%] font-medium"
+                className="text-body-xs text-text-subtle flex h-7 items-center leading-[150%] font-medium"
               >
                 {row.left}
               </p>
             ))}
           </div>
 
-          <div className="mx-[24px] flex h-[136px] w-[286px] flex-col gap-[8px]">
-            {spectrumRows.map((row) => (
-              <div key={`${row.left}-${row.right}`} className="relative h-[28px]">
-                <div className="absolute top-1/2 left-0 h-[6px] w-full -translate-y-1/2 rounded-full bg-[#D1D5DB]" />
+          <div className="relative mx-6 flex h-[136px] w-[286px] flex-col gap-2">
+            <SpectrumVerticalDashOverlay widthPx={spectrumTrackWidthPx} />
 
-                <div className="absolute top-0 left-0 flex h-full w-full items-center justify-between px-[56px]">
-                  {[0, 1, 2, 3].map((index) => (
-                    <div key={index} className="h-[24px] border-l border-dashed border-[#D8DDE5]" />
-                  ))}
-                </div>
+            {spectrumRows.map((row) => (
+              <div key={`${row.left}-${row.right}`} className="relative z-10 h-7">
+                <div className="absolute top-1/2 left-0 z-10 h-1.5 w-full -translate-y-1/2 rounded-full bg-(--color-gray-300)" />
 
                 <div
-                  className="absolute top-1/2 h-[16px] w-[16px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#1F2937] bg-white shadow-[0_0_0_2px_rgba(255,255,255,0.65)]"
+                  aria-hidden
+                  className="border-border-gray-darker bg-bg-white absolute top-1/2 z-20 box-border size-4 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full border shadow-sm"
                   style={{ left: row.markerLeft }}
                 />
               </div>
             ))}
           </div>
 
-          <div className="flex h-[136px] w-[113px] flex-col gap-[8px]">
+          <div className="flex h-[136px] w-[113px] flex-col gap-2">
             {spectrumRows.map((row) => (
               <p
                 key={`${row.right}-right`}
-                className="text-body-xs text-text-subtle flex h-[28px] items-center justify-end text-right leading-[150%] font-medium whitespace-nowrap"
+                className="text-body-xs text-text-subtle flex h-7 items-center justify-end leading-[150%] font-medium"
               >
                 {row.right}
               </p>
@@ -128,22 +149,23 @@ export const SoftSkills = ({
 
       {!!hasDistributionData && (
         <div className="mt-[41px] w-[540px]">
-          <h3 className="text-heading-sm leading-[30px] font-bold text-[#4B5563]">받은 평가 분포(6명 응답)</h3>
+          <h3 className="text-detail-base text-text-subtle h-6 leading-[150%] font-bold">받은 평가 분포(6명 응답)</h3>
 
-          <div className="mx-auto mt-[16px] flex h-[235px] w-[513px] items-end justify-between">
+          <div className="mx-auto mt-4 flex w-[513px] items-end justify-between" style={{ height: CHART_TOTAL_HEIGHT }}>
             {distributionBars.map((bar, index) => (
               <div key={bar.label} className="flex w-[61px] flex-col items-center">
-                <span className="text-body-xs mb-[6px] text-center leading-[150%] font-medium text-[#4B5563]">
+                <span className="text-body-xs text-text-subtle flex h-[18px] shrink-0 items-center justify-center text-center leading-[150%] font-medium">
                   {bar.count}명
                 </span>
+
                 <div
-                  className="w-[50px] rounded-t-[4px]"
+                  className={cn('w-[50px] shrink-0 rounded-t', barToneBgClasses[distributionBarTones[index]])}
                   style={{
                     height: `${getBarHeight(bar.count, maxDistributionCount)}px`,
-                    backgroundColor: barToneColors[distributionBarTones[index]],
                   }}
                 />
-                <div className="text-body-xs text-text-subtle mt-[12px] flex h-[36px] items-start justify-center text-center leading-[150%] font-medium break-keep whitespace-pre-line">
+
+                <div className="text-body-xs text-text-subtle mt-2 flex h-9 shrink-0 items-start justify-center text-center leading-[150%] font-medium break-keep whitespace-pre-line">
                   {bar.label}
                 </div>
               </div>
@@ -152,15 +174,9 @@ export const SoftSkills = ({
         </div>
       )}
 
-      {hasDistributionData ? (
-        <p className="text-detail-base text-text-disabled absolute bottom-[24px] left-1/2 h-[24px] w-[540px] -translate-x-1/2 leading-[150%] font-normal">
-          * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
-        </p>
-      ) : (
-        <p className="text-detail-base text-text-disabled mt-[28px] h-[24px] w-[540px] leading-[150%] font-normal">
-          * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
-        </p>
-      )}
+      <p className="text-detail-base text-text-disabled mt-7 h-6 w-[540px] leading-[150%] font-normal">
+        * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
+      </p>
     </section>
   );
 };
