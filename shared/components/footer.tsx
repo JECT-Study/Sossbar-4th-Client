@@ -4,8 +4,8 @@ const footerLinks = [
   { href: '#', label: '회사 소개' },
   { href: '#', label: '문의하기' },
   { href: '#', label: '커뮤니티' },
-  { href: '#', label: '개인정보 처리방침' },
-  { href: '#', label: '이용약관' },
+  { href: '/policies/privacy-policy', label: '개인정보 처리방침' },
+  { href: '/policies/terms-of-service', label: '이용약관' },
 ] as const;
 
 type FooterVariant = 'dark' | 'light';
@@ -19,7 +19,7 @@ export const Footer = ({ variant = 'dark' }: { variant?: FooterVariant }) => {
         <nav aria-label="푸터 링크">
           <ul className="flex flex-wrap items-center gap-6">
             {footerLinks.map(({ href, label }) => (
-              <li key={href}>
+              <li key={label}>
                 <Link
                   href={href}
                   className={

@@ -112,7 +112,7 @@ const SignupPage = () => {
             <Checkbox checked={agreements.terms} onCheckedChange={(v) => handleAgreement('terms', v)} />
             <span className="text-[14px] text-(--color-text-basic)">
               <Link
-                href="/terms"
+                href="/policies/terms-of-service"
                 className="text-black underline underline-offset-2"
                 onClick={(e) => e.stopPropagation()}
               >
@@ -125,7 +125,7 @@ const SignupPage = () => {
             <Checkbox checked={agreements.privacy} onCheckedChange={(v) => handleAgreement('privacy', v)} />
             <span className="text-[14px] text-(--color-text-basic)">
               <Link
-                href="/personal"
+                href="/policies/privacy-policy"
                 className="text-[14px] text-black underline underline-offset-2"
                 onClick={(e) => e.stopPropagation()}
               >
