@@ -11,7 +11,7 @@ const footerLinks = [
 export const Footer = () => {
   return (
     <footer className="mt-auto bg-black">
-      <div className="mx-auto flex min-h-[167px] w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 md:flex-row md:items-start md:justify-between md:gap-8">
+      <div className="mx-auto flex min-h-[167px] w-full max-w-[1200px] flex-col gap-6 px-4 py-8 sm:px-6 md:flex-row md:items-start md:justify-between md:gap-8 lg:px-0">
         <nav aria-label="푸터 링크">
           <ul className="flex flex-wrap items-center gap-6">
             {footerLinks.map(({ href, label }) => (
