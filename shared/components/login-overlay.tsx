@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons';
+import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons/index';
 import { Button } from '@/shared/components/button';
 import { cn } from '@/shared/lib/cn';
 
