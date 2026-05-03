@@ -22,7 +22,7 @@ export const Header = () => {
           <nav aria-label="주요 메뉴">
             <ul className="flex items-center gap-4">
               {navLinks.map(({ href, label, widthClassName }) => (
-                <li key={href}>
+                <li key={label}>
                   <Link
                     href={href}
                     className={cn(buttonVariants({ variant: 'tertiary', size: 'small' }), 'h-10 px-0', widthClassName)}
