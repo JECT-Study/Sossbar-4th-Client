@@ -7,17 +7,18 @@ import { cn } from '@/shared/lib/cn';
 import type { VariantProps } from 'class-variance-authority';
 
 const projectStateBadgeVariants = cva(
-  'w-fit px-2 py-1 rounded-full inline-flex items-center justify-center gap-1 text-detail-xs font-medium',
+  'w-fit px-2 h-6.5 rounded-full inline-flex items-center justify-center gap-1 text-detail-xs font-medium',
   {
     variants: {
-      status: {
+      variant: {
         waiting: 'bg-element-warning text-text-basic-inverse',
         error: 'bg-element-error text-text-basic-inverse',
         success: 'bg-element-success text-text-basic-inverse',
+        host: 'bg-transparent text-element-secondary border border-element-secondary',
       },
     },
     defaultVariants: {
-      status: 'waiting',
+      variant: 'waiting',
     },
   },
 );
@@ -28,9 +29,9 @@ interface Props extends ComponentPropsWithRef<'span'>, VariantProps<typeof proje
   children: ReactNode;
 }
 
-export const ProjectStateBadge = ({ status, children, leftIcon, rightIcon, className, ...restProps }: Props) => {
+export const ProjectStateBadge = ({ variant, children, leftIcon, rightIcon, className, ...restProps }: Props) => {
   return (
-    <span className={cn(projectStateBadgeVariants({ status }), className)} {...restProps}>
+    <span className={cn(projectStateBadgeVariants({ variant }), className)} {...restProps}>
       {leftIcon}
       {children}
       {rightIcon}
