@@ -2,8 +2,7 @@ import type { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
-import { Footer } from '@/shared/components/footer';
-import { Header } from '@/shared/components/header';
+import { AppShell } from '@/shared/components/app-shell';
 import { MswProvider } from '@/shared/components/msw-provider';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
@@ -32,9 +31,7 @@ const RootLayout = ({
       <body className="bg-gray-0 flex min-h-screen flex-col text-gray-900 antialiased">
         <QueryProvider>
           {process.env.NODE_ENV === 'development' && <MswProvider />}
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <AppShell>{children}</AppShell>
         </QueryProvider>
       </body>
     </html>
