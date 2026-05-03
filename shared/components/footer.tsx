@@ -15,7 +15,7 @@ export const Footer = () => {
         <nav aria-label="푸터 링크">
           <ul className="flex flex-wrap items-center gap-6">
             {footerLinks.map(({ href, label }) => (
-              <li key={href}>
+              <li key={label}>
                 <Link href={href} className="text-body-sm text-gray-0 transition-opacity hover:opacity-80">
                   {label}
                 </Link>
