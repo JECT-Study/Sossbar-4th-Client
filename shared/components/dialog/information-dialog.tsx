@@ -7,7 +7,7 @@ import { Button } from '../button/button';
 interface Props {
   title: ReactNode;
   description: ReactNode;
-  confirmText?: ReactNode;
+  confirmText: ReactNode;
   icon?: ReactElement;
   open: boolean;
   onOpenChange: (open: boolean) => void;
