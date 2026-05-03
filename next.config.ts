@@ -1,10 +1,9 @@
-import path from 'path';
-
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   turbopack: {
-    root: path.join(__dirname, '..'),
+    // Project root must be this app directory; `..` breaks `@/` and `shared/...` resolution on Linux CI.
+    root: __dirname,
     rules: {
       '*.svg': {
         loaders: [
