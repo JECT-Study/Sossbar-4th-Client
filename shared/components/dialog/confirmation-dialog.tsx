@@ -8,11 +8,10 @@ interface Props {
   open: boolean;
   title: ReactNode;
   description: ReactNode;
-  confirmText?: ReactNode;
-  cancelText?: ReactNode;
+  confirmText: string;
+  cancelText: string;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
-  onCancel: () => void;
 }
 
 export const ConfirmationDialog = ({
@@ -23,7 +22,6 @@ export const ConfirmationDialog = ({
   cancelText,
   onOpenChange,
   onConfirm,
-  onCancel,
 }: Props) => {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -35,9 +33,9 @@ export const ConfirmationDialog = ({
             <Dialog.Description className="text-body-base text-text-subtle">{description}</Dialog.Description>
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="tertiary" onClick={onCancel}>
-              {cancelText}
-            </Button>
+            <Dialog.Close asChild>
+              <Button variant="tertiary">{cancelText}</Button>
+            </Dialog.Close>
             <Button variant="primary" onClick={onConfirm}>
               {confirmText}
             </Button>
