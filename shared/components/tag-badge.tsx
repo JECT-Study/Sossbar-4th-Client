@@ -30,7 +30,7 @@ interface Props extends ComponentPropsWithRef<'span'>, VariantProps<typeof tagBa
 }
 
 export const TagBadge = ({ ref, children, className, count, priority, ...restProps }: Props) => {
-  const countColor = priority === 'default' ? 'text-text-subtle' : 'text-inherit';
+  const countColor = priority && priority !== 'default' ? 'text-inherit' : 'text-text-subtle';
 
   return (
     <span ref={ref} className={cn(tagBadgeVariants({ priority }), className)} {...restProps}>
