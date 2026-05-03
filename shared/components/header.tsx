@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { cn } from '@/shared/lib/cn';
 
-import { buttonVariants } from './button';
+import { buttonVariants } from './button/button';
 
 const navLinks = [
   { href: '#', label: '내 프로필', widthClassName: 'w-[100px]' },
