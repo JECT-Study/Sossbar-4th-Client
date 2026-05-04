@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { buttonVariants } from '@/shared/components/button';
+import { buttonVariants } from '@/shared/components/button/button';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
