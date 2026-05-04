@@ -1,11 +1,12 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { Button } from '@/shared/components/button';
 import { Dropmodal } from '@/shared/components/dropmodal';
 import { Input } from '@/shared/components/input';
-import { useSessionUser } from '@/shared/lib/session-user';
+import { clearSessionUser, useSessionUser } from '@/shared/lib/session-user';
 
 type CheckboxProps = {
   checked: boolean;
@@ -42,6 +43,7 @@ const disabledInputProps = {
 } as const;
 
 export const MypageForm = () => {
+  const router = useRouter();
   const sessionUser = useSessionUser();
   const [marketingAgreed, setMarketingAgreed] = useState(true);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
@@ -137,7 +139,14 @@ export const MypageForm = () => {
         </div>
       </div>
 
-      <Dropmodal open={withdrawOpen} onOpenChange={setWithdrawOpen} />
+      <Dropmodal
+        open={withdrawOpen}
+        onOpenChange={setWithdrawOpen}
+        onConfirm={() => {
+          clearSessionUser();
+          router.push('/');
+        }}
+      />
     </div>
   );
 };

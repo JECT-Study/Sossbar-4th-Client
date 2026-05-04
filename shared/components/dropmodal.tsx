@@ -4,6 +4,7 @@ import { Dialog, RadioGroup } from 'radix-ui';
 import { useId, useState } from 'react';
 
 import { Button } from '@/shared/components/button';
+import { Dropcomplete } from '@/shared/components/dropcomplete';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 
@@ -24,12 +25,10 @@ export type WithdrawalSubmitPayload = {
 };
 
 export type DropmodalProps = {
-  /** 제어 여부와 동일하게 열림 */
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /** 확인 시 선택 이유 및 상세 텍스트 */
   onSubmit?: (payload: WithdrawalSubmitPayload) => void | Promise<void>;
-  /** 초기 선택 이유 (기본값: 기타 — 피그마 기본 상태) */
+  onConfirm?: () => void;
   defaultReason?: WithdrawReasonValue;
   className?: string;
 };
@@ -64,9 +63,17 @@ type WithdrawModalBodyProps = {
   defaultReason: WithdrawReasonValue;
   onSubmit?: (payload: WithdrawalSubmitPayload) => void | Promise<void>;
   onClose: () => void;
+  onWithdrawSubmitted: () => void;
 };
 
-const WithdrawModalBody = ({ headingId, descriptionId, defaultReason, onSubmit, onClose }: WithdrawModalBodyProps) => {
+const WithdrawModalBody = ({
+  headingId,
+  descriptionId,
+  defaultReason,
+  onSubmit,
+  onClose,
+  onWithdrawSubmitted,
+}: WithdrawModalBodyProps) => {
   const [reason, setReason] = useState<WithdrawReasonValue>(defaultReason);
   const [detail, setDetail] = useState('');
 
@@ -75,6 +82,7 @@ const WithdrawModalBody = ({ headingId, descriptionId, defaultReason, onSubmit, 
   const handleSubmit = async () => {
     await onSubmit?.({ reason, detail: detail.trim() });
     onClose();
+    onWithdrawSubmitted();
   };
 
   return (
@@ -143,35 +151,57 @@ const WithdrawModalBody = ({ headingId, descriptionId, defaultReason, onSubmit, 
   );
 };
 
-export const Dropmodal = ({ open, onOpenChange, onSubmit, defaultReason = 'other', className }: DropmodalProps) => {
+export const Dropmodal = ({
+  open,
+  onOpenChange,
+  onSubmit,
+  onConfirm,
+  defaultReason = 'other',
+  className,
+}: DropmodalProps) => {
   const headingId = useId();
   const descriptionId = useId();
+  const [completeOpen, setCompleteOpen] = useState(false);
+
+  const handleWithdrawOpenChange = (next: boolean) => {
+    if (next) {
+      setCompleteOpen(false);
+    }
+    onOpenChange(next);
+  };
 
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
-        <Dialog.Content
-          aria-labelledby={headingId}
-          aria-describedby={descriptionId}
-          className={cn(
-            'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex h-[min(680px,calc(100vh-48px))] w-[min(592px,calc(100vw-32px))] -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-2xl border p-10 shadow-xl',
-            className,
-          )}
-        >
-          {open ? (
-            <WithdrawModalBody
-              headingId={headingId}
-              descriptionId={descriptionId}
-              defaultReason={defaultReason}
-              onSubmit={onSubmit}
-              onClose={() => {
-                onOpenChange(false);
-              }}
-            />
-          ) : null}
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <>
+      <Dialog.Root open={open} onOpenChange={handleWithdrawOpenChange}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
+          <Dialog.Content
+            aria-labelledby={headingId}
+            aria-describedby={descriptionId}
+            className={cn(
+              'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex h-[min(680px,calc(100vh-48px))] w-[min(592px,calc(100vw-32px))] -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-2xl border p-10 shadow-xl',
+              className,
+            )}
+          >
+            {open ? (
+              <WithdrawModalBody
+                headingId={headingId}
+                descriptionId={descriptionId}
+                defaultReason={defaultReason}
+                onSubmit={onSubmit}
+                onClose={() => {
+                  handleWithdrawOpenChange(false);
+                }}
+                onWithdrawSubmitted={() => {
+                  setCompleteOpen(true);
+                }}
+              />
+            ) : null}
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      <Dropcomplete open={completeOpen} onOpenChange={setCompleteOpen} onConfirm={onConfirm} />
+    </>
   );
 };
