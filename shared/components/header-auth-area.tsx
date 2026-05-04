@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
@@ -26,6 +27,7 @@ const HeaderAvatar = ({ src, alt }: { src: string; alt: string }) => {
 };
 
 export const HeaderAuthArea = () => {
+  const router = useRouter();
   const sessionUser = useSessionUser();
 
   if (!sessionUser) {
@@ -75,6 +77,7 @@ export const HeaderAuthArea = () => {
           className="text-body-sm text-text-basic !h-[44px] min-h-0 shrink-0 justify-start rounded-md px-2 py-0 font-normal"
           onSelect={() => {
             clearSessionUser();
+            router.push('/');
           }}
         >
           로그아웃
