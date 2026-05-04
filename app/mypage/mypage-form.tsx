@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { Button } from '@/shared/components/button';
+import { Dropmodal } from '@/shared/components/dropmodal';
 import { Input } from '@/shared/components/input';
 import { useSessionUser } from '@/shared/lib/session-user';
 
@@ -43,6 +44,7 @@ const disabledInputProps = {
 export const MypageForm = () => {
   const sessionUser = useSessionUser();
   const [marketingAgreed, setMarketingAgreed] = useState(true);
+  const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   const registeredDisplayName = sessionUser?.nickname ?? '';
 
@@ -124,6 +126,9 @@ export const MypageForm = () => {
                 size="medium"
                 type="button"
                 className="text-text-subtler focus-visible:ring-border-primary h-14 w-full py-0 outline-none focus-visible:ring-2"
+                onClick={() => {
+                  setWithdrawOpen(true);
+                }}
               >
                 회원 탈퇴
               </Button>
@@ -131,6 +136,8 @@ export const MypageForm = () => {
           </div>
         </div>
       </div>
+
+      <Dropmodal open={withdrawOpen} onOpenChange={setWithdrawOpen} />
     </div>
   );
 };
