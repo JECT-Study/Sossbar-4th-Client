@@ -11,6 +11,7 @@ import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
 import { ModalType } from '@/shared/components/modal-type';
 import { Textarea } from '@/shared/components/textarea';
+import { setSessionUser } from '@/shared/lib/session-user';
 
 const BIO_MAX_LENGTH = 50;
 
@@ -162,7 +163,13 @@ const SignupPage = () => {
           onClick={() => setIsCompleted(false)}
         >
           <div className="w-[360px]" onClick={(e) => e.stopPropagation()}>
-            <ModalType name={name.trim()} onConfirm={() => router.push('/')} />
+            <ModalType
+              name={name.trim()}
+              onConfirm={() => {
+                setSessionUser({ nickname: name.trim(), profileImageUrl: null });
+                router.push('/');
+              }}
+            />
           </div>
         </div>
       ) : null}

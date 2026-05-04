@@ -28,7 +28,7 @@ const DropdownContent = ({
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          'bg-surface-white border-border-gray-light z-50 flex w-44 flex-col rounded-lg border p-2',
+          'border-border-gray-light bg-surface-white z-50 box-border flex w-44 flex-col rounded-lg border p-2 shadow-sm',
           className,
         )}
         {...restProps}
