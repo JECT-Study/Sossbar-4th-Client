@@ -19,7 +19,7 @@ export const buttonVariants = cva(
       },
       size: {
         large: 'px-7 py-3 text-body-xl rounded-lg',
-        medium: 'py-2 px-[18px] rounded-md text-body-base',
+        medium: 'py-2.5 px-5 rounded-md text-body-base',
         small: 'px-4 py-2 text-body-sm rounded-sm',
       },
       disabled: {
