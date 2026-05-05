@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Dialog } from 'radix-ui';
 
 import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons';
-import { useBooleanState } from '@/shared/hooks/use-boolean-state';
+import { useLoginModal } from '@/shared/hooks/use-login-modal';
 
 import { Button } from './button';
 
@@ -13,10 +13,10 @@ interface Props {
 }
 
 export const KakaoLoginButton = ({ open = false }: Props) => {
-  const [isOpen, , , toggle] = useBooleanState(open);
+  const { isOpen, onOpenChange } = useLoginModal(open);
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={toggle}>
+    <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Trigger asChild>
         <Button className="self-center">로그인</Button>
       </Dialog.Trigger>

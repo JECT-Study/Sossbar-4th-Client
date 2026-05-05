@@ -1,9 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
-import { buttonVariants } from './button/button';
+import { Button, buttonVariants } from './button/button';
 import { KakaoLoginButton } from './button/kakao-login-button';
 
 const navLinks = [
@@ -36,7 +37,9 @@ export const Header = () => {
           </nav>
         </div>
 
-        <KakaoLoginButton />
+        <Suspense fallback={<Button className="self-center">로그인</Button>}>
+          <KakaoLoginButton />
+        </Suspense>
       </div>
     </header>
   );
