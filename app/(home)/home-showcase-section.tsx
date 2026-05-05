@@ -1,20 +1,17 @@
 import Image from 'next/image';
 
+import { HomeSectionHeader } from './home-section-header';
+
 export const HomeShowcaseSection = () => {
   return (
     <section id="home-showcase-section" className="overflow-hidden bg-white pt-[120px] pb-0">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center text-center">
-        <div className="flex h-[150px] w-full flex-col items-center">
-          <div className="text-element-primary bg-button-secondary-fill box-border flex h-[32px] w-[93px] shrink-0 items-center justify-center overflow-hidden rounded-[24px] text-center text-[14px] leading-none font-normal whitespace-nowrap">
-            메인페이지
-          </div>
-          <h2 className="text-text-basic mt-2 h-[72px] w-full text-center text-[48px] leading-[150%] font-bold">
-            Softskill을 한 눈에!
-          </h2>
-          <p className="text-text-subtle mt-2 h-[30px] w-full text-center text-[20px] leading-[150%] font-normal">
-            각각의 프로젝트 동료에게 받은 후기와 소프트 스킬을 한 페이지에 가독성 좋게!
-          </p>
-        </div>
+        <HomeSectionHeader
+          badge="메인페이지"
+          heading="Softskill을 한 눈에!"
+          description="각각의 프로젝트 동료에게 받은 후기와 소프트 스킬을 한 페이지에 가독성 좋게!"
+          className="h-[150px]"
+        />
 
         <div className="relative mt-8 flex w-full justify-center">
           <div

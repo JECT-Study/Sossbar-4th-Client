@@ -1,10 +1,6 @@
-interface Step {
-  step: number;
-  title: string;
-  description: string;
-}
+import { HomeSectionHeader } from './home-section-header';
 
-const STEPS: Step[] = [
+const STEPS = [
   {
     step: 1,
     title: '프로필 생성',
@@ -29,14 +25,7 @@ export const HomeHowItWorksSection = () => {
       className="bg-gray-0 box-border flex h-[800px] w-full items-center justify-center p-[80px]"
     >
       <div className="box-border flex h-[434px] w-full max-w-[1200px] min-w-0 shrink-0 flex-col">
-        <div className="flex w-full flex-col items-center">
-          <div className="text-element-primary bg-button-secondary-fill box-border flex h-[32px] w-[69px] shrink-0 items-center justify-center overflow-hidden rounded-[24px] text-center text-[14px] leading-none font-normal whitespace-nowrap">
-            사용법
-          </div>
-          <h2 className="text-text-basic mt-6 w-full text-center text-[48px] leading-[150%] font-bold">
-            Sossbar 이용 방법
-          </h2>
-        </div>
+        <HomeSectionHeader badge="사용법" heading="Sossbar 이용 방법" headingClassName="mt-6" />
 
         <div className="mt-[40px] w-full shrink-0">
           <ol className="box-border flex h-max w-full list-none flex-row items-start justify-center gap-[24px] p-0">
