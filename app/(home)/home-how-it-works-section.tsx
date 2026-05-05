@@ -1,3 +1,5 @@
+import { PageContainer } from '@/shared/components/page-container';
+
 import { HomeSectionHeader } from './home-section-header';
 
 const STEPS = [
@@ -20,41 +22,36 @@ const STEPS = [
 
 export const HomeHowItWorksSection = () => {
   return (
-    <section
-      id="home-how-it-works-section"
-      className="bg-gray-0 box-border flex h-[800px] w-full items-center justify-center p-[80px]"
-    >
-      <div className="box-border flex h-[434px] w-full max-w-[1200px] min-w-0 shrink-0 flex-col">
+    <PageContainer className="flex h-[800px] w-full items-center py-20">
+      <div className="flex w-full flex-col items-center self-center">
         <HomeSectionHeader badge="사용법" heading="Sossbar 이용 방법" headingClassName="mt-6" />
 
-        <div className="mt-[40px] w-full shrink-0">
-          <ol className="box-border flex h-max w-full list-none flex-row items-start justify-center gap-[24px] p-0">
-            {STEPS.map((step) => (
-              <li
-                key={step.step}
-                className="relative box-border flex min-w-0 flex-1 flex-col items-start py-[16px] text-left"
-              >
+        <div className="mt-10 box-border flex h-[208px] w-full max-w-[1200px] flex-none items-stretch gap-6">
+          {STEPS.map((step) => (
+            <li
+              key={step.step}
+              className="relative box-border flex min-w-0 flex-1 flex-col items-start py-[16px] text-left"
+            >
+              <div
+                className="bg-divider-gray-light pointer-events-none absolute top-11 right-0 left-7 z-0 h-px"
+                aria-hidden
+              />
+              <div className="relative z-10 flex min-w-0 flex-col items-start">
                 <div
-                  className="bg-divider-gray-light pointer-events-none absolute top-11 right-0 left-7 z-0 h-px"
+                  className="text-text-basic bg-bg-white text-heading-base flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full text-center font-bold shadow-md"
                   aria-hidden
-                />
-                <div className="relative z-10 flex min-w-0 flex-col items-start">
-                  <div
-                    className="text-text-basic bg-bg-white text-heading-base flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full text-center font-bold shadow-md"
-                    aria-hidden
-                  >
-                    {step.step}
-                  </div>
-                  <h3 className="text-text-basic text-heading-base mt-[16px] w-full font-bold">{step.title}</h3>
-                  <p className="text-text-subtle text-body-base mt-[16px] w-full leading-normal font-normal">
-                    {step.description}
-                  </p>
+                >
+                  {step.step}
                 </div>
-              </li>
-            ))}
-          </ol>
+                <h3 className="text-text-basic text-heading-base mt-[16px] w-full font-bold">{step.title}</h3>
+                <p className="text-text-subtle text-body-base mt-[16px] w-full leading-normal font-normal">
+                  {step.description}
+                </p>
+              </div>
+            </li>
+          ))}
         </div>
       </div>
-    </section>
+    </PageContainer>
   );
 };

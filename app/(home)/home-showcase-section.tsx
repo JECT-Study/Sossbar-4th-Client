@@ -1,11 +1,13 @@
 import Image from 'next/image';
 
+import { PageContainer } from '@/shared/components/page-container';
+
 import { HomeSectionHeader } from './home-section-header';
 
 export const HomeShowcaseSection = () => {
   return (
     <section id="home-showcase-section" className="overflow-hidden bg-white pt-[120px] pb-0">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center text-center">
+      <PageContainer className="flex w-full flex-col items-center self-center">
         <HomeSectionHeader
           badge="메인페이지"
           heading="Softskill을 한 눈에!"
@@ -65,7 +67,7 @@ export const HomeShowcaseSection = () => {
             </div>
           </div>
         </div>
-      </div>
+      </PageContainer>
     </section>
   );
 };

@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import { PageContainer } from '@/shared/components/page-container';
+
 import { HomeSectionHeader } from './home-section-header';
 
 const FEATURES = [
@@ -27,8 +29,8 @@ const FEATURES = [
 
 export const HomeFeaturesSection = () => {
   return (
-    <section id="home-features-section" className="bg-gray-0 flex h-[800px] w-full items-center py-[80px]">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center self-center">
+    <PageContainer className="flex h-[800px] w-full items-center py-20">
+      <div className="flex w-full flex-col items-center self-center">
         <HomeSectionHeader
           badge="주요 기능"
           heading="보이지 않던 협업 역량을 투명한 데이터로!"
@@ -50,6 +52,6 @@ export const HomeFeaturesSection = () => {
           ))}
         </div>
       </div>
-    </section>
+    </PageContainer>
   );
 };

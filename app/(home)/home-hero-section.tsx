@@ -2,11 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Button } from '@/shared/components/button/button';
+import { PageContainer } from '@/shared/components/page-container';
 import { ROUTES } from '@/shared/constants/routes';
 
 export const HomeHeroSection = () => {
   return (
-    <div className="flex items-center justify-center py-20">
+    <PageContainer className="flex justify-center pt-40 pb-64">
       <div className="flex-1">
         <h1 className="text-display-base text-text-basic h-[168px] w-full leading-[1.3] font-bold tracking-[-0.02em]">
           당신의 소프트스킬,
@@ -34,6 +35,6 @@ export const HomeHeroSection = () => {
           <Image src="/Margin.svg" alt="Hero visual" fill className="object-contain" priority />
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
