@@ -1,9 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { buttonVariants } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button/button';
 import { ROUTES } from '@/shared/constants/routes';
-import { cn } from '@/shared/lib/cn';
 
 export const HomeCtaSection = () => {
   return (
@@ -43,15 +42,9 @@ export const HomeCtaSection = () => {
               </p>
             </div>
 
-            <Link
-              href={ROUTES.LOGIN}
-              className={cn(
-                buttonVariants({ variant: 'primary' }),
-                'text-text-basic-inverse mt-10 h-[56px] w-[201px] px-0 text-[20px] font-medium',
-              )}
-            >
-              로그인하고 시작하기
-            </Link>
+            <Button asChild variant="primary" size="large" className="mx-auto mt-10">
+              <Link href={ROUTES.LOGIN}>로그인하고 시작하기</Link>
+            </Button>
           </div>
         </div>
       </div>

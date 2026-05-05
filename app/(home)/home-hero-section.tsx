@@ -1,9 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { buttonVariants } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button/button';
 import { ROUTES } from '@/shared/constants/routes';
-import { cn } from '@/shared/lib/cn';
 
 export const HomeHeroSection = () => {
   return (
@@ -26,18 +25,12 @@ export const HomeHeroSection = () => {
             </div>
 
             <div className="mt-[40px] flex items-center gap-4">
-              <Link
-                href={ROUTES.LOGIN}
-                className={cn(buttonVariants({ variant: 'primary' }), 'h-14 w-[200px] px-0 text-[20px] font-medium')}
-              >
-                프로젝트 시작하기
-              </Link>
-              <Link
-                href={ROUTES.LOGIN}
-                className={cn(buttonVariants({ variant: 'secondary' }), 'h-14 w-[176px] px-0 text-[20px] font-medium')}
-              >
-                내 프로필 보기
-              </Link>
+              <Button asChild variant="primary" size="large">
+                <Link href={ROUTES.LOGIN}>프로젝트 시작하기</Link>
+              </Button>
+              <Button asChild variant="secondary" size="large">
+                <Link href={ROUTES.LOGIN}>내 프로필 보기</Link>
+              </Button>
             </div>
           </div>
         </div>
