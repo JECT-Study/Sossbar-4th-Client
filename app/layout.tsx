@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import localFont from 'next/font/local';
 
 import { AppShell } from '@/shared/components/app-shell';
-import { MswProvider } from '@/shared/components/msw-provider';
+import { MswProvider } from '@/shared/providers/msw-provider';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
 import type { Metadata } from 'next';
