@@ -65,14 +65,13 @@ export const authHandlers = [
     });
   }),
 
-  http.post(`${BASE}/login/reissue`, ({ request }) => {
-    const hasRefreshCookie = /refreshToken=/.test(request.headers.get('cookie') ?? '');
-    if (!hasRefreshCookie) {
+  http.post(`${BASE}/login/reissue`, ({ cookies }) => {
+    if (!cookies.refreshToken) {
       // 명세상 HttpOnly 리프레시 쿠키가 없으면 갱신 불가에 가깝게 동작
       return jsonError(401, 'Refresh token cookie missing or invalid');
     }
 
-    return HttpResponse.json({
+    return withRefreshCookie({
       accessToken: 'mock-reissued-access-token',
     });
   }),
