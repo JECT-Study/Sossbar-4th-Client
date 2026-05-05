@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { cn } from '@/shared/lib/cn';
 
 import { buttonVariants } from './button/button';
+import { KakaoLoginButton } from './button/kakao-login-button';
 
 const navLinks = [
   { href: '#', label: '내 프로필', widthClassName: 'w-[100px]' },
@@ -13,7 +14,7 @@ const navLinks = [
 
 export const Header = () => {
   return (
-    <header className="bg-gray-0/95 sticky top-0 z-50 border-b border-gray-200 backdrop-blur-sm">
+    <header className="bg-gray-0/95 sticky top-0 border-b border-gray-200 backdrop-blur-sm">
       <div className="mx-auto flex h-14 w-full max-w-[1200px] items-center justify-between gap-4 px-4 sm:h-16 sm:gap-6 sm:px-6 lg:px-0">
         <div className="flex min-w-0 items-center gap-6">
           <Link href="/" className="relative flex h-[36px] shrink-0 items-center">
@@ -35,9 +36,7 @@ export const Header = () => {
           </nav>
         </div>
 
-        <Link href="/login" className={cn(buttonVariants({ variant: 'primary' }), 'h-10 w-[90px] px-0')}>
-          로그인
-        </Link>
+        <KakaoLoginButton />
       </div>
     </header>
   );
