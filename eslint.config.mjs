@@ -104,6 +104,7 @@ const eslintConfig = defineConfig([
     'eslint.config.mjs',
     'postcss.config.mjs',
     'commitlint.config.mjs',
+    'public/mockServiceWorker.js',
   ]),
 ]);
 
