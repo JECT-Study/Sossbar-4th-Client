@@ -1,35 +1,11 @@
-import { API_BASE } from '@/shared/lib/api-base';
+import { apiRequest } from '@/shared/lib/api';
 
 import type { OnboardingRequest, Profile, UpdateProfileRequest } from '../types/profile';
 
-export const createOnboarding = async (data: OnboardingRequest): Promise<{ userId: number }> => {
-  const res = await fetch(`${API_BASE}/users/onboarding`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  if (!res.ok) {
-    throw new Error('Failed to create onboarding');
-  }
-  return res.json() as Promise<{ userId: number }>;
-};
+export const createOnboarding = (data: OnboardingRequest): Promise<{ userId: number }> =>
+  apiRequest<{ userId: number }>('/users/onboarding', { method: 'POST', body: data });
 
-export const fetchProfile = async (): Promise<Profile> => {
-  const res = await fetch(`${API_BASE}/users/profile`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch profile');
-  }
-  return res.json() as Promise<Profile>;
-};
+export const fetchProfile = (): Promise<Profile> => apiRequest<Profile>('/users/profile');
 
-export const updateProfile = async (data: UpdateProfileRequest): Promise<{ userId: number }> => {
-  const res = await fetch(`${API_BASE}/users/profile`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  if (!res.ok) {
-    throw new Error('Failed to update profile');
-  }
-  return res.json() as Promise<{ userId: number }>;
-};
+export const updateProfile = (data: UpdateProfileRequest): Promise<{ userId: number }> =>
+  apiRequest<{ userId: number }>('/users/profile', { method: 'PATCH', body: data });

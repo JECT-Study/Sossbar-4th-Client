@@ -1,46 +1,16 @@
-import { API_BASE } from '@/shared/lib/api-base';
+import { apiRequest } from '@/shared/lib/api';
 
 import type { CreateReviewRequest, Review, ReviewFormData, SpectrumWithAverage, Tag } from '../types/review';
 
-export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
-  const res = await fetch(`${API_BASE}/form-data`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch review form data');
-  }
-  return res.json() as Promise<ReviewFormData>;
-};
+export const fetchReviewFormData = (): Promise<ReviewFormData> => apiRequest<ReviewFormData>('/form-data');
 
-export const fetchReviews = async (): Promise<Review[]> => {
-  const res = await fetch(`${API_BASE}/reviews`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch reviews');
-  }
-  return res.json() as Promise<Review[]>;
-};
+export const fetchReviews = (): Promise<Review[]> => apiRequest<Review[]>('/reviews');
 
-export const fetchTagsByProject = async (projectId: number): Promise<Tag[]> => {
-  const res = await fetch(`${API_BASE}/reviews/tags/${projectId}`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch tags');
-  }
-  return res.json() as Promise<Tag[]>;
-};
+export const fetchTagsByProject = (projectId: number): Promise<Tag[]> =>
+  apiRequest<Tag[]>(`/reviews/tags/${projectId}`);
 
-export const fetchSpectrumsByProject = async (projectId: number): Promise<SpectrumWithAverage[]> => {
-  const res = await fetch(`${API_BASE}/reviews/spectrums/${projectId}`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch spectrums');
-  }
-  return res.json() as Promise<SpectrumWithAverage[]>;
-};
+export const fetchSpectrumsByProject = (projectId: number): Promise<SpectrumWithAverage[]> =>
+  apiRequest<SpectrumWithAverage[]>(`/reviews/spectrums/${projectId}`);
 
-export const createReview = async (data: CreateReviewRequest): Promise<void> => {
-  const res = await fetch(`${API_BASE}/reviews`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  if (!res.ok) {
-    throw new Error('Failed to create review');
-  }
-};
+export const createReview = (data: CreateReviewRequest): Promise<void> =>
+  apiRequest<void>('/reviews', { method: 'POST', body: data });
