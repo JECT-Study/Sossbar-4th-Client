@@ -1,18 +1,30 @@
-import type { InputHTMLAttributes, ReactElement } from 'react';
+'use client';
 
-import { forwardRef, useId } from 'react';
+import type { ComponentProps, InputHTMLAttributes, ReactElement } from 'react';
 
-import { DeleteIcon } from '@/shared/assets/icons';
+import { forwardRef, useId, useState } from 'react';
+
+import { DangerIcon, InputClearIcon } from '@/shared/assets/icons';
 import { cn } from '@/shared/lib/cn';
 
-const InputErrorLeadIcon = () => {
+type InputClearButtonProps = ComponentProps<'button'>;
+
+const InputClearButton = ({ 'aria-label': ariaLabel = '입력 지우기', className, ...props }: InputClearButtonProps) => {
   return (
-    <DeleteIcon
-      width={16}
-      height={16}
-      className="[&_rect]:fill-element-error [&_path]:fill-icon-inverse pointer-events-none mt-0.5 shrink-0"
-      aria-hidden
-    />
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      className={cn(
+        'flex h-5 w-5 shrink-0 items-center justify-center rounded-full p-0 outline-none',
+        'focus-visible:ring-1 focus-visible:ring-(--color-border-primary)',
+        'disabled:opacity-50',
+        'transition-opacity',
+        className,
+      )}
+      {...props}
+    >
+      <InputClearIcon className="text-icon-gray pointer-events-none shrink-0 select-none" aria-hidden />
+    </button>
   );
 };
 
@@ -36,15 +48,33 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     variant = 'default',
     errorMessage,
     'aria-describedby': ariaDescribedBy,
+    onChange,
+    onFocus,
+    onBlur,
+    value,
     ...props
   },
   ref,
 ) {
+  const [isFocused, setIsFocused] = useState(false);
+
   const isError = variant === 'error';
   const errorId = useId();
   const resolvedErrorText = errorMessage ?? '메시지를 입력해 주세요';
 
   const describedBy = [ariaDescribedBy, isError ? errorId : undefined].filter(Boolean).join(' ') || undefined;
+
+  const showClearButton = isFocused && !disabled && typeof value === 'string' && value.length > 0;
+
+  const handleClear = () => {
+    onChange?.({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  const resolvedRightSlot = showClearButton ? (
+    <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} />
+  ) : (
+    rightSlot
+  );
 
   return (
     <div className={cn('flex w-full max-w-[360px] flex-col', className)}>
@@ -79,6 +109,16 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           disabled={disabled}
           aria-invalid={isError || undefined}
           aria-describedby={describedBy}
+          value={value}
+          onChange={onChange}
+          onFocus={(e) => {
+            setIsFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            onBlur?.(e);
+          }}
           className={cn(
             'text-body-base min-w-0 flex-1 bg-transparent py-0 text-start leading-normal outline-none',
             disabled
@@ -89,21 +129,21 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           {...props}
         />
 
-        {rightSlot != null && (
+        {resolvedRightSlot != null && (
           <span
             className={cn(
               'flex shrink-0 items-center justify-center',
               disabled ? 'text-icon-disabled [&_svg]:text-icon-disabled' : 'text-icon-gray [&_svg]:text-icon-gray',
             )}
           >
-            {rightSlot}
+            {resolvedRightSlot}
           </span>
         )}
       </div>
 
       {!!isError && (
         <div id={errorId} className="mt-1 flex w-full items-start gap-1" aria-live="polite">
-          <InputErrorLeadIcon />
+          <DangerIcon width={16} height={16} className="pointer-events-none mt-0.5 shrink-0" aria-hidden />
           <span className="text-body-sm text-text-error">{resolvedErrorText}</span>
         </div>
       )}
