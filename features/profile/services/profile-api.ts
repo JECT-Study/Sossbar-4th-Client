@@ -1,9 +1,9 @@
+import { API_BASE } from '@/shared/lib/api-base';
+
 import type { OnboardingRequest, Profile, UpdateProfileRequest } from '../types/profile';
 
-const BASE = '/api/v1';
-
 export const createOnboarding = async (data: OnboardingRequest): Promise<{ userId: number }> => {
-  const res = await fetch(`${BASE}/users/onboarding`, {
+  const res = await fetch(`${API_BASE}/users/onboarding`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -15,7 +15,7 @@ export const createOnboarding = async (data: OnboardingRequest): Promise<{ userI
 };
 
 export const fetchProfile = async (): Promise<Profile> => {
-  const res = await fetch(`${BASE}/users/profile`);
+  const res = await fetch(`${API_BASE}/users/profile`);
   if (!res.ok) {
     throw new Error('Failed to fetch profile');
   }
@@ -23,7 +23,7 @@ export const fetchProfile = async (): Promise<Profile> => {
 };
 
 export const updateProfile = async (data: UpdateProfileRequest): Promise<{ userId: number }> => {
-  const res = await fetch(`${BASE}/users/profile`, {
+  const res = await fetch(`${API_BASE}/users/profile`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

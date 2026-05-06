@@ -1,9 +1,9 @@
+import { API_BASE } from '@/shared/lib/api-base';
+
 import type { CreateReviewRequest, Review, ReviewFormData, SpectrumWithAverage, Tag } from '../types/review';
 
-const BASE = '/api/v1';
-
 export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
-  const res = await fetch(`${BASE}/form-data`);
+  const res = await fetch(`${API_BASE}/form-data`);
   if (!res.ok) {
     throw new Error('Failed to fetch review form data');
   }
@@ -11,7 +11,7 @@ export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
 };
 
 export const fetchReviews = async (): Promise<Review[]> => {
-  const res = await fetch(`${BASE}/reviews`);
+  const res = await fetch(`${API_BASE}/reviews`);
   if (!res.ok) {
     throw new Error('Failed to fetch reviews');
   }
@@ -19,7 +19,7 @@ export const fetchReviews = async (): Promise<Review[]> => {
 };
 
 export const fetchTagsByProject = async (projectId: number): Promise<Tag[]> => {
-  const res = await fetch(`${BASE}/reviews/tags/${projectId}`);
+  const res = await fetch(`${API_BASE}/reviews/tags/${projectId}`);
   if (!res.ok) {
     throw new Error('Failed to fetch tags');
   }
@@ -27,7 +27,7 @@ export const fetchTagsByProject = async (projectId: number): Promise<Tag[]> => {
 };
 
 export const fetchSpectrumsByProject = async (projectId: number): Promise<SpectrumWithAverage[]> => {
-  const res = await fetch(`${BASE}/reviews/spectrums/${projectId}`);
+  const res = await fetch(`${API_BASE}/reviews/spectrums/${projectId}`);
   if (!res.ok) {
     throw new Error('Failed to fetch spectrums');
   }
@@ -35,7 +35,7 @@ export const fetchSpectrumsByProject = async (projectId: number): Promise<Spectr
 };
 
 export const createReview = async (data: CreateReviewRequest): Promise<void> => {
-  const res = await fetch(`${BASE}/reviews`, {
+  const res = await fetch(`${API_BASE}/reviews`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
