@@ -8,12 +8,8 @@ import { useLoginModal } from '@/shared/hooks/use-login-modal';
 
 import { Button } from './button';
 
-interface Props {
-  open?: boolean;
-}
-
-export const KakaoLoginButton = ({ open = false }: Props) => {
-  const { isOpen, onOpenChange } = useLoginModal(open);
+export const KakaoLoginButton = () => {
+  const { isOpen, onOpenChange } = useLoginModal(false);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
