@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchReviewFormData, fetchReviews, fetchSpectrumsByProject, fetchTagsByProject } from './review-api';
+import { fetchReviewFormData, fetchReviews, fetchSpectrumsByProject, fetchTagsByProject } from './fetchers';
 
 export const reviewKeys = {
   all: ['review'] as const,
