@@ -34,6 +34,8 @@ export type DropmodalProps = {
 };
 
 const RadioRow = ({ value, label, checked }: { value: WithdrawReasonValue; label: string; checked: boolean }) => {
+  const labelColorClass = checked ? 'text-text-basic' : 'text-text-subtle';
+
   return (
     <label className="flex cursor-pointer items-center gap-2" htmlFor={`withdraw-reason-${value}`}>
       <RadioGroup.Item
@@ -49,7 +51,7 @@ const RadioRow = ({ value, label, checked }: { value: WithdrawReasonValue; label
       </RadioGroup.Item>
       <span
         id={`withdraw-reason-label-${value}`}
-        className={cn('text-body-base font-bold whitespace-nowrap', checked ? 'text-text-basic' : 'text-text-subtle')}
+        className={cn('text-body-base font-bold whitespace-nowrap', labelColorClass)}
       >
         {label}
       </span>
@@ -60,7 +62,7 @@ const RadioRow = ({ value, label, checked }: { value: WithdrawReasonValue; label
 type WithdrawModalBodyProps = {
   headingId: string;
   descriptionId: string;
-  defaultReason: WithdrawReasonValue;
+  defaultReason?: WithdrawReasonValue;
   onSubmit?: (payload: WithdrawalSubmitPayload) => void | Promise<void>;
   onClose: () => void;
   onWithdrawSubmitted: () => void;
@@ -74,12 +76,20 @@ const WithdrawModalBody = ({
   onClose,
   onWithdrawSubmitted,
 }: WithdrawModalBodyProps) => {
-  const [reason, setReason] = useState<WithdrawReasonValue>(defaultReason);
+  const [reason, setReason] = useState<WithdrawReasonValue | undefined>(defaultReason);
   const [detail, setDetail] = useState('');
 
   const detailEnabled = reason === 'other';
+  const otherDetailFilled = detail.trim().length > 0;
+  const canSubmit = reason != null && (reason !== 'other' ? true : otherDetailFilled);
 
   const handleSubmit = async () => {
+    if (reason == null) {
+      return;
+    }
+    if (reason === 'other' && !detail.trim()) {
+      return;
+    }
     await onSubmit?.({ reason, detail: detail.trim() });
     onClose();
     onWithdrawSubmitted();
@@ -99,9 +109,11 @@ const WithdrawModalBody = ({
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-4">
         <div className="flex shrink-0 flex-col gap-6">
           <RadioGroup.Root
-            value={reason}
+            value={reason ?? ''}
             onValueChange={(next) => {
               if (!next) {
+                setReason(undefined);
+                setDetail('');
                 return;
               }
               const nextReason = next as WithdrawReasonValue;
@@ -142,7 +154,14 @@ const WithdrawModalBody = ({
           <Button type="button" variant="tertiary" size="medium" className="h-11 min-w-[68px]" onClick={onClose}>
             취소
           </Button>
-          <Button type="button" variant="primary" size="medium" className="h-11 min-w-[68px]" onClick={handleSubmit}>
+          <Button
+            type="button"
+            variant="primary"
+            size="medium"
+            className="h-11 min-w-[68px]"
+            disabled={!canSubmit}
+            onClick={handleSubmit}
+          >
             제출하기
           </Button>
         </div>
@@ -151,14 +170,7 @@ const WithdrawModalBody = ({
   );
 };
 
-export const Dropmodal = ({
-  open,
-  onOpenChange,
-  onSubmit,
-  onConfirm,
-  defaultReason = 'other',
-  className,
-}: DropmodalProps) => {
+export const Dropmodal = ({ open, onOpenChange, onSubmit, onConfirm, defaultReason, className }: DropmodalProps) => {
   const headingId = useId();
   const descriptionId = useId();
   const [completeOpen, setCompleteOpen] = useState(false);

@@ -36,10 +36,16 @@ const MarketingCheckbox = ({ checked, onCheckedChange }: CheckboxProps) => (
   </>
 );
 
-const disabledInputProps = {
+const nameInputProps = {
+  className: 'mx-auto max-w-none w-full',
+  fieldClassName: 'rounded-md border-input-border bg-input-surface',
+  inputClassName: 'font-normal text-body-base leading-[150%] text-text-basic',
+} as const;
+
+const emailInputProps = {
   className: 'mx-auto max-w-none w-full',
   fieldClassName: 'rounded-md border-input-border-disabled bg-input-surface-disabled',
-  inputClassName: 'font-normal text-[17px] leading-[150%] text-text-subtle',
+  inputClassName: 'font-normal text-body-base leading-[150%] text-text-disabled',
 } as const;
 
 export const MypageForm = () => {
@@ -51,20 +57,10 @@ export const MypageForm = () => {
   const registeredDisplayName = sessionUser?.nickname ?? '';
 
   return (
-    <div className="w-full">
-      <div className="w-full border-b border-(--color-divider-gray-light)">
-        <div className="mx-auto w-full max-w-[1200px] px-10">
-          <div className="flex min-h-[72px] flex-col justify-center py-8">
-            <h1 className="text-heading-2xl text-center font-bold tracking-tight text-(--color-text-basic)">
-              마이페이지
-            </h1>
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto w-full max-w-[1200px] px-10">
-        <div className="pt-[105px] pb-[138px]">
-          <div className="mx-auto flex w-full max-w-[480px] flex-col gap-10">
+    <>
+      <div className="mx-auto w-full max-w-[1200px] px-10 pt-[65px] pb-[98px]">
+        <div className="mx-auto flex w-full max-w-[560px] justify-center">
+          <div className="flex w-full max-w-[480px] flex-col gap-10 py-10">
             <section aria-labelledby="mypage-basic-heading" className="w-full">
               <h2 id="mypage-basic-heading" className="text-heading-base text-text-basic mb-8 font-bold">
                 기본 정보
@@ -74,34 +70,20 @@ export const MypageForm = () => {
                   <label htmlFor="mypage-name" className="text-heading-xs text-text-subtle font-bold">
                     이름
                   </label>
-                  <Input {...disabledInputProps} id="mypage-name" name="name" disabled value={registeredDisplayName} />
+                  <Input {...nameInputProps} id="mypage-name" name="name" value={registeredDisplayName} readOnly />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label htmlFor="mypage-email" className="text-heading-xs text-text-subtle font-bold">
                     이메일 주소
                   </label>
                   <Input
-                    {...disabledInputProps}
+                    {...emailInputProps}
                     id="mypage-email"
                     name="email"
                     type="email"
                     disabled
                     autoComplete="email"
                     defaultValue="minmin1234@naver.com"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="mypage-phone" className="text-heading-xs text-text-subtle font-bold">
-                    휴대폰 번호
-                  </label>
-                  <Input
-                    {...disabledInputProps}
-                    id="mypage-phone"
-                    name="phone"
-                    type="tel"
-                    disabled
-                    autoComplete="tel"
-                    defaultValue="01011111111"
                   />
                 </div>
               </div>
@@ -113,21 +95,21 @@ export const MypageForm = () => {
               </h2>
               <label className="flex cursor-pointer items-start gap-2">
                 <MarketingCheckbox checked={marketingAgreed} onCheckedChange={setMarketingAgreed} />
-                <span className="text-body-sm text-text-basic leading-normal font-medium">
+                <span className="text-detail-sm text-text-basic pt-px leading-normal font-medium">
                   (선택) 마케팅 수신 · 홍보 목적의 개인정보 수집 및 이용에 동의합니다.
                 </span>
               </label>
             </section>
 
             <div className="flex w-full flex-col gap-4">
-              <Button type="button" size="medium" className="h-14 w-full py-0">
+              <Button type="button" size="medium" className="text-body-xl h-14 w-full py-0">
                 정보 수정
               </Button>
               <Button
                 variant="tertiary"
                 size="medium"
                 type="button"
-                className="text-text-subtler focus-visible:ring-border-primary h-14 w-full py-0 outline-none focus-visible:ring-2"
+                className="text-text-disabled focus-visible:ring-border-primary text-body-xl h-14 w-full py-0 outline-none focus-visible:ring-2"
                 onClick={() => {
                   setWithdrawOpen(true);
                 }}
@@ -147,6 +129,6 @@ export const MypageForm = () => {
           router.push('/');
         }}
       />
-    </div>
+    </>
   );
 };
