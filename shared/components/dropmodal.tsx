@@ -90,9 +90,13 @@ const WithdrawModalBody = ({
     if (reason === 'other' && !detail.trim()) {
       return;
     }
-    await onSubmit?.({ reason, detail: detail.trim() });
-    onClose();
-    onWithdrawSubmitted();
+    try {
+      await onSubmit?.({ reason, detail: detail.trim() });
+      onWithdrawSubmitted();
+      onClose();
+    } catch {
+      // onSubmit 실패 시 모달을 유지해 사용자가 재시도할 수 있도록 함
+    }
   };
 
   return (

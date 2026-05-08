@@ -55,6 +55,7 @@ export const MypageForm = () => {
   const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   const registeredDisplayName = sessionUser?.nickname ?? '';
+  const registeredEmail = sessionUser?.email ?? 'minmin1234@naver.com';
 
   return (
     <>
@@ -83,7 +84,8 @@ export const MypageForm = () => {
                     type="email"
                     disabled
                     autoComplete="email"
-                    defaultValue="minmin1234@naver.com"
+                    value={registeredEmail}
+                    readOnly
                   />
                 </div>
               </div>

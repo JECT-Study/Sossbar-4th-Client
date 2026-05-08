@@ -166,7 +166,7 @@ const SignupPage = () => {
             <ModalType
               name={name.trim()}
               onConfirm={() => {
-                setSessionUser({ nickname: name.trim(), profileImageUrl: null });
+                setSessionUser({ nickname: name.trim(), email: '', profileImageUrl: null });
                 router.push('/');
               }}
             />
