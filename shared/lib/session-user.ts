@@ -1,12 +1,14 @@
 import { useSyncExternalStore } from 'react';
 
+import { isServer } from '@/shared/constants/env';
+
 const STORAGE_KEY = 'sossbar:user-session';
 
 /**
  * `pnpm dev`에서는 기본적으로 sessionStorage 로 두어 새 탭·새 접속 시 로그인 전 상태를 기본값으로 맞춥니다.
  */
 const getAuthStorage = (): Storage | null => {
-  if (typeof window === 'undefined') {
+  if (isServer) {
     return null;
   }
   return process.env.NODE_ENV === 'development' ? window.sessionStorage : window.localStorage;

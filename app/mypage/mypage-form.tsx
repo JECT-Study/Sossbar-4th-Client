@@ -1,40 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { Checkbox } from 'radix-ui';
 
 import { Button } from '@/shared/components/button';
 import { Dropmodal } from '@/shared/components/dropmodal';
 import { Input } from '@/shared/components/input';
+import { useBooleanState } from '@/shared/hooks/use-boolean-state';
+import { cn } from '@/shared/lib/cn';
 import { clearSessionUser, useSessionUser } from '@/shared/lib/session-user';
-
-type CheckboxProps = {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-};
-
-const MarketingCheckbox = ({ checked, onCheckedChange }: CheckboxProps) => (
-  <>
-    <input
-      type="checkbox"
-      checked={checked}
-      onChange={(e) => onCheckedChange(e.target.checked)}
-      className="peer sr-only"
-    />
-    <span
-      aria-hidden
-      className={`peer-focus-visible:ring-border-primary flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[4px] border border-solid transition-colors peer-focus-visible:ring-2 ${
-        checked ? 'bg-element-primary border-transparent' : 'border-border-gray bg-white'
-      }`}
-    >
-      {checked ? (
-        <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-          <path d="M1 4L4.5 7.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      ) : null}
-    </span>
-  </>
-);
 
 const nameInputProps = {
   className: 'mx-auto max-w-none w-full',
@@ -51,8 +25,8 @@ const emailInputProps = {
 export const MypageForm = () => {
   const router = useRouter();
   const sessionUser = useSessionUser();
-  const [marketingAgreed, setMarketingAgreed] = useState(true);
-  const [withdrawOpen, setWithdrawOpen] = useState(false);
+  const [marketingAgreed, setMarketingAgreedTrue, setMarketingAgreedFalse] = useBooleanState(true);
+  const [withdrawOpen, openWithdraw, closeWithdraw] = useBooleanState(false);
 
   const registeredDisplayName = sessionUser?.nickname ?? '';
   const registeredEmail = sessionUser?.email ?? 'minmin1234@naver.com';
@@ -61,7 +35,7 @@ export const MypageForm = () => {
     <>
       <div className="mx-auto w-full max-w-[1200px] px-10 pt-[65px] pb-[98px]">
         <div className="mx-auto flex w-full max-w-[560px] justify-center">
-          <div className="flex w-full max-w-[480px] flex-col gap-10 py-10">
+          <form className="flex w-full max-w-[480px] flex-col gap-10 py-10" onSubmit={(e) => e.preventDefault()}>
             <section aria-labelledby="mypage-basic-heading" className="w-full">
               <h2 id="mypage-basic-heading" className="text-heading-base text-text-basic mb-8 font-bold">
                 기본 정보
@@ -96,7 +70,35 @@ export const MypageForm = () => {
                 수신 설정
               </h2>
               <label className="flex cursor-pointer items-start gap-2">
-                <MarketingCheckbox checked={marketingAgreed} onCheckedChange={setMarketingAgreed} />
+                <Checkbox.Root
+                  checked={marketingAgreed}
+                  onCheckedChange={(checked) =>
+                    checked === true ? setMarketingAgreedTrue() : setMarketingAgreedFalse()
+                  }
+                  className={cn(
+                    'focus-visible:ring-border-primary flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[4px] border border-solid transition-colors focus-visible:ring-2 focus-visible:outline-none',
+                    marketingAgreed ? 'bg-element-primary border-transparent' : 'border-border-gray bg-white',
+                  )}
+                >
+                  <Checkbox.Indicator>
+                    <svg
+                      width="12"
+                      height="9"
+                      viewBox="0 0 12 9"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden
+                    >
+                      <path
+                        d="M1 4L4.5 7.5L11 1"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </Checkbox.Indicator>
+                </Checkbox.Root>
                 <span className="text-detail-sm text-text-basic pt-px leading-normal font-medium">
                   (선택) 마케팅 수신 · 홍보 목적의 개인정보 수집 및 이용에 동의합니다.
                 </span>
@@ -104,7 +106,7 @@ export const MypageForm = () => {
             </section>
 
             <div className="flex w-full flex-col gap-4">
-              <Button type="button" size="medium" className="text-body-xl h-14 w-full py-0">
+              <Button type="submit" size="medium" className="text-body-xl h-14 w-full py-0">
                 정보 수정
               </Button>
               <Button
@@ -112,20 +114,18 @@ export const MypageForm = () => {
                 size="medium"
                 type="button"
                 className="text-text-disabled focus-visible:ring-border-primary text-body-xl h-14 w-full py-0 outline-none focus-visible:ring-2"
-                onClick={() => {
-                  setWithdrawOpen(true);
-                }}
+                onClick={openWithdraw}
               >
                 회원 탈퇴
               </Button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
 
       <Dropmodal
         open={withdrawOpen}
-        onOpenChange={setWithdrawOpen}
+        onOpenChange={(open) => (open ? openWithdraw() : closeWithdraw())}
         onConfirm={() => {
           clearSessionUser();
           router.push('/');
