@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { useBooleanState } from '@/shared/hooks/use-boolean-state';
+
 import type { SignupFormData } from './types';
 
 import { SignupFormSchema } from './schemas';
@@ -17,14 +19,9 @@ const defaultValues: SignupFormData = {
 };
 
 export const useSignupForm = () => {
-  const {
-    control,
-    watch,
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors, isValid },
-  } = useForm({
+  const [isSignupCompleted, handleSignupSuccess] = useBooleanState();
+
+  const form = useForm({
     defaultValues,
     mode: 'onTouched',
     reValidateMode: 'onChange',
@@ -34,18 +31,17 @@ export const useSignupForm = () => {
   const onSubmit = (data: SignupFormData) => {
     // eslint-disable-next-line no-console
     console.log(data);
+    handleSignupSuccess();
   };
 
-  const canSubmit = isValid;
+  const canSubmit = form.formState.isValid;
 
   return {
     canSubmit,
-    errors,
-    control,
-    watch,
-    register,
-    handleSubmit,
     onSubmit,
-    setValue,
+    form,
+    /** 회원가입 성공 여부 **/
+    isSignupCompleted,
+    handleSignupSuccess,
   };
 };
