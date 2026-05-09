@@ -1,8 +1,8 @@
 'use client';
 
-import type { ComponentProps, InputHTMLAttributes, ReactElement } from 'react';
+import type { ComponentProps, InputHTMLAttributes, Ref } from 'react';
 
-import { forwardRef, useId, useState } from 'react';
+import { useId, useState } from 'react';
 
 import { DangerIcon, InputClearIcon } from '@/shared/assets/icons';
 import { cn } from '@/shared/lib/cn';
@@ -29,33 +29,28 @@ const InputClearButton = ({ 'aria-label': ariaLabel = '입력 지우기', classN
 };
 
 export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
-  leftSlot?: ReactElement;
-  rightSlot?: ReactElement;
   className?: string;
   inputClassName?: string;
   variant?: 'default' | 'error';
   /** `variant="error"`일 때 하단 안내 문구 */
   errorMessage?: string;
+  ref?: Ref<HTMLInputElement>;
 };
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  {
-    className,
-    inputClassName,
-    leftSlot,
-    rightSlot,
-    disabled,
-    variant = 'default',
-    errorMessage,
-    'aria-describedby': ariaDescribedBy,
-    onChange,
-    onFocus,
-    onBlur,
-    value,
-    ...props
-  },
+export const Input = ({
   ref,
-) {
+  className,
+  inputClassName,
+  disabled,
+  variant = 'default',
+  errorMessage,
+  'aria-describedby': ariaDescribedBy,
+  onChange,
+  onFocus,
+  onBlur,
+  value,
+  ...props
+}: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const isError = variant === 'error';
@@ -69,12 +64,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   const handleClear = () => {
     onChange?.({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
   };
-
-  const resolvedRightSlot = showClearButton ? (
-    <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} />
-  ) : (
-    rightSlot
-  );
 
   return (
     <div className={cn('flex w-full max-w-[360px] flex-col', className)}>
@@ -93,17 +82,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             ],
         )}
       >
-        {leftSlot != null && (
-          <span
-            className={cn(
-              'flex shrink-0 items-center justify-center',
-              disabled ? 'text-icon-disabled [&_svg]:text-icon-disabled' : 'text-icon-gray [&_svg]:text-icon-gray',
-            )}
-          >
-            {leftSlot}
-          </span>
-        )}
-
         <input
           ref={ref}
           disabled={disabled}
@@ -129,14 +107,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           {...props}
         />
 
-        {resolvedRightSlot != null && (
-          <span
-            className={cn(
-              'flex shrink-0 items-center justify-center',
-              disabled ? 'text-icon-disabled [&_svg]:text-icon-disabled' : 'text-icon-gray [&_svg]:text-icon-gray',
-            )}
-          >
-            {resolvedRightSlot}
+        {!!showClearButton && (
+          <span className={cn('flex shrink-0 items-center justify-center', 'text-icon-gray [&_svg]:text-icon-gray')}>
+            <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} />
           </span>
         )}
       </div>
@@ -149,4 +122,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       )}
     </div>
   );
-});
+};
