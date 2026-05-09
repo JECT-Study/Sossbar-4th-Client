@@ -43,6 +43,7 @@ export const Input = ({
   errorMessage,
   maxLength,
   defaultValue,
+  readOnly,
   'aria-describedby': ariaDescribedBy,
   onChange,
   onFocus,
@@ -81,7 +82,7 @@ export const Input = ({
 
   const valueLength = trackedValue.length;
   const showCount = maxLength != null && !disabled;
-  const showClearButton = isFocused && !disabled && valueLength > 0;
+  const showClearButton = isFocused && !disabled && !readOnly && valueLength > 0;
 
   const countColorClass = isError
     ? 'text-text-error'
@@ -146,11 +147,14 @@ export const Input = ({
             inputClassName,
           )}
           {...props}
+          readOnly={readOnly}
           maxLength={maxLength}
           {...(isControlled ? { value } : { defaultValue })}
         />
 
-        {!!showClearButton && <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} />}
+        {!!showClearButton && (
+          <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} tabIndex={-1} />
+        )}
       </div>
 
       {!!(isError || showCount) && (
