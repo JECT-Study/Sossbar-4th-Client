@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import localFont from 'next/font/local';
 
 import { AppShell } from '@/shared/components/app-shell';
+import { MswProvider } from '@/shared/providers/msw-provider';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
 import type { Metadata } from 'next';
@@ -29,6 +30,7 @@ const RootLayout = ({
     <html lang="ko" className={pretendard.variable}>
       <body className="bg-gray-0 flex min-h-screen flex-col text-gray-900 antialiased">
         <QueryProvider>
+          {process.env.NODE_ENV === 'development' && <MswProvider />}
           <AppShell>{children}</AppShell>
         </QueryProvider>
       </body>

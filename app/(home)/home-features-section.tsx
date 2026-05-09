@@ -1,12 +1,10 @@
 import Image from 'next/image';
 
-interface Feature {
-  title: string;
-  description: string;
-  imageSrc: string;
-}
+import { PageContainer } from '@/shared/components/page-container';
 
-const FEATURES: Feature[] = [
+import { HomeSectionHeader } from './home-section-header';
+
+const FEATURES = [
   {
     title: '프로필 생성 및 관리',
     description: '닉네임, 한 줄 소개 등 기본 프로필을 등록하고 받은 협업 후기와 태그를 한 눈에',
@@ -31,20 +29,13 @@ const FEATURES: Feature[] = [
 
 export const HomeFeaturesSection = () => {
   return (
-    <section id="home-features-section" className="bg-gray-0 flex h-[800px] w-full items-center py-[80px]">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center self-center">
-        <div className="flex w-full flex-col items-center">
-          <div className="text-element-primary bg-button-secondary-fill box-border flex h-[32px] w-[84px] shrink-0 items-center justify-center overflow-hidden rounded-[24px] text-center text-[14px] leading-none font-normal whitespace-nowrap">
-            주요 기능
-          </div>
-          <h2 className="text-text-basic mt-2 w-full text-center text-[48px] leading-[150%] font-bold">
-            보이지 않던 협업 역량을 투명한 데이터로!
-          </h2>
-          <p className="text-text-subtle mt-2 w-full text-center text-[20px] leading-[150%] font-normal">
-            기술, 스펙, 스킬은 포트폴리오나 깃허브로 증명할 수 있지만 소통 방식과 책임감과 같은 소프트스킬은 어떻게
-            보여주시나요?
-          </p>
-        </div>
+    <PageContainer className="flex h-[800px] w-full items-center py-20">
+      <div className="flex w-full flex-col items-center self-center">
+        <HomeSectionHeader
+          badge="주요 기능"
+          heading="보이지 않던 협업 역량을 투명한 데이터로!"
+          description="기술, 스펙, 스킬은 포트폴리오나 깃허브로 증명할 수 있지만 소통 방식과 책임감과 같은 소프트스킬은 어떻게 보여주시나요?"
+        />
 
         <div className="mt-10 box-border flex h-[208px] w-full max-w-[1200px] flex-none items-stretch gap-6">
           {FEATURES.map((feature) => (
@@ -61,6 +52,6 @@ export const HomeFeaturesSection = () => {
           ))}
         </div>
       </div>
-    </section>
+    </PageContainer>
   );
 };
