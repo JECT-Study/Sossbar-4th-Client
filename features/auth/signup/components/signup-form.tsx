@@ -1,6 +1,10 @@
 'use client';
 
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
 import { Button } from '@/shared/components/button';
+import { InformationDialog } from '@/shared/components/dialog/information-dialog';
 import { Input } from '@/shared/components/input';
 import { Textarea } from '@/shared/components/textarea';
 
@@ -10,7 +14,20 @@ import { FormField } from './form-field';
 import { SignupAgreement } from './signup-agreement';
 
 export const SignupForm = () => {
-  const { canSubmit, errors, control, register, handleSubmit, onSubmit, watch, setValue } = useSignupForm();
+  const router = useRouter();
+  const { isSignupCompleted, canSubmit, form, onSubmit } = useSignupForm();
+
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    getValues,
+    control,
+  } = form;
+
+  const goToProfile = () => router.push('/');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-8 w-full max-w-[460px]">
@@ -47,6 +64,24 @@ export const SignupForm = () => {
       <Button disabled={!canSubmit} size="large" className="mt-10 w-full rounded-xl py-4 text-[18px] font-semibold">
         가입완료
       </Button>
+
+      {isSignupCompleted ? (
+        <InformationDialog
+          title={
+            <>
+              <span className="text-text-primary">{getValues('name')}님</span>
+              <br />
+              가입이 완료되었습니다!
+            </>
+          }
+          description="협업 프로필을 공유해보세요!"
+          confirmText="프로필 공유하러 가기"
+          open={isSignupCompleted}
+          icon={<Image src="/signup_image.svg" alt="" width={120} height={120} className="h-full w-full" />}
+          onOpenChange={goToProfile}
+          onConfirm={goToProfile}
+        />
+      ) : null}
     </form>
   );
 };
