@@ -2,9 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
+import { ApiError } from '@/shared/lib/api';
 
 import type { SignupFormData } from './types';
 
+import { useSignup } from './mutations';
 import { SignupFormSchema } from './schemas';
 
 const defaultValues: SignupFormData = {
@@ -19,7 +21,8 @@ const defaultValues: SignupFormData = {
 };
 
 export const useSignupForm = () => {
-  const [isSignupCompleted, handleSignupSuccess] = useBooleanState();
+  const [isSignupCompleted, completeSignup] = useBooleanState();
+  const { mutateAsync: signup, isPending } = useSignup();
 
   const form = useForm({
     defaultValues,
@@ -28,20 +31,23 @@ export const useSignupForm = () => {
     resolver: zodResolver(SignupFormSchema),
   });
 
-  const onSubmit = (data: SignupFormData) => {
-    // eslint-disable-next-line no-console
-    console.log(data);
-    handleSignupSuccess();
+  const onSubmit = async (data: SignupFormData) => {
+    try {
+      await signup(data);
+      completeSignup();
+    } catch (error) {
+      form.setError('root', {
+        message: error instanceof ApiError ? error.message : '서버 오류가 발생했어요. 잠시 후 다시 시도해주세요.',
+      });
+    }
   };
 
-  const canSubmit = form.formState.isValid;
+  const canSubmit = form.formState.isValid && !isPending;
 
   return {
     canSubmit,
     onSubmit,
     form,
-    /** 회원가입 성공 여부 **/
     isSignupCompleted,
-    handleSignupSuccess,
   };
 };
