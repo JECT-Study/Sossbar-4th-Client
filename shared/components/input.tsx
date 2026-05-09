@@ -14,13 +14,7 @@ const InputClearButton = ({ 'aria-label': ariaLabel = '입력 지우기', classN
     <button
       type="button"
       aria-label={ariaLabel}
-      className={cn(
-        'flex h-5 w-5 shrink-0 items-center justify-center rounded-full p-0 outline-none',
-        'focus-visible:ring-1 focus-visible:ring-(--color-border-primary)',
-        'disabled:opacity-50',
-        'transition-opacity',
-        className,
-      )}
+      className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full p-0 outline-none', className)}
       {...props}
     >
       <InputClearIcon className="text-icon-gray pointer-events-none shrink-0 select-none" aria-hidden />
@@ -44,6 +38,7 @@ export const Input = ({
   disabled,
   variant = 'default',
   errorMessage,
+  maxLength,
   'aria-describedby': ariaDescribedBy,
   onChange,
   onFocus,
@@ -55,18 +50,28 @@ export const Input = ({
 
   const isError = variant === 'error';
   const errorId = useId();
-  const resolvedErrorText = errorMessage ?? '메시지를 입력해 주세요';
+  const resolvedErrorText = errorMessage ?? '입력값을 확인해 주세요';
 
   const describedBy = [ariaDescribedBy, isError ? errorId : undefined].filter(Boolean).join(' ') || undefined;
 
-  const showClearButton = isFocused && !disabled && typeof value === 'string' && value.length > 0;
+  const valueLength = typeof value === 'string' ? value.length : 0;
+  const showCount = maxLength != null && !disabled;
+  const showClearButton = isFocused && !disabled && valueLength > 0;
+
+  const countColorClass = isError
+    ? 'text-text-error'
+    : isFocused
+      ? 'text-text-primary'
+      : valueLength > 0
+        ? 'text-text-success'
+        : 'text-text-disabled';
 
   const handleClear = () => {
     onChange?.({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
   };
 
   return (
-    <div className={cn('flex w-full max-w-[360px] flex-col', className)}>
+    <div className={cn('flex w-full flex-col', className)}>
       <div
         className={cn(
           'box-border flex h-12 w-full items-center gap-2 rounded-md px-4 py-0',
@@ -105,19 +110,26 @@ export const Input = ({
             inputClassName,
           )}
           {...props}
+          maxLength={maxLength}
         />
 
-        {!!showClearButton && (
-          <span className={cn('flex shrink-0 items-center justify-center', 'text-icon-gray [&_svg]:text-icon-gray')}>
-            <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} />
-          </span>
-        )}
+        {!!showClearButton && <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} />}
       </div>
 
-      {!!isError && (
-        <div id={errorId} className="mt-1 flex w-full items-start gap-1" aria-live="polite">
-          <DangerIcon width={16} height={16} className="pointer-events-none mt-0.5 shrink-0" aria-hidden />
-          <span className="text-body-sm text-text-error">{resolvedErrorText}</span>
+      {!!(isError || showCount) && (
+        <div className="mt-1 flex w-full items-start gap-1">
+          {!!isError && (
+            <div id={errorId} className="flex items-start gap-1" aria-live="polite">
+              <DangerIcon width={16} height={16} className="pointer-events-none mt-0.5 shrink-0" aria-hidden />
+              <span className="text-body-sm text-text-error">{resolvedErrorText}</span>
+            </div>
+          )}
+          {!!showCount && (
+            <span className={cn('text-body-sm ml-auto shrink-0 tabular-nums', countColorClass)}>
+              <span>{valueLength}</span>
+              <span className="text-text-subtle">/{maxLength}</span>
+            </span>
+          )}
         </div>
       )}
     </div>
