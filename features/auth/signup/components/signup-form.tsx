@@ -61,7 +61,9 @@ export const SignupForm = () => {
 
       <SignupAgreement control={control} setValue={setValue} />
 
-      <Button disabled={!canSubmit} size="large" className="mt-10 w-full rounded-xl py-4 text-[18px] font-semibold">
+      {errors.root ? <p className="text-body-sm text-text-error mt-3">{errors.root.message}</p> : null}
+
+      <Button disabled={!canSubmit} size="large" className="mt-4 w-full rounded-xl py-4 text-[18px] font-semibold">
         가입완료
       </Button>
 
