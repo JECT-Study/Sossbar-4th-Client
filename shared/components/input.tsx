@@ -1,10 +1,11 @@
 'use client';
 
-import type { ComponentProps, InputHTMLAttributes, Ref } from 'react';
+import type { ChangeEvent, ComponentProps, InputHTMLAttributes, Ref } from 'react';
 
-import { useId, useState } from 'react';
+import { useCallback, useId, useRef, useState } from 'react';
 
 import { DangerIcon, InputClearIcon } from '@/shared/assets/icons';
+import { useControllableState } from '@/shared/hooks/use-controllable-state';
 import { cn } from '@/shared/lib/cn';
 
 type InputClearButtonProps = ComponentProps<'button'>;
@@ -22,7 +23,9 @@ const InputClearButton = ({ 'aria-label': ariaLabel = '입력 지우기', classN
   );
 };
 
-export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'value' | 'defaultValue'> & {
+  value?: string;
+  defaultValue?: string;
   className?: string;
   inputClassName?: string;
   variant?: 'default' | 'error';
@@ -39,6 +42,7 @@ export const Input = ({
   variant = 'default',
   errorMessage,
   maxLength,
+  defaultValue,
   'aria-describedby': ariaDescribedBy,
   onChange,
   onFocus,
@@ -48,13 +52,34 @@ export const Input = ({
 }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
+  const isControlled = value !== undefined;
+
+  const [trackedValue, setTrackedValue] = useControllableState<string>({
+    prop: value,
+    defaultProp: defaultValue ?? '',
+  });
+
+  // 외부 ref(RHF register 등)와 clear 버튼용 내부 inputRef를 동시에 채우기 위한 콜백 ref
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const setInputRef = useCallback(
+    (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
+
   const isError = variant === 'error';
   const errorId = useId();
   const resolvedErrorText = errorMessage ?? '입력값을 확인해 주세요';
 
   const describedBy = [ariaDescribedBy, isError ? errorId : undefined].filter(Boolean).join(' ') || undefined;
 
-  const valueLength = typeof value === 'string' ? value.length : 0;
+  const valueLength = trackedValue.length;
   const showCount = maxLength != null && !disabled;
   const showClearButton = isFocused && !disabled && valueLength > 0;
 
@@ -66,8 +91,20 @@ export const Input = ({
         ? 'text-text-success'
         : 'text-text-disabled';
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTrackedValue(e.target.value);
+    onChange?.(e);
+  };
+
   const handleClear = () => {
-    onChange?.({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
+    const input = inputRef.current;
+    if (!input) {
+      return;
+    }
+    // React의 value 추적을 우회해 진짜 input 이벤트를 발사해야 onChange가 정상 발화됨
+    const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+    nativeSetter?.call(input, '');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
   };
 
   return (
@@ -88,12 +125,11 @@ export const Input = ({
         )}
       >
         <input
-          ref={ref}
+          ref={setInputRef}
           disabled={disabled}
           aria-invalid={isError || undefined}
           aria-describedby={describedBy}
-          value={value}
-          onChange={onChange}
+          onChange={handleChange}
           onFocus={(e) => {
             setIsFocused(true);
             onFocus?.(e);
@@ -111,6 +147,7 @@ export const Input = ({
           )}
           {...props}
           maxLength={maxLength}
+          {...(isControlled ? { value } : { defaultValue })}
         />
 
         {!!showClearButton && <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} />}
