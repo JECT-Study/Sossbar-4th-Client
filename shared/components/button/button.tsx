@@ -6,7 +6,7 @@ import { Slot } from 'radix-ui';
 import { cn } from '@/shared/lib/cn';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center font-medium transition-colors gap-1 self-start',
+  'inline-flex items-center justify-center font-medium transition-colors gap-1 self-start cursor-pointer',
   {
     variants: {
       variant: {

@@ -4,7 +4,7 @@ import { HomeHeroSection } from './home-hero-section';
 import { HomeHowItWorksSection } from './home-how-it-works-section';
 import { HomeShowcaseSection } from './home-showcase-section';
 
-export const HomeLandingSections = () => {
+const Home = () => {
   return (
     <>
       <HomeHeroSection />
@@ -15,3 +15,5 @@ export const HomeLandingSections = () => {
     </>
   );
 };
+
+export default Home;
