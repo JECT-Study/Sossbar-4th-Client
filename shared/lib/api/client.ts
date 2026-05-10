@@ -1,5 +1,5 @@
 import { getAccessToken } from './access-token';
-import { buildApiUrl } from './resolve-api-url';
+import { buildApiUrl, getApiOrigin } from './resolve-api-url';
 import { ApiError, type ApiErrorPayload, type ApiResponse, unwrapApiResponse } from './types';
 
 type ApiRequestOptions = Omit<RequestInit, 'body'> & {
@@ -46,7 +46,7 @@ export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {
 
   const res = await fetch(url, {
     ...init,
-    credentials: init.credentials ?? 'same-origin',
+    credentials: init.credentials ?? (getApiOrigin() ? 'include' : 'same-origin'),
     headers: requestHeaders,
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });

@@ -13,6 +13,5 @@ export const fetchTagsByProject = (projectId: number): Promise<Tag[]> =>
 export const fetchSpectrumsByProject = (projectId: number): Promise<SpectrumWithAverage[]> =>
   apiRequest<SpectrumWithAverage[]>(`/reviews/spectrums/${projectId}`).then(assertApiData);
 
-export const createReview = async (data: CreateReviewRequest): Promise<void> => {
-  await apiRequest<void>('/reviews', { method: 'POST', body: data });
-};
+export const createReview = (data: CreateReviewRequest): Promise<void> =>
+  apiRequest('/reviews', { method: 'POST', body: data }).then(() => {});

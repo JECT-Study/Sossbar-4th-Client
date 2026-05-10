@@ -32,11 +32,11 @@ export const notificationsHandlers = [
     return HttpResponse.json({ data: mockNotifications });
   }),
 
-  http.patch(`${BASE}/notifications/read/:notificationId`, () => {
+  http.patch(`${BASE}/notifications/read/all`, () => {
     return new HttpResponse(null, { status: 204 });
   }),
 
-  http.patch(`${BASE}/notifications/read/all`, () => {
+  http.patch(`${BASE}/notifications/read/:notificationId`, () => {
     return new HttpResponse(null, { status: 204 });
   }),
 ];

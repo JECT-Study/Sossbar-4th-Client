@@ -47,16 +47,8 @@ export const reviewsHandlers = [
     });
   }),
 
-  http.get(`${BASE}/reviews/tags`, () => {
-    return HttpResponse.json({ data: mockTags });
-  }),
-
   http.get(`${BASE}/reviews/tags/:projectId`, () => {
     return HttpResponse.json({ data: mockTags.slice(0, 5) });
-  }),
-
-  http.get(`${BASE}/reviews/spectrums`, () => {
-    return HttpResponse.json({ data: mockSpectrums.map((s) => ({ ...s, averageValue: 60 })) });
   }),
 
   http.get(`${BASE}/reviews/spectrums/:projectId`, () => {
