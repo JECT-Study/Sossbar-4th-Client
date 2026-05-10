@@ -123,7 +123,6 @@ export const Input = ({
               'focus-within:bg-surface-white',
               'focus-within:ring-border-primary focus-within:ring-2 focus-within:ring-inset',
             ],
-          fieldClassName,
         )}
       >
         <input
