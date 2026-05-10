@@ -1,15 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { cn } from '@/shared/lib/cn';
-
-import { buttonVariants } from './button/button';
-
-const navLinks = [
-  { href: '#', label: '내 프로필', widthClassName: 'w-[100px]' },
-  { href: '#', label: '프로젝트 관리', widthClassName: 'w-[127px]' },
-  { href: '#', label: '프로필 예시 보기', widthClassName: 'w-[145px]' },
-] as const;
+import { HeaderAuthArea } from './header-auth-area';
+import { HeaderMainNav } from './header-main-nav';
 
 export const Header = () => {
   return (
@@ -19,25 +12,11 @@ export const Header = () => {
           <Link href="/" className="relative flex h-[36px] shrink-0 items-center">
             <Image src="/Sossbar_logo.svg" alt="Sossbar" width={161} height={36} className="h-[36px] w-auto" priority />
           </Link>
-          <nav aria-label="주요 메뉴">
-            <ul className="flex items-center gap-4">
-              {navLinks.map(({ href, label, widthClassName }) => (
-                <li key={label}>
-                  <Link
-                    href={href}
-                    className={cn(buttonVariants({ variant: 'tertiary', size: 'small' }), 'h-10 px-0', widthClassName)}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <HeaderMainNav />
         </div>
-
-        <Link href="/login" className={cn(buttonVariants({ variant: 'primary' }), 'h-10 w-[90px] px-0')}>
-          로그인
-        </Link>
+        <div className="flex shrink-0 items-center self-stretch">
+          <HeaderAuthArea />
+        </div>
       </div>
     </header>
   );
