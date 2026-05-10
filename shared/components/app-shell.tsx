@@ -20,7 +20,6 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Header />
-      <hr className="fixed top-[64px] right-0 left-0 z-40 border-t border-gray-200" />
       <main className="flex-1">{children}</main>
       <Footer variant={footerVariant} />
     </>
