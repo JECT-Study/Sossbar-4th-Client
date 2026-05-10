@@ -31,7 +31,7 @@ export const useSignupForm = () => {
     resolver: zodResolver(SignupFormSchema),
   });
 
-  const onSubmit = async (data: SignupFormData) => {
+  const onSubmit = async (data: Pick<SignupFormData, 'name' | 'bio'>) => {
     try {
       await signup(data);
       completeSignup();
