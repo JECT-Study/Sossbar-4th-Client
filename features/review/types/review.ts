@@ -3,10 +3,18 @@ export type Tag = {
   name: string;
 };
 
-export type SpectrumWithAverage = {
+export type Spectrum = {
   spectrumId: number;
   leftLabel: string;
   rightLabel: string;
+};
+
+export type SpectrumWithValue = {
+  spectrumId: number;
+  value: number;
+};
+
+export type SpectrumWithAverage = Spectrum & {
   averageValue: number;
 };
 
@@ -17,23 +25,19 @@ export type Review = {
   praise: string;
   improvement: string;
   tags: Tag[];
-  spectrums: Array<{ spectrumId: number; value: number }>;
+  spectrums: SpectrumWithValue[];
   createdAt: string;
 };
 
 export type ReviewFormData = {
   tags: Tag[];
-  spectrums: Array<{
-    spectrumId: number;
-    leftLabel: string;
-    rightLabel: string;
-  }>;
+  spectrums: Spectrum[];
 };
 
 export type CreateReviewRequest = {
   projectId: number;
   praise: string;
   improvement: string;
-  selectedTagIds: number[];
-  spectrums: Array<{ spectrumId: number; value: number }>;
+  tagIds: number[];
+  spectrums: SpectrumWithValue[];
 };

@@ -28,7 +28,7 @@ export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {
   const { basePath = DEFAULT_BASE_PATH, headers, body, ...init } = options;
 
   let res: Response;
-  try {
+  try {https://github.com/JECT-Study/Sossbar-4th-Client/pull/75/conflict?name=shared%252Flib%252Fapi%252Findex.ts&base_oid=682dd848d7e54665d9917220d32c48d082017849&head_oid=c33072a4d23ced62f0d9247481d3e9fe16d0c5cd
     res = await fetch(`${basePath}${path}`, {
       ...init,
       headers: {
