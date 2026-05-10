@@ -7,12 +7,6 @@ export type Profile = {
   email: string;
 };
 
-export type OnboardingRequest = {
-  realName: string;
-  bio: string;
-  profileImageUrl?: string | null;
-};
-
 export type UpdateProfileRequest = {
   nickname?: string;
   bio?: string;
