@@ -5,12 +5,14 @@ import type { ChangeEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Dialog } from 'radix-ui';
 import { useId, useState } from 'react';
 
 import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
 import { ModalType } from '@/shared/components/modal-type';
 import { Textarea } from '@/shared/components/textarea';
+import { setSessionUser } from '@/shared/lib/session-user';
 
 const BIO_MAX_LENGTH = 50;
 
@@ -153,19 +155,21 @@ const SignupPage = () => {
         </Button>
       </div>
 
-      {isCompleted ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label="회원가입 완료"
-          onClick={() => setIsCompleted(false)}
-        >
-          <div className="w-[360px]" onClick={(e) => e.stopPropagation()}>
-            <ModalType name={name.trim()} onConfirm={() => router.push('/')} />
-          </div>
-        </div>
-      ) : null}
+      <Dialog.Root open={isCompleted} onOpenChange={setIsCompleted}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
+          <Dialog.Content className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
+            <Dialog.Title className="sr-only">회원가입 완료</Dialog.Title>
+            <ModalType
+              name={name.trim()}
+              onConfirm={() => {
+                setSessionUser({ nickname: name.trim(), email: '', profileImageUrl: null });
+                router.push('/');
+              }}
+            />
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   );
 };

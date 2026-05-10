@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { cn } from '@/shared/lib/cn';
+
 const footerLinks = [
   { href: '#', label: '회사 소개' },
   { href: '#', label: '문의하기' },
@@ -14,7 +16,7 @@ export const Footer = ({ variant = 'dark' }: { variant?: FooterVariant }) => {
   const isDark = variant === 'dark';
 
   return (
-    <footer className="mt-auto bg-black">
+    <footer className={cn('mt-auto', isDark ? 'bg-black' : 'bg-gray-0 border-t border-(--color-divider-gray-light)')}>
       <div className="mx-auto flex min-h-[167px] w-full max-w-[1200px] flex-col gap-6 px-4 py-8 sm:px-6 md:flex-row md:items-start md:justify-between md:gap-8 lg:px-0">
         <nav aria-label="푸터 링크">
           <ul className="flex flex-wrap items-center gap-6">
