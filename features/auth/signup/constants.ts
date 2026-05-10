@@ -1,5 +1,7 @@
 export const BIO_MAX_LENGTH = 50;
 
+export const NAME_MAX_LENGTH = 20;
+
 export const AGREEMENTS = [
   { key: 'age', label: '만 14세 이상입니다.', required: true },
   {
