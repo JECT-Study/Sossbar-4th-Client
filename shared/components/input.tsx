@@ -20,15 +20,16 @@ export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
   leftSlot?: ReactElement;
   rightSlot?: ReactElement;
   className?: string;
+  fieldClassName?: string;
   inputClassName?: string;
   variant?: 'default' | 'error';
-  /** `variant="error"`일 때 하단 안내 문구 */
   errorMessage?: string;
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
     className,
+    fieldClassName,
     inputClassName,
     leftSlot,
     rightSlot,
@@ -61,6 +62,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
               'focus-within:bg-surface-white',
               'focus-within:ring-border-primary focus-within:ring-2 focus-within:ring-inset',
             ],
+          fieldClassName,
         )}
       >
         {leftSlot != null && (
