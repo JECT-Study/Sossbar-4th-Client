@@ -1,9 +1,6 @@
 import { apiRequest } from '@/shared/lib/api';
 
-import type { OnboardingRequest, Profile, UpdateProfileRequest } from '../types/profile';
-
-export const createOnboarding = (data: OnboardingRequest): Promise<{ userId: number }> =>
-  apiRequest<{ userId: number }>('/users/onboarding', { method: 'POST', body: data });
+import type { Profile, UpdateProfileRequest } from '../types/profile';
 
 export const fetchProfile = (): Promise<Profile> => apiRequest<Profile>('/users/profile');
 
