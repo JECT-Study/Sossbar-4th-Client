@@ -1,3 +1,3 @@
-export { useUpdateProfile } from './api/mutations';
+export { useOnboarding, useUpdateProfile } from './api/mutations';
 export { useProfile } from './api/queries';
-export type { Profile, UpdateProfileRequest } from './types/profile';
+export type { OnboardingRequest, Profile, UpdateProfileRequest } from './types/profile';
