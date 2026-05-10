@@ -14,7 +14,6 @@ const withRefreshCookie = (body: Record<string, unknown>) =>
     { data: body },
     {
       headers: {
-        // 실제 BE와 같이 리프레시는 쿠키로 줄 수 있음 (브라우저/요청 설정에 따라 동작 상이)
         'Set-Cookie': `refreshToken=mock-refresh-token-${MOCK_USER_ID}; Path=/; SameSite=Lax`,
       },
     },
@@ -61,7 +60,6 @@ export const authHandlers = [
 
   http.post(`${BASE}/login/reissue`, ({ cookies }) => {
     if (!cookies.refreshToken) {
-      // 명세상 HttpOnly 리프레시 쿠키가 없으면 갱신 불가에 가깝게 동작
       return jsonError(401, 'Refresh token cookie missing or invalid');
     }
 
