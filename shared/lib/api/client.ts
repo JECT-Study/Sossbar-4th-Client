@@ -1,4 +1,5 @@
-import { ApiError, type ApiErrorPayload, unwrapApiResponse, type ApiResponse } from './types';
+import { ApiError, type ApiErrorData } from './api-error';
+import { unwrapApiResponse, type ApiResponse } from './api-response';
 
 type ApiRequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
@@ -7,6 +8,9 @@ type ApiRequestOptions = Omit<RequestInit, 'body'> & {
 };
 
 const DEFAULT_BASE_PATH = '/api/v1';
+
+/** When `fetch` throws (network / DNS / aborted, etc.). Surfaced as `ApiError` like HTTP failures—often handled alongside 5xx. */
+const FETCH_FAILURE_STATUS = 503;
 
 const safeJson = async (res: Response): Promise<unknown | undefined> => {
   const text = await res.text();
@@ -23,19 +27,25 @@ const safeJson = async (res: Response): Promise<unknown | undefined> => {
 export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {}): Promise<T> => {
   const { basePath = DEFAULT_BASE_PATH, headers, body, ...init } = options;
 
-  const res = await fetch(`${basePath}${path}`, {
-    ...init,
-    headers: {
-      ...(body !== undefined ? { 'Content-Type': 'application/json' } : null),
-      ...headers,
-    },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${basePath}${path}`, {
+      ...init,
+      headers: {
+        ...(body !== undefined ? { 'Content-Type': 'application/json' } : null),
+        ...headers,
+      },
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Network request failed';
+    throw new ApiError(FETCH_FAILURE_STATUS, message);
+  }
 
   if (!res.ok) {
-    const payload = (await safeJson(res)) as ApiErrorPayload | undefined;
-    const message = payload?.message ?? `Request failed (${res.status})`;
-    throw new ApiError(res.status, message, payload);
+    const errorData = (await safeJson(res)) as ApiErrorData | undefined;
+    const message = errorData?.message ?? `Request failed (${res.status})`;
+    throw new ApiError(res.status, message, errorData);
   }
 
   const json = (await safeJson(res)) as ApiResponse<T> | undefined;
