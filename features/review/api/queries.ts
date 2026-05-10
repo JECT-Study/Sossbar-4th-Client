@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { fetchReviewFormData, fetchReviews, fetchSpectrumsByProject, fetchTagsByProject } from './fetchers';
 
+/** 리뷰·태그·폼 데이터 도메인 공통 키 루트 */
 export const reviewKeys = {
   all: ['review'] as const,
   lists: () => [...reviewKeys.all, 'list'] as const,

@@ -1,5 +1,5 @@
 export { useCreateReview } from './api/mutations';
-export { useReviewFormData, useReviews, useSpectrumsByProject, useTagsByProject } from './api/queries';
+export { reviewKeys, useReviewFormData, useReviews, useSpectrumsByProject, useTagsByProject } from './api/queries';
 export type {
   CreateReviewRequest,
   Review,
