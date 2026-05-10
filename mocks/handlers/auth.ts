@@ -19,12 +19,15 @@ const LOCAL_TEST_PASSWORD = 'sossbar123!';
 const jsonError = (status: number, message: string) => HttpResponse.json({ message }, { status });
 
 const withRefreshCookie = (body: Record<string, unknown>) =>
-  HttpResponse.json(body, {
-    headers: {
-      // 실제 BE와 같이 리프레시는 쿠키로 줄 수 있음 (브라우저/요청 설정에 따라 동작 상이)
-      'Set-Cookie': `refreshToken=mock-refresh-token-${MOCK_USER_ID}; Path=/; SameSite=Lax`,
+  HttpResponse.json(
+    { data: body },
+    {
+      headers: {
+        // 실제 BE와 같이 리프레시는 쿠키로 줄 수 있음 (브라우저/요청 설정에 따라 동작 상이)
+        'Set-Cookie': `refreshToken=mock-refresh-token-${MOCK_USER_ID}; Path=/; SameSite=Lax`,
+      },
     },
-  });
+  );
 
 export const authHandlers = [
   http.get(`${BASE}/login/kakao`, ({ request }) => {

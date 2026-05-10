@@ -24,7 +24,7 @@ const mockProjects = [
 
 export const projectsHandlers = [
   http.get(`${BASE}/projects`, () => {
-    return HttpResponse.json(mockProjects);
+    return HttpResponse.json({ data: mockProjects });
   }),
 
   http.get(`${BASE}/projects/:projectId`, ({ params }) => {
@@ -32,16 +32,16 @@ export const projectsHandlers = [
     if (!project) {
       return new HttpResponse(null, { status: 404 });
     }
-    return HttpResponse.json(project);
+    return HttpResponse.json({ data: project });
   }),
 
   http.post(`${BASE}/projects`, async ({ request }) => {
     const body = (await request.json()) as { name: string; organization: string };
-    return HttpResponse.json({ projectId: 3, ...body, status: 1, members: [] }, { status: 201 });
+    return HttpResponse.json({ data: { projectId: 3, ...body, status: 1, members: [] } }, { status: 201 });
   }),
 
   http.patch(`${BASE}/projects/:projectId`, () => {
-    return HttpResponse.json({ projectId: 1 });
+    return HttpResponse.json({ data: { projectId: 1 } });
   }),
 
   http.post(`${BASE}/projects/invite/:projectId`, () => {
@@ -53,6 +53,6 @@ export const projectsHandlers = [
   }),
 
   http.patch(`${BASE}/projects/confirm/:projectId`, () => {
-    return HttpResponse.json({ projectId: 1, status: 2 });
+    return HttpResponse.json({ data: { projectId: 1, status: 2 } });
   }),
 ];

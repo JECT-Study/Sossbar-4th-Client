@@ -29,7 +29,7 @@ export const notificationsHandlers = [
   }),
 
   http.get(`${BASE}/notifications/all`, () => {
-    return HttpResponse.json(mockNotifications);
+    return HttpResponse.json({ data: mockNotifications });
   }),
 
   http.patch(`${BASE}/notifications/read/:notificationId`, () => {

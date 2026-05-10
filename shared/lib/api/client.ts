@@ -1,3 +1,5 @@
+import { getAccessToken } from './access-token';
+import { buildApiUrl } from './resolve-api-url';
 import { ApiError, type ApiErrorPayload, type ApiResponse, unwrapApiResponse } from './types';
 
 type ApiRequestOptions = Omit<RequestInit, 'body'> & {
@@ -5,7 +7,15 @@ type ApiRequestOptions = Omit<RequestInit, 'body'> & {
   basePath?: string;
 };
 
-const DEFAULT_BASE_PATH = '/api/v1';
+export const DEFAULT_API_BASE_PATH = '/api/v1';
+
+/** 본문이 반드시 있어야 하는 성공 응답용 — `undefined`면 예외 */
+export const assertApiData = <T>(value: T | undefined): T => {
+  if (value === undefined) {
+    throw new ApiError(502, 'Empty response body');
+  }
+  return value;
+};
 
 const safeJson = async (res: Response): Promise<unknown | undefined> => {
   const text = await res.text();
@@ -20,15 +30,24 @@ const safeJson = async (res: Response): Promise<unknown | undefined> => {
   }
 };
 
-export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {}): Promise<T> => {
-  const { basePath = DEFAULT_BASE_PATH, headers, body, ...init } = options;
+export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {}): Promise<T | undefined> => {
+  const { basePath = DEFAULT_API_BASE_PATH, headers, body, ...init } = options;
 
-  const res = await fetch(`${basePath}${path}`, {
+  const url = buildApiUrl(basePath, path);
+  const token = getAccessToken();
+
+  const requestHeaders = new Headers(headers);
+  if (body !== undefined) {
+    requestHeaders.set('Content-Type', 'application/json');
+  }
+  if (token) {
+    requestHeaders.set('Authorization', `Bearer ${token}`);
+  }
+
+  const res = await fetch(url, {
     ...init,
-    headers: {
-      ...(body !== undefined ? { 'Content-Type': 'application/json' } : null),
-      ...headers,
-    },
+    credentials: init.credentials ?? 'same-origin',
+    headers: requestHeaders,
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
@@ -38,10 +57,14 @@ export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {
     throw new ApiError(res.status, message, payload);
   }
 
-  const json = (await safeJson(res)) as ApiResponse<T> | undefined;
-  if (json === undefined) {
-    return undefined as T;
+  if (res.status === 204 || res.status === 205) {
+    return undefined;
   }
 
-  return unwrapApiResponse(json);
+  const raw = await safeJson(res);
+  if (raw === undefined) {
+    return undefined;
+  }
+
+  return unwrapApiResponse(raw as ApiResponse<T>);
 };

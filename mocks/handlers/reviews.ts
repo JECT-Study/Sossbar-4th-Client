@@ -27,37 +27,39 @@ export const reviewsHandlers = [
   }),
 
   http.get(`${BASE}/form-data`, () => {
-    return HttpResponse.json({ tags: mockTags, spectrums: mockSpectrums });
+    return HttpResponse.json({ data: { tags: mockTags, spectrums: mockSpectrums } });
   }),
 
   http.get(`${BASE}/reviews`, () => {
-    return HttpResponse.json([
-      {
-        reviewId: 1,
-        projectId: 1,
-        authorNickname: '익명',
-        praise: '소통이 잘 되고 매우 꼼꼼하게 작업해주셨습니다.',
-        improvement: '일정 관리를 좀 더 세밀하게 하면 좋을 것 같아요.',
-        tags: [mockTags[0], mockTags[1]],
-        spectrums: [{ spectrumId: 1, value: 70 }],
-        createdAt: '2026-04-20T00:00:00Z',
-      },
-    ]);
+    return HttpResponse.json({
+      data: [
+        {
+          reviewId: 1,
+          projectId: 1,
+          authorNickname: '익명',
+          praise: '소통이 잘 되고 매우 꼼꼼하게 작업해주셨습니다.',
+          improvement: '일정 관리를 좀 더 세밀하게 하면 좋을 것 같아요.',
+          tags: [mockTags[0], mockTags[1]],
+          spectrums: [{ spectrumId: 1, value: 70 }],
+          createdAt: '2026-04-20T00:00:00Z',
+        },
+      ],
+    });
   }),
 
   http.get(`${BASE}/reviews/tags`, () => {
-    return HttpResponse.json(mockTags);
+    return HttpResponse.json({ data: mockTags });
   }),
 
   http.get(`${BASE}/reviews/tags/:projectId`, () => {
-    return HttpResponse.json(mockTags.slice(0, 5));
+    return HttpResponse.json({ data: mockTags.slice(0, 5) });
   }),
 
   http.get(`${BASE}/reviews/spectrums`, () => {
-    return HttpResponse.json(mockSpectrums.map((s) => ({ ...s, averageValue: 60 })));
+    return HttpResponse.json({ data: mockSpectrums.map((s) => ({ ...s, averageValue: 60 })) });
   }),
 
   http.get(`${BASE}/reviews/spectrums/:projectId`, () => {
-    return HttpResponse.json(mockSpectrums.map((s) => ({ ...s, averageValue: 55 })));
+    return HttpResponse.json({ data: mockSpectrums.map((s) => ({ ...s, averageValue: 55 })) });
   }),
 ];
