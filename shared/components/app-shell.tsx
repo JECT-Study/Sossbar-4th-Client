@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 
 import { Footer } from '@/shared/components/footer';
-import { Header } from '@/shared/components/header';
+import { Header } from '@/shared/components/header/header';
 
 export const AppShell = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
