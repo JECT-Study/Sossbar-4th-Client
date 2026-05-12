@@ -79,6 +79,30 @@ const twMerge = extendTailwindMerge({
           ],
         },
       ],
+      'ring-color': [
+        {
+          ring: [
+            'border-transparency',
+            'border-disabled',
+            'border-gray-light',
+            'border-gray',
+            'border-gray-dark',
+            'border-gray-darker',
+            'border-primary',
+            'border-primary-light',
+            'border-secondary',
+            'border-secondary-light',
+            'border-tertiary',
+            'border-tertiary-light',
+            'border-error',
+            'border-error-light',
+            'border-warning',
+            'border-warning-light',
+            'border-success',
+            'border-success-light',
+          ],
+        },
+      ],
       'bg-color': [
         {
           bg: [

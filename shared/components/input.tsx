@@ -1,54 +1,115 @@
-import type { InputHTMLAttributes, ReactElement } from 'react';
+'use client';
 
-import { forwardRef, useId } from 'react';
+import type { ChangeEvent, ComponentProps, InputHTMLAttributes, Ref } from 'react';
 
-import { DeleteIcon } from '@/shared/assets/icons';
+import { useCallback, useId, useRef, useState } from 'react';
+
+import { DangerIcon, InputClearIcon } from '@/shared/assets/icons';
+import { useControllableState } from '@/shared/hooks/use-controllable-state';
 import { cn } from '@/shared/lib/cn';
 
-const InputErrorLeadIcon = () => {
+type InputClearButtonProps = ComponentProps<'button'>;
+
+const InputClearButton = ({ 'aria-label': ariaLabel = '입력 지우기', className, ...props }: InputClearButtonProps) => {
   return (
-    <DeleteIcon
-      width={16}
-      height={16}
-      className="[&_rect]:fill-element-error [&_path]:fill-icon-inverse pointer-events-none mt-0.5 shrink-0"
-      aria-hidden
-    />
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      className={cn('flex h-5 w-5 shrink-0 items-center justify-center rounded-full p-0 outline-none', className)}
+      {...props}
+    >
+      <InputClearIcon className="text-icon-gray pointer-events-none shrink-0 select-none" aria-hidden />
+    </button>
   );
 };
 
-export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> & {
-  leftSlot?: ReactElement;
-  rightSlot?: ReactElement;
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'value' | 'defaultValue'> & {
+  value?: string;
+  defaultValue?: string;
   className?: string;
   fieldClassName?: string;
   inputClassName?: string;
   variant?: 'default' | 'error';
   errorMessage?: string;
+  ref?: Ref<HTMLInputElement>;
 };
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  {
-    className,
-    fieldClassName,
-    inputClassName,
-    leftSlot,
-    rightSlot,
-    disabled,
-    variant = 'default',
-    errorMessage,
-    'aria-describedby': ariaDescribedBy,
-    ...props
-  },
+export const Input = ({
   ref,
-) {
+  className,
+  inputClassName,
+  disabled,
+  variant = 'default',
+  errorMessage,
+  maxLength,
+  defaultValue,
+  readOnly,
+  'aria-describedby': ariaDescribedBy,
+  onChange,
+  onFocus,
+  onBlur,
+  value,
+  ...props
+}: InputProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const isControlled = value !== undefined;
+
+  const [trackedValue, setTrackedValue] = useControllableState<string>({
+    prop: value,
+    defaultProp: defaultValue ?? '',
+  });
+
+  // 외부 ref(RHF register 등)와 clear 버튼용 내부 inputRef를 동시에 채우기 위한 콜백 ref
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const setInputRef = useCallback(
+    (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref],
+  );
+
   const isError = variant === 'error';
   const errorId = useId();
-  const resolvedErrorText = errorMessage ?? '메시지를 입력해 주세요';
+  const resolvedErrorText = errorMessage ?? '입력값을 확인해 주세요';
 
   const describedBy = [ariaDescribedBy, isError ? errorId : undefined].filter(Boolean).join(' ') || undefined;
 
+  const valueLength = trackedValue.length;
+  const showCount = maxLength != null && !disabled;
+  const showClearButton = isFocused && !disabled && !readOnly && valueLength > 0;
+
+  const countColorClass = isError
+    ? 'text-text-error'
+    : isFocused
+      ? 'text-text-primary'
+      : valueLength > 0
+        ? 'text-text-success'
+        : 'text-text-disabled';
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTrackedValue(e.target.value);
+    onChange?.(e);
+  };
+
+  const handleClear = () => {
+    const input = inputRef.current;
+    if (!input) {
+      return;
+    }
+    // React의 value 추적을 우회해 진짜 input 이벤트를 발사해야 onChange가 정상 발화됨
+    const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+    nativeSetter?.call(input, '');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+
   return (
-    <div className={cn('flex w-full max-w-[360px] flex-col', className)}>
+    <div className={cn('flex w-full flex-col', className)}>
       <div
         className={cn(
           'box-border flex h-12 w-full items-center gap-2 rounded-md px-4 py-0',
@@ -62,25 +123,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
               'focus-within:bg-surface-white',
               'focus-within:ring-border-primary focus-within:ring-2 focus-within:ring-inset',
             ],
-          fieldClassName,
         )}
       >
-        {leftSlot != null && (
-          <span
-            className={cn(
-              'flex shrink-0 items-center justify-center',
-              disabled ? 'text-icon-disabled [&_svg]:text-icon-disabled' : 'text-icon-gray [&_svg]:text-icon-gray',
-            )}
-          >
-            {leftSlot}
-          </span>
-        )}
-
         <input
-          ref={ref}
+          ref={setInputRef}
           disabled={disabled}
           aria-invalid={isError || undefined}
           aria-describedby={describedBy}
+          onChange={handleChange}
+          onFocus={(e) => {
+            setIsFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            onBlur?.(e);
+          }}
           className={cn(
             'text-body-base min-w-0 flex-1 bg-transparent py-0 text-start leading-normal outline-none',
             disabled
@@ -89,26 +147,32 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             inputClassName,
           )}
           {...props}
+          readOnly={readOnly}
+          maxLength={maxLength}
+          {...(isControlled ? { value } : { defaultValue })}
         />
 
-        {rightSlot != null && (
-          <span
-            className={cn(
-              'flex shrink-0 items-center justify-center',
-              disabled ? 'text-icon-disabled [&_svg]:text-icon-disabled' : 'text-icon-gray [&_svg]:text-icon-gray',
-            )}
-          >
-            {rightSlot}
-          </span>
+        {!!showClearButton && (
+          <InputClearButton onMouseDown={(e) => e.preventDefault()} onClick={handleClear} tabIndex={-1} />
         )}
       </div>
 
-      {!!isError && (
-        <div id={errorId} className="mt-1 flex w-full items-start gap-1" aria-live="polite">
-          <InputErrorLeadIcon />
-          <span className="text-body-sm text-text-error">{resolvedErrorText}</span>
+      {!!(isError || showCount) && (
+        <div className="mt-1 flex w-full items-start gap-1">
+          {!!isError && (
+            <div id={errorId} className="flex items-start gap-1" aria-live="polite">
+              <DangerIcon width={16} height={16} className="pointer-events-none mt-0.5 shrink-0" aria-hidden />
+              <span className="text-body-sm text-text-error">{resolvedErrorText}</span>
+            </div>
+          )}
+          {!!showCount && (
+            <span className={cn('text-body-sm ml-auto shrink-0 tabular-nums', countColorClass)}>
+              <span>{valueLength}</span>
+              <span className="text-text-subtle">/{maxLength}</span>
+            </span>
+          )}
         </div>
       )}
     </div>
   );
-});
+};
