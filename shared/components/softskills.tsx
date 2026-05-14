@@ -17,7 +17,7 @@ const spectrumRows = [
   { left: '서포트형', right: '리드형', markerLeft: '20%' },
   { left: '빠른 작업 속도 중시', right: '천천히 신중한 고민 중시', markerLeft: '40%' },
   { left: '상황별 유연한 대처', right: '철저한 계획 기반 실행', markerLeft: '40%' },
-  { left: '냉철한 결과 지향', right: '따뜻한 관계 지향', markerLeft: '100%' },
+  { left: '냉철한 유연한 대처', right: '따뜻한 관계 지향', markerLeft: '100%' },
 ];
 
 const defaultDistributionBars: SoftSkillsDistributionBar[] = [
@@ -27,7 +27,7 @@ const defaultDistributionBars: SoftSkillsDistributionBar[] = [
   { label: '천천히 신중\n한 고민 중시', count: 2 },
   { label: '상황별\n유연한 대처', count: 4 },
   { label: '철저한 계획\n기반 실행', count: 2 },
-  { label: '냉철한\n결과 지향', count: 0 },
+  { label: '냉철한\n유연한 대처', count: 0 },
   { label: '따뜻한\n관계 지향', count: 6 },
 ];
 
