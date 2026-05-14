@@ -10,6 +10,7 @@ import { cn } from '@/shared/lib/cn';
 import type { Tag } from '../types/review';
 
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
+import { ReviewSubmitDialog } from './review-submit-dialog';
 import { useCreateReview } from '../api/mutations';
 import { useReviewFormData } from '../api/queries';
 
@@ -47,6 +48,7 @@ export const ReviewWriteContent = () => {
   const [spectrumSteps, setSpectrumSteps] = useState<Record<number, number>>({});
   const [praise, setPraise] = useState('');
   const [improvement, setImprovement] = useState('');
+  const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
 
   const toggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
@@ -72,7 +74,7 @@ export const ReviewWriteContent = () => {
   const spectrumsOk = !!formData?.spectrums?.length;
   const canSubmit = praiseOk && tagsOk && spectrumsOk && !isSubmitting;
 
-  const handleSubmit = async () => {
+  const handleSubmitFromDialog = useCallback(async () => {
     if (!formData || !canSubmit) {
       return;
     }
@@ -81,15 +83,20 @@ export const ReviewWriteContent = () => {
       spectrumId: s.spectrumId,
       value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
     }));
-    await submitReview({
-      projectId,
-      praise: praise.trim(),
-      improvement: improvement.trim(),
-      tagIds,
-      spectrums,
-    });
-    router.push('/');
-  };
+    try {
+      await submitReview({
+        projectId,
+        praise: praise.trim(),
+        improvement: improvement.trim(),
+        tagIds,
+        spectrums,
+      });
+      setSubmitDialogOpen(false);
+      router.push('/');
+    } catch {
+      /* 제출 실패 시 모달 유지 */
+    }
+  }, [formData, canSubmit, selectedTagIds, spectrumSteps, projectId, praise, improvement, submitReview, router]);
 
   if (isPending) {
     return (
@@ -112,6 +119,12 @@ export const ReviewWriteContent = () => {
 
   return (
     <>
+      <ReviewSubmitDialog
+        open={submitDialogOpen}
+        onOpenChange={setSubmitDialogOpen}
+        isSubmitting={isSubmitting}
+        onConfirm={handleSubmitFromDialog}
+      />
       <header className="border-divider-gray-light bg-surface-white w-full border-b-2">
         <div className="mx-auto w-full max-w-[1200px] px-4 pt-[62px] pb-8 md:px-10">
           <h1 className="text-heading-lg text-text-basic leading-normal font-bold">후기 작성</h1>
@@ -241,7 +254,11 @@ export const ReviewWriteContent = () => {
               size="large"
               className="text-body-xl min-w-[91px] px-7 font-medium"
               disabled={!canSubmit}
-              onClick={() => void handleSubmit()}
+              onClick={() => {
+                if (canSubmit) {
+                  setSubmitDialogOpen(true);
+                }
+              }}
             >
               후기 제출하기
             </Button>
