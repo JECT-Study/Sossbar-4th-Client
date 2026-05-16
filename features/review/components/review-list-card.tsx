@@ -1,9 +1,11 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
 
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { SegmentedControl } from '@/shared/components/segmented-control';
 
 const reviews = [
   {
@@ -48,10 +50,20 @@ const reviews = [
   },
 ] as const;
 
+const reviewToneOptions = [
+  { value: 'praise', label: '칭찬해요' },
+  { value: 'improvement', label: '아쉬워요' },
+] as const;
+
 export const ReviewListCard = () => {
+  const [selectedTone, setSelectedTone] = useState('praise');
+
   return (
     <section className="border-border-gray flex w-full flex-col rounded-2xl border p-6">
-      <h2 className="text-heading-base text-text-basic font-bold">받은 후기</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-heading-base text-text-basic font-bold">받은 후기</h2>
+        <SegmentedControl options={reviewToneOptions} value={selectedTone} onValueChange={setSelectedTone} />
+      </div>
 
       <ul>
         {reviews.map((review) => (
