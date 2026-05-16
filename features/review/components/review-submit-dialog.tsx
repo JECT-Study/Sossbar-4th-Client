@@ -10,9 +10,16 @@ type ReviewSubmitDialogProps = {
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void | Promise<void>;
   isSubmitting?: boolean;
+  errorMessage?: string;
 };
 
-export const ReviewSubmitDialog = ({ open, onOpenChange, onConfirm, isSubmitting }: ReviewSubmitDialogProps) => {
+export const ReviewSubmitDialog = ({
+  open,
+  onOpenChange,
+  onConfirm,
+  isSubmitting,
+  errorMessage,
+}: ReviewSubmitDialogProps) => {
   const handleOpenChange = (next: boolean) => {
     if (!next && isSubmitting) {
       return;
@@ -26,7 +33,7 @@ export const ReviewSubmitDialog = ({ open, onOpenChange, onConfirm, isSubmitting
         <Dialog.Overlay className="bg-black-75 fixed inset-0 z-50" />
         <Dialog.Content
           className={cn(
-            'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex h-[216px] w-[360px] max-w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col',
+            'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex w-[360px] max-w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col',
             'gap-4 overflow-hidden rounded-xl border p-6 outline-none',
           )}
         >
@@ -41,6 +48,11 @@ export const ReviewSubmitDialog = ({ open, onOpenChange, onConfirm, isSubmitting
               </div>
             </Dialog.Description>
           </div>
+          {!!errorMessage && (
+            <p className="text-body-sm text-text-error px-4" role="alert">
+              {errorMessage}
+            </p>
+          )}
           <div className="flex w-full shrink-0 justify-end gap-2">
             <Dialog.Close asChild>
               <Button

@@ -49,6 +49,7 @@ export const ReviewWriteContent = () => {
   const [praise, setPraise] = useState('');
   const [improvement, setImprovement] = useState('');
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const toggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
@@ -78,6 +79,7 @@ export const ReviewWriteContent = () => {
     if (!formData || !canSubmit) {
       return;
     }
+    setSubmitError(null);
     const tagIds = [...selectedTagIds];
     const spectrums = formData.spectrums.map((s) => ({
       spectrumId: s.spectrumId,
@@ -94,7 +96,7 @@ export const ReviewWriteContent = () => {
       setSubmitDialogOpen(false);
       router.push('/');
     } catch {
-      /* 제출 실패 시 모달 유지 */
+      setSubmitError('제출에 실패했습니다. 다시 시도해주세요.');
     }
   }, [formData, canSubmit, selectedTagIds, spectrumSteps, projectId, praise, improvement, submitReview, router]);
 
@@ -121,8 +123,14 @@ export const ReviewWriteContent = () => {
     <>
       <ReviewSubmitDialog
         open={submitDialogOpen}
-        onOpenChange={setSubmitDialogOpen}
+        onOpenChange={(open) => {
+          setSubmitDialogOpen(open);
+          if (!open) {
+            setSubmitError(null);
+          }
+        }}
         isSubmitting={isSubmitting}
+        errorMessage={submitError ?? undefined}
         onConfirm={handleSubmitFromDialog}
       />
       <header className="border-divider-gray-light bg-surface-white w-full border-b-2">
@@ -226,7 +234,7 @@ export const ReviewWriteContent = () => {
             <Textarea
               className="max-w-none"
               textareaClassName="min-h-[144px] rounded-md text-body-sm"
-              placeholder="ex) 적극적이고 배려심이 깊다."
+              placeholder="ex) 소통이 조금 더 적극적이었으면 좋았을 것 같다."
               value={improvement}
               onChange={(e) => {
                 setImprovement(e.target.value.slice(0, TEXT_MAX_LENGTH));
