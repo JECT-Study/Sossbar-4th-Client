@@ -1,6 +1,7 @@
 'use client';
 
 import { ProfileSection } from '@/app/myprofile/profile-section';
+import { ProjectSection } from '@/app/myprofile/project-section';
 import { ReviewListCard, SoftSkillsCard, TagCard } from '@/features/review';
 import { PageContainer } from '@/shared/components/page-container';
 import { Tab } from '@/shared/components/tab';
@@ -21,7 +22,9 @@ const MyProfilePage = () => {
           </div>
           <ReviewListCard />
         </Tab.Content>
-        <Tab.Content value="projects" className="mt-6"></Tab.Content>
+        <Tab.Content value="projects" className="mt-10">
+          <ProjectSection />
+        </Tab.Content>
       </Tab.Root>
     </PageContainer>
   );
