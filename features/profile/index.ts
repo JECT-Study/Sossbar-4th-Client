@@ -1,3 +1,3 @@
-export { useUpdateProfile } from './api/mutations';
-export { useProfile } from './api/queries';
-export type { Profile, UpdateProfileRequest } from './types/profile';
+export { useUpdateProfile } from './mutations';
+export { useProfile } from './queries';
+export type { Profile, UpdateProfilePayload } from './types';
