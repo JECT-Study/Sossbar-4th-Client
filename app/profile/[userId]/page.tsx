@@ -1,12 +1,21 @@
 'use client';
 
-import { ProfileSection } from '@/app/myprofile/profile-section';
-import { ProjectSection } from '@/app/myprofile/project-section';
+import { use } from 'react';
+
+import { ProfileSection, ProjectSection } from '@/features/profile';
 import { ReviewListCard, SoftSkillsCard, TagCard } from '@/features/review';
 import { PageContainer } from '@/shared/components/page-container';
 import { Tab } from '@/shared/components/tab';
 
-const MyProfilePage = () => {
+type ProfilePageProps = {
+  params: Promise<{
+    userId: string;
+  }>;
+};
+
+const ProfilePage = ({ params }: ProfilePageProps) => {
+  const { userId } = use(params);
+
   return (
     <PageContainer className="mb-20">
       <ProfileSection />
@@ -23,11 +32,11 @@ const MyProfilePage = () => {
           <ReviewListCard />
         </Tab.Content>
         <Tab.Content value="projects" className="mt-10">
-          <ProjectSection />
+          <ProjectSection userId={userId} />
         </Tab.Content>
       </Tab.Root>
     </PageContainer>
   );
 };
 
-export default MyProfilePage;
+export default ProfilePage;

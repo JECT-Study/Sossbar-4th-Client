@@ -5,16 +5,18 @@ import Link from 'next/link';
 
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { ROUTES } from '@/shared/constants/routes';
 
-const PROJECTS = Array.from({ length: 8 }, (_, index) => ({
-  id: `hackathon-project-${index + 1}`,
-  title: '2024 해커톤 프로젝트',
-  description: '테크 스타트업 캠퍼니 · 2025.07.10',
-  thumbnailSrc: '/default.png',
-  href: `/myprofile`,
-}));
+const createProjects = (userId: string) =>
+  Array.from({ length: 8 }, (_, index) => ({
+    id: `hackathon-project-${index + 1}`,
+    title: '2024 해커톤 프로젝트',
+    description: '테크 스타트업 캠퍼니 · 2025.07.10',
+    thumbnailSrc: '/default.png',
+    href: ROUTES.PROFILE(userId),
+  }));
 
-type Project = (typeof PROJECTS)[number];
+type Project = ReturnType<typeof createProjects>[number];
 
 interface ProjectItemProps {
   project: Project;
@@ -43,11 +45,17 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
   );
 };
 
-export const ProjectSection = () => {
+type ProjectSectionProps = {
+  userId: string;
+};
+
+export const ProjectSection = ({ userId }: ProjectSectionProps) => {
+  const projects = createProjects(userId);
+
   return (
     <section aria-label="프로젝트별 리뷰" className="flex flex-col">
       <ul className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-        {PROJECTS.map((project) => (
+        {projects.map((project) => (
           <li key={project.id}>
             <ProjectItem project={project} />
           </li>

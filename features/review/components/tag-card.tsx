@@ -1,3 +1,5 @@
+'use client';
+
 import { useId, useState } from 'react';
 
 import { DownIcon, UpIcon } from '@/shared/assets/icons';
