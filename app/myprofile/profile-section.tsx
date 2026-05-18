@@ -3,7 +3,7 @@
 import { Avatar } from 'radix-ui';
 import { useState } from 'react';
 
-import { EditIcon, PlusIcon, ShareIcon } from '@/shared/assets/icons';
+import { CameraIcon, EditIcon, ShareIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
 import { PageContainer } from '@/shared/components/page-container';
@@ -46,8 +46,11 @@ export const ProfileSection = () => {
         <div className="mt-6 flex gap-6">
           <div className="relative shrink-0">
             <ProfileAvatar />
-            <button className="absolute top-18.5 left-18.5 h-fit w-fit rounded-full" aria-label="프로필 이미지 변경">
-              <PlusIcon className="h-6 w-6" />
+            <button
+              className="border-icon-gray-fill absolute top-14.5 left-16.75 flex h-10.5 w-10.5 items-center justify-center rounded-full border bg-white"
+              aria-label="프로필 이미지 변경"
+            >
+              <CameraIcon className="text-icon-gray-fill h-6 w-6" />
             </button>
           </div>
           <div className="flex w-full max-w-120 flex-1 flex-col gap-2">
