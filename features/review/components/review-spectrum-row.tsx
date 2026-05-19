@@ -21,8 +21,6 @@ export const ReviewSpectrumRow = ({
   valueStep,
   onChange,
 }: ReviewSpectrumRowProps) => {
-  const rowLabel = `${leftLabel}에서 ${rightLabel} 사이 성향`;
-
   return (
     <Fragment>
       <span className="text-detail-xs text-text-subtle min-w-0 shrink-0 text-left leading-normal font-medium whitespace-nowrap">
@@ -35,7 +33,7 @@ export const ReviewSpectrumRow = ({
           onChangeAction={(nextIndex) => {
             onChange(spectrumId, nextIndex);
           }}
-          aria-label={rowLabel}
+          aria-label={`${leftLabel}에서 ${rightLabel} 사이 성향`}
           className="w-full max-w-[515px]"
         />
       </div>
