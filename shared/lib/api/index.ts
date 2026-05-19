@@ -1,2 +1,3 @@
+export { ApiError, type ApiErrorData } from './api-error';
 export { apiRequest } from './client';
-export { ApiError, type ApiErrorPayload, type ApiResponse, unwrapApiResponse } from './types';
+export { type ApiResponse, unwrapApiResponse } from './api-response';
