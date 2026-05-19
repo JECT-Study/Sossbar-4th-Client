@@ -1,9 +1,11 @@
 import { getAccessToken } from './access-token';
+import { ApiError, type ApiErrorData } from './api-error';
+import { unwrapApiResponse, type ApiResponse } from './api-response';
 import { buildApiUrl, getApiOrigin } from './resolve-api-url';
-import { ApiError, type ApiErrorPayload, type ApiResponse, unwrapApiResponse } from './types';
 
 type ApiRequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
+  /** defaults to `/api/v1` */
   basePath?: string;
 };
 
@@ -17,12 +19,14 @@ export const assertApiData = <T>(value: T | undefined): T => {
   return value;
 };
 
+/** When `fetch` throws (network / DNS / aborted, etc.). Surfaced as `ApiError` like HTTP failures—often handled alongside 5xx. */
+const FETCH_FAILURE_STATUS = 503;
+
 const safeJson = async (res: Response): Promise<unknown | undefined> => {
   const text = await res.text();
   if (!text) {
     return undefined;
   }
-
   try {
     return JSON.parse(text) as unknown;
   } catch {
@@ -33,28 +37,34 @@ const safeJson = async (res: Response): Promise<unknown | undefined> => {
 export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {}): Promise<T | undefined> => {
   const { basePath = DEFAULT_API_BASE_PATH, headers, body, ...init } = options;
 
-  const url = buildApiUrl(basePath, path);
-  const token = getAccessToken();
+  let res: Response;
+  try {
+    const url = buildApiUrl(basePath, path);
+    const token = getAccessToken();
 
-  const requestHeaders = new Headers(headers);
-  if (body !== undefined) {
-    requestHeaders.set('Content-Type', 'application/json');
-  }
-  if (token) {
-    requestHeaders.set('Authorization', `Bearer ${token}`);
-  }
+    const requestHeaders = new Headers(headers);
+    if (body !== undefined) {
+      requestHeaders.set('Content-Type', 'application/json');
+    }
+    if (token) {
+      requestHeaders.set('Authorization', `Bearer ${token}`);
+    }
 
-  const res = await fetch(url, {
-    ...init,
-    credentials: init.credentials ?? (getApiOrigin() ? 'include' : 'same-origin'),
-    headers: requestHeaders,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
+    res = await fetch(url, {
+      ...init,
+      credentials: init.credentials ?? (getApiOrigin() ? 'include' : 'same-origin'),
+      headers: requestHeaders,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Network request failed';
+    throw new ApiError(FETCH_FAILURE_STATUS, message);
+  }
 
   if (!res.ok) {
-    const payload = (await safeJson(res)) as ApiErrorPayload | undefined;
-    const message = payload?.message ?? `Request failed (${res.status})`;
-    throw new ApiError(res.status, message, payload);
+    const errorData = (await safeJson(res)) as ApiErrorData | undefined;
+    const message = errorData?.message ?? `Request failed (${res.status})`;
+    throw new ApiError(res.status, message, errorData);
   }
 
   if (res.status === 204 || res.status === 205) {

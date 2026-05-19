@@ -1,9 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
 
-import { Button } from './button/button';
-import { KakaoLoginButton } from './button/kakao-login-button';
 import { HeaderAuthArea } from './header-auth-area';
 import { HeaderMainNav } from './header-main-nav';
 
@@ -17,13 +14,7 @@ export const Header = () => {
           </Link>
           <HeaderMainNav />
         </div>
-        <div className="flex shrink-0 items-center self-stretch">
-          <HeaderAuthArea />
-        </div>
-
-        <Suspense fallback={<Button className="self-center">로그인</Button>}>
-          <KakaoLoginButton />
-        </Suspense>
+        <HeaderAuthArea />
       </div>
     </header>
   );
