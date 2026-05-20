@@ -1,5 +1,6 @@
 import { ApiError, type ApiErrorData } from './api-error';
 import { unwrapApiResponse, type ApiResponse } from './api-response';
+import { buildApiUrl, getApiOrigin } from './resolve-api-url';
 
 type ApiRequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
@@ -27,10 +28,14 @@ const safeJson = async (res: Response): Promise<unknown | undefined> => {
 export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {}): Promise<T> => {
   const { basePath = DEFAULT_BASE_PATH, headers, body, ...init } = options;
 
+  const url = buildApiUrl(basePath, path);
+  const apiOrigin = getApiOrigin();
+
   let res: Response;
   try {
-    res = await fetch(`${basePath}${path}`, {
+    res = await fetch(url, {
       ...init,
+      credentials: init.credentials ?? (apiOrigin ? 'include' : 'same-origin'),
       headers: {
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : null),
         ...headers,
