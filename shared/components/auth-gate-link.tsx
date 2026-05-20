@@ -1,6 +1,6 @@
 'use client';
 
-import type { ComponentProps, MouseEvent } from 'react';
+import type { ComponentProps, MouseEvent, Ref } from 'react';
 
 import Link from 'next/link';
 import { forwardRef } from 'react';
@@ -17,7 +17,7 @@ export const AuthGateLink = forwardRef<HTMLAnchorElement | HTMLButtonElement, Au
 
     if (sessionUser) {
       return (
-        <Link ref={ref} href={href} onClick={onClick} className={className} {...props}>
+        <Link ref={ref as Ref<HTMLAnchorElement>} href={href} onClick={onClick} className={className} {...props}>
           {children}
         </Link>
       );
@@ -25,7 +25,7 @@ export const AuthGateLink = forwardRef<HTMLAnchorElement | HTMLButtonElement, Au
 
     return (
       <button
-        ref={ref}
+        ref={ref as Ref<HTMLButtonElement>}
         type="button"
         className={className}
         onClick={(event: MouseEvent<HTMLButtonElement>) => {
