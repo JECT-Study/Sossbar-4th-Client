@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 import { buildApiUrl, getApiOrigin } from './resolve-api-url';
 
->>>>>>> 2e07ac7 (fix: api barrel export 구문 정리 및 request-builder에 API origin 반영)
 export type ApiRequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
   basePath?: string;
