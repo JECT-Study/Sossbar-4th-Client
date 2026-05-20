@@ -1,14 +1,16 @@
 'use client';
 
+import type { ComponentProps, MouseEvent } from 'react';
+
 import Link from 'next/link';
-import { forwardRef, type ComponentProps } from 'react';
+import { forwardRef } from 'react';
 
 import { useLoginModal } from '@/shared/hooks/use-login-modal';
 import { useSessionUser } from '@/shared/lib/session-user';
 
 type AuthGateLinkProps = ComponentProps<typeof Link>;
 
-export const AuthGateLink = forwardRef<HTMLAnchorElement, AuthGateLinkProps>(
+export const AuthGateLink = forwardRef<HTMLAnchorElement | HTMLButtonElement, AuthGateLinkProps>(
   ({ href, onClick, children, className, ...props }, ref) => {
     const sessionUser = useSessionUser();
     const { openLoginModal } = useLoginModal();
@@ -23,11 +25,11 @@ export const AuthGateLink = forwardRef<HTMLAnchorElement, AuthGateLinkProps>(
 
     return (
       <button
-        ref={ref as React.Ref<HTMLButtonElement>}
+        ref={ref}
         type="button"
         className={className}
-        onClick={(event) => {
-          onClick?.(event as unknown as React.MouseEvent<HTMLAnchorElement>);
+        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+          onClick?.(event as unknown as MouseEvent<HTMLAnchorElement>);
           openLoginModal();
         }}
       >

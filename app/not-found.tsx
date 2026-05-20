@@ -31,14 +31,12 @@ const NotFound = () => {
           </span>
         </div>
 
-        <h1 className="text-heading-xl text-text-basic text-center leading-normal font-bold whitespace-nowrap">
-          Page not found
-        </h1>
+        <h1 className="text-heading-xl text-text-basic text-center leading-normal font-bold">Page not found</h1>
 
         <div className="flex w-full flex-col items-center gap-4">
           <p className="text-body-xl text-text-subtle text-center leading-normal font-medium">
-            <span className="block whitespace-nowrap">이런, 뭔가 잘못됐어요!</span>
-            <span className="block whitespace-nowrap">이 페이지가 더 이상 존재하지 않아요.</span>
+            <span className="block">이런, 뭔가 잘못됐어요!</span>
+            <span className="block">이 페이지가 더 이상 존재하지 않아요.</span>
           </p>
 
           <Button
