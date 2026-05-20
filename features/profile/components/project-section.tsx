@@ -24,17 +24,11 @@ const createProjects = () => {
 
 type Project = ReturnType<typeof createProjects>[number];
 
-const createProjectDescription = ({ host, startDate }: Pick<Project, 'host' | 'startDate'>) => {
-  return `${host} · ${formatIsoDateToDots(startDate)}`;
-};
-
 interface ProjectItemProps {
   project: Project;
 }
 
 const ProjectItem = ({ project }: ProjectItemProps) => {
-  const description = createProjectDescription(project);
-
   return (
     <Link
       href={ROUTES.PROJECT(project.projectId)}
@@ -51,7 +45,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
           />
         </div>
         <h3 className="text-heading-xs text-text-subtle mt-4 font-bold">{project.projectName}</h3>
-        <p className="text-body-sm text-text-subtler mt-1 font-medium">{description}</p>
+        <p className="text-body-sm text-text-subtler mt-1 font-medium">{`${project.host} · ${formatIsoDateToDots(project.startDate)}`}</p>
       </article>
     </Link>
   );
