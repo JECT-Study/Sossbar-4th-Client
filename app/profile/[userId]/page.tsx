@@ -20,7 +20,7 @@ const ProfilePage = ({ params }: ProfilePageProps) => {
   return (
     <PageContainer className="mb-20">
       <ProfileSection isMyProfile={isMyProfile} />
-      <Tab.Root defaultValue="all">
+      <Tab.Root key={userId} defaultValue="all">
         <Tab.List aria-label="프로필 정보 탭" className="w-full">
           <Tab.Trigger value="all">전체</Tab.Trigger>
           <Tab.Trigger value="projects">프로젝트별</Tab.Trigger>
@@ -33,7 +33,7 @@ const ProfilePage = ({ params }: ProfilePageProps) => {
           <ReviewListCard />
         </Tab.Content>
         <Tab.Content value="projects" className="mt-10">
-          <ProjectSection userId={userId} />
+          <ProjectSection />
         </Tab.Content>
       </Tab.Root>
     </PageContainer>
