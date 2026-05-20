@@ -14,7 +14,7 @@ export const HomeCtaSection = () => {
         <div className="relative isolate flex min-h-109.5 w-full items-start justify-start gap-6 overflow-hidden rounded-3xl border border-white/10 bg-[rgba(24,30,52,0.28)] p-0 shadow-[0_1.5rem_5rem_rgba(0,0,0,0.45)] backdrop-blur-[1.5rem]">
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(168,183,246,0.24)_0%,rgba(30,36,64,0.2)_44%,rgba(16,20,34,0.5)_100%)]" />
           <Image
-            src="/Overlay+Blur left.svg"
+            src="/overlay-blur-left.svg"
             alt=""
             width={586}
             height={438}
@@ -22,7 +22,7 @@ export const HomeCtaSection = () => {
             className="pointer-events-none absolute inset-y-0 -left-4 h-full w-auto max-w-[min(100%,36.625rem)] object-cover object-left select-none"
           />
           <Image
-            src="/Overlay+Blur right.svg"
+            src="/overlay-blur-right.svg"
             alt=""
             width={826}
             height={438}
