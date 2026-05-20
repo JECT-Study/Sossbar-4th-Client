@@ -32,6 +32,10 @@ export const ProfileSection = ({ isMyProfile }: ProfileSectionProps) => {
   const [nickname, setNickname] = useState('');
   const [bio, setBio] = useState('');
 
+  const handleSubmitProfile = () => {
+    setIsEditing(false);
+  };
+
   if (isMyProfile && isEditing) {
     return (
       <section className="mt-15.5 mb-8">
@@ -41,7 +45,7 @@ export const ProfileSection = ({ isMyProfile }: ProfileSectionProps) => {
             <Button variant="tertiary" size="medium" onClick={() => setIsEditing(false)}>
               취소
             </Button>
-            <Button variant="secondary" size="medium" onClick={() => setIsEditing(false)}>
+            <Button variant="secondary" size="medium" onClick={handleSubmitProfile}>
               저장
             </Button>
           </div>
