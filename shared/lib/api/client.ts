@@ -1,57 +1,21 @@
-import { ApiError, type ApiErrorData } from './api-error';
-import { unwrapApiResponse, type ApiResponse } from './api-response';
+import { httpTransport } from './http-transport';
+import { requestBuilder, type ApiRequestOptions } from './request-builder';
+import { responseParser } from './response-parser';
 
-type ApiRequestOptions = Omit<RequestInit, 'body'> & {
-  body?: unknown;
-  /** defaults to `/api/v1` */
-  basePath?: string;
-};
-
-const DEFAULT_BASE_PATH = '/api/v1';
-
-/** When `fetch` throws (network / DNS / aborted, etc.). Surfaced as `ApiError` like HTTP failures—often handled alongside 5xx. */
-const FETCH_FAILURE_STATUS = 503;
-
-const safeJson = async (res: Response): Promise<unknown | undefined> => {
-  const text = await res.text();
-  if (!text) {
-    return undefined;
-  }
-  try {
-    return JSON.parse(text) as unknown;
-  } catch {
-    return undefined;
-  }
-};
-
-export const apiRequest = async <T>(path: string, options: ApiRequestOptions = {}): Promise<T> => {
-  const { basePath = DEFAULT_BASE_PATH, headers, body, ...init } = options;
-
-  let res: Response;
-  try {
-    res = await fetch(`${basePath}${path}`, {
-      ...init,
-      headers: {
-        ...(body !== undefined ? { 'Content-Type': 'application/json' } : null),
-        ...headers,
-      },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Network request failed';
-    throw new ApiError(FETCH_FAILURE_STATUS, message);
-  }
-
-  if (!res.ok) {
-    const errorData = (await safeJson(res)) as ApiErrorData | undefined;
-    const message = errorData?.message ?? `Request failed (${res.status})`;
-    throw new ApiError(res.status, message, errorData);
-  }
-
-  const json = (await safeJson(res)) as ApiResponse<T> | undefined;
-  if (json === undefined) {
-    // 204 / empty body
-    return undefined as T;
-  }
-  return unwrapApiResponse(json);
-};
+/**
+ * `/api/v1` 기반 API 요청을 보내고 타입 안전한 응답을 반환하는 함수
+ *
+ * @param path - 베이스 경로(`/api/v1`) 이후의 엔드포인트 (예: '/users/me')
+ * @param options - 요청 옵션 (`method`, `body`, `headers`, `basePath` 등)
+ * @returns 파싱된 응답 데이터 (`204` 빈 응답은 `undefined`로 반환)
+ * @throws {ApiError} 네트워크 장애(503), HTTP 에러 응답(4xx/5xx)
+ *
+ * @example
+ * const user = await apiRequest<User>('/users/me');
+ * const post = await apiRequest<Post>('/posts', {
+ *   method: 'POST',
+ *   body: { title: 'Hello' },
+ * });
+ */
+export const apiRequest = <T>(path: string, options: ApiRequestOptions = {}): Promise<T> =>
+  httpTransport(requestBuilder(path, options)).then((res) => responseParser<T>(res));
