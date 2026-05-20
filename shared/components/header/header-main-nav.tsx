@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { AuthGateLink } from '@/shared/components/auth-gate-link';
 import { cn } from '@/shared/lib/cn';
 
 import { Button } from '../button/button';
@@ -24,12 +24,12 @@ export const HeaderMainNav = () => {
           return (
             <li key={label}>
               <Button asChild size="small" variant="tertiary">
-                <Link
+                <AuthGateLink
                   href={href}
                   className={cn('h-10 px-0', widthClassName, isActive && 'bg-surface-gray-subtle rounded-md')}
                 >
                   {label}
-                </Link>
+                </AuthGateLink>
               </Button>
             </li>
           );

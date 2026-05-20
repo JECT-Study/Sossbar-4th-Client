@@ -1,8 +1,7 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
+import { AuthGateLink } from '@/shared/components/auth-gate-link';
 import { Button } from '@/shared/components/button/button';
-import { ROUTES } from '@/shared/constants/routes';
 
 export const HomeCtaSection = () => {
   return (
@@ -43,7 +42,7 @@ export const HomeCtaSection = () => {
             </div>
 
             <Button asChild variant="primary" size="large" className="mx-auto mt-10">
-              <Link href={ROUTES.LOGIN}>로그인하고 시작하기</Link>
+              <AuthGateLink href="/mypage">로그인하고 시작하기</AuthGateLink>
             </Button>
           </div>
         </div>

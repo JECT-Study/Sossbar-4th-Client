@@ -15,14 +15,16 @@ export const useLoginModal = (open = false) => {
 
     if (nextOpen) {
       nextParams.set(MODAL_QUERY_KEY, LOGIN_MODAL_VALUE);
-      router.push(`${pathname}?${nextParams.toString()}`);
+      router.push(`${pathname}?${nextParams.toString()}`, { scroll: false });
       return;
     }
 
     nextParams.delete(MODAL_QUERY_KEY);
     const nextQuery = nextParams.toString();
-    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname);
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   };
 
-  return { isOpen, onOpenChange };
+  const openLoginModal = () => onOpenChange(true);
+
+  return { isOpen, onOpenChange, openLoginModal };
 };
