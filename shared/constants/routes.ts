@@ -1,5 +1,8 @@
 export const ROUTES = {
+  HOME: '/',
   LOGIN: '/login',
+  LOGIN_KAKAO_CALLBACK: '/login/kakao',
+  SIGNUP: '/signup',
   MY_PAGE: '/mypage',
   PRIVACY_POLICY: '/policies/privacy-policy',
   PROFILE: (userId: string | number) => `/profile/${userId}`,
