@@ -14,6 +14,7 @@
   --color-text-subtle: var(--color-gray-600);
   --color-text-subtler: var(--color-gray-500);
   --color-text-disabled: var(--color-gray-400);
+  --color-text-disabled-on: var(--color-gray-500);
   --color-text-primary: var(--color-primary-600);
   --color-text-secondary: var(--color-secondary-800);
   --color-text-tertiary: var(--color-tertiary-700);
@@ -176,6 +177,7 @@
   --color-text-subtle: var(--color-text-subtle);
   --color-text-subtler: var(--color-text-subtler);
   --color-text-disabled: var(--color-text-disabled);
+  --color-text-disabled-on: var(--color-text-disabled-on);
   --color-text-primary: var(--color-text-primary);
   --color-text-secondary: var(--color-text-secondary);
   --color-text-tertiary: var(--color-text-tertiary);
