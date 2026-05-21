@@ -93,6 +93,7 @@ export const Input = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           className={cn(inputVariants({ disabled, error }), className)}
+          aria-invalid={error || undefined}
           {...restProps}
         />
         {showClearButton ? (
