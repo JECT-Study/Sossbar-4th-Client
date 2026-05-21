@@ -1,21 +1,23 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 
-import { kakaoLogin, getMyProfile } from '@/features/auth/kakao/fetchers';
+import { getMyProfile } from '@/features/auth/fetchers';
+import { kakaoLogin } from '@/features/auth/kakao/fetchers';
 import { setAuthToken } from '@/shared/lib/auth-token';
 
 const KakaoCallbackContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get('code');
+  const didRun = useRef(false);
 
   useEffect(() => {
-    if (!code) {
-      router.replace('/');
+    if (!code || didRun.current) {
       return;
     }
+    didRun.current = true;
 
     const handleLogin = async () => {
       try {

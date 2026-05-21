@@ -1,11 +1,6 @@
 import { apiRequest } from '@/shared/lib/api';
 
-import type { LoginInfoResDto, UserInfoResDto } from './types';
+import type { LoginInfoResDto } from './types';
 
 export const kakaoLogin = (code: string): Promise<LoginInfoResDto> =>
-  apiRequest<LoginInfoResDto>(`/login/kakao?code=${encodeURIComponent(code)}`, {
-    method: 'GET',
-    credentials: 'include',
-  });
-
-export const getMyProfile = (): Promise<UserInfoResDto> => apiRequest<UserInfoResDto>('/users/profile');
+  apiRequest<LoginInfoResDto>(`/login/kakao?code=${encodeURIComponent(code)}`, { method: 'GET' });
