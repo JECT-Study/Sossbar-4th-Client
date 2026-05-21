@@ -1,10 +1,12 @@
+import type { ReactNode } from 'react';
+
 import { DangerIcon } from '@/shared/assets/icons';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
   id?: string;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const ErrorMessage = ({ id, className, children }: Props) => {
