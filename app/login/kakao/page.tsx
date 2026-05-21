@@ -1,12 +1,12 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import { kakaoLogin, getMyProfile } from '@/features/auth/kakao/fetchers';
 import { setAuthToken } from '@/shared/lib/auth-token';
 
-const KakaoCallbackPage = () => {
+const KakaoCallbackContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get('code');
@@ -39,5 +39,11 @@ const KakaoCallbackPage = () => {
     </div>
   );
 };
+
+const KakaoCallbackPage = () => (
+  <Suspense>
+    <KakaoCallbackContent />
+  </Suspense>
+);
 
 export default KakaoCallbackPage;
