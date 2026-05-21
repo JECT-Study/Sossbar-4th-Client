@@ -35,6 +35,7 @@ export const TextField = ({
         name={name}
         clearable={clearable}
         id={`input-${name}`}
+        required={required}
         aria-describedby={errorMessage ? `${name}-error-message` : undefined}
         placeholder="내용을 입력해주세요."
         className={inputClassName}
