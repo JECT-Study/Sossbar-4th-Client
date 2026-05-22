@@ -4,7 +4,7 @@ import type { ChangeEventHandler, FocusEventHandler, Ref } from 'react';
 
 import { useRef, useState } from 'react';
 
-import { useMergeRef } from '@/shared/hooks/use-merge-ref';
+import { useComposedRefs } from '@/shared/hooks/use-composed-refs';
 
 interface InputInteractionParams {
   ref?: Ref<HTMLInputElement>;
@@ -17,7 +17,7 @@ export const useInputInteraction = ({ ref, onChange, onFocus, onBlur }: InputInt
   const [valueLength, setValueLength] = useState(0);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const mergedRef = useMergeRef(inputRef, ref);
+  const mergedRef = useComposedRefs(inputRef, ref);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setValueLength(event.target.value.length);
