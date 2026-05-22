@@ -2,7 +2,7 @@ import type { ComponentPropsWithRef } from 'react';
 
 import { cva } from 'class-variance-authority';
 
-import { SuccessIcon, TimeIcon } from '@/shared/assets/icons';
+import { CheckFilledIcon, TimeIcon } from '@/shared/assets/icons';
 import { cn } from '@/shared/lib/cn';
 
 import type { VariantProps } from 'class-variance-authority';
@@ -31,7 +31,7 @@ const projectStateBadgeContents = {
     label: '대기중',
   },
   success: {
-    icon: <SuccessIcon aria-hidden className="size-4 shrink-0" />,
+    icon: <CheckFilledIcon aria-hidden className="size-4 shrink-0" />,
     label: '확정됨',
   },
   leader: {
