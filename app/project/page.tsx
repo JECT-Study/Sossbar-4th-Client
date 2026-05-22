@@ -14,7 +14,7 @@ const mockProjects = [
     endDate: '2025-06-30T00:00:00',
     projectLink: '30b2e693-ca41-4e26-96dc-da7e3a6a0de1',
     projectImage: null,
-    projectStatus: 'COMPLETED',
+    projectStatus: 'IN_PROGRESS',
     myMemberStatus: 'LEADER',
     members: [
       {
