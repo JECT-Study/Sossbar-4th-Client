@@ -11,6 +11,7 @@ const counterColorVariants = cva('', {
     inputState: {
       disabled: 'text-text-subtle',
       error: 'text-(--color-border-error)',
+      success: 'text-text-success',
       completed: 'text-input-border',
       focused: 'text-(--color-border-primary)',
       idle: 'text-text-disabled',
@@ -25,12 +26,13 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   textareaClassName?: string;
   variant?: 'default' | 'error';
   isCompleted?: boolean;
-  /** 텍스트영역 상단 라벨 */
   label?: string;
   bottomText?: string;
   currentCount?: number;
   totalCount?: number;
   errorMessage?: string;
+  counterSuccessMin?: number;
+  counterSuccessCompareCount?: number;
 }
 
 export const Textarea = ({
@@ -45,6 +47,8 @@ export const Textarea = ({
   currentCount,
   totalCount,
   errorMessage,
+  counterSuccessMin,
+  counterSuccessCompareCount,
   id,
   placeholder = '내용을 입력해주세요',
   'aria-describedby': ariaDescribedBy,
@@ -70,15 +74,22 @@ export const Textarea = ({
   const hasCounter = resolvedCounter != null;
   const hasHelper = hasErrorMessage || hasCounter || bottomText != null;
 
+  const countMeetsSuccessMin =
+    counterSuccessMin != null &&
+    resolvedCounter != null &&
+    (counterSuccessCompareCount ?? resolvedCounter.currentCount) >= counterSuccessMin;
+
   const inputState = disabled
     ? 'disabled'
     : isError
       ? 'error'
-      : isCompleted
-        ? 'completed'
-        : isFocused
-          ? 'focused'
-          : 'idle';
+      : isFocused
+        ? 'focused'
+        : countMeetsSuccessMin
+          ? 'success'
+          : isCompleted
+            ? 'completed'
+            : 'idle';
   const counterColorCls = counterColorVariants({ inputState });
 
   const describedBy = [ariaDescribedBy, hasHelper ? helperId : undefined].filter(Boolean).join(' ') || undefined;
@@ -107,15 +118,15 @@ export const Textarea = ({
           onBlur?.(e);
         }}
         className={cn(
-          'text-body-base h-36 w-full resize-none rounded-md border px-4 py-2 text-start leading-normal outline-none',
+          'text-body-base border-input-border h-36 w-full resize-none rounded-md border px-4 py-2 text-start leading-normal outline-none',
           'transition-[border-color,box-shadow,background-color]',
           disabled &&
-            'border-border-gray bg-surface-gray-subtler text-text-subtle placeholder:text-text-subtle cursor-not-allowed',
-          !disabled && isError && 'border-border-error bg-surface-white border-2',
+            'border-input-border-disabled bg-surface-gray-subtler text-text-subtle placeholder:text-text-subtle cursor-not-allowed',
+          !disabled && isError && 'border-input-border-error bg-surface-white',
           !disabled &&
             !isError &&
             !isCompleted && [
-              'border-border-gray bg-surface-white',
+              'bg-surface-white',
               'focus:border-transparent',
               'focus:bg-surface-white',
               'focus:ring-border-primary focus:ring-2 focus:ring-inset',
@@ -123,7 +134,7 @@ export const Textarea = ({
           !disabled &&
             !isError &&
             isCompleted && [
-              'border-input-border bg-surface-white',
+              'bg-surface-white',
               'focus:border-transparent',
               'focus:bg-surface-white',
               'focus:ring-border-primary focus:ring-2 focus:ring-inset',
