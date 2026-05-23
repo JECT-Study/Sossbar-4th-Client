@@ -21,16 +21,8 @@ export const LoadingDialog = ({ open, message = '로딩 중...' }: LoadingDialog
           onInteractOutside={(event) => event.preventDefault()}
           aria-busy="true"
         >
-          <div className="flex w-[112px] shrink-0 p-2">
-            <Image
-              src="/loading-animation.gif"
-              alt=""
-              width={96}
-              height={96}
-              className="h-24 w-24 object-cover"
-              unoptimized
-              priority
-            />
+          <div className="flex w-[112px] shrink-0 animate-pulse p-2">
+            <Image src="/Sossbar-logo2.svg" alt="" width={96} height={96} className="h-24 w-24 object-contain" />
           </div>
           <div className="flex flex-col items-center px-4 py-2">
             <Dialog.Title className="text-heading-base text-text-basic w-[280px] text-center font-bold">
