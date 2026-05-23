@@ -6,6 +6,7 @@ import { ProfileSection, ProjectSection } from '@/features/profile';
 import { ReviewListCard, SoftSkillsCard, TagCard } from '@/features/review';
 import { PageContainer } from '@/shared/components/page-container';
 import { Tab } from '@/shared/components/tab';
+import { useSessionUser } from '@/shared/lib/session-user';
 
 type ProfilePageProps = {
   params: Promise<{
@@ -15,7 +16,9 @@ type ProfilePageProps = {
 
 const ProfilePage = ({ params }: ProfilePageProps) => {
   const { userId } = use(params);
-  const isMyProfile = true;
+  const profileUserId = Number(userId);
+  const sessionUser = useSessionUser();
+  const isMyProfile = profileUserId === sessionUser?.userId;
 
   return (
     <PageContainer className="mb-20">
