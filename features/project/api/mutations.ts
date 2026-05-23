@@ -1,0 +1,73 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import type { CreateProjectPayload, UpdateProjectPayload } from '@/features/project/types';
+
+import {
+  confirmProjectMembers,
+  createProject,
+  deleteProject,
+  deleteProjectMember,
+  inviteProjectMember,
+  updateProject,
+} from './fetchers';
+import { projectKeys } from './queries';
+
+export const useCreateProject = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateProjectPayload) => createProject(payload),
+    onSuccess: (data) => {
+      queryClient.setQueryData(projectKeys.detail(data.projectId), data);
+    },
+  });
+};
+
+export const useUpdateProject = (projectId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: UpdateProjectPayload) => updateProject(projectId, payload),
+    onSuccess: (data) => {
+      queryClient.setQueryData(projectKeys.detail(data.projectId), data);
+    },
+  });
+};
+
+export const useDeleteProject = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (projectId: number) => deleteProject(projectId),
+    onSuccess: (_data, projectId) => {
+      queryClient.removeQueries({ queryKey: projectKeys.detail(projectId) });
+    },
+  });
+};
+
+export const useInviteProjectMember = (projectId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => inviteProjectMember(projectId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
+    },
+  });
+};
+
+export const useDeleteProjectMember = (projectId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userId: number) => deleteProjectMember(projectId, userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
+    },
+  });
+};
+
+export const useConfirmProjectMembers = (projectId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => confirmProjectMembers(projectId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
+    },
+  });
+};
