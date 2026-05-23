@@ -3,13 +3,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Avatar } from 'radix-ui';
-import { Suspense } from 'react';
 
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 import { clearSessionUser, useSessionUser } from '@/shared/lib/session-user';
 
-import { Button } from '../button';
 import { KakaoLoginButton } from '../button/kakao-login-button';
 import { Dropdown } from '../dropdown';
 
@@ -23,17 +21,7 @@ export const HeaderAuthArea = () => {
   const sessionUser = useSessionUser();
 
   if (!sessionUser) {
-    return (
-      <Suspense
-        fallback={
-          <Button className="self-center" disabled>
-            로그인
-          </Button>
-        }
-      >
-        <KakaoLoginButton />
-      </Suspense>
-    );
+    return <KakaoLoginButton />;
   }
 
   const avatarSrc = sessionUser.profileImageUrl || DEFAULT_AVATAR_SRC;
