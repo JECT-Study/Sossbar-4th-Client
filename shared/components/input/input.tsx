@@ -5,11 +5,12 @@ import type { ComponentProps } from 'react';
 import { cva } from 'class-variance-authority';
 
 import { InputClearIcon } from '@/shared/assets/icons';
+import { useInputInteraction } from '@/shared/components/input/use-input-interaction';
 import { cn } from '@/shared/lib/cn';
 
 import type { VariantProps } from 'class-variance-authority';
 
-import { useInputInteraction } from '../../hooks/use-input-interaction';
+import { CharCount } from '../char-count';
 
 const inputVariants = cva(
   'border border-border-gray rounded-md px-4 pr-9 py-3 text-body-base min-w-0 w-full bg-transparent text-start leading-normal outline-none placeholder:text-text-disabled focus-within:ring-border-primary focus-within:ring-2 focus-within:ring-inset',
@@ -38,20 +39,6 @@ const inputVariants = cva(
   },
 );
 
-const countVariants = cva('text-body-sm ml-auto shrink-0 tabular-nums', {
-  variants: {
-    state: {
-      idle: 'text-text-disabled',
-      focused: 'text-text-primary',
-      filled: 'text-text-success',
-      error: 'text-text-error',
-    },
-  },
-  defaultVariants: {
-    state: 'idle',
-  },
-});
-
 interface Props extends ComponentProps<'input'>, Omit<VariantProps<typeof inputVariants>, 'disabled'> {
   name: string;
   clearable?: boolean;
@@ -61,11 +48,13 @@ interface Props extends ComponentProps<'input'>, Omit<VariantProps<typeof inputV
 export const Input = ({
   ref,
   disabled,
+  readOnly,
   error,
   className,
   wrapperClassName,
   clearable,
   maxLength,
+  defaultValue,
   onChange,
   onFocus,
   onBlur,
@@ -73,12 +62,13 @@ export const Input = ({
 }: Props) => {
   const { mergedRef, valueLength, isFocused, handleChange, handleFocus, handleBlur, clearInput } = useInputInteraction({
     ref,
+    defaultValue: defaultValue as string | undefined,
     onChange,
     onFocus,
     onBlur,
   });
 
-  const showClearButton = clearable && isFocused && valueLength > 0 && !disabled;
+  const showClearButton = clearable && isFocused && valueLength > 0 && !disabled && !readOnly;
   const showCount = maxLength != null && !disabled;
   const countState = error ? 'error' : isFocused ? 'focused' : valueLength > 0 ? 'filled' : 'idle';
 
@@ -88,6 +78,8 @@ export const Input = ({
         <input
           ref={mergedRef}
           disabled={disabled}
+          readOnly={readOnly}
+          defaultValue={defaultValue}
           maxLength={maxLength}
           onChange={handleChange}
           onFocus={handleFocus}
@@ -111,10 +103,7 @@ export const Input = ({
       </div>
       {showCount ? (
         <div className="absolute right-0 bottom-0 translate-y-[calc(100%+8px)]">
-          <span className={countVariants({ state: countState })}>
-            <span>{valueLength}</span>
-            <span className="text-text-subtle">/{maxLength}</span>
-          </span>
+          <CharCount current={valueLength} max={maxLength!} state={countState} />
         </div>
       ) : null}
     </div>
