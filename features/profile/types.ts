@@ -1,10 +1,21 @@
 export interface Profile {
   userId: number;
+  username: string;
   nickname: string;
-  realName: string;
-  bio: string;
-  profileImageUrl: string | null;
   email: string;
+  bio: string | null;
+  profileImageUrl: string | null;
+  userType: string;
 }
 
-export type UpdateProfilePayload = Partial<Pick<Profile, 'nickname' | 'bio' | 'profileImageUrl'>>;
+export type UpdateProfileInfo = {
+  nickname: string;
+  bio: string;
+};
+
+export type UpdateProfilePayload = {
+  info: UpdateProfileInfo;
+  profileImage?: File | null;
+};
+
+export type UpdateProfileResponse = Profile;
