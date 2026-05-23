@@ -7,14 +7,15 @@ import { useRef, useState } from 'react';
 import { useComposedRefs } from '@/shared/hooks/use-composed-refs';
 
 interface InputInteractionParams {
+  defaultValue?: string;
   ref?: Ref<HTMLInputElement>;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
-export const useInputInteraction = ({ ref, onChange, onFocus, onBlur }: InputInteractionParams) => {
-  const [valueLength, setValueLength] = useState(0);
+export const useInputInteraction = ({ ref, defaultValue = '', onChange, onFocus, onBlur }: InputInteractionParams) => {
+  const [valueLength, setValueLength] = useState(defaultValue.length);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const mergedRef = useComposedRefs(inputRef, ref);
@@ -35,7 +36,7 @@ export const useInputInteraction = ({ ref, onChange, onFocus, onBlur }: InputInt
   };
 
   const clearInput = () => {
-    if (!inputRef.current) {
+    if (!inputRef.current || inputRef.current.readOnly) {
       return;
     }
     // React가 관리하는 value를 우회해 native setter로 초기화해야 RHF의 onChange가 정상 발화됨
