@@ -21,7 +21,9 @@ export const AppShell = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Header />
+      <Suspense fallback={null}>
+        <Header />
+      </Suspense>
       <main className="flex-1">{children}</main>
       <Footer variant={footerVariant} />
       <Suspense fallback={null}>
