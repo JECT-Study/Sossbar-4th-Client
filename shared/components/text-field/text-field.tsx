@@ -31,18 +31,20 @@ export const TextField = ({
       <Label required={required} htmlFor={`input-${name}`}>
         {label}
       </Label>
-      <Input
-        name={name}
-        clearable={clearable}
-        id={`input-${name}`}
-        required={required}
-        aria-describedby={errorMessage ? `${name}-error-message` : undefined}
-        placeholder="내용을 입력해주세요."
-        className={inputClassName}
-        error={!!errorMessage}
-        {...restProps}
-      />
-      {errorMessage ? <ErrorMessage id={`${name}-error-message`}>{errorMessage}</ErrorMessage> : null}
+      <div className="flex flex-col gap-2">
+        <Input
+          name={name}
+          clearable={clearable}
+          id={`input-${name}`}
+          required={required}
+          aria-describedby={errorMessage ? `${name}-error-message` : undefined}
+          placeholder="내용을 입력해주세요."
+          className={inputClassName}
+          error={!!errorMessage}
+          {...restProps}
+        />
+        {errorMessage ? <ErrorMessage id={`${name}-error-message`}>{errorMessage}</ErrorMessage> : null}
+      </div>
     </div>
   );
 };
