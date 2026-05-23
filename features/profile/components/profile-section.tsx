@@ -63,6 +63,7 @@ export const ProfileSection = ({ isMyProfile }: ProfileSectionProps) => {
                 닉네임 <span className="text-text-tertiary">*</span>
               </label>
               <Input
+                name="nickname"
                 className="max-w-full"
                 placeholder="내용을 입력하세요"
                 maxLength={MAX_NICKNAME}

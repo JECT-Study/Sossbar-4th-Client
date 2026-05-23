@@ -73,7 +73,7 @@ export const Input = ({
   const countState = error ? 'error' : isFocused ? 'focused' : valueLength > 0 ? 'filled' : 'idle';
 
   return (
-    <div className={cn('relative flex w-full flex-col', wrapperClassName)}>
+    <div className={cn('relative flex w-full flex-col gap-2', wrapperClassName)}>
       <div className="relative flex w-full items-center">
         <input
           ref={mergedRef}
@@ -101,11 +101,7 @@ export const Input = ({
           </button>
         ) : null}
       </div>
-      {showCount ? (
-        <div className="absolute right-0 bottom-0 translate-y-[calc(100%+8px)]">
-          <CharCount current={valueLength} max={maxLength!} state={countState} />
-        </div>
-      ) : null}
+      {showCount ? <CharCount current={valueLength} max={maxLength!} state={countState} /> : null}
     </div>
   );
 };
