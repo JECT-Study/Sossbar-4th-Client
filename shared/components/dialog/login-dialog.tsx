@@ -6,7 +6,7 @@ import { Dialog } from 'radix-ui';
 import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons';
 import { useLoginModal } from '@/shared/hooks/use-login-modal';
 
-export const LoginModal = () => {
+export const LoginDialog = () => {
   const { isOpen, onOpenChange } = useLoginModal();
 
   return (

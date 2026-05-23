@@ -3,13 +3,13 @@
 import Image from 'next/image';
 import { Dialog } from 'radix-ui';
 
-type LoadingModalProps = {
+type LoadingDialogProps = {
   open: boolean;
   /** @default '로딩 중...' */
   message?: string;
 };
 
-export const LoadingModal = ({ open, message = '로딩 중...' }: LoadingModalProps) => {
+export const LoadingDialog = ({ open, message = '로딩 중...' }: LoadingDialogProps) => {
   return (
     <Dialog.Root open={open}>
       <Dialog.Portal>
