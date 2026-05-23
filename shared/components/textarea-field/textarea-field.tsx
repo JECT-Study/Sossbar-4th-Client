@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/cn';
 
 import { ErrorMessage } from '../error-message';
 import { Label } from '../label';
-import { Textarea } from '../textarea/textarea';
+import { Textarea } from '../textarea';
 
 interface Props extends ComponentProps<'textarea'> {
   name: string;
