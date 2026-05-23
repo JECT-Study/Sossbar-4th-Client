@@ -5,8 +5,9 @@ import { useId, useState } from 'react';
 
 import { Button } from '@/shared/components/button';
 import { Dropcomplete } from '@/shared/components/dropcomplete';
-import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
+
+import { TextareaLegacy } from './textarea-legacy';
 
 const REASON_OPTIONS = [
   { value: 'low-quality', label: '서비스 퀄리티가 낮아요' },
@@ -135,7 +136,7 @@ const WithdrawModalBody = ({
           </RadioGroup.Root>
 
           <div className="w-full shrink-0">
-            <Textarea
+            <TextareaLegacy
               label="탈퇴사유"
               placeholder="탈퇴사유를 입력해주세요."
               value={detail}
