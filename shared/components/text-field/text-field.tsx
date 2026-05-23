@@ -27,7 +27,7 @@ export const TextField = ({
   ...restProps
 }: Props) => {
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
+    <div className={cn('relative flex flex-col gap-2', className)}>
       <Label required={required} htmlFor={`input-${name}`}>
         {label}
       </Label>
