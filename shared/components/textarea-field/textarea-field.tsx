@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/cn';
 
 import { ErrorMessage } from '../error-message';
 import { Label } from '../label';
-import { Textarea } from '../textarea/textarea';
+import { Textarea } from '../textarea';
 
 interface Props extends ComponentProps<'textarea'> {
   name: string;
@@ -31,7 +31,7 @@ export const TextareaField = ({
   ...restProps
 }: Props) => {
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
+    <div className={cn('relative flex flex-col gap-2', className)}>
       <Label required={required} htmlFor={`textarea-${name}`}>
         {label}
       </Label>
