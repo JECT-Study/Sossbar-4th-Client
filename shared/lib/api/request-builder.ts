@@ -9,13 +9,14 @@ const DEFAULT_BASE_PATH = '/api/v1';
 
 export const requestBuilder: RequestBuilder = (path, { basePath = DEFAULT_BASE_PATH, headers, body, ...init }) => {
   const hasBody = body !== undefined;
+  const isFormDataBody = typeof FormData !== 'undefined' && body instanceof FormData;
 
   return new Request(`${basePath}${path}`, {
     ...init,
     headers: {
-      ...(hasBody && { 'Content-Type': 'application/json' }),
+      ...(hasBody && !isFormDataBody && { 'Content-Type': 'application/json' }),
       ...headers,
     },
-    body: hasBody ? JSON.stringify(body) : undefined,
+    body: hasBody ? (isFormDataBody ? body : JSON.stringify(body)) : undefined,
   });
 };
