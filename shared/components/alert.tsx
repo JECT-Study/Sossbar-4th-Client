@@ -10,8 +10,10 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        warning: 'bg-surface-warning-subtler text-[#8A5C00] shadow-[inset_0_0_0_1px_var(--color-border-warning-light)]',
-        success: 'bg-[#EAF6EC] text-[#267337] shadow-[inset_0_0_0_1px_#D8EEDD]',
+        warning:
+          'bg-surface-warning-subtler text-text-warning shadow-[inset_0_0_0_1px_var(--color-border-warning-light)]',
+        success:
+          'bg-surface-success-subtler text-text-success shadow-[inset_0_0_0_1px_var(--color-border-success-light)]',
       },
     },
     defaultVariants: {
