@@ -8,7 +8,7 @@ export type SoftSkillsDistributionBar = {
   tone?: DistributionBarTone;
 };
 
-type SoftSkillsProps = {
+type SoftSkillsCardProps = {
   title?: string;
   distributionBars?: SoftSkillsDistributionBar[];
 };
@@ -17,7 +17,7 @@ const spectrumRows = [
   { left: '서포트형', right: '리드형', markerLeft: '20%' },
   { left: '빠른 작업 속도 중시', right: '천천히 신중한 고민 중시', markerLeft: '40%' },
   { left: '상황별 유연한 대처', right: '철저한 계획 기반 실행', markerLeft: '40%' },
-  { left: '냉철한 결과 지향', right: '따뜻한 관계 지향', markerLeft: '100%' },
+  { left: '냉철한 유연한 대처', right: '따뜻한 관계 지향', markerLeft: '100%' },
 ];
 
 const defaultDistributionBars: SoftSkillsDistributionBar[] = [
@@ -27,7 +27,7 @@ const defaultDistributionBars: SoftSkillsDistributionBar[] = [
   { label: '천천히 신중\n한 고민 중시', count: 2 },
   { label: '상황별\n유연한 대처', count: 4 },
   { label: '철저한 계획\n기반 실행', count: 2 },
-  { label: '냉철한\n결과 지향', count: 0 },
+  { label: '냉철한\n유연한 대처', count: 0 },
   { label: '따뜻한\n관계 지향', count: 6 },
 ];
 
@@ -91,20 +91,20 @@ const SpectrumVerticalDashOverlay = ({ widthPx }: { widthPx: number }) => (
   </svg>
 );
 
-export const SoftSkills = ({
+export const SoftSkillsCard = ({
   title = '소프트 스킬 스펙트럼',
   distributionBars = defaultDistributionBars,
-}: SoftSkillsProps) => {
+}: SoftSkillsCardProps) => {
   const maxDistributionCount = Math.max(...distributionBars.map((bar) => bar.count), 0);
   const hasDistributionData = distributionBars.some((bar) => bar.count > 0);
   const distributionBarTones = getTopBarTones(distributionBars);
 
   return (
     <section className="border-border-gray h-[652px] w-[588px] overflow-hidden rounded-2xl border bg-white p-6">
-      <h2 className="text-heading-sm h-6 leading-6 font-bold text-black">{title}</h2>
+      <h2 className="text-heading-base h-6 leading-6 font-bold text-black">{title}</h2>
 
       <div className="mt-7 w-[540px]">
-        <h3 className="text-detail-base text-text-subtle h-6 leading-[150%] font-bold">평균 지표</h3>
+        <h3 className="text-heading-xs text-text-subtle h-6 leading-[150%] font-bold">평균 지표</h3>
 
         <div className="mt-3 flex h-[136px] items-start">
           <div className="flex h-[136px] w-[93px] flex-col gap-2">
@@ -149,7 +149,7 @@ export const SoftSkills = ({
 
       {!!hasDistributionData && (
         <div className="mt-[41px] w-[540px]">
-          <h3 className="text-detail-base text-text-subtle h-6 leading-[150%] font-bold">받은 평가 분포(6명 응답)</h3>
+          <h3 className="text-heading-xs text-text-subtle h-6 leading-[150%] font-bold">받은 평가 분포(6명 응답)</h3>
 
           <div className="mx-auto mt-4 flex w-[513px] items-end justify-between" style={{ height: CHART_TOTAL_HEIGHT }}>
             {distributionBars.map((bar, index) => (
