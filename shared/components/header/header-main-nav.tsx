@@ -29,11 +29,11 @@ export const HeaderMainNav = () => {
             <li key={label}>
               <Button asChild size="small" variant="tertiary">
                 {requiresAuth ? (
-                  <AuthGateLink href={href} className={linkClassName}>
+                  <AuthGateLink href={href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
                     {label}
                   </AuthGateLink>
                 ) : (
-                  <Link href={href} className={linkClassName}>
+                  <Link href={href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
                     {label}
                   </Link>
                 )}
