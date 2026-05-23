@@ -6,8 +6,8 @@ import type { SignupFormData } from '../types';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 
 import { AgreementItem } from './agreement-item';
-import { AGREEMENTS } from '../constants';
-import { useAgreements } from '../hooks';
+import { useAgreements } from '../hooks/use-agreements';
+import { AGREEMENTS } from '../signup-constants';
 
 interface Props {
   control: Control<SignupFormData>;

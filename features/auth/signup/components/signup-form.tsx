@@ -8,9 +8,9 @@ import { InformationDialog } from '@/shared/components/dialog/information-dialog
 import { TextField } from '@/shared/components/text-field';
 import { TextareaField } from '@/shared/components/textarea-field/textarea-field';
 
-import { useSignupForm } from '../use-signup-form';
+import { BIO_MAX_LENGTH } from '../signup-constants';
 import { SignupAgreement } from './signup-agreement';
-import { BIO_MAX_LENGTH } from '../constants';
+import { useSignupForm } from '../hooks/use-signup-form';
 
 export const SignupForm = () => {
   const router = useRouter();

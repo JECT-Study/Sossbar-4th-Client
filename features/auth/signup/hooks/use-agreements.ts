@@ -1,9 +1,9 @@
 import { useWatch } from 'react-hook-form';
 
-import type { SignupFormData } from './types';
+import type { SignupFormData } from '../types';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 
-import { AGREEMENTS } from './constants';
+import { AGREEMENTS } from '../signup-constants';
 
 export const useAgreements = (control: Control<SignupFormData>, setValue: UseFormSetValue<SignupFormData>) => {
   const agreements = useWatch({ control, name: 'agreements' });

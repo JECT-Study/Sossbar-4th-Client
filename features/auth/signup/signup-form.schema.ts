@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { BIO_MAX_LENGTH, NAME_MAX_LENGTH } from './constants';
+import { BIO_MAX_LENGTH, NAME_MAX_LENGTH } from './signup-constants';
 
 export const SignupFormSchema = z.object({
   name: z
