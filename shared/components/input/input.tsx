@@ -83,7 +83,7 @@ export const Input = ({
   const countState = error ? 'error' : isFocused ? 'focused' : valueLength > 0 ? 'filled' : 'idle';
 
   return (
-    <div className={cn('flex w-full flex-col', wrapperClassName)}>
+    <div className={cn('relative flex w-full flex-col', wrapperClassName)}>
       <div className="relative flex w-full items-center">
         <input
           ref={mergedRef}
@@ -110,7 +110,7 @@ export const Input = ({
         ) : null}
       </div>
       {showCount ? (
-        <div className="mt-1 flex justify-end">
+        <div className="absolute right-0 bottom-0 translate-y-[calc(100%+8px)]">
           <span className={countVariants({ state: countState })}>
             <span>{valueLength}</span>
             <span className="text-text-subtle">/{maxLength}</span>
