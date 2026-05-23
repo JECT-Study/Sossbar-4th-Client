@@ -3,9 +3,9 @@
 import type { ComponentProps, MouseEvent, Ref } from 'react';
 
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { forwardRef } from 'react';
 
-import { useLoginModal } from '@/shared/hooks/use-login-modal';
 import { useSessionUser } from '@/shared/lib/session-user';
 
 type AuthGateLinkProps = ComponentProps<typeof Link>;
@@ -13,7 +13,14 @@ type AuthGateLinkProps = ComponentProps<typeof Link>;
 export const AuthGateLink = forwardRef<HTMLAnchorElement | HTMLButtonElement, AuthGateLinkProps>(
   ({ href, onClick, children, className, ...props }, ref) => {
     const sessionUser = useSessionUser();
-    const { openLoginModal } = useLoginModal();
+    const pathname = usePathname();
+    const router = useRouter();
+
+    const openLoginModal = () => {
+      const params = new URLSearchParams(window.location.search);
+      params.set('modal', 'login');
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    };
 
     if (sessionUser) {
       return (
