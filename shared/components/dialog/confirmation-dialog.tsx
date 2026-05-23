@@ -1,18 +1,24 @@
+'use client';
+
 import type { ReactNode } from 'react';
 
 import { Dialog } from 'radix-ui';
 
+import { cn } from '@/shared/lib/cn';
+
 import { Button } from '../button/button';
 
-interface Props {
+type ConfirmationDialogProps = {
   open: boolean;
   title: ReactNode;
   description: ReactNode;
   confirmText: string;
   cancelText: string;
   onOpenChange: (open: boolean) => void;
-  onConfirm: () => void;
-}
+  onConfirm: () => void | Promise<void>;
+  isConfirming?: boolean;
+  errorMessage?: string;
+};
 
 export const ConfirmationDialog = ({
   open,
@@ -22,21 +28,59 @@ export const ConfirmationDialog = ({
   cancelText,
   onOpenChange,
   onConfirm,
-}: Props) => {
+  isConfirming = false,
+  errorMessage,
+}: ConfirmationDialogProps) => {
+  const handleOpenChange = (next: boolean) => {
+    if (!next && isConfirming) {
+      return;
+    }
+    onOpenChange(next);
+  };
+
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-black-75 fixed inset-0" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 flex w-[360px] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-6">
-          <div className="flex flex-col gap-2 px-4 py-2">
-            <Dialog.Title className="text-heading-base font-bold">{title}</Dialog.Title>
-            <Dialog.Description className="text-body-base text-text-subtle">{description}</Dialog.Description>
+        <Dialog.Overlay className="bg-black-75 fixed inset-0 z-50" />
+        <Dialog.Content
+          className={cn(
+            'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex w-[360px] max-w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col',
+            'gap-4 overflow-hidden rounded-xl border p-6 outline-none',
+          )}
+        >
+          <div className="flex h-[108px] w-full shrink-0 flex-col gap-2 px-4 py-2">
+            <Dialog.Title className="text-heading-base text-text-basic leading-normal font-bold">{title}</Dialog.Title>
+            <Dialog.Description asChild>
+              <div className="text-body-base text-text-subtle flex flex-col leading-normal">{description}</div>
+            </Dialog.Description>
           </div>
-          <div className="flex justify-end gap-2">
+          {!!errorMessage && (
+            <p className="text-body-sm text-text-error px-4" role="alert">
+              {errorMessage}
+            </p>
+          )}
+          <div className="flex w-full shrink-0 justify-end gap-2">
             <Dialog.Close asChild>
-              <Button variant="tertiary">{cancelText}</Button>
+              <Button
+                type="button"
+                variant="tertiary"
+                size="medium"
+                className="h-11 min-w-[68px] shrink-0 px-5"
+                disabled={isConfirming}
+              >
+                {cancelText}
+              </Button>
             </Dialog.Close>
-            <Button variant="primary" onClick={onConfirm}>
+            <Button
+              type="button"
+              variant="primary"
+              size="medium"
+              className="h-11 min-w-[68px] shrink-0 px-5"
+              disabled={isConfirming}
+              onClick={() => {
+                void onConfirm();
+              }}
+            >
               {confirmText}
             </Button>
           </div>
