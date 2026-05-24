@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { setSessionUser } from '@/shared/lib/session-user';
 
-import { createSignup } from './fetchers';
+import { createSignup } from '../create-signup.api';
 
 export const useSignup = () => {
   return useMutation({

@@ -1,12 +1,13 @@
-import Link from 'next/link';
-import { Controller, useWatch } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 
 import { Checkbox } from '@/shared/components/checkbox';
 
 import type { SignupFormData } from '../types';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 
-import { AGREEMENTS } from '../constants';
+import { AgreementItem } from './agreement-item';
+import { useAgreements } from '../hooks/use-agreements';
+import { AGREEMENTS } from '../signup-constants';
 
 interface Props {
   control: Control<SignupFormData>;
@@ -14,15 +15,7 @@ interface Props {
 }
 
 export const SignupAgreement = ({ control, setValue }: Props) => {
-  const agreements = useWatch({ control, name: 'agreements' });
-  const agreeAll = Object.values(agreements).every(Boolean);
-
-  const handleAgreeAll = (checked: boolean | 'indeterminate') => {
-    if (typeof checked !== 'boolean') {
-      return;
-    }
-    AGREEMENTS.forEach(({ key }) => setValue(`agreements.${key}`, checked, { shouldValidate: true }));
-  };
+  const { agreeAll, handleAgreeAll } = useAgreements(control, setValue);
 
   return (
     <div className="border-border-gray-light mt-[40px] space-y-4 rounded-xl border p-4">
@@ -36,28 +29,7 @@ export const SignupAgreement = ({ control, setValue }: Props) => {
           control={control}
           name={`agreements.${agreement.key}`}
           render={({ field }) => (
-            <label className="flex cursor-pointer items-center gap-3">
-              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-              <span className="text-text-basic text-[14px]">
-                {'url' in agreement ? (
-                  <>
-                    {agreement.required ? '(필수)' : '(선택)'}{' '}
-                    <Link
-                      href={agreement.url}
-                      className="font-medium underline underline-offset-2"
-                      onClick={(event) => event.stopPropagation()}
-                    >
-                      {agreement.linkLabel}
-                    </Link>
-                    {agreement.suffix}
-                  </>
-                ) : (
-                  <>
-                    {agreement.required ? '(필수)' : '(선택)'} {agreement.label}
-                  </>
-                )}
-              </span>
-            </label>
+            <AgreementItem agreement={agreement} checked={field.value} onChange={field.onChange} />
           )}
         />
       ))}
