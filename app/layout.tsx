@@ -30,8 +30,13 @@ const RootLayout = ({
     <html lang="ko" className={pretendard.variable}>
       <body className="bg-gray-0 flex min-h-screen flex-col text-gray-900 antialiased">
         <QueryProvider>
-          {process.env.NODE_ENV === 'development' && <MswProvider />}
-          <AppShell>{children}</AppShell>
+          {process.env.NODE_ENV === 'development' ? (
+            <MswProvider>
+              <AppShell>{children}</AppShell>
+            </MswProvider>
+          ) : (
+            <AppShell>{children}</AppShell>
+          )}
         </QueryProvider>
       </body>
     </html>

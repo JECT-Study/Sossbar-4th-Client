@@ -38,6 +38,7 @@ const twMerge = extendTailwindMerge({
             'text-subtle',
             'text-subtler',
             'text-disabled',
+            'text-disabled-on',
             'text-primary',
             'text-secondary',
             'text-tertiary',

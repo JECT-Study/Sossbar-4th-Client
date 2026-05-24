@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/shared/components/button';
 import { InformationDialog } from '@/shared/components/dialog/information-dialog';
-import { Input } from '@/shared/components/input';
+import { TextField } from '@/shared/components/text-field';
 import { Textarea } from '@/shared/components/textarea';
 
-import { BIO_MAX_LENGTH } from '../constants';
 import { useSignupForm } from '../use-signup-form';
 import { FormField } from './form-field';
 import { SignupAgreement } from './signup-agreement';
+import { BIO_MAX_LENGTH } from '../constants';
 
 export const SignupForm = () => {
   const router = useRouter();
@@ -19,9 +19,9 @@ export const SignupForm = () => {
 
   const {
     formState: { errors },
+    watch,
     register,
     handleSubmit,
-    watch,
     setValue,
     getValues,
     control,
@@ -31,18 +31,15 @@ export const SignupForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-8 w-full max-w-[460px]">
-      <FormField label="이름" htmlFor="name">
-        <Input
-          type="text"
-          id="name"
-          placeholder="입력해주세요."
-          className="max-w-none"
-          inputClassName="text-[16px]"
-          variant={errors.name ? 'error' : 'default'}
-          errorMessage={errors.name?.message}
-          {...register('name')}
-        />
-      </FormField>
+      <TextField
+        label="이름"
+        placeholder="입력해주세요."
+        errorMessage={errors.name?.message}
+        required
+        clearable
+        maxLength={20}
+        {...register('name')}
+      />
 
       <FormField label="한 줄 소개" htmlFor="bio" className="mt-10">
         <Textarea
