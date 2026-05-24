@@ -91,8 +91,8 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
                   placeholder="내용을 입력하세요"
                   maxLength={PROFILE_NICKNAME_MAX_LENGTH}
                   errorMessage={errors.nickname?.message}
-                  disabled={isSubmitting}
                   {...field}
+                  disabled
                 />
               )}
             />
