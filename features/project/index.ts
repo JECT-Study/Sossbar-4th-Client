@@ -1,3 +1,4 @@
+export { ProjectPageContent } from './components/project-page-content';
 export {
   useConfirmProjectMembers,
   useCreateProject,
