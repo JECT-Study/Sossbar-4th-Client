@@ -6,12 +6,11 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/components/button';
 import { InformationDialog } from '@/shared/components/dialog/information-dialog';
 import { TextField } from '@/shared/components/text-field';
-import { TextareaLegacy } from '@/shared/components/textarea-legacy';
+import { TextareaField } from '@/shared/components/textarea-field/textarea-field';
 
-import { useSignupForm } from '../use-signup-form';
-import { FormField } from './form-field';
+import { BIO_MAX_LENGTH } from '../signup-constants';
 import { SignupAgreement } from './signup-agreement';
-import { BIO_MAX_LENGTH } from '../constants';
+import { useSignupForm } from '../hooks/use-signup-form';
 
 export const SignupForm = () => {
   const router = useRouter();
@@ -19,7 +18,6 @@ export const SignupForm = () => {
 
   const {
     formState: { errors },
-    watch,
     register,
     handleSubmit,
     setValue,
@@ -41,20 +39,14 @@ export const SignupForm = () => {
         {...register('name')}
       />
 
-      <FormField label="한 줄 소개" htmlFor="bio" className="mt-10">
-        <TextareaLegacy
-          variant={errors.bio ? 'error' : 'default'}
-          id="bio"
-          placeholder="내용을 입력해 주세요. (기본상태)"
-          rows={4}
-          currentCount={watch('bio').length}
-          totalCount={BIO_MAX_LENGTH}
-          className="max-w-none"
-          textareaClassName="text-[16px] rounded-xl"
-          errorMessage={errors.bio?.message}
-          {...register('bio')}
-        />
-      </FormField>
+      <TextareaField
+        label="한 줄 소개"
+        placeholder="내용을 입력해 주세요. (기본상태)"
+        maxLength={BIO_MAX_LENGTH}
+        errorMessage={errors.bio?.message}
+        className="mt-10"
+        {...register('bio')}
+      />
 
       <SignupAgreement control={control} setValue={setValue} />
 
