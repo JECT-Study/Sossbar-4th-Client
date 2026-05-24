@@ -26,7 +26,7 @@ export const ProfilePageContent = ({ userId, isMyProfile }: ProfilePageContentPr
             <TagCard />
             <SoftSkillsCard />
           </div>
-          <ReviewListCard />
+          <ReviewListCard variant="all" isMyProfile={isMyProfile} />
         </Tab.Content>
         <Tab.Content value="projects" className="mt-10">
           <ProjectSection />
