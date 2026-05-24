@@ -6,8 +6,14 @@ import { Dialog } from 'radix-ui';
 import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons';
 import { useLoginModal } from '@/shared/hooks/use-login-modal';
 
-export const LoginDialog = () => {
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
+
+export const LoginModal = () => {
   const { isOpen, onOpenChange } = useLoginModal();
+
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
@@ -29,6 +35,7 @@ export const LoginDialog = () => {
             </div>
             <button
               type="button"
+              onClick={handleKakaoLogin}
               className="text-text-basic text-body-xl relative w-full cursor-pointer rounded-lg bg-[#FAE100] px-7 py-3.5 font-medium"
             >
               <div className="absolute top-1/2 left-7 flex h-6 w-6 -translate-y-1/2">
