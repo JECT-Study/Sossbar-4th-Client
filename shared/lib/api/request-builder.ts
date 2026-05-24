@@ -1,5 +1,6 @@
-import { buildApiUrl, getApiOrigin } from './resolve-api-url';
 import { getAuthToken } from '@/shared/lib/auth-token';
+
+import { buildApiUrl, getApiOrigin } from './resolve-api-url';
 
 export type ApiRequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
@@ -19,7 +20,6 @@ export const requestBuilder: RequestBuilder = (path, { basePath = DEFAULT_BASE_P
   return new Request(url, {
     ...init,
     credentials: init.credentials ?? (apiOrigin ? 'include' : 'same-origin'),
-    credentials: 'include',
     headers: {
       ...(hasBody && { 'Content-Type': 'application/json' }),
       ...(token && { Authorization: `Bearer ${token}` }),
