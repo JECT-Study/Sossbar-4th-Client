@@ -12,7 +12,8 @@ const wrap = <T>(data: T) =>
     data,
   });
 
-const mockProject: ProjectResponse = {
+// 방장 + 진행중 + 팀원 후기 일부 미작성
+const mockProject1: ProjectResponse = {
   projectId: 1,
   projectName: '소스바 프로젝트',
   host: 'JECT',
@@ -28,6 +29,7 @@ const mockProject: ProjectResponse = {
       username: '김재희',
       profileImageUrl: null,
       memberStatus: 'LEADER',
+      reviewWritten: false,
     },
     {
       projectMemberId: 2,
@@ -35,14 +37,80 @@ const mockProject: ProjectResponse = {
       username: '유하영',
       profileImageUrl: null,
       memberStatus: 'MEMBER',
+      reviewWritten: true,
     },
   ],
 };
 
+// 팀원 + 완료 + 후기 모두 작성
+const mockProject2: ProjectResponse = {
+  projectId: 2,
+  projectName: '디자인 시스템 구축',
+  host: '유하영',
+  startDate: '2025-01-01T00:00:00',
+  endDate: '2025-02-28T00:00:00',
+  projectLink: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  projectImage: null,
+  projectStatus: 'COMPLETED',
+  members: [
+    {
+      projectMemberId: 3,
+      userId: 2,
+      username: '유하영',
+      profileImageUrl: null,
+      memberStatus: 'LEADER',
+      reviewWritten: true,
+    },
+    {
+      projectMemberId: 4,
+      userId: 1,
+      username: '김재희',
+      profileImageUrl: null,
+      memberStatus: 'MEMBER',
+      reviewWritten: true,
+    },
+  ],
+};
+
+// 방장 + 아카이브 + 후기 미작성
+const mockProject3: ProjectResponse = {
+  projectId: 3,
+  projectName: '레거시 리팩토링',
+  host: 'JECT',
+  startDate: '2024-06-01T00:00:00',
+  endDate: '2024-12-31T00:00:00',
+  projectLink: 'f9e8d7c6-b5a4-3210-fedc-ba9876543210',
+  projectImage: null,
+  projectStatus: 'ARCHIVED',
+  members: [
+    {
+      projectMemberId: 5,
+      userId: 1,
+      username: '김재희',
+      profileImageUrl: null,
+      memberStatus: 'LEADER',
+      reviewWritten: false,
+    },
+    {
+      projectMemberId: 6,
+      userId: 3,
+      username: '박민수',
+      profileImageUrl: null,
+      memberStatus: 'MEMBER',
+      reviewWritten: false,
+    },
+  ],
+};
+
+const mockProjects = [mockProject1, mockProject2, mockProject3];
+
 export const projectsHandlers = [
+  http.get(`${BASE}/projects`, () => wrap(mockProjects)),
+
   http.get(`${BASE}/projects/:projectId`, ({ params }) => {
     const projectId = Number(params.projectId);
-    if (projectId !== mockProject.projectId) {
+    const project = mockProjects.find((p) => p.projectId === projectId);
+    if (!project) {
       return HttpResponse.json(
         {
           status: 404,
@@ -53,14 +121,18 @@ export const projectsHandlers = [
         { status: 404 },
       );
     }
-    return wrap(mockProject);
+    return wrap(project);
   }),
 
   http.post(`${BASE}/projects`, async () => {
-    return wrap({ ...mockProject, projectId: 3 });
+    return wrap({ ...mockProject1, projectId: 99 });
   }),
 
-  http.patch(`${BASE}/projects/:projectId`, () => wrap(mockProject)),
+  http.patch(`${BASE}/projects/:projectId`, ({ params }) => {
+    const projectId = Number(params.projectId);
+    const project = mockProjects.find((p) => p.projectId === projectId) ?? mockProject1;
+    return wrap(project);
+  }),
 
   http.delete(`${BASE}/projects/:projectId`, () => {
     return new HttpResponse(null, { status: 204 });

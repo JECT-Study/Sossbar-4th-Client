@@ -7,6 +7,7 @@ export interface ProjectMemberResponse {
   username: string;
   profileImageUrl: string | null;
   memberStatus: MemberStatus;
+  reviewWritten?: boolean;
 }
 
 export interface ProjectResponse {
