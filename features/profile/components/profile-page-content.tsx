@@ -8,14 +8,14 @@ import { ProfileSection } from './profile-section';
 import { ProjectSection } from './project-section';
 
 type ProfilePageContentProps = {
-  userId: string;
+  userId: number;
   isMyProfile: boolean;
 };
 
 export const ProfilePageContent = ({ userId, isMyProfile }: ProfilePageContentProps) => {
   return (
     <PageContainer className="mb-20">
-      <ProfileSection isMyProfile={isMyProfile} />
+      <ProfileSection userId={userId} isMyProfile={isMyProfile} />
       <Tab.Root key={userId} defaultValue="all">
         <Tab.List aria-label="프로필 정보 탭" className="w-full">
           <Tab.Trigger value="all">전체</Tab.Trigger>
@@ -26,7 +26,7 @@ export const ProfilePageContent = ({ userId, isMyProfile }: ProfilePageContentPr
             <TagCard />
             <SoftSkillsCard />
           </div>
-          <ReviewListCard />
+          <ReviewListCard variant="all" isMyProfile={isMyProfile} />
         </Tab.Content>
         <Tab.Content value="projects" className="mt-10">
           <ProjectSection />
