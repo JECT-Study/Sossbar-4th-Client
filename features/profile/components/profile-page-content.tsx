@@ -8,7 +8,7 @@ import { ProfileSection } from './profile-section';
 import { ProjectSection } from './project-section';
 
 type ProfilePageContentProps = {
-  userId: string;
+  userId: number;
   isMyProfile: boolean;
 };
 
