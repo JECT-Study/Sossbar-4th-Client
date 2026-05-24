@@ -5,7 +5,7 @@ import type { ChangeEvent } from 'react';
 import { useRef } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 
-import { PlusIcon } from '@/shared/assets/icons';
+import { CameraIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { TextField } from '@/shared/components/text-field';
 import { Textarea } from '@/shared/components/textarea';
@@ -72,12 +72,12 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
             />
             <button
               type="button"
-              className="absolute top-18.5 left-18.5 h-fit w-fit rounded-full"
+              className="border-icon-gray-fill absolute top-14.5 left-16.75 flex size-10.5 cursor-pointer items-center justify-center rounded-full border bg-white"
               aria-label="프로필 이미지 변경"
               onClick={handleClickImageButton}
               disabled={isSubmitting}
             >
-              <PlusIcon className="h-6 w-6" />
+              <CameraIcon className="text-icon-gray-fill size-6" />
             </button>
           </div>
           <div className="flex w-full max-w-120 flex-1 flex-col gap-2">
