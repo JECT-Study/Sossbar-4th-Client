@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 import { ApiError } from '@/shared/lib/api';
 
-import type { SignupFormData } from './types';
+import type { SignupFormData } from '../types';
 
-import { useSignup } from './mutations';
-import { SignupFormSchema } from './schemas';
+import { useSignup } from './use-signup.mutation';
+import { SignupFormSchema } from '../signup-form.schema';
 
 const defaultValues: SignupFormData = {
   name: '',
