@@ -7,12 +7,12 @@ import { Button } from '@/shared/components/button';
 import { TextareaLegacy } from '@/shared/components/textarea-legacy';
 import { cn } from '@/shared/lib/cn';
 
-import type { Tag } from '../types/review';
+import type { Tag } from '../types';
 
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';
-import { useCreateReview } from '../api/mutations';
-import { useReviewFormData } from '../api/queries';
+import { useCreateReview } from '../mutations';
+import { useReviewFormData } from '../queries';
 
 const PRAISE_MIN_LENGTH = 10;
 const TEXT_MAX_LENGTH = 250;
