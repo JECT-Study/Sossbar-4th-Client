@@ -1,46 +1,24 @@
 'use client';
 
-import { Avatar } from 'radix-ui';
 import { useCallback, useState } from 'react';
 
 import { buildProfileShareClipboardText } from '@/features/profile/lib/build-profile-share-clipboard-text';
-import { EditIcon, PlusIcon, ShareIcon } from '@/shared/assets/icons';
+import { EditIcon, ShareIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
-import { Input } from '@/shared/components/input';
-import { TextareaLegacy } from '@/shared/components/textarea-legacy';
 import { cn } from '@/shared/lib/cn';
 import { copyTextToClipboard } from '@/shared/lib/copy-text-to-clipboard';
 
-import { ProfileShareTooltip } from './profile-share-tooltip';
-import { useState } from 'react';
-
-import { EditIcon, ShareIcon } from '@/shared/assets/icons';
-import { Button } from '@/shared/components/button';
-
 import type { UpdateProfilePayload } from '../types';
 
-/** 목 UI 표시명 — API 연동 전까지 프로필 헤더·공유 텍스트에 공통 사용 */
-const MOCK_DISPLAY_NAME = '이름';
-
-const ProfileAvatar = () => {
-  return (
-    <Avatar.Root className="bg-action-gray-light flex size-25 shrink-0 items-center justify-center overflow-hidden rounded-full">
-      <Avatar.Image className="h-full w-full object-cover" src={PROFILE_IMAGE_SRC} alt="프로필 이미지" />
-      <Avatar.Fallback className="text-heading-lg text-text-subtle font-bold" delayMs={600}>
-        {MOCK_DISPLAY_NAME}
-      </Avatar.Fallback>
-    </Avatar.Root>
-  );
-};
 import { useUpdateProfile } from '../mutations';
 import { useProfile } from '../queries';
 import { ProfileAvatar } from './profile-avatar';
 import { ProfileEditForm } from './profile-edit-form';
+import { ProfileShareTooltip } from './profile-share-tooltip';
 
 type ProfileSectionProps = {
   userId: number;
   isMyProfile: boolean;
-  userId: number;
 };
 
 export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => {
@@ -48,6 +26,20 @@ export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => 
   const { data: profile, isPending, isError, refetch } = useProfile(userId);
   const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useUpdateProfile();
   const [isEditing, setIsEditing] = useState(false);
+  const [isShareTooltipOpen, setIsShareTooltipOpen] = useState(false);
+  const [shareTooltipMessage, setShareTooltipMessage] = useState('링크가 복사되었습니다');
+
+  const closeShareTooltip = useCallback(() => setIsShareTooltipOpen(false), []);
+
+  const handleShareProfile = async () => {
+    if (!Number.isFinite(userId) || userId <= 0) {
+      return;
+    }
+
+    const copied = await copyTextToClipboard(buildProfileShareClipboardText(userId));
+    setShareTooltipMessage(copied ? '링크가 복사되었습니다' : '링크 복사에 실패했습니다');
+    setIsShareTooltipOpen(true);
+  };
 
   const handleStartEditing = () => {
     setIsEditing(true);
