@@ -15,14 +15,17 @@ interface Props {
 
 export const AccountDeletionCompleteModal = ({ open, onOpenChange, onConfirm }: Props) => {
   const router = useRouter();
-  const handleOpenChange = () => {
-    onConfirm?.();
-    onOpenChange(false);
-    router.push('/');
+  const handleOpenChange = (nextOpen: boolean) => {
+    onOpenChange(nextOpen);
+
+    if (!nextOpen) {
+      onConfirm?.();
+      router.push('/');
+    }
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
         <Dialog.Content
@@ -49,7 +52,7 @@ export const AccountDeletionCompleteModal = ({ open, onOpenChange, onConfirm }: 
               variant="primary"
               size="medium"
               className="h-11 w-full shrink-0 px-5"
-              onClick={handleOpenChange}
+              onClick={() => handleOpenChange(false)}
             >
               확인
             </Button>
