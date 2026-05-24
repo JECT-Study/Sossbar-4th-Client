@@ -4,15 +4,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 
 import { Button } from '@/shared/components/button';
-import { TextareaLegacy } from '@/shared/components/textarea-legacy';
+import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 
-import type { Tag } from '../types';
+import type { Tag } from '../types/review';
 
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';
-import { useCreateReview } from '../mutations';
-import { useReviewFormData } from '../queries';
+import { useCreateReview } from '../api/mutations';
+import { useReviewFormData } from '../api/queries';
 
 const PRAISE_MIN_LENGTH = 10;
 const TEXT_MAX_LENGTH = 250;
@@ -207,7 +207,7 @@ export const ReviewWriteContent = () => {
               칭찬해요
             </h2>
             <p className="text-body-sm text-text-subtle">(필수) 최소 {PRAISE_MIN_LENGTH}자 이상 작성해주세요.</p>
-            <TextareaLegacy
+            <Textarea
               className="max-w-none"
               textareaClassName="min-h-[144px] rounded-md text-body-sm"
               placeholder="ex) 적극적이고 배려심이 깊다."
@@ -231,7 +231,7 @@ export const ReviewWriteContent = () => {
               아쉬워요
             </h2>
             <p className="text-body-sm text-text-subtle">이 팀원과 협업하며 아쉬웠던 점을 작성해주세요.</p>
-            <TextareaLegacy
+            <Textarea
               className="max-w-none"
               textareaClassName="min-h-[144px] rounded-md text-body-sm"
               placeholder="ex) 소통이 조금 더 적극적이었으면 좋았을 것 같다."

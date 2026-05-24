@@ -13,6 +13,7 @@ const DEFAULT_BASE_PATH = '/api/v1';
 
 export const requestBuilder: RequestBuilder = (path, { basePath = DEFAULT_BASE_PATH, headers, body, ...init }) => {
   const hasBody = body !== undefined;
+  const isFormData = body instanceof FormData;
   const url = buildApiUrl(basePath, path);
   const apiOrigin = getApiOrigin();
   const token = getAuthToken()?.accessToken;
@@ -21,10 +22,10 @@ export const requestBuilder: RequestBuilder = (path, { basePath = DEFAULT_BASE_P
     ...init,
     credentials: init.credentials ?? (apiOrigin ? 'include' : 'same-origin'),
     headers: {
-      ...(hasBody && { 'Content-Type': 'application/json' }),
+      ...(hasBody && !isFormData && { 'Content-Type': 'application/json' }),
       ...(token && { Authorization: `Bearer ${token}` }),
       ...headers,
     },
-    body: hasBody ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
+    body: hasBody ? (isFormData ? body : JSON.stringify(body)) : undefined,
   });
 };

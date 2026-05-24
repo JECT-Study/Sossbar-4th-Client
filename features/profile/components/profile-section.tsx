@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { EditIcon, PlusIcon, ShareIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
-import { TextareaLegacy } from '@/shared/components/textarea-legacy';
+import { Textarea } from '@/shared/components/textarea';
 
 const MAX_NICKNAME = 20;
 const MAX_BIO = 50;
@@ -71,7 +71,7 @@ export const ProfileSection = ({ isMyProfile }: ProfileSectionProps) => {
                 onChange={(e) => setNickname(e.target.value)}
               />
             </div>
-            <TextareaLegacy
+            <Textarea
               className="max-w-full"
               label="한 줄 소개"
               placeholder="협업을 즐기는 프론트엔드 개발자입니다."

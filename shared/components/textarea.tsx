@@ -35,7 +35,7 @@ interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   counterSuccessCompareCount?: number;
 }
 
-export const TextareaLegacy = ({
+export const Textarea = ({
   ref,
   className,
   textareaClassName,

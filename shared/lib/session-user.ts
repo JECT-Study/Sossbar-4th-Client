@@ -17,7 +17,6 @@ const getAuthStorage = (): Storage | null => {
 export const SESSION_USER_EVENT = 'sossbar:user-session-change';
 
 export type SessionUser = {
-  userId: number;
   nickname: string;
   email: string;
   profileImageUrl: string | null;
@@ -32,10 +31,6 @@ export const parseSessionUser = (raw: string | null): SessionUser | null => {
     if (!data || typeof data !== 'object' || !('nickname' in data)) {
       return null;
     }
-    const userId = 'userId' in data && typeof data.userId === 'number' ? data.userId : Number.NaN;
-    if (!Number.isFinite(userId) || userId <= 0) {
-      return null;
-    }
     const nickname = typeof data.nickname === 'string' ? data.nickname.trim() : '';
     if (!nickname) {
       return null;
@@ -45,7 +40,7 @@ export const parseSessionUser = (raw: string | null): SessionUser | null => {
       'profileImageUrl' in data && typeof data.profileImageUrl === 'string' && data.profileImageUrl.trim()
         ? data.profileImageUrl.trim()
         : null;
-    return { userId, nickname, email, profileImageUrl: url };
+    return { nickname, email, profileImageUrl: url };
   } catch {
     return null;
   }
@@ -65,7 +60,6 @@ export const setSessionUser = (user: SessionUser) => {
     return;
   }
   const payload: SessionUser = {
-    userId: user.userId,
     nickname: user.nickname.trim(),
     email: user.email.trim(),
     profileImageUrl: user.profileImageUrl?.trim() || null,

@@ -8,6 +8,7 @@ import { Suspense } from 'react';
 import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { Footer } from '@/shared/components/footer';
 import { Header } from '@/shared/components/header/header';
+import { AuthBootstrap } from '@/shared/providers/auth-bootstrap';
 
 const AppShellInner = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ const AppShellInner = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
+      <AuthBootstrap />
       <Suspense fallback={null}>
         <Header />
       </Suspense>
