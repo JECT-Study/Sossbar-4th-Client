@@ -9,7 +9,7 @@ export const useCreateReview = () => {
   return useMutation({
     mutationFn: createReview,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: reviewKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: reviewKeys.all });
     },
   });
 };

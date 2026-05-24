@@ -10,10 +10,10 @@ import {
 } from './fetchers';
 import { reviewKeys } from './query-keys';
 
-export const useReviews = () =>
+export const useReviews = (userId: number) =>
   useQuery({
-    queryKey: reviewKeys.lists(),
-    queryFn: fetchReviews,
+    queryKey: reviewKeys.reviews(userId),
+    queryFn: () => fetchReviews(userId),
   });
 
 export const useReviewFormData = () =>

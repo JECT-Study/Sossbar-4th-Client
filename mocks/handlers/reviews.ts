@@ -2,6 +2,28 @@ import { http, HttpResponse } from 'msw';
 
 const BASE = '/api/v1';
 
+/** 본인으로 간주할 사용자 ID. 이 값과 일치하면 negativeFeedback까지 포함해 응답한다. */
+const MY_USER_ID = 1;
+
+const mockReceivedReviews = [
+  {
+    reviewId: 1,
+    projectName: '프로젝트 1',
+    host: '주최사',
+    positiveFeedback: '항상 책임감 있게 작업을 수행해주시고 협업 분위기도 좋게 이끌어주셨습니다.',
+    negativeFeedback: '가끔 진행 상황 공유가 조금 늦어지는 점이 있었습니다.',
+    reviewerNickname: '익명의 동료',
+  },
+  {
+    reviewId: 2,
+    projectName: '프로젝트 2',
+    host: '사이드 프로젝트',
+    positiveFeedback: '맡은 부분을 끝까지 책임지고 마무리해주셔서 믿고 협업할 수 있었어요.',
+    negativeFeedback: '회의 때 의견을 조금 더 적극적으로 내주시면 좋겠어요.',
+    reviewerNickname: '익명의 동료',
+  },
+] as const;
+
 const mockTags = [
   { tagId: 1, name: '응답이 빨라요' },
   { tagId: 2, name: '적극적이에요' },
@@ -137,24 +159,18 @@ export const reviewsHandlers = [
     return HttpResponse.json({ tags: mockTags, spectrums: mockSpectrums });
   }),
 
-  http.get(`${BASE}/reviews`, () => {
-    return HttpResponse.json([
-      {
-        reviewId: 1,
-        projectId: 1,
-        authorNickname: '익명',
-        praise: '소통이 잘 되고 매우 꼼꼼하게 작업해주셨습니다.',
-        improvement: '일정 관리를 좀 더 세밀하게 하면 좋을 것 같아요.',
-        tags: [mockTags[0], mockTags[1]],
-        spectrums: [
-          { spectrumId: 1, value: 70 },
-          { spectrumId: 2, value: 55 },
-          { spectrumId: 3, value: 45 },
-          { spectrumId: 4, value: 60 },
-        ],
-        createdAt: '2026-04-20T00:00:00Z',
-      },
-    ]);
+  http.get(`${BASE}/users/:userId/reviews`, ({ params }) => {
+    const isMine = Number(params.userId) === MY_USER_ID;
+    const data = mockReceivedReviews.map(({ negativeFeedback, ...rest }) =>
+      isMine ? { ...rest, negativeFeedback } : rest,
+    );
+
+    return HttpResponse.json({
+      status: 200,
+      code: 'COMMON-200',
+      message: '성공적으로 조회했습니다.',
+      data,
+    });
   }),
 
   http.get(`${BASE}/reviews/tags/:userId`, () => {

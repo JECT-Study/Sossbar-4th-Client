@@ -40,13 +40,11 @@ export type SpectrumStats = {
 
 export type Review = {
   reviewId: number;
-  projectId: number;
-  authorNickname: string;
-  praise: string;
-  improvement: string;
-  tags: Tag[];
-  spectrums: SpectrumWithValue[];
-  createdAt: string;
+  projectName: string;
+  host: string;
+  positiveFeedback: string;
+  negativeFeedback?: string; // 본인 후기 조회 시에만 포함. 타인 조회 시 응답에서 제외.
+  reviewerNickname: string;
 };
 
 export type ReviewFormData = {

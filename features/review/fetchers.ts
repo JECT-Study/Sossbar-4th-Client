@@ -4,7 +4,7 @@ import type { CreateReviewRequest, ReceivedTags, Review, ReviewFormData, Spectru
 
 export const fetchReviewFormData = (): Promise<ReviewFormData> => apiRequest<ReviewFormData>('/form-data');
 
-export const fetchReviews = (): Promise<Review[]> => apiRequest<Review[]>('/reviews');
+export const fetchReviews = (userId: number): Promise<Review[]> => apiRequest<Review[]>(`/users/${userId}/reviews`);
 
 export const fetchReceivedTags = (userId: number): Promise<ReceivedTags> =>
   apiRequest<ReceivedTags>(`/reviews/tags/${userId}`);
