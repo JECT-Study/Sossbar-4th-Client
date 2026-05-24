@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { getMyProfile } from '@/features/auth/fetchers';
@@ -14,6 +14,10 @@ import { setSessionUser } from '@/shared/lib/session-user';
  * 카카오 OAuth 없이 테스트 계정 토큰을 발급받아 실제 로그인 플로우(토큰 저장 → 프로필 조회 → 라우팅)를 재현합니다.
  */
 const TestLoginPage = () => {
+  if (process.env.NODE_ENV !== 'development') {
+    notFound();
+  }
+
   const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
 
