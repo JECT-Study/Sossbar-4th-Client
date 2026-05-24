@@ -22,4 +22,13 @@ export const mypageHandlers = [
       data: mockProfile,
     });
   }),
+  // NOTE: API 명세에 없는 mock api입니다. 추후에 변경될 수 있어요.
+  http.delete(`${BASE}/users/profile`, async () => {
+    return HttpResponse.json({
+      status: 200,
+      code: 'COMMON-200',
+      message: '회원 탈퇴가 완료되었습니다.',
+      data: { userId: mockProfile.userId },
+    });
+  }),
 ];
