@@ -9,7 +9,7 @@ export interface Profile {
 }
 
 export type UpdateProfileInfo = {
-  nickname: string;
+  username: string;
   bio: string;
 };
 

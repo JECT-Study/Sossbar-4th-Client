@@ -62,7 +62,7 @@ export const useProfileEditForm = ({ profile, onSubmitProfile }: UseProfileEditF
     try {
       await onSubmitProfile({
         info: {
-          nickname: data.nickname.trim(),
+          username: data.nickname.trim(),
           bio: data.bio.trim(),
         },
         profileImage: data.profileImage,
