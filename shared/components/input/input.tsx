@@ -84,7 +84,7 @@ export const Input = ({
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className={cn(inputVariants({ disabled, error }), className)}
+          className={cn(inputVariants({ disabled: disabled || readOnly, error }), className)}
           aria-invalid={error || undefined}
           {...restProps}
         />
