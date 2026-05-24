@@ -8,7 +8,7 @@ import { Controller, useWatch } from 'react-hook-form';
 import { CameraIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { TextField } from '@/shared/components/text-field';
-import { Textarea } from '@/shared/components/textarea';
+import { TextareaField } from '@/shared/components/textarea-field';
 
 import type { Profile, UpdateProfilePayload } from '../types';
 
@@ -32,7 +32,6 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
     control,
   } = form;
 
-  const bio = useWatch({ control, name: 'bio' });
   const nickname = useWatch({ control, name: 'nickname' });
   const previewSrc = previewImageUrl ?? profile.profileImageUrl;
 
@@ -100,16 +99,13 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
               control={control}
               name="bio"
               render={({ field }) => (
-                <Textarea
+                <TextareaField
                   className="max-w-full"
                   label="한 줄 소개"
                   placeholder="협업을 즐기는 프론트엔드 개발자입니다."
                   maxLength={PROFILE_BIO_MAX_LENGTH}
-                  variant={errors.bio ? 'error' : 'default'}
                   errorMessage={errors.bio?.message}
                   disabled={isSubmitting}
-                  currentCount={bio.length}
-                  totalCount={PROFILE_BIO_MAX_LENGTH}
                   {...field}
                 />
               )}
