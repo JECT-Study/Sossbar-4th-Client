@@ -14,11 +14,15 @@ export const metadata: Metadata = {
 
 const Page = async () => {
   const queryClient = getQueryClient();
+  const hasApiOrigin = Boolean(process.env.NEXT_PUBLIC_API_ORIGIN?.trim());
 
-  await queryClient.prefetchQuery({
-    queryKey: mypageKeys.all,
-    queryFn: () => fetchProfile(),
-  });
+  // NOTE: MSW 환경에서는 서버에서 상대 URL을 fetch 할 수 없으므로 prefetch를 건너뜁니다. (TODO: 추후 변경 가능성 있음)
+  if (hasApiOrigin) {
+    await queryClient.prefetchQuery({
+      queryKey: mypageKeys.all,
+      queryFn: () => fetchProfile(),
+    });
+  }
 
   return (
     <section className="min-h-0 flex-1" aria-label="마이페이지">
