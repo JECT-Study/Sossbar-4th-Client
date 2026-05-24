@@ -50,7 +50,7 @@ export const TextareaField = ({
           error={!!errorMessage}
           {...restProps}
         />
-        {errorMessage ? <ErrorMessage id={`${name}-error-message`}>{errorMessage}</ErrorMessage> : null}
+        {errorMessage && !disabled ? <ErrorMessage id={`${name}-error-message`}>{errorMessage}</ErrorMessage> : null}
       </div>
     </div>
   );
