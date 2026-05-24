@@ -1,7 +1,7 @@
 export { ReviewSubmitDialog } from './components/review-submit-dialog';
 export { ReviewWriteContent } from './components/review-write-content';
-export { useCreateReview } from './api/mutations';
-export { reviewKeys } from './api/query-keys';
+export { useCreateReview } from './mutations';
+export { reviewKeys } from './query-keys';
 export {
   useReceivedTags,
   useReceivedTagsByProject,
@@ -9,7 +9,7 @@ export {
   useReviews,
   useSpectrumStats,
   useSpectrumStatsByProject,
-} from './api/queries';
+} from './queries';
 export { ReviewListCard } from './components/review-list-card';
 export { SoftSkillsCard } from './components/softskills-card';
 export { TagCard } from './components/tag-card';
@@ -24,4 +24,4 @@ export type {
   SpectrumStats,
   SpectrumWithValue,
   Tag,
-} from './types/review';
+} from './types';
