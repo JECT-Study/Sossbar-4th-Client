@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { AuthGateLink } from '@/shared/components/auth-gate-link';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 import { useSessionUser } from '@/shared/lib/session-user';
@@ -11,9 +12,9 @@ import { Button } from '../button/button';
 
 const navLinks = (userId: number | null) =>
   [
-    { href: userId ? ROUTES.PROFILE(userId) : '/', label: '내 프로필' },
-    { href: '/projects', label: '프로젝트 관리' },
-    { href: '/profile-examples', label: '프로필 예시 보기' },
+    { href: ROUTES.PROFILE(userId ?? ''), label: '내 프로필', requiresAuth: true },
+    { href: '/projects', label: '프로젝트 관리', requiresAuth: true },
+    { href: ROUTES.PROFILE_EXAMPLES, label: '프로필 예시 보기', requiresAuth: false },
   ] as const;
 
 export const HeaderMainNav = () => {
@@ -24,14 +25,22 @@ export const HeaderMainNav = () => {
   return (
     <nav aria-label="주요 메뉴">
       <ul className="flex items-center gap-4">
-        {navLinks(userId).map(({ href, label }) => {
+        {navLinks(userId).map(({ href, label, requiresAuth }) => {
           const isActive = pathname === href;
+          const linkClassName = cn('h-10 px-5', isActive && 'bg-surface-gray-subtle rounded-md');
+
           return (
             <li key={label}>
               <Button asChild size="small" variant="tertiary">
-                <Link href={href} className={cn('h-10 px-5', isActive && 'bg-surface-gray-subtle rounded-md')}>
-                  {label}
-                </Link>
+                {requiresAuth ? (
+                  <AuthGateLink href={href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
+                    {label}
+                  </AuthGateLink>
+                ) : (
+                  <Link href={href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
+                    {label}
+                  </Link>
+                )}
               </Button>
             </li>
           );
