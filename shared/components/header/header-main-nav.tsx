@@ -6,24 +6,28 @@ import { usePathname } from 'next/navigation';
 import { AuthGateLink } from '@/shared/components/auth-gate-link';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
+import { useSessionUser } from '@/shared/lib/session-user';
 
 import { Button } from '../button/button';
 
-const navLinks = [
-  { href: ROUTES.MY_PAGE, label: '내 프로필', widthClassName: 'w-[100px]', requiresAuth: true },
-  { href: '/projects', label: '프로젝트 관리', widthClassName: 'w-[127px]', requiresAuth: true },
-  { href: ROUTES.PROFILE_EXAMPLES, label: '프로필 예시 보기', widthClassName: 'w-[145px]', requiresAuth: false },
-] as const;
+const navLinks = (userId: number | null) =>
+  [
+    { href: ROUTES.PROFILE(userId ?? ''), label: '내 프로필', requiresAuth: true },
+    { href: '/projects', label: '프로젝트 관리', requiresAuth: true },
+    { href: ROUTES.PROFILE_EXAMPLES, label: '프로필 예시 보기', requiresAuth: false },
+  ] as const;
 
 export const HeaderMainNav = () => {
   const pathname = usePathname();
+  const sessionUser = useSessionUser();
+  const userId = sessionUser?.userId ?? null;
 
   return (
     <nav aria-label="주요 메뉴">
       <ul className="flex items-center gap-4">
-        {navLinks.map(({ href, label, widthClassName, requiresAuth }) => {
+        {navLinks(userId).map(({ href, label, requiresAuth }) => {
           const isActive = pathname === href;
-          const linkClassName = cn('h-10 px-0', widthClassName, isActive && 'bg-surface-gray-subtle rounded-md');
+          const linkClassName = cn('h-10 px-5', isActive && 'bg-surface-gray-subtle rounded-md');
 
           return (
             <li key={label}>
