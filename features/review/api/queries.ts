@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchReviewFormData, fetchReviews, fetchSpectrumsByProject, fetchTagsByProject } from './fetchers';
-
-export const reviewKeys = {
-  all: ['review'] as const,
-  lists: () => [...reviewKeys.all, 'list'] as const,
-  formData: () => [...reviewKeys.all, 'formData'] as const,
-  tagsByProject: (projectId: number) => [...reviewKeys.all, 'tags', projectId] as const,
-  spectrumsByProject: (projectId: number) => [...reviewKeys.all, 'spectrums', projectId] as const,
-};
+import {
+  fetchReceivedTags,
+  fetchReceivedTagsByProject,
+  fetchReviewFormData,
+  fetchReviews,
+  fetchSpectrumStats,
+  fetchSpectrumStatsByProject,
+} from './fetchers';
+import { reviewKeys } from './query-keys';
 
 export const useReviews = () =>
   useQuery({
@@ -22,14 +22,26 @@ export const useReviewFormData = () =>
     queryFn: fetchReviewFormData,
   });
 
-export const useTagsByProject = (projectId: number) =>
+export const useReceivedTags = (userId: number) =>
   useQuery({
-    queryKey: reviewKeys.tagsByProject(projectId),
-    queryFn: () => fetchTagsByProject(projectId),
+    queryKey: reviewKeys.receivedTags(userId),
+    queryFn: () => fetchReceivedTags(userId),
   });
 
-export const useSpectrumsByProject = (projectId: number) =>
+export const useReceivedTagsByProject = (userId: number, projectId: number) =>
   useQuery({
-    queryKey: reviewKeys.spectrumsByProject(projectId),
-    queryFn: () => fetchSpectrumsByProject(projectId),
+    queryKey: reviewKeys.receivedTagsByProject(userId, projectId),
+    queryFn: () => fetchReceivedTagsByProject(userId, projectId),
+  });
+
+export const useSpectrumStats = (userId: number) =>
+  useQuery({
+    queryKey: reviewKeys.spectrumStats(userId),
+    queryFn: () => fetchSpectrumStats(userId),
+  });
+
+export const useSpectrumStatsByProject = (userId: number, projectId: number) =>
+  useQuery({
+    queryKey: reviewKeys.spectrumStatsByProject(userId, projectId),
+    queryFn: () => fetchSpectrumStatsByProject(userId, projectId),
   });

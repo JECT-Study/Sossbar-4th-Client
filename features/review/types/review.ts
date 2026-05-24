@@ -14,8 +14,28 @@ export type SpectrumWithValue = {
   value: number;
 };
 
-export type SpectrumWithAverage = Spectrum & {
-  averageValue: number;
+export type ReceivedTagCount = {
+  tagId: number;
+  tagName: string;
+  count: number;
+};
+
+export type ReceivedTags = {
+  top3Tags: ReceivedTagCount[];
+  allTags: ReceivedTagCount[];
+};
+
+export type SpectrumInfo = {
+  spectrumAxisId: number;
+  axisName: string;
+  averageStrength: number;
+  totalCount: number;
+  leftStrengthCount: number;
+  rightStrengthCount: number;
+};
+
+export type SpectrumStats = {
+  spectrumInfoResDtos: SpectrumInfo[];
 };
 
 export type Review = {
