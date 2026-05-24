@@ -15,7 +15,7 @@ type ProfilePageContentProps = {
 export const ProfilePageContent = ({ userId, isMyProfile }: ProfilePageContentProps) => {
   return (
     <PageContainer className="mb-20">
-      <ProfileSection isMyProfile={isMyProfile} />
+      <ProfileSection isMyProfile={isMyProfile} userId={userId} />
       <Tab.Root key={userId} defaultValue="all">
         <Tab.List aria-label="프로필 정보 탭" className="w-full">
           <Tab.Trigger value="all">전체</Tab.Trigger>
