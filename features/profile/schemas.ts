@@ -14,11 +14,7 @@ export const ProfileEditFormSchema = z.object({
     .trim()
     .min(1, { message: '닉네임을 입력해 주세요.' })
     .max(PROFILE_NICKNAME_MAX_LENGTH, `닉네임은 ${PROFILE_NICKNAME_MAX_LENGTH}자 이하로 입력해 주세요.`),
-  bio: z
-    .string()
-    .trim()
-    .min(1, { message: '한 줄 소개를 입력해 주세요.' })
-    .max(PROFILE_BIO_MAX_LENGTH, `한 줄 소개는 ${PROFILE_BIO_MAX_LENGTH}자 이하로 입력해 주세요.`),
+  bio: z.string().trim().max(PROFILE_BIO_MAX_LENGTH, `한 줄 소개는 ${PROFILE_BIO_MAX_LENGTH}자 이하로 입력해 주세요.`),
   profileImage: z
     .custom<File | null>((value) => value === null || isProfileImageFile(value), {
       message: '이미지 파일을 선택해 주세요.',
