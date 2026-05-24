@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "Bash(git cherry-pick *)",
+      "Bash(git branch *)",
+      "Bash(git fetch *)",
+      "Bash(git push *)",
+      "Bash(cat .env.local)",
+      "Bash(cat .env)",
+      "Bash(cat .env.example)",
+      "Bash(cat .env.local.example)",
+      "Bash(pnpm build *)",
+      "Bash(git diff *)"
+    ]
+  }
+}

@@ -1,3 +1,7 @@
+import { getAuthToken } from '@/shared/lib/auth-token';
+
+import { buildApiUrl, getApiOrigin } from './resolve-api-url';
+
 export type ApiRequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
   basePath?: string;
@@ -9,13 +13,18 @@ const DEFAULT_BASE_PATH = '/api/v1';
 
 export const requestBuilder: RequestBuilder = (path, { basePath = DEFAULT_BASE_PATH, headers, body, ...init }) => {
   const hasBody = body !== undefined;
+  const url = buildApiUrl(basePath, path);
+  const apiOrigin = getApiOrigin();
+  const token = getAuthToken()?.accessToken;
 
-  return new Request(`${basePath}${path}`, {
+  return new Request(url, {
     ...init,
+    credentials: init.credentials ?? (apiOrigin ? 'include' : 'same-origin'),
     headers: {
       ...(hasBody && { 'Content-Type': 'application/json' }),
+      ...(token && { Authorization: `Bearer ${token}` }),
       ...headers,
     },
-    body: hasBody ? JSON.stringify(body) : undefined,
+    body: hasBody ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
   });
 };

@@ -1,9 +1,8 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
+import { AuthGateLink } from '@/shared/components/auth-gate-link';
 import { Button } from '@/shared/components/button/button';
 import { PageContainer } from '@/shared/components/page-container';
-import { ROUTES } from '@/shared/constants/routes';
 
 export const HomeHeroSection = () => {
   return (
@@ -22,10 +21,10 @@ export const HomeHeroSection = () => {
         </p>
         <div className="mt-[40px] flex items-center gap-4">
           <Button asChild variant="primary" size="large">
-            <Link href={ROUTES.LOGIN}>프로젝트 시작하기</Link>
+            <AuthGateLink href="/projects">프로젝트 시작하기</AuthGateLink>
           </Button>
           <Button asChild variant="secondary" size="large">
-            <Link href={ROUTES.LOGIN}>내 프로필 보기</Link>
+            <AuthGateLink href="/mypage">내 프로필 보기</AuthGateLink>
           </Button>
         </div>
       </div>
