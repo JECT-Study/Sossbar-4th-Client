@@ -14,9 +14,16 @@ const mockProfile = {
 };
 
 type MockProfileInfo = {
-  nickname?: string;
+  username?: string;
   bio?: string;
 };
+
+const readFileAsDataUrl = (file: File): Promise<string> =>
+  new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.readAsDataURL(file);
+  });
 
 const parseProfileInfo = async (formData: FormData): Promise<MockProfileInfo> => {
   const info = formData.get('info');
@@ -52,10 +59,11 @@ export const profileHandlers = [
     const info = await parseProfileInfo(formData);
     const profileImage = formData.get('profileImage');
 
-    mockProfile.nickname = info.nickname ?? mockProfile.nickname;
+    mockProfile.nickname = info.username ?? mockProfile.nickname;
     mockProfile.bio = info.bio ?? mockProfile.bio;
-    mockProfile.profileImageUrl =
-      profileImage instanceof File && profileImage.size > 0 ? PROFILE_IMAGE_URL : mockProfile.profileImageUrl;
+    if (profileImage instanceof File && profileImage.size > 0) {
+      mockProfile.profileImageUrl = await readFileAsDataUrl(profileImage);
+    }
 
     return HttpResponse.json({
       status: 200,
