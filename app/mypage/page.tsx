@@ -1,9 +1,9 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
+import { fetchProfile } from '@/features/mypage/apis/fetch-profile.api';
 import { MypageForm } from '@/features/mypage/components/mypage-form';
 import { mypageKeys } from '@/features/mypage/mypage.query-key';
-import { fetchProfile } from '@/features/profile/fetchers';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import type { Metadata } from 'next';
