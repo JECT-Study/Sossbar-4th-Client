@@ -7,7 +7,7 @@ import { Controller, useWatch } from 'react-hook-form';
 
 import { PlusIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
-import { Input } from '@/shared/components/input';
+import { TextField } from '@/shared/components/text-field';
 import { Textarea } from '@/shared/components/textarea';
 
 import type { Profile, UpdateProfilePayload } from '../types';
@@ -81,27 +81,21 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
             </button>
           </div>
           <div className="flex w-full max-w-120 flex-1 flex-col gap-2">
-            <div className="flex flex-col">
-              <label className="text-heading-xs text-text-subtle mb-2 font-bold" htmlFor="profile-nickname">
-                닉네임 <span className="text-text-tertiary">*</span>
-              </label>
-              <Controller
-                control={control}
-                name="nickname"
-                render={({ field }) => (
-                  <Input
-                    id="profile-nickname"
-                    className="max-w-full"
-                    placeholder="내용을 입력하세요"
-                    maxLength={PROFILE_NICKNAME_MAX_LENGTH}
-                    variant={errors.nickname ? 'error' : 'default'}
-                    errorMessage={errors.nickname?.message}
-                    disabled={isSubmitting}
-                    {...field}
-                  />
-                )}
-              />
-            </div>
+            <Controller
+              control={control}
+              name="nickname"
+              render={({ field }) => (
+                <TextField
+                  label="닉네임"
+                  required
+                  placeholder="내용을 입력하세요"
+                  maxLength={PROFILE_NICKNAME_MAX_LENGTH}
+                  errorMessage={errors.nickname?.message}
+                  disabled={isSubmitting}
+                  {...field}
+                />
+              )}
+            />
             <Controller
               control={control}
               name="bio"
