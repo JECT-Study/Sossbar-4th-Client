@@ -58,7 +58,7 @@ export const ReviewListCard = ({ variant, isMyProfile }: ReviewListCardProps) =>
   const reviews = createReviews(isMyProfile);
   const displayTone = isMyProfile ? selectedTone : 'positive';
   const showThumbnail = variant === 'all';
-  const showItemMenu = isMyProfile;
+  const showItemMenu = isMyProfile && selectedTone === 'negative';
   const visibleReviews = isExpanded ? reviews : reviews.slice(0, INITIAL_VISIBLE_REVIEW_COUNT);
   const showMoreButton = reviews.length > INITIAL_VISIBLE_REVIEW_COUNT && !isExpanded;
 
