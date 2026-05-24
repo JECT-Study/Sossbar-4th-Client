@@ -29,3 +29,23 @@ pnpm dev
 ```
 
 브라우저에서 `http://localhost:3000`을 열어 결과를 확인할 수 있습니다.
+
+## 환경 변수
+
+```bash
+cp .env.example .env.local
+```
+
+| 변수                     | 로컬                        | Vercel Preview / Production   |
+| ------------------------ | --------------------------- | ----------------------------- |
+| `NEXT_PUBLIC_API_ORIGIN` | 비움 (MSW가 `/api/v1` 처리) | 백엔드 배포 URL (끝 `/` 없이) |
+
+## Vercel 배포 (1차)
+
+1. Vercel에서 GitHub 레포 연결, **Root Directory** = `Sossbar-4th-Client` (모노레포 루트가 상위일 때)
+2. Framework: Next.js · Install: `pnpm install` · Build: `pnpm build` · Node **20**
+3. **Production Branch**: `main` · **Preview**: `develop` (팀 합의에 맞게 조정)
+4. Environment Variables에 `NEXT_PUBLIC_API_ORIGIN` 등록 (Preview / Production 각각)
+5. MSW는 `development`에서만 동작합니다. Preview URL에서는 Mock이 없으므로 API 미연동 페이지는 빈 화면·에러가 날 수 있습니다.
+
+백엔드 CORS에 `http://localhost:3000`, `https://*.vercel.app`(또는 고정 Preview URL) 허용이 필요합니다.
