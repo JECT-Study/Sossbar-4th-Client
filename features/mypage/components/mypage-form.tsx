@@ -12,7 +12,16 @@ export const MypageForm = () => {
   const { data: profile } = useProfile();
 
   const [marketingAgreed, , , toggleMarketingAgreed] = useBooleanState(false);
-  const [accountActionsOpen, openAccountActions] = useBooleanState(false);
+  const [accountActionsOpen, openAccountActions, closeAccountActions] = useBooleanState(false);
+
+  const handleAccountActionsChange = (open: boolean) => {
+    if (open) {
+      openAccountActions();
+      return;
+    }
+
+    closeAccountActions();
+  };
 
   return (
     <form className="mx-auto flex w-full max-w-[480px] flex-col gap-10 py-20" onSubmit={(e) => e.preventDefault()}>
@@ -50,7 +59,7 @@ export const MypageForm = () => {
         </Button>
       </div>
 
-      <AccountDeletionModal open={accountActionsOpen} onOpenChange={openAccountActions} />
+      <AccountDeletionModal open={accountActionsOpen} onOpenChange={handleAccountActionsChange} />
     </form>
   );
 };
