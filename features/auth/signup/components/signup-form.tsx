@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/components/button';
 import { InformationDialog } from '@/shared/components/dialog/information-dialog';
 import { TextField } from '@/shared/components/text-field';
-import { TextareaField } from '@/shared/components/textarea-field/textarea-field';
+import { Textarea } from '@/shared/components/textarea';
 
 import { BIO_MAX_LENGTH } from '../signup-constants';
 import { SignupAgreement } from './signup-agreement';
@@ -23,7 +23,10 @@ export const SignupForm = () => {
     setValue,
     getValues,
     control,
+    watch,
   } = form;
+
+  const bioValue = watch('bio') ?? '';
 
   const goToProfile = () => router.push('/');
 
@@ -39,12 +42,15 @@ export const SignupForm = () => {
         {...register('name')}
       />
 
-      <TextareaField
+      <Textarea
         label="한 줄 소개"
         placeholder="내용을 입력해 주세요. (기본상태)"
         maxLength={BIO_MAX_LENGTH}
+        variant={errors.bio ? 'error' : 'default'}
         errorMessage={errors.bio?.message}
-        className="mt-10"
+        currentCount={bioValue.length}
+        totalCount={BIO_MAX_LENGTH}
+        className="mt-10 max-w-none"
         {...register('bio')}
       />
 
