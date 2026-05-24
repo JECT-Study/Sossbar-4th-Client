@@ -1,14 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CreateProjectModal } from '@/features/project/components/create-project-modal';
 import { ProjectCard } from '@/features/project/components/project-card';
+import { getCompletedReviews } from '@/features/project/lib/completed-review-storage';
 import { SettingIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { PageContainer } from '@/shared/components/page-container';
 
-const mockProjects = [
+type ProjectMember = {
+  memberId: number;
+  name: string;
+  reviewStatus: 'writable' | 'completed' | 'self';
+};
+
+type ProjectListItem = {
+  projectId: number;
+  projectName: string;
+  host: string;
+  startDate: string;
+  endDate: string;
+  projectLink: string;
+  projectImage: string | null;
+  projectStatus: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
+  myMemberStatus: 'LEADER' | 'MEMBER';
+  members: ProjectMember[];
+};
+
+const applyCompletedReviews = (projects: ProjectListItem[]): ProjectListItem[] => {
+  const completed = getCompletedReviews();
+
+  return projects.map((project) => ({
+    ...project,
+    members: project.members.map((member) => {
+      if (member.reviewStatus !== 'writable') {
+        return member;
+      }
+
+      return completed[`${project.projectId}-${member.memberId}`]
+        ? { ...member, reviewStatus: 'completed' as const }
+        : member;
+    }),
+  }));
+};
+
+const mockProjects: ProjectListItem[] = [
   {
     projectId: 1,
     projectName: '소스바 프로젝트',
@@ -43,10 +80,11 @@ const mockProjects = [
       { memberId: 8, name: '최준호', reviewStatus: 'writable' },
     ],
   },
-] as const;
+];
 
 export const ProjectsPageContent = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const projects = useMemo(() => applyCompletedReviews(mockProjects), []);
 
   return (
     <PageContainer>
@@ -69,7 +107,7 @@ export const ProjectsPageContent = () => {
       </div>
 
       <div className="my-10.5 space-y-6">
-        {mockProjects.map((project) => (
+        {projects.map((project) => (
           <ProjectCard key={project.projectId} project={project} />
         ))}
       </div>

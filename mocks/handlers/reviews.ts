@@ -150,8 +150,23 @@ const mockProjectSpectrumInfo = [
   },
 ] as const;
 
+const submittedReviews = new Set<string>();
+
 export const reviewsHandlers = [
-  http.post(`${BASE}/reviews`, () => {
+  http.post(`${BASE}/reviews`, async ({ request }) => {
+    const body = (await request.json()) as {
+      reviewReqDto?: { projectId?: number; revieweeId?: number };
+      projectId?: number;
+      revieweeId?: number;
+    };
+
+    const projectId = body.reviewReqDto?.projectId ?? body.projectId;
+    const revieweeId = body.reviewReqDto?.revieweeId ?? body.revieweeId;
+
+    if (projectId != null && revieweeId != null) {
+      submittedReviews.add(`${projectId}-${revieweeId}`);
+    }
+
     return new HttpResponse(null, { status: 201 });
   }),
 
