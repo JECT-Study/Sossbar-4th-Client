@@ -22,7 +22,7 @@ export const buildProfileShareMetadata = (userId: number, userName?: string): Me
       siteName: 'Sossbar',
       images: [
         {
-          url: '/Sossbar-logo2.svg',
+          url: '/Sossbar_logo.svg',
           alt: 'Sossbar',
         },
       ],
@@ -31,6 +31,7 @@ export const buildProfileShareMetadata = (userId: number, userName?: string): Me
       card: 'summary',
       title: PROFILE_SHARE_TITLE,
       description,
+      images: ['/Sossbar_logo.svg'],
     },
   };
 };

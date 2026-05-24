@@ -38,7 +38,7 @@ export const ProfileShareTooltip = ({
       role="status"
       aria-live="polite"
       className={cn(
-        'pointer-events-auto absolute bottom-full left-1/2 z-20 mb-2 flex -translate-x-1/2 flex-col items-center',
+        'pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 flex -translate-x-1/2 flex-col items-center',
         className,
       )}
     >
@@ -46,7 +46,7 @@ export const ProfileShareTooltip = ({
         <p className="text-body-sm text-text-basic-inverse font-normal whitespace-nowrap">{message}</p>
         <button
           type="button"
-          className="text-text-basic-inverse flex size-4 shrink-0 items-center justify-center"
+          className="text-text-basic-inverse pointer-events-auto flex size-4 shrink-0 items-center justify-center"
           aria-label="알림 닫기"
           onClick={onClose}
         >

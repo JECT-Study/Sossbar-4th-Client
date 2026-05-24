@@ -8,6 +8,8 @@ import { EditIcon, PlusIcon, ShareIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
 import { TextareaLegacy } from '@/shared/components/textarea-legacy';
+import { cn } from '@/shared/lib/cn';
+import { copyTextToClipboard } from '@/shared/lib/copy-text-to-clipboard';
 
 import { ProfileShareTooltip } from './profile-share-tooltip';
 
@@ -39,18 +41,18 @@ export const ProfileSection = ({ isMyProfile, userId }: ProfileSectionProps) => 
   const [nickname, setNickname] = useState('');
   const [bio, setBio] = useState('');
   const [isShareTooltipOpen, setIsShareTooltipOpen] = useState(false);
+  const [shareTooltipMessage, setShareTooltipMessage] = useState('링크가 복사되었습니다');
 
   const closeShareTooltip = useCallback(() => setIsShareTooltipOpen(false), []);
 
   const handleShareProfile = async () => {
-    const clipboardText = buildProfileShareClipboardText(userId);
-
-    try {
-      await navigator.clipboard.writeText(clipboardText);
-      setIsShareTooltipOpen(true);
-    } catch {
-      setIsShareTooltipOpen(false);
+    if (!Number.isFinite(userId) || userId <= 0) {
+      return;
     }
+
+    const copied = await copyTextToClipboard(buildProfileShareClipboardText(userId));
+    setShareTooltipMessage(copied ? '링크가 복사되었습니다' : '링크 복사에 실패했습니다');
+    setIsShareTooltipOpen(true);
   };
 
   const handleSubmitProfile = () => {
@@ -130,11 +132,15 @@ export const ProfileSection = ({ isMyProfile, userId }: ProfileSectionProps) => 
               variant="primary"
               size="medium"
               leftIcon={<ShareIcon aria-hidden />}
+              className={cn(
+                isShareTooltipOpen &&
+                  'bg-button-primary-fill-pressed hover:bg-button-primary-fill-pressed focus:bg-button-primary-fill-pressed active:bg-button-primary-fill-pressed',
+              )}
               onClick={() => void handleShareProfile()}
             >
               내 프로필 공유하기
             </Button>
-            <ProfileShareTooltip open={isShareTooltipOpen} onClose={closeShareTooltip} />
+            <ProfileShareTooltip open={isShareTooltipOpen} onClose={closeShareTooltip} message={shareTooltipMessage} />
           </div>
         </div>
       ) : null}
