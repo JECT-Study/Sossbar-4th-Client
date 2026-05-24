@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/components/button';
 import { InformationDialog } from '@/shared/components/dialog/information-dialog';
 import { TextField } from '@/shared/components/text-field';
-import { Textarea } from '@/shared/components/textarea';
+import { TextareaLegacy } from '@/shared/components/textarea-legacy';
 
 import { useSignupForm } from '../use-signup-form';
 import { FormField } from './form-field';
@@ -42,7 +42,7 @@ export const SignupForm = () => {
       />
 
       <FormField label="한 줄 소개" htmlFor="bio" className="mt-10">
-        <Textarea
+        <TextareaLegacy
           variant={errors.bio ? 'error' : 'default'}
           id="bio"
           placeholder="내용을 입력해 주세요. (기본상태)"
