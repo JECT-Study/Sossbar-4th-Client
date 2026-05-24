@@ -25,6 +25,6 @@ export const requestBuilder: RequestBuilder = (path, { basePath = DEFAULT_BASE_P
       ...(token && { Authorization: `Bearer ${token}` }),
       ...headers,
     },
-    body: hasBody ? JSON.stringify(body) : undefined,
+    body: hasBody ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
   });
 };

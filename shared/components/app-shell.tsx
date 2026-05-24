@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { LoginDialog } from '@/shared/components/dialog/login-dialog';
+import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { Footer } from '@/shared/components/footer';
 import { Header } from '@/shared/components/header/header';
 
@@ -27,7 +27,7 @@ const AppShellInner = ({ children }: { children: ReactNode }) => {
       <main className="flex-1">{children}</main>
       <Footer variant={footerVariant} />
       <Suspense fallback={null}>
-        <LoginDialog />
+        <LoginModal />
       </Suspense>
     </>
   );
