@@ -28,7 +28,12 @@ export const consumeLoginReturnPath = (): string => {
   const raw = sessionStorage.getItem(LOGIN_RETURN_KEY);
   sessionStorage.removeItem(LOGIN_RETURN_KEY);
 
-  if (!raw?.startsWith('/') || BLOCKED_PREFIXES.some((prefix) => raw.startsWith(prefix))) {
+  if (
+    !raw?.startsWith('/') ||
+    raw.startsWith('//') ||
+    raw.includes('://') ||
+    BLOCKED_PREFIXES.some((prefix) => raw === prefix || raw.startsWith(`${prefix}/`) || raw.startsWith(`${prefix}?`))
+  ) {
     return '/';
   }
 
