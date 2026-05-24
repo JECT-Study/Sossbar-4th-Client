@@ -7,31 +7,40 @@ export type AuthToken = {
   userId: number;
 };
 
-export const getAuthToken = (): AuthToken | null => {
+const getStorage = (): Storage | null => {
   if (isServer) {
     return null;
   }
-  const raw = window.sessionStorage.getItem(STORAGE_KEY);
+  return process.env.NODE_ENV === 'development' ? window.sessionStorage : window.localStorage;
+};
+
+export const getAuthToken = (): AuthToken | null => {
+  const raw = getStorage()?.getItem(STORAGE_KEY);
   if (!raw) {
     return null;
   }
   try {
-    return JSON.parse(raw) as AuthToken;
+    const data = JSON.parse(raw) as unknown;
+    if (
+      !data ||
+      typeof data !== 'object' ||
+      !('accessToken' in data) ||
+      !('userId' in data) ||
+      typeof (data as { accessToken: unknown }).accessToken !== 'string' ||
+      typeof (data as { userId: unknown }).userId !== 'number'
+    ) {
+      return null;
+    }
+    return data as AuthToken;
   } catch {
     return null;
   }
 };
 
-export const setAuthToken = (token: AuthToken): void => {
-  if (isServer) {
-    return;
-  }
-  window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(token));
+export const setAuthToken = (token: AuthToken) => {
+  getStorage()?.setItem(STORAGE_KEY, JSON.stringify(token));
 };
 
-export const clearAuthToken = (): void => {
-  if (isServer) {
-    return;
-  }
-  window.sessionStorage.removeItem(STORAGE_KEY);
+export const clearAuthToken = () => {
+  getStorage()?.removeItem(STORAGE_KEY);
 };

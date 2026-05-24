@@ -3,12 +3,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 const MODAL_QUERY_KEY = 'modal';
 const LOGIN_MODAL_VALUE = 'login';
 
-export const useLoginModal = (open = false) => {
+export const useLoginModal = () => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const isOpen = open || searchParams.get(MODAL_QUERY_KEY) === LOGIN_MODAL_VALUE;
+  const isOpen = searchParams.get(MODAL_QUERY_KEY) === LOGIN_MODAL_VALUE;
 
   const onOpenChange = (nextOpen: boolean) => {
     const nextParams = new URLSearchParams(searchParams.toString());
