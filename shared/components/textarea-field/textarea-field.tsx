@@ -4,7 +4,6 @@ import type { ComponentProps } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 
-import { ErrorMessage } from '../error-message';
 import { Label } from '../label';
 import { Textarea } from '../textarea';
 
@@ -50,7 +49,11 @@ export const TextareaField = ({
           error={!!errorMessage}
           {...restProps}
         />
-        {errorMessage ? <ErrorMessage id={`${name}-error-message`}>{errorMessage}</ErrorMessage> : null}
+        {errorMessage ? (
+          <p id={`${name}-error-message`} className="text-body-sm text-text-error">
+            {errorMessage}
+          </p>
+        ) : null}
       </div>
     </div>
   );

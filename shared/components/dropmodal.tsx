@@ -5,9 +5,8 @@ import { useId, useState } from 'react';
 
 import { Button } from '@/shared/components/button';
 import { Dropcomplete } from '@/shared/components/dropcomplete';
+import { TextareaField } from '@/shared/components/textarea-field';
 import { cn } from '@/shared/lib/cn';
-
-import { TextareaLegacy } from './textarea-legacy';
 
 const REASON_OPTIONS = [
   { value: 'low-quality', label: '서비스 퀄리티가 낮아요' },
@@ -136,7 +135,8 @@ const WithdrawModalBody = ({
           </RadioGroup.Root>
 
           <div className="w-full shrink-0">
-            <TextareaLegacy
+            <TextareaField
+              name="withdraw-detail"
               label="탈퇴사유"
               placeholder="탈퇴사유를 입력해주세요."
               value={detail}
@@ -144,13 +144,8 @@ const WithdrawModalBody = ({
               onChange={(e) => {
                 setDetail(e.target.value);
               }}
-              textareaClassName={cn(
-                'w-full min-h-[144px] max-h-[144px]',
-                detailEnabled
-                  ? 'border-border-gray-dark'
-                  : 'border-input-border-disabled bg-input-surface-disabled text-text-disabled placeholder:text-text-disabled',
-              )}
-              className="w-full max-w-none"
+              textareaClassName={cn('w-full min-h-[144px] max-h-[144px]', detailEnabled && 'border-border-gray-dark')}
+              className="w-full"
             />
           </div>
         </div>

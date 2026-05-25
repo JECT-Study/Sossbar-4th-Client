@@ -7,7 +7,7 @@ import { Button } from '@/shared/components/button';
 import { TagBadge } from '@/shared/components/tag-badge';
 import { cn } from '@/shared/lib/cn';
 
-import { useReceivedTags } from '../queries';
+import { useReceivedTags } from '../api/queries';
 
 const EMPTY_TAGS = [] as const;
 const topTagPriorities = ['first', 'second', 'third'] as const;
