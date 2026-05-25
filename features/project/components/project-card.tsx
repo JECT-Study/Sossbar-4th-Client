@@ -1,14 +1,22 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
+import { ProfileShareTooltip } from '@/features/profile/components/profile-share-tooltip';
+import { useConfirmProjectMembers } from '@/features/project/api/mutations';
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
+import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
+import { buildReviewWriteUrl } from '@/features/project/lib/build-review-write-url';
 import { CopyIcon, EditIcon, EllipsisVerticalIcon, RoundCheckIcon, TrashIcon } from '@/shared/assets/icons';
 import { Alert } from '@/shared/components/alert';
 import { Button, IconButton } from '@/shared/components/button';
+import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { Dropdown } from '@/shared/components/dropdown';
 import { cn } from '@/shared/lib/cn';
+import { copyTextToClipboard } from '@/shared/lib/copy-text-to-clipboard';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
@@ -54,11 +62,14 @@ interface ProjectCardTitleProps {
 }
 
 interface ProjectCardActionsProps {
+  projectId: number;
   isLeader: boolean;
   projectStatus: ProjectCardItem['projectStatus'];
+  projectLink: string;
 }
 
 interface ProjectMemberListProps {
+  projectId: number;
   members: readonly ProjectCardMember[];
 }
 
@@ -77,8 +88,13 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           startDate={project.startDate}
         />
         <ProjectCardTitle projectName={project.projectName} host={project.host} />
-        <ProjectCardActions isLeader={isLeader} projectStatus={project.projectStatus} />
-        <ProjectMemberList members={project.members} />
+        <ProjectCardActions
+          projectId={project.projectId}
+          isLeader={isLeader}
+          projectStatus={project.projectStatus}
+          projectLink={project.projectLink}
+        />
+        <ProjectMemberList projectId={project.projectId} members={project.members} />
       </div>
     </article>
   );
@@ -144,22 +160,65 @@ const ProjectCardTitle = ({ host, projectName }: ProjectCardTitleProps) => {
   );
 };
 
-const ProjectCardActions = ({ isLeader, projectStatus }: ProjectCardActionsProps) => {
+const ProjectCardActions = ({ projectId, isLeader, projectStatus, projectLink }: ProjectCardActionsProps) => {
+  const [isInviteTooltipOpen, setIsInviteTooltipOpen] = useState(false);
+  const [inviteTooltipMessage, setInviteTooltipMessage] = useState('링크가 복사되었습니다');
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
+  const { mutateAsync: confirmTeam, isPending: isConfirming } = useConfirmProjectMembers(projectId);
+
+  const closeInviteTooltip = useCallback(() => setIsInviteTooltipOpen(false), []);
+
+  const handleConfirmTeam = useCallback(async () => {
+    setConfirmError(null);
+    try {
+      await confirmTeam();
+      setConfirmDialogOpen(false);
+    } catch {
+      setConfirmError('팀 확정에 실패했습니다. 다시 시도해주세요.');
+    }
+  }, [confirmTeam]);
+
+  const handleCopyInviteLink = async () => {
+    if (!projectLink.trim()) {
+      return;
+    }
+
+    const copied = await copyTextToClipboard(buildProjectInviteUrl(projectLink));
+    setInviteTooltipMessage(copied ? '링크가 복사되었습니다' : '링크 복사에 실패했습니다');
+    setIsInviteTooltipOpen(true);
+  };
+
   if (!isLeader) {
     return <Alert variant={projectStatus === 'IN_PROGRESS' ? 'warning' : 'success'} className="w-full" />;
   }
 
   return (
     <div className="flex gap-2">
-      <Button type="button" variant="secondary" size="medium" leftIcon={<CopyIcon aria-hidden className="size-4" />}>
-        초대 링크 복사
-      </Button>
+      <div className="relative inline-flex">
+        <Button
+          type="button"
+          variant="secondary"
+          size="medium"
+          leftIcon={<CopyIcon aria-hidden className="size-4" />}
+          className={cn(
+            isInviteTooltipOpen &&
+              'bg-button-secondary-fill-pressed hover:bg-button-secondary-fill-pressed focus:bg-button-secondary-fill-pressed active:bg-button-secondary-fill-pressed',
+          )}
+          onClick={() => void handleCopyInviteLink()}
+        >
+          초대 링크 복사
+        </Button>
+        <ProfileShareTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
+      </div>
       {projectStatus === 'IN_PROGRESS' ? (
         <Button
           type="button"
           variant="primary"
           size="medium"
           leftIcon={<RoundCheckIcon aria-hidden className="size-4" />}
+          disabled={isConfirming}
+          onClick={() => setConfirmDialogOpen(true)}
         >
           우리 팀 확정하기
         </Button>
@@ -180,12 +239,38 @@ const ProjectCardActions = ({ isLeader, projectStatus }: ProjectCardActionsProps
           팀 확정 완료
         </Button>
       )}
+      <ConfirmationDialog
+        open={confirmDialogOpen}
+        title="우리 팀을 확정할까요?"
+        description="확정하면 팀원들과 후기를 주고받을 수 있습니다. 확정 후에는 되돌릴 수 없습니다."
+        confirmText="확정하기"
+        cancelText="취소"
+        onOpenChange={(open) => {
+          if (!open) {
+            setConfirmError(null);
+          }
+          setConfirmDialogOpen(open);
+        }}
+        onConfirm={handleConfirmTeam}
+        isConfirming={isConfirming}
+        errorMessage={confirmError ?? undefined}
+      />
     </div>
   );
 };
 
-const ProjectMemberList = ({ members }: ProjectMemberListProps) => {
-  const handleWriteReview = () => undefined;
+const ProjectMemberList = ({ projectId, members }: ProjectMemberListProps) => {
+  const router = useRouter();
+
+  const handleWriteReview = (member: ProjectCardMember) => {
+    router.push(
+      buildReviewWriteUrl({
+        projectId,
+        revieweeId: member.memberId,
+        revieweeName: member.name,
+      }),
+    );
+  };
 
   return (
     <div>
@@ -194,7 +279,11 @@ const ProjectMemberList = ({ members }: ProjectMemberListProps) => {
         {members.map((member) => (
           <li key={member.memberId}>
             {member.reviewStatus === 'writable' ? (
-              <ProjectMemberChip name={member.name} state={member.reviewStatus} onWriteReview={handleWriteReview} />
+              <ProjectMemberChip
+                name={member.name}
+                state={member.reviewStatus}
+                onWriteReview={() => handleWriteReview(member)}
+              />
             ) : (
               <ProjectMemberChip name={member.name} state={member.reviewStatus} />
             )}
