@@ -5,7 +5,7 @@ import { IconButton } from '@/shared/components/button';
 import { Dropdown } from '@/shared/components/dropdown';
 import { cn } from '@/shared/lib/cn';
 
-import type { Review } from '../types/reviews';
+import type { Review } from '../types/review';
 
 const DEFAULT_IMAGE_PATH = '/default.png';
 
