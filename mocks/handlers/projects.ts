@@ -1,6 +1,8 @@
 import { http, HttpResponse } from 'msw';
 
-import type { MyProjectResponse, ProjectResponse } from '@/features/project/types';
+import type { MyProjectResponse, ProjectMemberResponse, ProjectResponse } from '@/features/project/types';
+
+import { isMockReviewSubmitted } from '../lib/submitted-reviews';
 
 const BASE = '/api/v1';
 
@@ -105,7 +107,7 @@ const mockProject3: ProjectResponse = {
 const mockProjects = [mockProject1, mockProject2, mockProject3];
 
 /** GET /projects — 로그인 유저(userId 1) 기준, 본인 제외 팀원만 members */
-const mockMyProjects: MyProjectResponse[] = [
+let mockMyProjects: MyProjectResponse[] = [
   {
     projectId: 1,
     projectName: '소스바 프로젝트',
@@ -158,8 +160,19 @@ const mockMyProjects: MyProjectResponse[] = [
   },
 ];
 
+const withSubmittedReviewFlags = (projects: MyProjectResponse[]): MyProjectResponse[] =>
+  projects.map((project) => ({
+    ...project,
+    members: project.members.map(
+      (member): ProjectMemberResponse => ({
+        ...member,
+        reviewWritten: member.reviewWritten === true || isMockReviewSubmitted(project.projectId, member.userId),
+      }),
+    ),
+  }));
+
 export const projectsHandlers = [
-  http.get(`${BASE}/projects`, () => wrap(mockMyProjects)),
+  http.get(`${BASE}/projects`, () => wrap(withSubmittedReviewFlags(mockMyProjects))),
 
   http.get(`${BASE}/projects/:projectId`, ({ params }) => {
     const projectId = Number(params.projectId);
@@ -198,5 +211,11 @@ export const projectsHandlers = [
     return new HttpResponse(null, { status: 204 });
   }),
 
-  http.patch(`${BASE}/projects/confirm/:projectId`, () => wrap(null)),
+  http.patch(`${BASE}/projects/confirm/:projectId`, ({ params }) => {
+    const projectId = Number(params.projectId);
+    mockMyProjects = mockMyProjects.map((project) =>
+      project.projectId === projectId ? { ...project, projectStatus: 'COMPLETED' } : project,
+    );
+    return wrap(null);
+  }),
 ];
