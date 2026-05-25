@@ -1,5 +1,16 @@
-/** Trailing slash stripped. Empty string = same-origin `/api/v1` (local MSW or Next rewrites). */
-export const getApiOrigin = (): string => process.env.NEXT_PUBLIC_API_ORIGIN?.trim().replace(/\/$/, '') ?? '';
+const isMswEnabledInDev = (): boolean =>
+  process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_MSW !== 'false';
+
+/**
+ * Trailing slash stripped. Empty string = same-origin `/api/v1` (MSW 또는 Next rewrite).
+ * 개발 + MSW ON일 때는 `NEXT_PUBLIC_API_ORIGIN`을 무시해 cross-origin/CORS를 피합니다.
+ */
+export const getApiOrigin = (): string => {
+  if (isMswEnabledInDev()) {
+    return '';
+  }
+  return process.env.NEXT_PUBLIC_API_ORIGIN?.trim().replace(/\/$/, '') ?? '';
+};
 
 export const buildApiUrl = (basePath: string, path: string): string => {
   const origin = getApiOrigin();
