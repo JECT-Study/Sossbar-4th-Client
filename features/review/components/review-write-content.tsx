@@ -208,22 +208,19 @@ export const ReviewWriteContent = () => {
             </h2>
             <p className="text-body-sm text-text-subtle">(필수) 최소 {PRAISE_MIN_LENGTH}자 이상 작성해주세요.</p>
             <Textarea
-              className="max-w-none"
-              textareaClassName="min-h-[144px] rounded-md text-body-sm"
+              name="praise"
+              className="text-body-sm min-h-[144px] rounded-md"
               placeholder="ex) 적극적이고 배려심이 깊다."
               value={praise}
-              counterSuccessMin={PRAISE_MIN_LENGTH}
-              counterSuccessCompareCount={praise.trim().length}
+              maxLength={TEXT_MAX_LENGTH}
+              error={praise.length > 0 && !praiseOk}
               onChange={(e) => {
-                setPraise(e.target.value.slice(0, TEXT_MAX_LENGTH));
+                setPraise(e.target.value);
               }}
-              variant={praise.length > 0 && !praiseOk ? 'error' : 'default'}
-              errorMessage={
-                praise.length > 0 && !praiseOk ? `칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.` : undefined
-              }
-              currentCount={praise.length}
-              totalCount={TEXT_MAX_LENGTH}
             />
+            {praise.length > 0 && !praiseOk ? (
+              <p className="text-body-sm text-text-error">{`칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.`}</p>
+            ) : null}
           </section>
 
           <section className="flex flex-col gap-2" aria-labelledby="review-improve-heading">
@@ -232,15 +229,14 @@ export const ReviewWriteContent = () => {
             </h2>
             <p className="text-body-sm text-text-subtle">이 팀원과 협업하며 아쉬웠던 점을 작성해주세요.</p>
             <Textarea
-              className="max-w-none"
-              textareaClassName="min-h-[144px] rounded-md text-body-sm"
+              name="improvement"
+              className="text-body-sm min-h-[144px] rounded-md"
               placeholder="ex) 소통이 조금 더 적극적이었으면 좋았을 것 같다."
               value={improvement}
+              maxLength={TEXT_MAX_LENGTH}
               onChange={(e) => {
-                setImprovement(e.target.value.slice(0, TEXT_MAX_LENGTH));
+                setImprovement(e.target.value);
               }}
-              currentCount={improvement.length}
-              totalCount={TEXT_MAX_LENGTH}
             />
           </section>
 
