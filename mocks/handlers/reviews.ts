@@ -1,5 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
+import { markMockReviewSubmitted } from '../lib/submitted-reviews';
+
 const BASE = '/api/v1';
 
 const mockTags = [
@@ -32,8 +34,6 @@ const mockSpectrums = [
   { spectrumId: 4, leftLabel: '냉철한 유연한 대처', rightLabel: '따뜻한 관계 지향' },
 ];
 
-const submittedReviews = new Set<string>();
-
 export const reviewsHandlers = [
   http.post(`${BASE}/reviews`, async ({ request }) => {
     const body = (await request.json()) as {
@@ -46,7 +46,7 @@ export const reviewsHandlers = [
     const revieweeId = body.reviewReqDto?.revieweeId ?? body.revieweeId;
 
     if (projectId != null && revieweeId != null) {
-      submittedReviews.add(`${projectId}-${revieweeId}`);
+      markMockReviewSubmitted(projectId, revieweeId);
     }
 
     return new HttpResponse(null, { status: 201 });
