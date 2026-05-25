@@ -11,11 +11,12 @@ import { useProject } from '../api/queries';
 const DEFAULT_PROJECT_IMAGE = '/default.png';
 
 type ProjectPageContentProps = {
+  userId: number;
   projectId: number;
   isMyProfile: boolean;
 };
 
-export const ProjectPageContent = ({ projectId, isMyProfile }: ProjectPageContentProps) => {
+export const ProjectPageContent = ({ userId, projectId, isMyProfile }: ProjectPageContentProps) => {
   const { data: project, isPending, isError } = useProject(projectId);
 
   if (isPending) {
@@ -59,7 +60,7 @@ export const ProjectPageContent = ({ projectId, isMyProfile }: ProjectPageConten
 
       <div className="flex flex-col gap-6">
         <div className="flex gap-6">
-          <TagCard collapsible />
+          <TagCard userId={userId} projectId={projectId} collapsible />
           <SoftSkillsCard showDistribution={false} />
         </div>
         <ReviewListCard variant="project" isMyProfile={isMyProfile} />

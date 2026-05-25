@@ -19,7 +19,7 @@ const ProjectPage = ({ params }: ProjectPageProps) => {
   const sessionUser = useSessionUser();
   const isMyProfile = profileUserId === sessionUser?.userId;
 
-  return <ProjectPageContent projectId={projectIdNum} isMyProfile={isMyProfile} />;
+  return <ProjectPageContent userId={profileUserId} projectId={projectIdNum} isMyProfile={isMyProfile} />;
 };
 
 export default ProjectPage;

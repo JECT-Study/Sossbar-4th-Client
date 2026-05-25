@@ -3,8 +3,7 @@ export { ReviewWriteContent } from './components/review-write-content';
 export { useCreateReview } from './mutations';
 export { reviewKeys } from './query-keys';
 export {
-  useReceivedTags,
-  useReceivedTagsByProject,
+  useReceivedTagsQuery,
   useReviewFormData,
   useReviews,
   useSpectrumStats,
