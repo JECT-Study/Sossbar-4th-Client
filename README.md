@@ -36,9 +36,14 @@ pnpm dev
 cp .env.example .env.local
 ```
 
-| 변수                     | 로컬                        | Vercel Preview / Production   |
-| ------------------------ | --------------------------- | ----------------------------- |
-| `NEXT_PUBLIC_API_ORIGIN` | 비움 (MSW가 `/api/v1` 처리) | 백엔드 배포 URL (끝 `/` 없이) |
+| 변수                             | 로컬 (cloudtype 실서버)                                  | Vercel (`youhayeong.shop`)                      |
+| -------------------------------- | -------------------------------------------------------- | ----------------------------------------------- |
+| `NEXT_PUBLIC_API_BASE_URL`       | `https://port-0-ject5-4th-server-....sel3.cloudtype.app` | `https://youhayeong.shop`                       |
+| `NEXT_PUBLIC_API_ORIGIN`         | cloudtype URL (끝 `/` 없이)                              | `https://youhayeong.shop`                       |
+| `NEXT_PUBLIC_KAKAO_REDIRECT_URI` | `http://localhost:3000/api/v1/login/kakao`               | `https://sossbar.vercel.app/api/v1/login/kakao` |
+| `NEXT_PUBLIC_MSW`                | 실서버 테스트 시 `false`                                 | (미설정, production에서 MSW 없음)               |
+
+카카오 Redirect URI는 BE·카카오 콘솔과 **문자 그대로** 일치해야 합니다. `/api/v1/login/kakao` 로 들어오면 `next.config`가 `/login/kakao` 콜백 페이지로 연결합니다.
 
 ## Vercel 배포 (1차)
 

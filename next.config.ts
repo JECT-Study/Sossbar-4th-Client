@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
     const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080';
 
     return {
+      // 카카오 Redirect URI가 /api/v1/login/kakao 인 경우, 브라우저 진입만 콜백 페이지로 연결
       beforeFiles: [
         {
           source: '/api/v1/login/kakao',
