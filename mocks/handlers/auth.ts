@@ -5,6 +5,7 @@ import { http, HttpResponse } from 'msw';
  *
  * - GET  /api/v1/login/kakao?code=…     카카오 로그인 (토큰)
  * - POST /api/v1/login/local            개발용 이메일 로그인 (토큰)
+ * - POST /api/v1/login/test-account     개발용 테스트 계정 로그인 (토큰)
  * - POST /api/v1/login/reissue          리프레시 (실서버는 HttpOnly 쿠키 기준)
  * - DELETE /api/v1/login/:userId        회원 탈퇴 (204)
  */
@@ -39,6 +40,18 @@ export const authHandlers = [
       email: 'kakao-user@sossbar.mock',
     });
   }),
+
+  http.post(`${BASE}/login/test-account`, () =>
+    HttpResponse.json({
+      status: 200,
+      code: 'COMMON-200',
+      message: '성공적으로 처리했습니다.',
+      data: {
+        accessToken: 'mock-test-access-token',
+        userId: MOCK_USER_ID,
+      },
+    }),
+  ),
 
   http.post(`${BASE}/login/local`, async ({ request }) => {
     let body: { email?: string; password?: string };
