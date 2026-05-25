@@ -7,7 +7,7 @@ import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 
-import type { Tag } from '../types';
+import type { Tag } from '../types/tag';
 
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';

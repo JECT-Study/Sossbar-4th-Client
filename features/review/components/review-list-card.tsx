@@ -6,7 +6,7 @@ import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { SegmentedControl } from '@/shared/components/segmented-control';
 
-import type { Review } from '../types';
+import type { Review } from '../types/reviews';
 
 import { ReviewListItem } from './review-list-item';
 

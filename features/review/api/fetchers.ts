@@ -1,6 +1,8 @@
 import { apiRequest } from '@/shared/lib/api';
 
-import type { CreateReviewRequest, ReceivedTags, Review, ReviewFormData, SpectrumStats } from '../types';
+import type { CreateReviewRequest, Review, ReviewFormData } from '../types/review';
+import type { SpectrumStats } from '../types/spectrum';
+import type { ReceivedTags } from '../types/tag';
 
 export const fetchReviewFormData = (): Promise<ReviewFormData> => apiRequest<ReviewFormData>('/form-data');
 
