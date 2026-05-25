@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Avatar } from 'radix-ui';
 
 import { ROUTES } from '@/shared/constants/routes';
+import { clearAuthToken } from '@/shared/lib/auth-token';
 import { cn } from '@/shared/lib/cn';
 import { clearSessionUser, useSessionUser } from '@/shared/lib/session-user';
 
@@ -57,8 +58,9 @@ export const HeaderAuthArea = () => {
         <Dropdown.Item
           className={dropdownItemClassName}
           onSelect={() => {
+            clearAuthToken();
             clearSessionUser();
-            router.push('/');
+            router.push(ROUTES.HOME);
           }}
         >
           로그아웃
