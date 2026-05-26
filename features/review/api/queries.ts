@@ -22,16 +22,12 @@ export const useReviewFormData = () =>
     queryFn: fetchReviewFormData,
   });
 
-export const useReceivedTags = (userId: number) =>
+export const useReceivedTags = ({ userId, projectId }: { userId: number; projectId?: number }) =>
   useQuery({
-    queryKey: reviewKeys.receivedTags(userId),
-    queryFn: () => fetchReceivedTags(userId),
-  });
-
-export const useReceivedTagsByProject = (userId: number, projectId: number) =>
-  useQuery({
-    queryKey: reviewKeys.receivedTagsByProject(userId, projectId),
-    queryFn: () => fetchReceivedTagsByProject(userId, projectId),
+    queryKey: reviewKeys.receivedTags(userId, projectId),
+    queryFn: () =>
+      projectId === undefined ? fetchReceivedTags(userId) : fetchReceivedTagsByProject(userId, projectId),
+    enabled: userId > 0 && (projectId === undefined || projectId > 0),
   });
 
 export const useSpectrumStats = (userId: number) =>

@@ -23,7 +23,7 @@ export const ProfilePageContent = ({ userId, isMyProfile }: ProfilePageContentPr
         </Tab.List>
         <Tab.Content value="all" className="mt-6 flex flex-col gap-6">
           <div className="flex gap-6">
-            <TagCard />
+            <TagCard userId={userId} />
             <SoftSkillsCard />
           </div>
           <ReviewListCard variant="all" isMyProfile={isMyProfile} />

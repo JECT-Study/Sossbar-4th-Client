@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Dialog } from 'radix-ui';
 
+import { saveLoginReturnPath } from '@/features/auth/lib/login-return-path';
 import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons';
 import { useLoginModal } from '@/shared/hooks/use-login-modal';
 
@@ -12,6 +13,7 @@ export const LoginModal = () => {
   const { isOpen, onOpenChange } = useLoginModal();
 
   const handleKakaoLogin = () => {
+    saveLoginReturnPath();
     window.location.href = KAKAO_AUTH_URL;
   };
 

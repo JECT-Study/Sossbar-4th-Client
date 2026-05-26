@@ -145,7 +145,8 @@
   /* Button */
   --color-button-primary-fill: var(--color-primary-500);
   --color-button-primary-fill-hover: var(--color-primary-700);
-  --color-button-primary-fill-pressed: var(--color-primary-800);
+  --color-button-primary-fill-focus: var(--color-primary-700);
+  --color-button-primary-fill-pressed: #24378c;
   --color-button-secondary-fill: var(--color-primary-50);
   --color-button-secondary-fill-hover: var(--color-primary-100);
   --color-button-secondary-fill-pressed: var(--color-primary-200);
@@ -308,6 +309,7 @@
   /* Button */
   --color-button-primary-fill: var(--color-button-primary-fill);
   --color-button-primary-fill-hover: var(--color-button-primary-fill-hover);
+  --color-button-primary-fill-focus: var(--color-button-primary-fill-focus);
   --color-button-primary-fill-pressed: var(--color-button-primary-fill-pressed);
   --color-button-secondary-fill: var(--color-button-secondary-fill);
   --color-button-secondary-fill-hover: var(--color-button-secondary-fill-hover);

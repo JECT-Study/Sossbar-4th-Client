@@ -1,13 +1,31 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  async rewrites() {
-    return [
+  images: {
+    remotePatterns: [
       {
-        source: '/api/v1/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080'}/api/v1/:path*`,
+        protocol: 'https',
+        hostname: 'sossbar-bucket.s3.ap-northeast-2.amazonaws.com',
       },
-    ];
+    ],
+  },
+  async rewrites() {
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080';
+
+    return {
+      beforeFiles: [
+        {
+          source: '/api/v1/login/kakao',
+          destination: '/login/kakao',
+        },
+      ],
+      afterFiles: [
+        {
+          source: '/api/v1/:path*',
+          destination: `${apiBase}/api/v1/:path*`,
+        },
+      ],
+    };
   },
   turbopack: {
     // Project root must be this app directory; `..` breaks `@/` and `shared/...` resolution on Linux CI.

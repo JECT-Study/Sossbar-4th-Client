@@ -1,0 +1,70 @@
+'use client';
+
+import Image from 'next/image';
+
+import { ReviewListCard, SoftSkillsCard, TagCard } from '@/features/review';
+import { PageContainer } from '@/shared/components/page-container';
+import { formatIsoDateToDots } from '@/shared/lib/format-date';
+
+import { useProject } from '../api/queries';
+
+const DEFAULT_PROJECT_IMAGE = '/default.png';
+
+type ProjectPageContentProps = {
+  userId: number;
+  projectId: number;
+  isMyProfile: boolean;
+};
+
+export const ProjectPageContent = ({ userId, projectId, isMyProfile }: ProjectPageContentProps) => {
+  const { data: project, isPending, isError } = useProject(projectId);
+
+  if (isPending) {
+    return (
+      <PageContainer className="mt-15.5">
+        <p className="text-body-base text-text-subtle">프로젝트를 불러오는 중…</p>
+      </PageContainer>
+    );
+  }
+
+  if (isError || !project) {
+    return (
+      <PageContainer className="mt-15.5">
+        <p className="text-body-base text-text-basic">프로젝트 정보를 불러오지 못했습니다.</p>
+      </PageContainer>
+    );
+  }
+
+  const subtitleParts = [project.host, project.startDate ? formatIsoDateToDots(project.startDate) : null].filter(
+    Boolean,
+  );
+  const subtitle = subtitleParts.join(' · ');
+
+  return (
+    <PageContainer className="mb-20">
+      <section className="border-border-gray-light mt-15.5 mb-8.5 flex w-full flex-row gap-6 border-b-8 pb-8">
+        <div className="h-[106px] w-[142px] shrink-0 overflow-hidden rounded-2xl">
+          <Image
+            src={project.projectImage ?? DEFAULT_PROJECT_IMAGE}
+            alt={`${project.projectName} 이미지`}
+            width={142}
+            height={106}
+            className="h-full w-full object-cover"
+          />
+        </div>
+        <div>
+          <h1 className="text-heading-lg text-text-basic mb-2 font-bold">{project.projectName}</h1>
+          <p className="text-body-base text-text-subtle font-normal">{subtitle}</p>
+        </div>
+      </section>
+
+      <div className="flex flex-col gap-6">
+        <div className="flex gap-6">
+          <TagCard userId={userId} projectId={projectId} collapsible />
+          <SoftSkillsCard showDistribution={false} />
+        </div>
+        <ReviewListCard variant="project" isMyProfile={isMyProfile} />
+      </div>
+    </PageContainer>
+  );
+};

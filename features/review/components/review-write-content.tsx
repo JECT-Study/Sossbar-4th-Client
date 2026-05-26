@@ -3,16 +3,17 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 
+import { markReviewCompleted } from '@/features/project/lib/completed-review-storage';
 import { Button } from '@/shared/components/button';
-import { TextareaLegacy } from '@/shared/components/textarea-legacy';
+import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 
-import type { Tag } from '../types';
+import type { Tag } from '../types/tag';
 
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';
-import { useCreateReview } from '../mutations';
-import { useReviewFormData } from '../queries';
+import { useCreateReview } from '../api/mutations';
+import { useReviewFormData } from '../api/queries';
 
 const PRAISE_MIN_LENGTH = 10;
 const TEXT_MAX_LENGTH = 250;
@@ -37,9 +38,15 @@ export const ReviewWriteContent = () => {
   const projectId = useMemo(() => {
     const raw = searchParams.get('projectId');
     const n = raw != null ? Number.parseInt(raw, 10) : Number.NaN;
-    return Number.isFinite(n) && n > 0 ? n : 1;
+    return Number.isFinite(n) && n > 0 ? n : null;
   }, [searchParams]);
-  const revieweeName = searchParams.get('reviewee')?.trim() || '김이름';
+  const revieweeId = useMemo(() => {
+    const raw = searchParams.get('revieweeId');
+    const n = raw != null ? Number.parseInt(raw, 10) : Number.NaN;
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }, [searchParams]);
+  const revieweeName = searchParams.get('reviewee')?.trim() || '';
+  const hasRequiredParams = projectId != null && revieweeId != null && revieweeName.length > 0;
 
   const { data: formData, isPending, isError, refetch } = useReviewFormData();
   const { mutateAsync: submitReview, isPending: isSubmitting } = useCreateReview();
@@ -76,7 +83,7 @@ export const ReviewWriteContent = () => {
   const canSubmit = praiseOk && tagsOk && spectrumsOk && !isSubmitting;
 
   const handleSubmitFromDialog = useCallback(async () => {
-    if (!formData || !canSubmit) {
+    if (!formData || !canSubmit || projectId == null || revieweeId == null) {
       return;
     }
     setSubmitError(null);
@@ -88,17 +95,41 @@ export const ReviewWriteContent = () => {
     try {
       await submitReview({
         projectId,
+        revieweeId,
         praise: praise.trim(),
         improvement: improvement.trim(),
         tagIds,
         spectrums,
       });
+      markReviewCompleted(projectId, revieweeId);
       setSubmitDialogOpen(false);
-      router.push('/');
+      router.push('/projects');
     } catch {
       setSubmitError('제출에 실패했습니다. 다시 시도해주세요.');
     }
-  }, [formData, canSubmit, selectedTagIds, spectrumSteps, projectId, praise, improvement, submitReview, router]);
+  }, [
+    formData,
+    canSubmit,
+    selectedTagIds,
+    spectrumSteps,
+    projectId,
+    revieweeId,
+    praise,
+    improvement,
+    submitReview,
+    router,
+  ]);
+
+  if (!hasRequiredParams) {
+    return (
+      <div className="border-divider-gray-light bg-surface-white flex min-h-[320px] w-full flex-col items-center justify-center gap-4 border-b px-4">
+        <p className="text-body-base text-text-basic text-center">후기 작성 대상 정보가 올바르지 않습니다.</p>
+        <Button type="button" variant="secondary" size="medium" onClick={() => router.push('/projects')}>
+          프로젝트 관리로 돌아가기
+        </Button>
+      </div>
+    );
+  }
 
   if (isPending) {
     return (
@@ -207,23 +238,20 @@ export const ReviewWriteContent = () => {
               칭찬해요
             </h2>
             <p className="text-body-sm text-text-subtle">(필수) 최소 {PRAISE_MIN_LENGTH}자 이상 작성해주세요.</p>
-            <TextareaLegacy
-              className="max-w-none"
-              textareaClassName="min-h-[144px] rounded-md text-body-sm"
+            <Textarea
+              name="praise"
+              className="text-body-sm min-h-[144px] rounded-md"
               placeholder="ex) 적극적이고 배려심이 깊다."
               value={praise}
-              counterSuccessMin={PRAISE_MIN_LENGTH}
-              counterSuccessCompareCount={praise.trim().length}
+              maxLength={TEXT_MAX_LENGTH}
+              error={praise.length > 0 && !praiseOk}
               onChange={(e) => {
-                setPraise(e.target.value.slice(0, TEXT_MAX_LENGTH));
+                setPraise(e.target.value);
               }}
-              variant={praise.length > 0 && !praiseOk ? 'error' : 'default'}
-              errorMessage={
-                praise.length > 0 && !praiseOk ? `칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.` : undefined
-              }
-              currentCount={praise.length}
-              totalCount={TEXT_MAX_LENGTH}
             />
+            {praise.length > 0 && !praiseOk ? (
+              <p className="text-body-sm text-text-error">{`칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.`}</p>
+            ) : null}
           </section>
 
           <section className="flex flex-col gap-2" aria-labelledby="review-improve-heading">
@@ -231,16 +259,15 @@ export const ReviewWriteContent = () => {
               아쉬워요
             </h2>
             <p className="text-body-sm text-text-subtle">이 팀원과 협업하며 아쉬웠던 점을 작성해주세요.</p>
-            <TextareaLegacy
-              className="max-w-none"
-              textareaClassName="min-h-[144px] rounded-md text-body-sm"
+            <Textarea
+              name="improvement"
+              className="text-body-sm min-h-[144px] rounded-md"
               placeholder="ex) 소통이 조금 더 적극적이었으면 좋았을 것 같다."
               value={improvement}
+              maxLength={TEXT_MAX_LENGTH}
               onChange={(e) => {
-                setImprovement(e.target.value.slice(0, TEXT_MAX_LENGTH));
+                setImprovement(e.target.value);
               }}
-              currentCount={improvement.length}
-              totalCount={TEXT_MAX_LENGTH}
             />
           </section>
 
