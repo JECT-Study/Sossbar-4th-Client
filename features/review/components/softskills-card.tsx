@@ -1,22 +1,11 @@
 import { cn } from '@/shared/lib/cn';
 
+import type { SpectrumAxisInfo } from '../types/spectrum';
+
 type DistributionBarTone = 'accent' | 'light' | 'gray' | 'strong';
 
-type SoftSkillsDistributionBar = {
-  label: string;
-  count: number;
-};
-
-export type SpectrumInfo = {
-  spectrumAxisId: number;
-  axisName: string;
-  averageStrength: number;
-  leftStrengthCount: number;
-  rightStrengthCount: number;
-};
-
 type SoftSkillsCardProps = {
-  spectrumInfo?: SpectrumInfo[];
+  spectrumInfo?: SpectrumAxisInfo[];
   showDistribution?: boolean; // 전체 탭: true(스펙트럼+분포 차트) / 프로젝트별: false(스펙트럼만)
 };
 
@@ -27,11 +16,39 @@ const spectrumRows = [
   { left: '냉철한 결과 지향', right: '따뜻한 관계 지향' },
 ];
 
-const defaultSpectrumInfo: SpectrumInfo[] = [
-  { spectrumAxisId: 1, axisName: '1번 항목', averageStrength: 1, leftStrengthCount: 5, rightStrengthCount: 1 },
-  { spectrumAxisId: 2, axisName: '2번 항목', averageStrength: 2, leftStrengthCount: 4, rightStrengthCount: 2 },
-  { spectrumAxisId: 3, axisName: '3번 항목', averageStrength: 3, leftStrengthCount: 4, rightStrengthCount: 2 },
-  { spectrumAxisId: 4, axisName: '4번 항목', averageStrength: 5, leftStrengthCount: 0, rightStrengthCount: 6 },
+const defaultSpectrumAxisInfo: SpectrumAxisInfo[] = [
+  {
+    spectrumAxisId: 1,
+    axisName: '1번 항목',
+    averageStrength: 1,
+    totalCount: 6,
+    leftStrengthCount: 5,
+    rightStrengthCount: 1,
+  },
+  {
+    spectrumAxisId: 2,
+    axisName: '2번 항목',
+    averageStrength: 2,
+    totalCount: 6,
+    leftStrengthCount: 4,
+    rightStrengthCount: 2,
+  },
+  {
+    spectrumAxisId: 3,
+    axisName: '3번 항목',
+    averageStrength: 3,
+    totalCount: 6,
+    leftStrengthCount: 4,
+    rightStrengthCount: 2,
+  },
+  {
+    spectrumAxisId: 4,
+    axisName: '4번 항목',
+    averageStrength: 5,
+    totalCount: 6,
+    leftStrengthCount: 0,
+    rightStrengthCount: 6,
+  },
 ];
 
 const barToneBgClasses: Record<DistributionBarTone, string> = {
@@ -61,7 +78,7 @@ const spectrumVerticalDashPercents = [20, 40, 60, 80] as const;
 // averageStrength 1–5 → 20%–100% (5-point Likert scale)
 const getMarkerLeft = (averageStrength: number): string => `${(averageStrength / 5) * 100}%`;
 
-const getDistributionBars = (spectrumInfo: SpectrumInfo[]): SoftSkillsDistributionBar[] =>
+const getDistributionBars = (spectrumInfo: SpectrumAxisInfo[]) =>
   spectrumInfo.flatMap((item, index) => {
     const row = spectrumRows[index];
 
@@ -81,7 +98,7 @@ const getBarHeight = (count: number, maxDistributionCount: number): number => {
   return Math.round(BAR_HEIGHT_MIN_PX + ratio * (BAR_HEIGHT_MAX_PX - BAR_HEIGHT_MIN_PX));
 };
 
-const getTopBarTones = (distributionBars: SoftSkillsDistributionBar[]): DistributionBarTone[] => {
+const getTopBarTones = (distributionBars: { count: number }[]): DistributionBarTone[] => {
   const rankTones: DistributionBarTone[] = ['strong', 'accent', 'light'];
   const topCounts = Array.from(new Set(distributionBars.map((bar) => bar.count)))
     .filter((count) => count > 0)
@@ -106,7 +123,7 @@ const SpectrumVerticalDashOverlay = ({ widthPx }: { widthPx: number }) => (
   </svg>
 );
 
-const SoftSkillsSpectrum = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo[] }) => (
+const SoftSkillsSpectrum = ({ spectrumInfo }: { spectrumInfo: SpectrumAxisInfo[] }) => (
   <div className="w-fill mt-7">
     <h3 className="text-heading-xs text-text-subtle h-6 font-bold">평균 지표</h3>
 
@@ -149,7 +166,7 @@ const SoftSkillsSpectrum = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo[] }) 
   </div>
 );
 
-const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo[] }) => {
+const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumAxisInfo[] }) => {
   const bars = getDistributionBars(spectrumInfo);
   const tones = getTopBarTones(bars);
   const maxCount = Math.max(...bars.map((bar) => bar.count), 0);
@@ -179,7 +196,7 @@ const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo[]
 };
 
 export const SoftSkillsCard = ({
-  spectrumInfo = defaultSpectrumInfo,
+  spectrumInfo = defaultSpectrumAxisInfo,
   showDistribution = true,
 }: SoftSkillsCardProps) => (
   <section
