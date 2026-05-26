@@ -1,19 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchReviewFormData, fetchReviews, fetchSpectrumsByProject, fetchTagsByProject } from './fetchers';
+import {
+  fetchReceivedTags,
+  fetchReceivedTagsByProject,
+  fetchReviewFormData,
+  fetchReviews,
+  fetchSpectrumStats,
+  fetchSpectrumStatsByProject,
+} from './fetchers';
+import { reviewKeys } from './query-keys';
 
-export const reviewKeys = {
-  all: ['review'] as const,
-  lists: () => [...reviewKeys.all, 'list'] as const,
-  formData: () => [...reviewKeys.all, 'formData'] as const,
-  tagsByProject: (projectId: number) => [...reviewKeys.all, 'tags', projectId] as const,
-  spectrumsByProject: (projectId: number) => [...reviewKeys.all, 'spectrums', projectId] as const,
-};
-
-export const useReviews = () =>
+export const useReviews = (userId: number) =>
   useQuery({
-    queryKey: reviewKeys.lists(),
-    queryFn: fetchReviews,
+    queryKey: reviewKeys.reviews(userId),
+    queryFn: () => fetchReviews(userId),
   });
 
 export const useReviewFormData = () =>
@@ -22,14 +22,22 @@ export const useReviewFormData = () =>
     queryFn: fetchReviewFormData,
   });
 
-export const useTagsByProject = (projectId: number) =>
+export const useReceivedTags = ({ userId, projectId }: { userId: number; projectId?: number }) =>
   useQuery({
-    queryKey: reviewKeys.tagsByProject(projectId),
-    queryFn: () => fetchTagsByProject(projectId),
+    queryKey: reviewKeys.receivedTags(userId, projectId),
+    queryFn: () =>
+      projectId === undefined ? fetchReceivedTags(userId) : fetchReceivedTagsByProject(userId, projectId),
+    enabled: userId > 0 && (projectId === undefined || projectId > 0),
   });
 
-export const useSpectrumsByProject = (projectId: number) =>
+export const useSpectrumStats = (userId: number) =>
   useQuery({
-    queryKey: reviewKeys.spectrumsByProject(projectId),
-    queryFn: () => fetchSpectrumsByProject(projectId),
+    queryKey: reviewKeys.spectrumStats(userId),
+    queryFn: () => fetchSpectrumStats(userId),
+  });
+
+export const useSpectrumStatsByProject = (userId: number, projectId: number) =>
+  useQuery({
+    queryKey: reviewKeys.spectrumStatsByProject(userId, projectId),
+    queryFn: () => fetchSpectrumStatsByProject(userId, projectId),
   });

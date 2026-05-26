@@ -9,6 +9,7 @@ export {
   useUpdateProject,
 } from './api/mutations';
 export { projectKeys, useProject } from './api/queries';
+export { ProjectPageContent } from './components/project-page-content';
 export type {
   CreateProjectPayload,
   MemberStatus,
