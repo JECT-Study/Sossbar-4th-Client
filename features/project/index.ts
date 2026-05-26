@@ -8,6 +8,7 @@ export {
 } from './api/mutations';
 export { fetchProjects } from './api/fetchers';
 export { projectKeys, useProject, useProjects } from './api/queries';
+export { ProjectPageContent } from './components/project-page-content';
 export { useProjectCards } from './hooks/use-project-cards';
 export { mapMyProjectToCardItem, mapMyProjectsToCardItems } from './lib/map-my-project-to-card';
 export type {
