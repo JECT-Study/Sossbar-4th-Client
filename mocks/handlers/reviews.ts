@@ -25,11 +25,39 @@ const mockTags = [
   { tagId: 20, name: '모르는 것을 숨기지 않고 물어봐요' },
 ];
 
-const mockSpectrums = [
-  { spectrumId: 1, leftLabel: '서포트형', rightLabel: '리드형' },
-  { spectrumId: 2, leftLabel: '빠른 작업 속도 중시', rightLabel: '천천히 신중한 고민 중시' },
-  { spectrumId: 3, leftLabel: '상황별 유연한 대처', rightLabel: '철저한 계획 기반 실행' },
-  { spectrumId: 4, leftLabel: '냉철한 유연한 대처', rightLabel: '따뜻한 관계 지향' },
+const mockSpectrumAxisInfos = [
+  {
+    spectrumAxisId: 1,
+    axisName: '서포트형-리드형',
+    averageStrength: 4,
+    totalCount: 8,
+    leftStrengthCount: 1,
+    rightStrengthCount: 7,
+  },
+  {
+    spectrumAxisId: 2,
+    axisName: '작업속도',
+    averageStrength: 2,
+    totalCount: 8,
+    leftStrengthCount: 5,
+    rightStrengthCount: 1,
+  },
+  {
+    spectrumAxisId: 3,
+    axisName: '대처방식',
+    averageStrength: 3,
+    totalCount: 8,
+    leftStrengthCount: 4,
+    rightStrengthCount: 2,
+  },
+  {
+    spectrumAxisId: 4,
+    axisName: '관계지향',
+    averageStrength: 4,
+    totalCount: 8,
+    leftStrengthCount: 0,
+    rightStrengthCount: 6,
+  },
 ];
 
 export const reviewsHandlers = [
@@ -38,7 +66,7 @@ export const reviewsHandlers = [
   }),
 
   http.get(`${BASE}/form-data`, () => {
-    return HttpResponse.json({ tags: mockTags, spectrums: mockSpectrums });
+    return HttpResponse.json({ tags: mockTags, spectrums: mockSpectrumAxisInfos });
   }),
 
   http.get(`${BASE}/reviews`, () => {
@@ -69,11 +97,11 @@ export const reviewsHandlers = [
     return HttpResponse.json(mockTags);
   }),
 
-  http.get(`${BASE}/reviews/spectrums`, () => {
-    return HttpResponse.json(mockSpectrums.map((s) => ({ ...s, averageValue: 60 })));
+  http.get(`${BASE}/reviews/spectrums/:userId`, () => {
+    return HttpResponse.json({ spectrumInfoResDtos: mockSpectrumAxisInfos });
   }),
 
-  http.get(`${BASE}/reviews/spectrums/:projectId`, () => {
-    return HttpResponse.json(mockSpectrums.map((s) => ({ ...s, averageValue: 55 })));
+  http.get(`${BASE}/reviews/spectrums/:userId/:projectId`, () => {
+    return HttpResponse.json({ spectrumInfoResDtos: mockSpectrumAxisInfos });
   }),
 ];

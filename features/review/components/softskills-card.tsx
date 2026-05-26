@@ -1,54 +1,25 @@
+'use client';
+
 import { cn } from '@/shared/lib/cn';
 
 import type { SpectrumAxisInfo } from '../types/spectrum';
 
+import { useSpectrum } from '../api/queries';
+
 type DistributionBarTone = 'accent' | 'light' | 'gray' | 'strong';
 
 type SoftSkillsCardProps = {
-  spectrumInfo?: SpectrumAxisInfo[];
+  userId: number;
+  projectId?: number;
   showDistribution?: boolean; // 전체 탭: true(스펙트럼+분포 차트) / 프로젝트별: false(스펙트럼만)
 };
 
+// 백엔드 API 요청 후 수정
 const spectrumRows = [
   { left: '서포트형', right: '리드형' },
   { left: '빠른 작업 속도 중시', right: '천천히 신중한 고민 중시' },
   { left: '상황별 유연한 대처', right: '철저한 계획 기반 실행' },
   { left: '냉철한 결과 지향', right: '따뜻한 관계 지향' },
-];
-
-const defaultSpectrumAxisInfo: SpectrumAxisInfo[] = [
-  {
-    spectrumAxisId: 1,
-    axisName: '1번 항목',
-    averageStrength: 1,
-    totalCount: 6,
-    leftStrengthCount: 5,
-    rightStrengthCount: 1,
-  },
-  {
-    spectrumAxisId: 2,
-    axisName: '2번 항목',
-    averageStrength: 2,
-    totalCount: 6,
-    leftStrengthCount: 4,
-    rightStrengthCount: 2,
-  },
-  {
-    spectrumAxisId: 3,
-    axisName: '3번 항목',
-    averageStrength: 3,
-    totalCount: 6,
-    leftStrengthCount: 4,
-    rightStrengthCount: 2,
-  },
-  {
-    spectrumAxisId: 4,
-    axisName: '4번 항목',
-    averageStrength: 5,
-    totalCount: 6,
-    leftStrengthCount: 0,
-    rightStrengthCount: 6,
-  },
 ];
 
 const barToneBgClasses: Record<DistributionBarTone, string> = {
@@ -195,24 +166,32 @@ const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumAxisIn
   );
 };
 
-export const SoftSkillsCard = ({
-  spectrumInfo = defaultSpectrumAxisInfo,
-  showDistribution = true,
-}: SoftSkillsCardProps) => (
-  <section
-    className={cn(
-      'border-border-gray w-[588px] overflow-hidden rounded-2xl border bg-white p-6',
-      showDistribution ? 'h-[652px]' : 'h-auto',
-    )}
-  >
-    <h2 className="text-heading-base h-6 leading-6 font-bold text-black">소프트 스킬 스펙트럼</h2>
+export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: SoftSkillsCardProps) => {
+  const { data: spectrumInfo = [], isPending, isError } = useSpectrum({ userId, projectId });
 
-    <SoftSkillsSpectrum spectrumInfo={spectrumInfo} />
+  return (
+    <section
+      className={cn(
+        'border-border-gray w-[588px] overflow-hidden rounded-2xl border bg-white p-6',
+        showDistribution ? 'h-[652px]' : 'h-auto',
+      )}
+    >
+      <h2 className="text-heading-base h-6 leading-6 font-bold text-black">소프트 스킬 스펙트럼</h2>
 
-    {!!showDistribution && <SoftSkillsDistribution spectrumInfo={spectrumInfo} />}
+      {isPending ? <p className="text-body-sm text-text-subtle mt-7">스펙트럼 정보를 불러오는 중...</p> : null}
 
-    <p className="text-detail-base text-text-disabled mt-7 h-6 w-[540px] font-normal">
-      * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
-    </p>
-  </section>
-);
+      {isError ? <p className="text-body-sm text-text-error mt-7">스펙트럼 정보를 불러오지 못했습니다.</p> : null}
+
+      {!isPending && !isError ? (
+        <>
+          <SoftSkillsSpectrum spectrumInfo={spectrumInfo} />
+          {!!showDistribution && <SoftSkillsDistribution spectrumInfo={spectrumInfo} />}
+        </>
+      ) : null}
+
+      <p className="text-detail-base text-text-disabled mt-7 h-6 w-[540px] font-normal">
+        * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
+      </p>
+    </section>
+  );
+};
