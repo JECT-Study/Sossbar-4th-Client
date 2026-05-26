@@ -2,8 +2,12 @@
 
 import { useState } from 'react';
 
+import { buildProfileShareClipboardText } from '@/features/profile/lib/build-profile-share-clipboard-text';
 import { EditIcon, ShareIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
+import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
+import { cn } from '@/shared/lib/cn';
 
 import type { UpdateProfilePayload } from '../types';
 
@@ -22,6 +26,20 @@ export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => 
   const { data: profile, isPending, isError, refetch } = useProfile(userId);
   const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useUpdateProfile();
   const [isEditing, setIsEditing] = useState(false);
+  const {
+    open: isShareTooltipOpen,
+    message: shareTooltipMessage,
+    close: closeShareTooltip,
+    copyLink,
+  } = useCopyLinkFeedback();
+
+  const handleShareProfile = async () => {
+    if (!Number.isFinite(userId) || userId <= 0) {
+      return;
+    }
+
+    await copyLink(buildProfileShareClipboardText(userId));
+  };
 
   const handleStartEditing = () => {
     setIsEditing(true);
@@ -84,9 +102,22 @@ export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => 
           <Button variant="secondary" size="medium" leftIcon={<EditIcon />} onClick={handleStartEditing}>
             프로필 수정
           </Button>
-          <Button variant="primary" size="medium" leftIcon={<ShareIcon />} className="ml-2">
-            내 프로필 공유하기
-          </Button>
+          <div className="relative ml-2 inline-flex">
+            <Button
+              type="button"
+              variant="primary"
+              size="medium"
+              leftIcon={<ShareIcon aria-hidden />}
+              className={cn(
+                isShareTooltipOpen &&
+                  'bg-button-primary-fill-pressed hover:bg-button-primary-fill-pressed focus:bg-button-primary-fill-pressed active:bg-button-primary-fill-pressed',
+              )}
+              onClick={() => void handleShareProfile()}
+            >
+              내 프로필 공유하기
+            </Button>
+            <CopyFeedbackTooltip open={isShareTooltipOpen} onClose={closeShareTooltip} message={shareTooltipMessage} />
+          </div>
         </div>
       ) : null}
     </section>

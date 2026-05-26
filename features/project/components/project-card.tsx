@@ -1,13 +1,18 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
+import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
+import { buildReviewWriteUrl } from '@/features/project/lib/build-review-write-url';
 import { CopyIcon, EditIcon, EllipsisVerticalIcon, RoundCheckIcon, TrashIcon } from '@/shared/assets/icons';
 import { Alert } from '@/shared/components/alert';
 import { Button, IconButton } from '@/shared/components/button';
+import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
 import { Dropdown } from '@/shared/components/dropdown';
+import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -56,9 +61,11 @@ interface ProjectCardTitleProps {
 interface ProjectCardActionsProps {
   isLeader: boolean;
   projectStatus: ProjectCardItem['projectStatus'];
+  projectLink: string;
 }
 
 interface ProjectMemberListProps {
+  projectId: number;
   members: readonly ProjectCardMember[];
 }
 
@@ -77,8 +84,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           startDate={project.startDate}
         />
         <ProjectCardTitle projectName={project.projectName} host={project.host} />
-        <ProjectCardActions isLeader={isLeader} projectStatus={project.projectStatus} />
-        <ProjectMemberList members={project.members} />
+        <ProjectCardActions
+          isLeader={isLeader}
+          projectStatus={project.projectStatus}
+          projectLink={project.projectLink}
+        />
+        <ProjectMemberList projectId={project.projectId} members={project.members} />
       </div>
     </article>
   );
@@ -144,16 +155,44 @@ const ProjectCardTitle = ({ host, projectName }: ProjectCardTitleProps) => {
   );
 };
 
-const ProjectCardActions = ({ isLeader, projectStatus }: ProjectCardActionsProps) => {
+const ProjectCardActions = ({ isLeader, projectStatus, projectLink }: ProjectCardActionsProps) => {
+  const {
+    open: isInviteTooltipOpen,
+    message: inviteTooltipMessage,
+    close: closeInviteTooltip,
+    copyLink,
+  } = useCopyLinkFeedback();
+
+  const handleCopyInviteLink = async () => {
+    if (!projectLink.trim()) {
+      return;
+    }
+
+    await copyLink(buildProjectInviteUrl(projectLink));
+  };
+
   if (!isLeader) {
     return <Alert variant={projectStatus === 'IN_PROGRESS' ? 'warning' : 'success'} className="w-full" />;
   }
 
   return (
     <div className="flex gap-2">
-      <Button type="button" variant="secondary" size="medium" leftIcon={<CopyIcon aria-hidden className="size-4" />}>
-        초대 링크 복사
-      </Button>
+      <div className="relative inline-flex">
+        <Button
+          type="button"
+          variant="secondary"
+          size="medium"
+          leftIcon={<CopyIcon aria-hidden className="size-4" />}
+          className={cn(
+            isInviteTooltipOpen &&
+              'bg-button-secondary-fill-pressed hover:bg-button-secondary-fill-pressed focus:bg-button-secondary-fill-pressed active:bg-button-secondary-fill-pressed',
+          )}
+          onClick={() => void handleCopyInviteLink()}
+        >
+          초대 링크 복사
+        </Button>
+        <CopyFeedbackTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
+      </div>
       {projectStatus === 'IN_PROGRESS' ? (
         <Button
           type="button"
@@ -184,8 +223,18 @@ const ProjectCardActions = ({ isLeader, projectStatus }: ProjectCardActionsProps
   );
 };
 
-const ProjectMemberList = ({ members }: ProjectMemberListProps) => {
-  const handleWriteReview = () => undefined;
+const ProjectMemberList = ({ projectId, members }: ProjectMemberListProps) => {
+  const router = useRouter();
+
+  const handleWriteReview = (member: ProjectCardMember) => {
+    router.push(
+      buildReviewWriteUrl({
+        projectId,
+        revieweeId: member.memberId,
+        revieweeName: member.name,
+      }),
+    );
+  };
 
   return (
     <div>
@@ -194,7 +243,11 @@ const ProjectMemberList = ({ members }: ProjectMemberListProps) => {
         {members.map((member) => (
           <li key={member.memberId}>
             {member.reviewStatus === 'writable' ? (
-              <ProjectMemberChip name={member.name} state={member.reviewStatus} onWriteReview={handleWriteReview} />
+              <ProjectMemberChip
+                name={member.name}
+                state={member.reviewStatus}
+                onWriteReview={() => handleWriteReview(member)}
+              />
             ) : (
               <ProjectMemberChip name={member.name} state={member.reviewStatus} />
             )}

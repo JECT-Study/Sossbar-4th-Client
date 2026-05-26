@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 
+import { markReviewCompleted } from '@/features/project/lib/completed-review-storage';
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
@@ -37,9 +38,15 @@ export const ReviewWriteContent = () => {
   const projectId = useMemo(() => {
     const raw = searchParams.get('projectId');
     const n = raw != null ? Number.parseInt(raw, 10) : Number.NaN;
-    return Number.isFinite(n) && n > 0 ? n : 1;
+    return Number.isFinite(n) && n > 0 ? n : null;
   }, [searchParams]);
-  const revieweeName = searchParams.get('reviewee')?.trim() || '김이름';
+  const revieweeId = useMemo(() => {
+    const raw = searchParams.get('revieweeId');
+    const n = raw != null ? Number.parseInt(raw, 10) : Number.NaN;
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }, [searchParams]);
+  const revieweeName = searchParams.get('reviewee')?.trim() || '';
+  const hasRequiredParams = projectId != null && revieweeId != null && revieweeName.length > 0;
 
   const { data: formData, isPending, isError, refetch } = useReviewFormData();
   const { mutateAsync: submitReview, isPending: isSubmitting } = useCreateReview();
@@ -76,7 +83,7 @@ export const ReviewWriteContent = () => {
   const canSubmit = praiseOk && tagsOk && spectrumsOk && !isSubmitting;
 
   const handleSubmitFromDialog = useCallback(async () => {
-    if (!formData || !canSubmit) {
+    if (!formData || !canSubmit || projectId == null || revieweeId == null) {
       return;
     }
     setSubmitError(null);
@@ -88,17 +95,41 @@ export const ReviewWriteContent = () => {
     try {
       await submitReview({
         projectId,
+        revieweeId,
         praise: praise.trim(),
         improvement: improvement.trim(),
         tagIds,
         spectrums,
       });
+      markReviewCompleted(projectId, revieweeId);
       setSubmitDialogOpen(false);
-      router.push('/');
+      router.push('/projects');
     } catch {
       setSubmitError('제출에 실패했습니다. 다시 시도해주세요.');
     }
-  }, [formData, canSubmit, selectedTagIds, spectrumSteps, projectId, praise, improvement, submitReview, router]);
+  }, [
+    formData,
+    canSubmit,
+    selectedTagIds,
+    spectrumSteps,
+    projectId,
+    revieweeId,
+    praise,
+    improvement,
+    submitReview,
+    router,
+  ]);
+
+  if (!hasRequiredParams) {
+    return (
+      <div className="border-divider-gray-light bg-surface-white flex min-h-[320px] w-full flex-col items-center justify-center gap-4 border-b px-4">
+        <p className="text-body-base text-text-basic text-center">후기 작성 대상 정보가 올바르지 않습니다.</p>
+        <Button type="button" variant="secondary" size="medium" onClick={() => router.push('/projects')}>
+          프로젝트 관리로 돌아가기
+        </Button>
+      </div>
+    );
+  }
 
   if (isPending) {
     return (
