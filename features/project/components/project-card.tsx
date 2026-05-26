@@ -2,9 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
 
-import { ProfileShareTooltip } from '@/features/profile/components/profile-share-tooltip';
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
 import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
@@ -12,9 +10,10 @@ import { buildReviewWriteUrl } from '@/features/project/lib/build-review-write-u
 import { CopyIcon, EditIcon, EllipsisVerticalIcon, RoundCheckIcon, TrashIcon } from '@/shared/assets/icons';
 import { Alert } from '@/shared/components/alert';
 import { Button, IconButton } from '@/shared/components/button';
+import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
 import { Dropdown } from '@/shared/components/dropdown';
+import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { cn } from '@/shared/lib/cn';
-import { copyTextToClipboard } from '@/shared/lib/copy-text-to-clipboard';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
@@ -157,19 +156,19 @@ const ProjectCardTitle = ({ host, projectName }: ProjectCardTitleProps) => {
 };
 
 const ProjectCardActions = ({ isLeader, projectStatus, projectLink }: ProjectCardActionsProps) => {
-  const [isInviteTooltipOpen, setIsInviteTooltipOpen] = useState(false);
-  const [inviteTooltipMessage, setInviteTooltipMessage] = useState('링크가 복사되었습니다');
-
-  const closeInviteTooltip = useCallback(() => setIsInviteTooltipOpen(false), []);
+  const {
+    open: isInviteTooltipOpen,
+    message: inviteTooltipMessage,
+    close: closeInviteTooltip,
+    copyLink,
+  } = useCopyLinkFeedback();
 
   const handleCopyInviteLink = async () => {
     if (!projectLink.trim()) {
       return;
     }
 
-    const copied = await copyTextToClipboard(buildProjectInviteUrl(projectLink));
-    setInviteTooltipMessage(copied ? '링크가 복사되었습니다' : '링크 복사에 실패했습니다');
-    setIsInviteTooltipOpen(true);
+    await copyLink(buildProjectInviteUrl(projectLink));
   };
 
   if (!isLeader) {
@@ -192,7 +191,7 @@ const ProjectCardActions = ({ isLeader, projectStatus, projectLink }: ProjectCar
         >
           초대 링크 복사
         </Button>
-        <ProfileShareTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
+        <CopyFeedbackTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
       </div>
       {projectStatus === 'IN_PROGRESS' ? (
         <Button

@@ -1,12 +1,13 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { buildProfileShareClipboardText } from '@/features/profile/lib/build-profile-share-clipboard-text';
 import { EditIcon, ShareIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
+import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { cn } from '@/shared/lib/cn';
-import { copyTextToClipboard } from '@/shared/lib/copy-text-to-clipboard';
 
 import type { UpdateProfilePayload } from '../types';
 
@@ -14,7 +15,6 @@ import { useUpdateProfile } from '../mutations';
 import { useProfile } from '../queries';
 import { ProfileAvatar } from './profile-avatar';
 import { ProfileEditForm } from './profile-edit-form';
-import { ProfileShareTooltip } from './profile-share-tooltip';
 
 type ProfileSectionProps = {
   userId: number;
@@ -26,19 +26,19 @@ export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => 
   const { data: profile, isPending, isError, refetch } = useProfile(userId);
   const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useUpdateProfile();
   const [isEditing, setIsEditing] = useState(false);
-  const [isShareTooltipOpen, setIsShareTooltipOpen] = useState(false);
-  const [shareTooltipMessage, setShareTooltipMessage] = useState('링크가 복사되었습니다');
-
-  const closeShareTooltip = useCallback(() => setIsShareTooltipOpen(false), []);
+  const {
+    open: isShareTooltipOpen,
+    message: shareTooltipMessage,
+    close: closeShareTooltip,
+    copyLink,
+  } = useCopyLinkFeedback();
 
   const handleShareProfile = async () => {
     if (!Number.isFinite(userId) || userId <= 0) {
       return;
     }
 
-    const copied = await copyTextToClipboard(buildProfileShareClipboardText(userId));
-    setShareTooltipMessage(copied ? '링크가 복사되었습니다' : '링크 복사에 실패했습니다');
-    setIsShareTooltipOpen(true);
+    await copyLink(buildProfileShareClipboardText(userId));
   };
 
   const handleStartEditing = () => {
@@ -116,7 +116,7 @@ export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => 
             >
               내 프로필 공유하기
             </Button>
-            <ProfileShareTooltip open={isShareTooltipOpen} onClose={closeShareTooltip} message={shareTooltipMessage} />
+            <CopyFeedbackTooltip open={isShareTooltipOpen} onClose={closeShareTooltip} message={shareTooltipMessage} />
           </div>
         </div>
       ) : null}
