@@ -8,6 +8,8 @@ import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import type { Metadata } from 'next';
 
+import { MyPageSkeleton } from './page.skeleton';
+
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ const Page = async () => {
       <div className="border-divider-gray-light bg-surface-white w-full border-b py-8">
         <h1 className="text-heading-2xl text-text-basic text-center font-bold">마이페이지</h1>
       </div>
-      <Suspense fallback="로딩중...">
+      <Suspense fallback={<MyPageSkeleton />}>
         <HydrationBoundary state={dehydrate(queryClient)}>
           <MypageForm />
         </HydrationBoundary>
