@@ -7,19 +7,19 @@ import { cn } from '@/shared/lib/cn';
 
 const AUTO_DISMISS_MS = 3000;
 
-type CopyFeedbackTooltipProps = {
+type ProfileShareTooltipProps = {
   open: boolean;
   onClose: () => void;
   message?: string;
   className?: string;
 };
 
-export const CopyFeedbackTooltip = ({
+export const ProfileShareTooltip = ({
   open,
   onClose,
   message = '링크가 복사되었습니다',
   className,
-}: CopyFeedbackTooltipProps) => {
+}: ProfileShareTooltipProps) => {
   useEffect(() => {
     if (!open) {
       return;
