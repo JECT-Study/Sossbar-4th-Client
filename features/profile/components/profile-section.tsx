@@ -6,7 +6,6 @@ import { buildProfileShareClipboardText } from '@/features/profile/lib/build-pro
 import { EditIcon, ShareIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
-import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { cn } from '@/shared/lib/cn';
 
 import type { UpdateProfilePayload } from '../types';
@@ -26,12 +25,6 @@ export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => 
   const { data: profile, isPending, isError, refetch } = useProfile(userId);
   const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useUpdateProfile();
   const [isEditing, setIsEditing] = useState(false);
-  const {
-    open: isShareTooltipOpen,
-    message: shareTooltipMessage,
-    close: closeShareTooltip,
-    copyLink,
-  } = useCopyLinkFeedback();
 
   const handleShareProfile = async () => {
     if (!Number.isFinite(userId) || userId <= 0) {
