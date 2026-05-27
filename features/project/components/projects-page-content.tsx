@@ -1,90 +1,68 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 import { CreateProjectModal } from '@/features/project/components/create-project-modal';
 import { ProjectCard } from '@/features/project/components/project-card';
-import { getCompletedReviews } from '@/features/project/lib/completed-review-storage';
+import { useProjectCards } from '@/features/project/hooks/use-project-cards';
 import { SettingIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { PageContainer } from '@/shared/components/page-container';
 
-type ProjectMember = {
-  memberId: number;
-  name: string;
-  reviewStatus: 'writable' | 'completed' | 'self';
-};
-
-type ProjectListItem = {
-  projectId: number;
-  projectName: string;
-  host: string;
-  startDate: string;
-  endDate: string;
-  projectLink: string;
-  projectImage: string | null;
-  projectStatus: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
-  myMemberStatus: 'LEADER' | 'MEMBER';
-  members: ProjectMember[];
-};
-
-const applyCompletedReviews = (projects: ProjectListItem[]): ProjectListItem[] => {
-  const completed = getCompletedReviews();
-
-  return projects.map((project) => ({
-    ...project,
-    members: project.members.map((member) => {
-      if (member.reviewStatus !== 'writable') {
-        return member;
-      }
-
-      return completed[`${project.projectId}-${member.memberId}`]
-        ? { ...member, reviewStatus: 'completed' as const }
-        : member;
-    }),
-  }));
-};
-
-const mockProjects: ProjectListItem[] = [
-  {
-    projectId: 1,
-    projectName: '소스바 프로젝트',
-    host: 'JECT',
-    startDate: '2025-03-01T00:00:00',
-    endDate: '2025-06-30T00:00:00',
-    projectLink: '30b2e693-ca41-4e26-96dc-da7e3a6a0de1',
-    projectImage: null,
-    projectStatus: 'IN_PROGRESS',
-    myMemberStatus: 'LEADER',
-    members: [
-      { memberId: 1, name: '김재희', reviewStatus: 'self' },
-      { memberId: 2, name: '유하영', reviewStatus: 'completed' },
-      { memberId: 3, name: '한예진', reviewStatus: 'writable' },
-      { memberId: 4, name: '양현준', reviewStatus: 'completed' },
-    ],
-  },
-  {
-    projectId: 2,
-    projectName: '소스바 프로젝트',
-    host: 'JECT',
-    startDate: '2025-03-01T00:00:00',
-    endDate: '2025-06-30T00:00:00',
-    projectLink: '30b2e693-ca41-4e26-96dc-da7e3a6a0de1',
-    projectImage: null,
-    projectStatus: 'COMPLETED',
-    myMemberStatus: 'MEMBER',
-    members: [
-      { memberId: 5, name: '박민서', reviewStatus: 'writable' },
-      { memberId: 6, name: '이도윤', reviewStatus: 'self' },
-      { memberId: 7, name: '정서연', reviewStatus: 'completed' },
-      { memberId: 8, name: '최준호', reviewStatus: 'writable' },
-    ],
-  },
-];
-
 export const ProjectsPageContent = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const projects = useMemo(() => applyCompletedReviews(mockProjects), []);
+  const { projects, hasSession, isPending, isError, refetch } = useProjectCards();
+
+  const renderProjectList = () => {
+    if (!hasSession) {
+      return (
+        <div className="border-divider-gray-light flex min-h-[240px] flex-col items-center justify-center gap-4 rounded-2xl border border-dashed px-6 py-12 text-center">
+          <p className="text-body-base text-text-basic">로그인 후 프로젝트 목록을 불러올 수 있습니다.</p>
+          {process.env.NODE_ENV === 'development' ? (
+            <Button type="button" variant="secondary" size="medium" asChild>
+              <Link href="/login/test">테스트 계정으로 로그인</Link>
+            </Button>
+          ) : null}
+        </div>
+      );
+    }
+
+    if (isPending) {
+      return (
+        <div className="flex min-h-[240px] items-center justify-center">
+          <p className="text-body-base text-text-subtle">프로젝트 목록을 불러오는 중…</p>
+        </div>
+      );
+    }
+
+    if (isError) {
+      return (
+        <div className="border-divider-gray-light flex min-h-[240px] flex-col items-center justify-center gap-4 rounded-2xl border px-6 py-12 text-center">
+          <p className="text-body-base text-text-basic">프로젝트 목록을 불러오지 못했습니다.</p>
+          <Button type="button" variant="secondary" size="medium" onClick={() => void refetch()}>
+            다시 시도
+          </Button>
+        </div>
+      );
+    }
+
+    if (projects.length === 0) {
+      return (
+        <div className="flex min-h-[240px] items-center justify-center">
+          <p className="text-body-base text-text-subtle">참여 중인 프로젝트가 없습니다.</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        {projects.map((project) => (
+          <ProjectCard key={project.projectId} project={project} />
+        ))}
+      </div>
+    );
+  };
 
   return (
     <PageContainer>
@@ -106,11 +84,7 @@ export const ProjectsPageContent = () => {
         </Button>
       </div>
 
-      <div className="my-10.5 space-y-6">
-        {projects.map((project) => (
-          <ProjectCard key={project.projectId} project={project} />
-        ))}
-      </div>
+      <div className="my-10.5">{renderProjectList()}</div>
 
       <CreateProjectModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
     </PageContainer>
