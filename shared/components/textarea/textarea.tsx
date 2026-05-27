@@ -75,6 +75,7 @@ export const Textarea = ({
         onFocus={handleFocus}
         onBlur={handleBlur}
         maxLength={maxLength}
+        disabled={disabled}
         {...restProps}
       />
       {showCount ? <CharCount current={valueLength} max={maxLength!} state={countState} /> : null}
