@@ -13,13 +13,14 @@ import { formatIsoDateToDots } from '@/shared/lib/format-date';
 const DEFAULT_IMAGE_PATH = '/default.png';
 
 interface ProjectItemProps {
+  userId: number;
   project: UserProjectResponse;
 }
 
-const ProjectItem = ({ project }: ProjectItemProps) => {
+const ProjectItem = ({ userId, project }: ProjectItemProps) => {
   return (
     <Link
-      href={ROUTES.PROJECT(project.projectId)}
+      href={ROUTES.PROJECT(userId, project.projectId)}
       className="focus-visible:ring-border-secondary block rounded-lg focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
     >
       <article>
@@ -63,7 +64,7 @@ export const ProjectSection = ({ userId }: ProjectSectionProps) => {
       <ul className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
         {projects.map((project) => (
           <li key={project.projectId}>
-            <ProjectItem project={project} />
+            <ProjectItem userId={userId} project={project} />
           </li>
         ))}
       </ul>
