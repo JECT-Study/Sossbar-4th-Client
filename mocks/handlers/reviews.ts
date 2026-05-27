@@ -36,8 +36,6 @@ const mockSpectrumAxisInfos = [
 
 const mockSpectrumInfo = { totalCount: 8, spectrumInfoResDtos: mockSpectrumAxisInfos };
 
-const submittedReviews = new Set<string>();
-
 export const reviewsHandlers = [
   http.post(`${BASE}/reviews`, async ({ request }) => {
     const body = (await request.json()) as {
