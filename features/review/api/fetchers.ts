@@ -1,7 +1,7 @@
 import { apiRequest } from '@/shared/lib/api';
 
 import type { CreateReviewApiBody, CreateReviewRequest, Review, ReviewFormData } from '../types/review';
-import type { SpectrumStats } from '../types/spectrum';
+import type { SpectrumInfo } from '../types/spectrum';
 import type { ReceivedTags } from '../types/tag';
 
 const toCreateReviewApiBody = (data: CreateReviewRequest): CreateReviewApiBody => {
@@ -32,11 +32,11 @@ export const fetchReceivedTags = (userId: number): Promise<ReceivedTags> =>
 export const fetchReceivedTagsByProject = (userId: number, projectId: number): Promise<ReceivedTags> =>
   apiRequest<ReceivedTags>(`/reviews/tags/${userId}/${projectId}`);
 
-export const fetchSpectrumStats = (userId: number): Promise<SpectrumStats> =>
-  apiRequest<SpectrumStats>(`/reviews/spectrums/${userId}`);
+export const fetchSpectrum = (userId: number): Promise<SpectrumInfo> =>
+  apiRequest<SpectrumInfo>(`/reviews/spectrums/${userId}`);
 
-export const fetchSpectrumStatsByProject = (userId: number, projectId: number): Promise<SpectrumStats> =>
-  apiRequest<SpectrumStats>(`/reviews/spectrums/${userId}/${projectId}`);
+export const fetchSpectrumByProject = (userId: number, projectId: number): Promise<SpectrumInfo> =>
+  apiRequest<SpectrumInfo>(`/reviews/spectrums/${userId}/${projectId}`);
 
 export const createReview = (data: CreateReviewRequest): Promise<void> =>
   apiRequest<void>('/reviews', { method: 'POST', body: toCreateReviewApiBody(data) });

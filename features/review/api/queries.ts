@@ -5,8 +5,8 @@ import {
   fetchReceivedTagsByProject,
   fetchReviewFormData,
   fetchReviews,
-  fetchSpectrumStats,
-  fetchSpectrumStatsByProject,
+  fetchSpectrum,
+  fetchSpectrumByProject,
 } from './fetchers';
 import { reviewKeys } from './query-keys';
 
@@ -30,14 +30,9 @@ export const useReceivedTags = ({ userId, projectId }: { userId: number; project
     enabled: userId > 0 && (projectId === undefined || projectId > 0),
   });
 
-export const useSpectrumStats = (userId: number) =>
+export const useSpectrum = ({ userId, projectId }: { userId: number; projectId?: number }) =>
   useQuery({
-    queryKey: reviewKeys.spectrumStats(userId),
-    queryFn: () => fetchSpectrumStats(userId),
-  });
-
-export const useSpectrumStatsByProject = (userId: number, projectId: number) =>
-  useQuery({
-    queryKey: reviewKeys.spectrumStatsByProject(userId, projectId),
-    queryFn: () => fetchSpectrumStatsByProject(userId, projectId),
+    queryKey: reviewKeys.spectrum(userId, projectId),
+    queryFn: () => (projectId === undefined ? fetchSpectrum(userId) : fetchSpectrumByProject(userId, projectId)),
+    enabled: userId > 0 && (projectId === undefined || projectId > 0),
   });
