@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { useUserProjects } from '@/features/project';
+import type { UserProjectResponse } from '@/features/project';
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { ROUTES } from '@/shared/constants/routes';
@@ -10,22 +12,8 @@ import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
 const DEFAULT_IMAGE_PATH = '/default.png';
 
-// mock data
-const createProjects = () => {
-  return Array.from({ length: 8 }, (_, index) => ({
-    projectId: index + 1,
-    projectName: '소스바 프로젝트',
-    host: 'JECT',
-    startDate: '2025-03-01T00:00:00',
-    endDate: '2025-06-30T00:00:00',
-    projectImage: '/default.png',
-  }));
-};
-
-type Project = ReturnType<typeof createProjects>[number];
-
 interface ProjectItemProps {
-  project: Project;
+  project: UserProjectResponse;
 }
 
 const ProjectItem = ({ project }: ProjectItemProps) => {
@@ -51,8 +39,24 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
   );
 };
 
-export const ProjectSection = () => {
-  const projects = createProjects();
+interface ProjectSectionProps {
+  userId: number;
+}
+
+export const ProjectSection = ({ userId }: ProjectSectionProps) => {
+  const { data: projects, isPending, isError } = useUserProjects(userId);
+
+  if (isPending) {
+    return <p className="text-body-sm text-text-subtle">프로젝트 정보를 불러오는 중...</p>;
+  }
+
+  if (isError) {
+    return <p className="text-body-sm text-text-error">프로젝트 정보를 불러오지 못했습니다.</p>;
+  }
+
+  if (projects.length === 0) {
+    return <p className="text-body-sm text-text-subtle">아직 참여한 프로젝트가 없습니다.</p>;
+  }
 
   return (
     <section aria-label="프로젝트별 리뷰" className="flex flex-col">
