@@ -32,7 +32,7 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
     control,
   } = form;
 
-  const nickname = useWatch({ control, name: 'nickname' });
+  const username = useWatch({ control, name: 'username' });
   const previewSrc = previewImageUrl ?? profile.profileImageUrl;
 
   const handleClickImageButton = () => {
@@ -61,7 +61,7 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
         </div>
         <div className="mt-6 flex gap-6">
           <div className="relative shrink-0">
-            <ProfileAvatar nickname={nickname.trim() || profile.nickname} profileImageUrl={previewSrc} />
+            <ProfileAvatar username={username.trim() || profile.username} profileImageUrl={previewSrc} />
             <input
               ref={fileInputRef}
               type="file"
@@ -82,14 +82,14 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
           <div className="flex w-full max-w-120 flex-1 flex-col gap-2">
             <Controller
               control={control}
-              name="nickname"
+              name="username"
               render={({ field }) => (
                 <TextField
                   label="닉네임"
                   required
                   placeholder="내용을 입력하세요"
                   maxLength={PROFILE_NICKNAME_MAX_LENGTH}
-                  errorMessage={errors.nickname?.message}
+                  errorMessage={errors.username?.message}
                   {...field}
                   disabled
                 />
