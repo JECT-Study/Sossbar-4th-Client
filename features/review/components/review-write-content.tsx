@@ -3,7 +3,6 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 
-import { markReviewCompleted } from '@/features/project/lib/completed-review-storage';
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
@@ -101,7 +100,6 @@ export const ReviewWriteContent = () => {
         tagIds,
         spectrums,
       });
-      markReviewCompleted(projectId, revieweeId);
       setSubmitDialogOpen(false);
       router.push('/projects');
     } catch {
