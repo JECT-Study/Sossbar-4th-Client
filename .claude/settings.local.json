@@ -11,7 +11,15 @@
       "Bash(cat .env.example)",
       "Bash(cat .env.local.example)",
       "Bash(pnpm build *)",
-      "Bash(git diff *)"
+      "Bash(git diff *)",
+      "Bash(git rebase *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(git reset *)",
+      "Bash(git ls-tree *)",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(git restore *)",
+      "Bash(git commit *)"
     ]
   }
 }

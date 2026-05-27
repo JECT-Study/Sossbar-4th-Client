@@ -8,14 +8,21 @@ export {
   useInviteProjectMember,
   useUpdateProject,
 } from './api/mutations';
-export { useProject, useUserProjects } from './api/queries';
+export { fetchProjects } from './api/fetchers';
+export { useProject, useProjects, useUserProjects } from './api/queries';
 export { projectKeys } from './api/query-keys';
 export { ProjectPageContent } from './components/project-page-content';
+export { useProjectCards } from './hooks/use-project-cards';
+export { mapMyProjectToCardItem, mapMyProjectsToCardItems } from './lib/map-my-project-to-card';
 export type {
   CreateProjectPayload,
   MemberStatus,
+  MyProjectResponse,
+  ProjectCardItem,
+  ProjectCardMember,
   ProjectCreateRequest,
   ProjectMemberResponse,
+  ProjectMemberReviewStatus,
   ProjectResponse,
   ProjectStatus,
   ProjectUpdateRequest,

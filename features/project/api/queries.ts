@@ -1,7 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchProject, fetchUserProjects } from './fetchers';
+import { fetchProject, fetchProjects, fetchUserProjects } from './fetchers';
 import { projectKeys } from './query-keys';
+
+export const useProjects = (enabled = true) =>
+  useQuery({
+    queryKey: projectKeys.list(),
+    queryFn: fetchProjects,
+    enabled,
+  });
 
 export const useProject = (projectId: number, enabled = true) =>
   useQuery({

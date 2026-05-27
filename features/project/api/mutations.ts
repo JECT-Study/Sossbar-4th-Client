@@ -18,6 +18,7 @@ export const useCreateProject = () => {
     mutationFn: (payload: CreateProjectPayload) => createProject(payload),
     onSuccess: (data) => {
       queryClient.setQueryData(projectKeys.detail(data.projectId), data);
+      queryClient.invalidateQueries({ queryKey: projectKeys.list() });
     },
   });
 };
@@ -68,6 +69,7 @@ export const useConfirmProjectMembers = (projectId: number) => {
     mutationFn: () => confirmProjectMembers(projectId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
+      queryClient.invalidateQueries({ queryKey: projectKeys.list() });
     },
   });
 };
