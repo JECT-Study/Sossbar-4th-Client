@@ -1,30 +1,31 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
-const MODAL_QUERY_KEY = 'modal';
+import { useSessionUser } from '@/shared/lib/session-user';
+
+import { useQueryParam } from './use-query-param';
+
 const LOGIN_MODAL_VALUE = 'login';
 
 export const useLoginModal = () => {
-  const pathname = usePathname();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const { queryParamValue, updateQueryParam, removeQueryParam } = useQueryParam('modal');
+  const sessionUser = useSessionUser();
 
-  const isOpen = searchParams.get(MODAL_QUERY_KEY) === LOGIN_MODAL_VALUE;
+  const hasLoginParam = queryParamValue === LOGIN_MODAL_VALUE;
+  const isOpen = hasLoginParam && !sessionUser;
+
+  useEffect(() => {
+    if (hasLoginParam && sessionUser) {
+      removeQueryParam();
+    }
+  }, [hasLoginParam, sessionUser, removeQueryParam]);
 
   const onOpenChange = (nextOpen: boolean) => {
-    const nextParams = new URLSearchParams(searchParams.toString());
-
     if (nextOpen) {
-      nextParams.set(MODAL_QUERY_KEY, LOGIN_MODAL_VALUE);
-      router.push(`${pathname}?${nextParams.toString()}`, { scroll: false });
-      return;
+      updateQueryParam(LOGIN_MODAL_VALUE);
+    } else {
+      removeQueryParam();
     }
-
-    nextParams.delete(MODAL_QUERY_KEY);
-    const nextQuery = nextParams.toString();
-    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   };
 
-  const openLoginModal = () => onOpenChange(true);
-
-  return { isOpen, onOpenChange, openLoginModal };
+  return { isOpen, onOpenChange, openLoginModal: () => onOpenChange(true) };
 };
