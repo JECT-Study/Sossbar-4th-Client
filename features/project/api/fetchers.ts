@@ -2,6 +2,9 @@ import { buildProjectMultipartFormData } from '@/features/project/lib/build-proj
 import type { CreateProjectPayload, ProjectResponse, UpdateProjectPayload } from '@/features/project/types';
 import { apiRequest } from '@/shared/lib/api';
 
+/** GET /api/v1/projects — 프로젝트 목록 (내 프로젝트 기준) */
+export const fetchProjects = (): Promise<ProjectResponse[]> => apiRequest<ProjectResponse[]>('/projects');
+
 /** GET /api/v1/projects/{projectId} — 프로젝트 조회 */
 export const fetchProject = (projectId: number): Promise<ProjectResponse> =>
   apiRequest<ProjectResponse>(`/projects/${projectId}`);

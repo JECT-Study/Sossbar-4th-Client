@@ -2,6 +2,8 @@ import { http, HttpResponse } from 'msw';
 
 import type { ProjectResponse } from '@/features/project/types';
 
+import { isMockReviewSubmitted } from '../lib/submitted-reviews';
+
 const BASE = '/api/v1';
 
 const wrap = <T>(data: T) =>
@@ -104,8 +106,17 @@ const mockProject3: ProjectResponse = {
 
 const mockProjects = [mockProject1, mockProject2, mockProject3];
 
+const withSubmittedReviewFlags = (projects: ProjectResponse[]): ProjectResponse[] =>
+  projects.map((project) => ({
+    ...project,
+    members: project.members.map((member) => ({
+      ...member,
+      reviewWritten: member.reviewWritten === true || isMockReviewSubmitted(project.projectId, member.userId),
+    })),
+  }));
+
 export const projectsHandlers = [
-  http.get(`${BASE}/projects`, () => wrap(mockProjects)),
+  http.get(`${BASE}/projects`, () => wrap(withSubmittedReviewFlags(mockProjects))),
 
   http.get(`${BASE}/projects/:projectId`, ({ params }) => {
     const projectId = Number(params.projectId);
@@ -121,7 +132,7 @@ export const projectsHandlers = [
         { status: 404 },
       );
     }
-    return wrap(project);
+    return wrap(withSubmittedReviewFlags([project])[0]);
   }),
 
   http.post(`${BASE}/projects`, async () => {
