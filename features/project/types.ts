@@ -22,6 +22,15 @@ export interface ProjectResponse {
   members: ProjectMemberResponse[];
 }
 
+export interface UserProjectResponse {
+  projectId: number;
+  projectName: string;
+  host: string;
+  startDate: string;
+  endDate: string;
+  projectImage: string | null;
+}
+
 export interface ProjectCreateRequest {
   projectName: string;
   host: string;

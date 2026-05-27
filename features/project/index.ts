@@ -8,7 +8,8 @@ export {
   useInviteProjectMember,
   useUpdateProject,
 } from './api/mutations';
-export { projectKeys, useProject } from './api/queries';
+export { useProject, useUserProjects } from './api/queries';
+export { projectKeys } from './api/query-keys';
 export { ProjectPageContent } from './components/project-page-content';
 export type {
   CreateProjectPayload,
@@ -19,4 +20,5 @@ export type {
   ProjectStatus,
   ProjectUpdateRequest,
   UpdateProjectPayload,
+  UserProjectResponse,
 } from './types';
