@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
+import { useConfirmProjectMembers } from '@/features/project/api/mutations';
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
 import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
@@ -11,6 +13,7 @@ import { CopyIcon, EditIcon, EllipsisVerticalIcon, RoundCheckIcon, TrashIcon } f
 import { Alert } from '@/shared/components/alert';
 import { Button, IconButton } from '@/shared/components/button';
 import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
+import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { Dropdown } from '@/shared/components/dropdown';
 import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { cn } from '@/shared/lib/cn';
@@ -59,6 +62,7 @@ interface ProjectCardTitleProps {
 }
 
 interface ProjectCardActionsProps {
+  projectId: number;
   isLeader: boolean;
   projectStatus: ProjectCardItem['projectStatus'];
   projectLink: string;
@@ -85,6 +89,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         />
         <ProjectCardTitle projectName={project.projectName} host={project.host} />
         <ProjectCardActions
+          projectId={project.projectId}
           isLeader={isLeader}
           projectStatus={project.projectStatus}
           projectLink={project.projectLink}
@@ -155,13 +160,26 @@ const ProjectCardTitle = ({ host, projectName }: ProjectCardTitleProps) => {
   );
 };
 
-const ProjectCardActions = ({ isLeader, projectStatus, projectLink }: ProjectCardActionsProps) => {
+const ProjectCardActions = ({ projectId, isLeader, projectStatus, projectLink }: ProjectCardActionsProps) => {
   const {
     open: isInviteTooltipOpen,
     message: inviteTooltipMessage,
     close: closeInviteTooltip,
     copyLink,
   } = useCopyLinkFeedback();
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
+  const { mutateAsync: confirmTeam, isPending: isConfirming } = useConfirmProjectMembers(projectId);
+
+  const handleConfirmTeam = useCallback(async () => {
+    setConfirmError(null);
+    try {
+      await confirmTeam();
+      setConfirmDialogOpen(false);
+    } catch {
+      setConfirmError('팀 확정에 실패했습니다. 다시 시도해주세요.');
+    }
+  }, [confirmTeam]);
 
   const handleCopyInviteLink = async () => {
     if (!projectLink.trim()) {
@@ -199,6 +217,8 @@ const ProjectCardActions = ({ isLeader, projectStatus, projectLink }: ProjectCar
           variant="primary"
           size="medium"
           leftIcon={<RoundCheckIcon aria-hidden className="size-4" />}
+          disabled={isConfirming}
+          onClick={() => setConfirmDialogOpen(true)}
         >
           우리 팀 확정하기
         </Button>
@@ -219,6 +239,22 @@ const ProjectCardActions = ({ isLeader, projectStatus, projectLink }: ProjectCar
           팀 확정 완료
         </Button>
       )}
+      <ConfirmationDialog
+        open={confirmDialogOpen}
+        title="우리 팀을 확정할까요?"
+        description="확정하면 팀원들과 후기를 주고받을 수 있습니다. 확정 후에는 되돌릴 수 없습니다."
+        confirmText="확정하기"
+        cancelText="취소"
+        onOpenChange={(open) => {
+          if (!open) {
+            setConfirmError(null);
+          }
+          setConfirmDialogOpen(open);
+        }}
+        onConfirm={handleConfirmTeam}
+        isConfirming={isConfirming}
+        errorMessage={confirmError ?? undefined}
+      />
     </div>
   );
 };
