@@ -1,24 +1,41 @@
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
+
+import { fetchMyProfile } from '@/features/mypage/apis/fetch-my-profile.api';
+import { MypageForm } from '@/features/mypage/components/mypage-form';
+import { mypageKeys } from '@/features/mypage/mypage.query-key';
+import { getQueryClient } from '@/shared/lib/get-query-client';
+
 import type { Metadata } from 'next';
 
-import { MypageForm } from './mypage-form';
+import { MyPageSkeleton } from './page.skeleton';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: '마이페이지',
 };
 
-const MypagePage = () => {
+const Page = async () => {
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: mypageKeys.all,
+    queryFn: () => fetchMyProfile(),
+  });
+
   return (
     <section className="min-h-0 flex-1" aria-label="마이페이지">
-      <div className="border-divider-gray-light bg-surface-white w-full border-b">
-        <div className="mx-auto w-full max-w-[1200px] px-10">
-          <div className="flex min-h-[152px] items-center justify-center py-8">
-            <h1 className="text-heading-2xl text-text-basic text-center font-bold">마이페이지</h1>
-          </div>
-        </div>
+      <div className="border-divider-gray-light bg-surface-white w-full border-b py-8">
+        <h1 className="text-heading-2xl text-text-basic text-center font-bold">마이페이지</h1>
       </div>
-      <MypageForm />
+      <Suspense fallback={<MyPageSkeleton />}>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <MypageForm />
+        </HydrationBoundary>
+      </Suspense>
     </section>
   );
 };
 
-export default MypagePage;
+export default Page;
