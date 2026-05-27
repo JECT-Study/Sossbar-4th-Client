@@ -41,6 +41,14 @@ const mockProject1: ProjectResponse = {
       memberStatus: 'MEMBER',
       reviewWritten: true,
     },
+    {
+      projectMemberId: 7,
+      userId: 3,
+      username: '박민수',
+      profileImageUrl: null,
+      memberStatus: 'MEMBER',
+      reviewWritten: false,
+    },
   ],
 };
 
