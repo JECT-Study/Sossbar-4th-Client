@@ -1,9 +1,8 @@
-'use client';
+import { buildProfileShareMetadata } from '@/features/profile/lib/build-profile-share-metadata';
 
-import { use } from 'react';
+import type { Metadata } from 'next';
 
-import { ProfilePageContent } from '@/features/profile';
-import { useSessionUser } from '@/shared/lib/session-user';
+import { ProfilePageClient } from './profile-page-client';
 
 type ProfilePageProps = {
   params: Promise<{
@@ -11,16 +10,17 @@ type ProfilePageProps = {
   }>;
 };
 
-const ProfilePage = ({ params }: ProfilePageProps) => {
-  const { userId } = use(params);
-  const parsedUserId = Number(userId);
-  const profileUserId = Number.isFinite(parsedUserId) && parsedUserId > 0 ? parsedUserId : 1;
-  const sessionUser = useSessionUser();
-  const isMockDev = process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_MSW !== 'false';
-  const mockMyProfileUserId = 1;
-  const isMyProfile = (isMockDev && profileUserId === mockMyProfileUserId) || profileUserId === sessionUser?.userId;
+export const generateMetadata = async ({ params }: ProfilePageProps): Promise<Metadata> => {
+  const { userId } = await params;
+  const profileUserId = Number(userId);
 
-  return <ProfilePageContent userId={profileUserId} isMyProfile={isMyProfile} />;
+  if (!Number.isFinite(profileUserId) || profileUserId <= 0) {
+    return { title: '프로필' };
+  }
+
+  return buildProfileShareMetadata(profileUserId);
 };
+
+const ProfilePage = ({ params }: ProfilePageProps) => <ProfilePageClient params={params} />;
 
 export default ProfilePage;

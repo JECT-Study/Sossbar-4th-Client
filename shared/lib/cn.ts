@@ -146,6 +146,7 @@ const twMerge = extendTailwindMerge({
             'action-disabled',
             'button-primary-fill',
             'button-primary-fill-hover',
+            'button-primary-fill-focus',
             'button-primary-fill-pressed',
             'button-secondary-fill',
             'button-secondary-fill-hover',

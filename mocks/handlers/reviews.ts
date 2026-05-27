@@ -34,6 +34,8 @@ const mockSpectrums = [
   { spectrumId: 4, leftLabel: '냉철한 유연한 대처', rightLabel: '따뜻한 관계 지향' },
 ];
 
+const submittedReviews = new Set<string>();
+
 export const reviewsHandlers = [
   http.post(`${BASE}/reviews`, async ({ request }) => {
     const body = (await request.json()) as {

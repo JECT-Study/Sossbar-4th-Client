@@ -1,3 +1,5 @@
+export { CreateProjectModal } from './components/create-project-modal';
+export { ProjectsPageContent } from './components/projects-page-content';
 export {
   useConfirmProjectMembers,
   useCreateProject,
