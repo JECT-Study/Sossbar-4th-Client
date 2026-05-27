@@ -14,11 +14,23 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sossbar.vercel.app'
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: {
-    default: 'Sossbar',
-    template: '%s',
+  title: 'Sossbar - 프로젝트 동료와 성장 기록을 남기다',
+  description: '함께한 동료의 피드백으로 협업 성향과 신뢰를 기록하는 성장 프로필 서비스',
+  icons: {
+    icon: [{ url: '/Sossbar-logo2.svg', type: 'image/svg+xml' }],
   },
-  description: '소프트 스킬 기반 협업 프로필 플랫폼',
+  openGraph: {
+    title: 'Sossbar - 프로젝트 동료와 성장 기록을 남기다',
+    description: '함께한 동료의 피드백으로 협업 성향과 신뢰를 기록하는 성장 프로필 서비스',
+    type: 'website',
+    url: siteUrl,
+    siteName: 'Sossbar',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Sossbar - 프로젝트 동료와 성장 기록을 남기다',
+    description: '함께한 동료의 피드백으로 협업 성향과 신뢰를 기록하는 성장 프로필 서비스',
+  },
 };
 
 const pretendard = localFont({

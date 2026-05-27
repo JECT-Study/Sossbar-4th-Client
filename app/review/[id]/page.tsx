@@ -19,20 +19,26 @@ export const metadata: Metadata = {
   },
 };
 
-const ReviewNewFallback = () => (
+const ReviewPageFallback = () => (
   <div className="border-divider-gray-light bg-surface-white flex min-h-[240px] w-full items-center justify-center border-b">
     <p className="text-body-base text-text-subtle">화면을 불러오는 중…</p>
   </div>
 );
 
-const ReviewNewPage = () => {
+type ReviewPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+const ReviewPage = async ({ params }: ReviewPageProps) => {
+  const { id } = await params;
+
   return (
-    <section className="min-h-0 flex-1" aria-label="후기 작성">
-      <Suspense fallback={<ReviewNewFallback />}>
+    <section className="min-h-0 flex-1" aria-label={`후기 작성 ${id}`}>
+      <Suspense fallback={<ReviewPageFallback />}>
         <ReviewWriteContent />
       </Suspense>
     </section>
   );
 };
 
-export default ReviewNewPage;
+export default ReviewPage;
