@@ -1,4 +1,5 @@
 import { authHandlers } from './auth';
+import { mypageHandlers } from './mypage';
 import { profileHandlers } from './profile';
 import { projectsHandlers } from './projects';
 import { reviewsHandlers } from './reviews';
@@ -10,4 +11,5 @@ export const handlers = [
   ...profileHandlers,
   ...projectsHandlers,
   ...reviewsHandlers,
+  ...mypageHandlers,
 ];
