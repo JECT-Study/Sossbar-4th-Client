@@ -41,6 +41,14 @@ const mockProject1: ProjectResponse = {
       memberStatus: 'MEMBER',
       reviewWritten: true,
     },
+    {
+      projectMemberId: 7,
+      userId: 3,
+      username: '박민수',
+      profileImageUrl: null,
+      memberStatus: 'MEMBER',
+      reviewWritten: false,
+    },
   ],
 };
 
@@ -160,8 +168,12 @@ let mockMyProjects: MyProjectResponse[] = [
   },
 ];
 
-const withSubmittedReviewFlags = (projects: MyProjectResponse[]): MyProjectResponse[] =>
-  projects.map((project) => ({
+function withSubmittedReviewFlags(projects: MyProjectResponse[]): MyProjectResponse[];
+function withSubmittedReviewFlags(projects: ProjectResponse[]): ProjectResponse[];
+function withSubmittedReviewFlags(
+  projects: MyProjectResponse[] | ProjectResponse[],
+): MyProjectResponse[] | ProjectResponse[] {
+  return projects.map((project) => ({
     ...project,
     members: project.members.map(
       (member): ProjectMemberResponse => ({
@@ -170,6 +182,7 @@ const withSubmittedReviewFlags = (projects: MyProjectResponse[]): MyProjectRespo
       }),
     ),
   }));
+}
 
 export const projectsHandlers = [
   http.get(`${BASE}/projects`, () => wrap(withSubmittedReviewFlags(mockMyProjects))),
@@ -188,7 +201,7 @@ export const projectsHandlers = [
         { status: 404 },
       );
     }
-    return wrap(project);
+    return wrap(withSubmittedReviewFlags([project])[0]);
   }),
 
   http.post(`${BASE}/projects`, async () => {

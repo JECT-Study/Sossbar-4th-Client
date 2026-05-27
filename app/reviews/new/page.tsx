@@ -5,7 +5,18 @@ import { ReviewWriteContent } from '@/features/review';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '후기 작성',
+  title: 'Sossbar - 프로젝트 동료 리뷰',
+  description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
+  openGraph: {
+    title: 'Sossbar - 프로젝트 동료 리뷰',
+    description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Sossbar - 프로젝트 동료 리뷰',
+    description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
+  },
 };
 
 const ReviewNewFallback = () => (
