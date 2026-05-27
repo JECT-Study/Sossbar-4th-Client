@@ -91,9 +91,9 @@ export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => 
   return (
     <section className="mt-15.5 mb-8 flex w-full flex-row">
       <div className="flex h-[104px] w-[540px] flex-row gap-6">
-        <ProfileAvatar nickname={profile.nickname} profileImageUrl={profile.profileImageUrl} />
+        <ProfileAvatar username={profile.username} profileImageUrl={profile.profileImageUrl} />
         <div className="flex flex-1 flex-col">
-          <h2 className="text-heading-lg text-text-basic pb-2 font-bold">{profile.nickname}</h2>
+          <h2 className="text-heading-lg text-text-basic pb-2 font-bold">{profile.username}</h2>
           <p className="text-heading-xs text-text-subtle font-normal">{profile.bio}</p>
         </div>
       </div>
