@@ -1,5 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
+import type { Spectrum } from '@/features/review/types/spectrum';
+
 import { markMockReviewSubmitted } from '../lib/submitted-reviews';
 
 const BASE = '/api/v1';
@@ -26,6 +28,14 @@ const mockTags = [
   { tagId: 19, name: '먼저 친근하게 다가와요' },
   { tagId: 20, name: '모르는 것을 숨기지 않고 물어봐요' },
 ];
+
+/** 후기 작성 폼용 축 (spectrumId → POST 시 spectrumAxisId로 매핑) */
+const mockReviewFormSpectrums = [
+  { spectrumId: 1, leftLabel: '서포트형', rightLabel: '리드형' },
+  { spectrumId: 2, leftLabel: '빠른 작업 속도 중시', rightLabel: '천천히 신중한 고민 중시' },
+  { spectrumId: 3, leftLabel: '상황별 유연한 대처', rightLabel: '철저한 계획 기반 실행' },
+  { spectrumId: 4, leftLabel: '냉철한 결과 지향', rightLabel: '따뜻한 관계 지향' },
+] as const satisfies readonly Spectrum[];
 
 const mockSpectrumAxisInfos = [
   { spectrumAxisId: 1, axisName: '서포트형-리드형', averageStrength: 4, leftStrengthCount: 1, rightStrengthCount: 7 },
@@ -55,7 +65,7 @@ export const reviewsHandlers = [
   }),
 
   http.get(`${BASE}/form-data`, () => {
-    return HttpResponse.json({ tags: mockTags, spectrums: mockSpectrumAxisInfos });
+    return HttpResponse.json({ tags: mockTags, spectrums: [...mockReviewFormSpectrums] });
   }),
 
   http.get(`${BASE}/reviews`, () => {
