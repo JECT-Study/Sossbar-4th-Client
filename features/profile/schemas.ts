@@ -9,7 +9,7 @@ const isProfileImageFile = (value: unknown): value is File => {
 };
 
 export const ProfileEditFormSchema = z.object({
-  nickname: z
+  username: z
     .string()
     .trim()
     .min(1, { message: '닉네임을 입력해 주세요.' })
