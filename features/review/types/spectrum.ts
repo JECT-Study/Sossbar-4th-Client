@@ -13,7 +13,11 @@ export type SpectrumAxisInfo = {
   spectrumAxisId: number;
   axisName: string;
   averageStrength: number;
-  totalCount: number;
   leftStrengthCount: number;
   rightStrengthCount: number;
+};
+
+export type SpectrumInfo = {
+  totalCount: number;
+  spectrumInfoResDtos: SpectrumAxisInfo[];
 };

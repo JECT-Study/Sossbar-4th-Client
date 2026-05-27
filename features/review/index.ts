@@ -8,4 +8,4 @@ export { SoftSkillsCard } from './components/softskills-card';
 export { TagCard } from './components/tag-card';
 export type { CreateReviewRequest, Review, ReviewFormData } from './types/review';
 export type { Tag, ReceivedTags, ReceivedTagCount } from './types/tag';
-export type { SpectrumAxisInfo } from './types/spectrum';
+export type { Spectrum, SpectrumWithValue, SpectrumAxisInfo, SpectrumInfo } from './types/spectrum';
