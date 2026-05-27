@@ -9,15 +9,15 @@ export type SpectrumWithValue = {
   value: number;
 };
 
-export type SpectrumInfo = {
+export type SpectrumAxisInfo = {
   spectrumAxisId: number;
   axisName: string;
   averageStrength: number;
-  totalCount: number;
   leftStrengthCount: number;
   rightStrengthCount: number;
 };
 
-export type SpectrumStats = {
-  spectrumInfoResDtos: SpectrumInfo[];
+export type SpectrumInfo = {
+  totalCount: number;
+  spectrumInfoResDtos: SpectrumAxisInfo[];
 };
