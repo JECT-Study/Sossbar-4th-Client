@@ -26,39 +26,13 @@ const mockTags = [
 ];
 
 const mockSpectrumAxisInfos = [
-  {
-    spectrumAxisId: 1,
-    axisName: '서포트형-리드형',
-    averageStrength: 4,
-    totalCount: 8,
-    leftStrengthCount: 1,
-    rightStrengthCount: 7,
-  },
-  {
-    spectrumAxisId: 2,
-    axisName: '작업속도',
-    averageStrength: 2,
-    totalCount: 8,
-    leftStrengthCount: 5,
-    rightStrengthCount: 1,
-  },
-  {
-    spectrumAxisId: 3,
-    axisName: '대처방식',
-    averageStrength: 3,
-    totalCount: 8,
-    leftStrengthCount: 4,
-    rightStrengthCount: 2,
-  },
-  {
-    spectrumAxisId: 4,
-    axisName: '관계지향',
-    averageStrength: 4,
-    totalCount: 8,
-    leftStrengthCount: 0,
-    rightStrengthCount: 6,
-  },
+  { spectrumAxisId: 1, axisName: '서포트형-리드형', averageStrength: 4, leftStrengthCount: 1, rightStrengthCount: 7 },
+  { spectrumAxisId: 2, axisName: '작업속도', averageStrength: 2, leftStrengthCount: 5, rightStrengthCount: 1 },
+  { spectrumAxisId: 3, axisName: '대처방식', averageStrength: 3, leftStrengthCount: 4, rightStrengthCount: 2 },
+  { spectrumAxisId: 4, axisName: '관계지향', averageStrength: 4, leftStrengthCount: 0, rightStrengthCount: 6 },
 ];
+
+const mockSpectrumInfo = { totalCount: 8, spectrumInfoResDtos: mockSpectrumAxisInfos };
 
 const submittedReviews = new Set<string>();
 
@@ -113,10 +87,10 @@ export const reviewsHandlers = [
   }),
 
   http.get(`${BASE}/reviews/spectrums/:userId`, () => {
-    return HttpResponse.json({ spectrumInfoResDtos: mockSpectrumAxisInfos });
+    return HttpResponse.json(mockSpectrumInfo);
   }),
 
   http.get(`${BASE}/reviews/spectrums/:userId/:projectId`, () => {
-    return HttpResponse.json({ spectrumInfoResDtos: mockSpectrumAxisInfos });
+    return HttpResponse.json(mockSpectrumInfo);
   }),
 ];
