@@ -15,7 +15,6 @@ import { Alert } from '@/shared/components/alert';
 import { Button, IconButton } from '@/shared/components/button';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { Dropdown } from '@/shared/components/dropdown';
-import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { cn } from '@/shared/lib/cn';
 import { copyTextToClipboard } from '@/shared/lib/copy-text-to-clipboard';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
