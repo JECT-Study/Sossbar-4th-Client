@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchProjects, fetchProject } from './fetchers';
+import { fetchProject, fetchProjects } from './fetchers';
 
 export const projectKeys = {
   all: ['project'] as const,
