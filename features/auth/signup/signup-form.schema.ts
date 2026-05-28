@@ -12,9 +12,9 @@ export const SignupFormSchema = z.object({
     .min(1, { message: '한 줄 소개를 입력해 주세요.' })
     .max(BIO_MAX_LENGTH, `한 줄 소개는 ${BIO_MAX_LENGTH}자 이하로 입력해 주세요.`),
   agreements: z.object({
-    age: z.literal(true),
-    terms: z.literal(true),
-    privacy: z.literal(true),
+    age: z.boolean().refine((val) => val, { message: '필수 약관에 동의해 주세요.' }),
+    terms: z.boolean().refine((val) => val, { message: '필수 약관에 동의해 주세요.' }),
+    privacy: z.boolean().refine((val) => val, { message: '필수 약관에 동의해 주세요.' }),
     marketing: z.boolean(),
   }),
 });
