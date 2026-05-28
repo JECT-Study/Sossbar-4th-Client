@@ -17,11 +17,12 @@ export const ProjectReviewContainer = ({ userId, projectId, isMyProfile }: Proje
 
   if (reviews.length === 0) {
     if (!isMyProfile) {
-      return <ReviewListEmpty />;
+      return <ReviewListEmpty title="아직 도착한 후기가 없어요." />;
     }
 
     return (
       <ReviewListEmpty
+        title="아직 도착한 후기가 없어요."
         description="링크를 공유해 볼까요?"
         action={
           <Button type="button" variant="secondary" size="medium">
