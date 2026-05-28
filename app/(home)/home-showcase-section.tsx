@@ -49,8 +49,8 @@ export const HomeShowcaseSection = () => {
           <div className="relative z-10 flex w-full justify-center">
             <div className="relative h-[829px] w-[1216px] max-w-[1216px]">
               <Image
-                src="/home-showcase-screen.svg"
-                alt=""
+                src="/demo-profile.svg"
+                alt="프로필 데모 화면"
                 width={922}
                 height={550}
                 className="pointer-events-none absolute top-[41px] left-1/2 z-20 h-[550px] w-[922px] -translate-x-1/2 select-none"
