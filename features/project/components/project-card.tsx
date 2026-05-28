@@ -56,7 +56,7 @@ interface ProjectCardHeaderProps {
   projectStatus: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
   startDate: string;
   onEdit?: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
 }
 
 interface ProjectCardTitleProps {
@@ -105,7 +105,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           projectStatus={project.projectStatus}
           startDate={project.startDate}
           onEdit={isLeader ? () => setEditOpen(true) : undefined}
-          onDelete={() => setDeleteProjectOpen(true)}
+          onDelete={isLeader ? () => setDeleteProjectOpen(true) : undefined}
         />
         <ProjectCardTitle projectName={project.projectName} host={project.host} />
         <ProjectCardActions
@@ -117,31 +117,35 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         <ProjectMemberList projectId={project.projectId} members={project.members} isLeader={isLeader} />
       </div>
 
-      <EditProjectModal
-        key={String(editOpen)}
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        projectId={project.projectId}
-        defaultProjectName={project.projectName}
-        defaultHost={project.host}
-      />
+      {isLeader ? (
+        <>
+          <EditProjectModal
+            key={String(editOpen)}
+            open={editOpen}
+            onOpenChange={setEditOpen}
+            projectId={project.projectId}
+            defaultProjectName={project.projectName}
+            defaultHost={project.host}
+          />
 
-      <ConfirmationDialog
-        open={deleteProjectOpen}
-        title="프로젝트를 삭제할까요?"
-        description="삭제하면 복구할 수 없습니다. 팀원과의 후기 기록도 함께 삭제될 수 있습니다."
-        confirmText="삭제하기"
-        cancelText="취소"
-        onOpenChange={(open) => {
-          if (!open) {
-            setDeleteProjectError(null);
-          }
-          setDeleteProjectOpen(open);
-        }}
-        onConfirm={handleDeleteProject}
-        isConfirming={isDeletingProject}
-        errorMessage={deleteProjectError ?? undefined}
-      />
+          <ConfirmationDialog
+            open={deleteProjectOpen}
+            title="프로젝트를 삭제할까요?"
+            description="삭제하면 복구할 수 없습니다. 팀원과의 후기 기록도 함께 삭제될 수 있습니다."
+            confirmText="삭제하기"
+            cancelText="취소"
+            onOpenChange={(open) => {
+              if (!open) {
+                setDeleteProjectError(null);
+              }
+              setDeleteProjectOpen(open);
+            }}
+            onConfirm={handleDeleteProject}
+            isConfirming={isDeletingProject}
+            errorMessage={deleteProjectError ?? undefined}
+          />
+        </>
+      ) : null}
     </article>
   );
 };
@@ -178,27 +182,27 @@ const ProjectCardHeader = ({
         <time className="text-detail-base text-text-subtle font-normal" dateTime={startDate}>
           {formatIsoDateToDots(startDate)}
         </time>
-        <Dropdown.Root>
-          <Dropdown.Trigger asChild>
-            <IconButton
-              type="button"
-              aria-label={`${projectName} 더보기`}
-              icon={<EllipsisVerticalIcon aria-hidden />}
-              className="text-icon-gray-light h-8 w-8 bg-transparent"
-            />
-          </Dropdown.Trigger>
-          <Dropdown.Content align="end" sideOffset={0} className="w-44 gap-1">
-            {isLeader ? (
+        {isLeader ? (
+          <Dropdown.Root>
+            <Dropdown.Trigger asChild>
+              <IconButton
+                type="button"
+                aria-label={`${projectName} 더보기`}
+                icon={<EllipsisVerticalIcon aria-hidden />}
+                className="text-icon-gray-light h-8 w-8 bg-transparent"
+              />
+            </Dropdown.Trigger>
+            <Dropdown.Content align="end" sideOffset={0} className="w-44 gap-1">
               <Dropdown.Item onSelect={() => onEdit?.()}>
                 수정 <EditIcon className="size-5" />
               </Dropdown.Item>
-            ) : null}
-            <Dropdown.Item onSelect={() => onDelete()}>
-              삭제
-              <TrashIcon className="size-5 stroke-[1.5]" />
-            </Dropdown.Item>
-          </Dropdown.Content>
-        </Dropdown.Root>
+              <Dropdown.Item onSelect={() => onDelete?.()}>
+                삭제
+                <TrashIcon className="size-5 stroke-[1.5]" />
+              </Dropdown.Item>
+            </Dropdown.Content>
+          </Dropdown.Root>
+        ) : null}
       </div>
     </div>
   );
