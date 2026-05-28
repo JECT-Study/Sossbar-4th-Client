@@ -16,8 +16,8 @@ export type EditProjectModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   projectId: number;
-  initialProjectName: string;
-  initialHost: string;
+  defaultProjectName: string;
+  defaultHost: string;
   className?: string;
 };
 
@@ -25,28 +25,26 @@ export const EditProjectModal = ({
   open,
   onOpenChange,
   projectId,
-  initialProjectName,
-  initialHost,
+  defaultProjectName,
+  defaultHost,
   className,
 }: EditProjectModalProps) => {
   const headingId = useId();
   const descriptionId = useId();
-  const [projectName, setProjectName] = useState(initialProjectName);
-  const [host, setHost] = useState(initialHost);
+  const [projectName, setProjectName] = useState(defaultProjectName);
+  const [host, setHost] = useState(defaultHost);
   const [image, setImage] = useState<File | null>(null);
 
   const { mutate: updateProject, isPending } = useUpdateProject(projectId);
 
-  const canSubmit = projectName.trim().length > 0 && host.trim().length > 0 && !isPending;
-
   const handleOpenChange = (next: boolean) => {
-    if (next) {
-      setProjectName(initialProjectName);
-      setHost(initialHost);
+    if (!next) {
       setImage(null);
     }
     onOpenChange(next);
   };
+
+  const canSubmit = projectName.trim().length > 0 && host.trim().length > 0 && !isPending;
 
   const handleSubmit = () => {
     if (!canSubmit) {
@@ -63,6 +61,7 @@ export const EditProjectModal = ({
       },
       {
         onSuccess: () => {
+          setImage(null);
           onOpenChange(false);
         },
       },
@@ -86,7 +85,7 @@ export const EditProjectModal = ({
               프로젝트 수정
             </Dialog.Title>
             <Dialog.Description id={descriptionId} className="text-body-base text-text-subtle leading-normal">
-              프로젝트명과 주최사를 수정할 수 있습니다. 이미지를 바꾸지 않으면 기존 사진이 유지됩니다.
+              프로젝트명과 주최사를 수정할 수 있습니다. 이미지를 새로 올리면 대표 이미지가 바뀝니다.
             </Dialog.Description>
           </div>
 
@@ -111,8 +110,10 @@ export const EditProjectModal = ({
             />
 
             <div className="flex flex-col gap-2">
-              <Label>협업 인증 사진 첨부</Label>
-              <p className="text-detail-sm text-text-subtle">* 변경 시에만 새 이미지를 선택하세요.</p>
+              <Label>협업 인증 사진 (선택)</Label>
+              <p className="text-detail-sm text-text-subtle">
+                * JPG, JPEG, PNG 형식. 비워 두면 기존 이미지를 유지합니다.
+              </p>
               <FileAttach
                 value={image}
                 onChange={setImage}

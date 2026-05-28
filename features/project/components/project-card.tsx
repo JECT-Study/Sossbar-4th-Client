@@ -55,8 +55,8 @@ interface ProjectCardHeaderProps {
   projectName: string;
   projectStatus: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
   startDate: string;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 interface ProjectCardTitleProps {
@@ -76,83 +76,79 @@ interface ProjectMemberListProps {
   projectStatus: ProjectCardItem['projectStatus'];
   isLeader: boolean;
   members: readonly ProjectCardMember[];
+  isLeader: boolean;
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isLeader = project.myMemberStatus === 'LEADER';
   const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-  const { mutateAsync: deleteProject, isPending: isDeleting } = useDeleteProject();
+  const [deleteProjectOpen, setDeleteProjectOpen] = useState(false);
+  const [deleteProjectError, setDeleteProjectError] = useState<string | null>(null);
+  const { mutateAsync: deleteProject, isPending: isDeletingProject } = useDeleteProject();
 
   const handleDeleteProject = useCallback(async () => {
-    setDeleteError(null);
+    setDeleteProjectError(null);
     try {
       await deleteProject(project.projectId);
-      setDeleteOpen(false);
+      setDeleteProjectOpen(false);
     } catch {
-      setDeleteError('프로젝트 삭제에 실패했습니다. 다시 시도해주세요.');
+      setDeleteProjectError('프로젝트 삭제에 실패했습니다. 다시 시도해주세요.');
     }
   }, [deleteProject, project.projectId]);
 
   return (
-    <>
-      <article className="flex flex-row gap-6 p-6">
-        <ProjectCardImage projectName={project.projectName} projectImage={project.projectImage} />
+    <article className="flex flex-row gap-6 p-6">
+      <ProjectCardImage projectName={project.projectName} projectImage={project.projectImage} />
 
-        <div className="flex flex-1 flex-col gap-4">
-          <ProjectCardHeader
-            isLeader={isLeader}
-            projectName={project.projectName}
-            projectStatus={project.projectStatus}
-            startDate={project.startDate}
-            onEdit={() => setEditOpen(true)}
-            onDelete={() => setDeleteOpen(true)}
-          />
-          <ProjectCardTitle projectName={project.projectName} host={project.host} />
-          <ProjectCardActions
-            projectId={project.projectId}
-            isLeader={isLeader}
-            projectStatus={project.projectStatus}
-            projectLink={project.projectLink}
-          />
-          <ProjectMemberList
-            projectId={project.projectId}
-            projectStatus={project.projectStatus}
-            isLeader={isLeader}
-            members={project.members}
-          />
-        </div>
-      </article>
+      <div className="flex flex-1 flex-col gap-4">
+        <ProjectCardHeader
+          isLeader={isLeader}
+          projectName={project.projectName}
+          projectStatus={project.projectStatus}
+          startDate={project.startDate}
+          onEdit={isLeader ? () => setEditOpen(true) : undefined}
+          onDelete={isLeader ? () => setDeleteProjectOpen(true) : undefined}
+        />
+        <ProjectCardTitle projectName={project.projectName} host={project.host} />
+        <ProjectCardActions
+          projectId={project.projectId}
+          isLeader={isLeader}
+          projectStatus={project.projectStatus}
+          projectLink={project.projectLink}
+        />
+        <ProjectMemberList projectId={project.projectId} members={project.members} isLeader={isLeader} />
+      </div>
 
       {isLeader ? (
         <>
           <EditProjectModal
+            key={String(editOpen)}
             open={editOpen}
             onOpenChange={setEditOpen}
             projectId={project.projectId}
-            initialProjectName={project.projectName}
-            initialHost={project.host}
+            defaultProjectName={project.projectName}
+            defaultHost={project.host}
           />
+
           <ConfirmationDialog
-            open={deleteOpen}
+            open={deleteProjectOpen}
             title="프로젝트를 삭제할까요?"
-            description="삭제하면 프로젝트와 팀원 정보가 모두 제거됩니다. 이 작업은 되돌릴 수 없습니다."
+            description="삭제하면 복구할 수 없습니다. 팀원과의 후기 기록도 함께 삭제될 수 있습니다."
             confirmText="삭제하기"
             cancelText="취소"
             onOpenChange={(open) => {
               if (!open) {
-                setDeleteError(null);
+                setDeleteProjectError(null);
               }
-              setDeleteOpen(open);
+              setDeleteProjectOpen(open);
             }}
             onConfirm={handleDeleteProject}
-            isConfirming={isDeleting}
-            errorMessage={deleteError ?? undefined}
+            isConfirming={isDeletingProject}
+            errorMessage={deleteProjectError ?? undefined}
           />
         </>
       ) : null}
-    </>
+    </article>
   );
 };
 
@@ -199,10 +195,10 @@ const ProjectCardHeader = ({
               />
             </Dropdown.Trigger>
             <Dropdown.Content align="end" sideOffset={0} className="w-44 gap-1">
-              <Dropdown.Item onSelect={onEdit}>
+              <Dropdown.Item onSelect={() => onEdit?.()}>
                 수정 <EditIcon className="size-5" />
               </Dropdown.Item>
-              <Dropdown.Item onSelect={onDelete}>
+              <Dropdown.Item onSelect={() => onDelete?.()}>
                 삭제
                 <TrashIcon className="size-5 stroke-[1.5]" />
               </Dropdown.Item>
@@ -322,13 +318,11 @@ const ProjectCardActions = ({ projectId, isLeader, projectStatus, projectLink }:
   );
 };
 
-const ProjectMemberList = ({ projectId, projectStatus, isLeader, members }: ProjectMemberListProps) => {
+const ProjectMemberList = ({ projectId, members, isLeader }: ProjectMemberListProps) => {
   const router = useRouter();
-  const [memberToRemove, setMemberToRemove] = useState<ProjectCardMember | null>(null);
+  const [memberToRemove, setMemberToRemove] = useState<{ memberId: number; name: string } | null>(null);
   const [removeError, setRemoveError] = useState<string | null>(null);
-  const { mutateAsync: removeMember, isPending: isRemoving } = useDeleteProjectMember(projectId);
-
-  const canRemoveMembers = isLeader && projectStatus === 'IN_PROGRESS';
+  const { mutateAsync: removeMember, isPending: isRemovingMember } = useDeleteProjectMember(projectId);
 
   const handleWriteReview = (member: ProjectCardMember) => {
     router.push(
@@ -340,8 +334,8 @@ const ProjectMemberList = ({ projectId, projectStatus, isLeader, members }: Proj
     );
   };
 
-  const handleRemoveMember = useCallback(async () => {
-    if (!memberToRemove) {
+  const handleConfirmRemoveMember = useCallback(async () => {
+    if (memberToRemove == null) {
       return;
     }
     setRemoveError(null);
@@ -349,7 +343,7 @@ const ProjectMemberList = ({ projectId, projectStatus, isLeader, members }: Proj
       await removeMember(memberToRemove.memberId);
       setMemberToRemove(null);
     } catch {
-      setRemoveError('팀원을 보내지 못했습니다. 다시 시도해주세요.');
+      setRemoveError('팀원 삭제에 실패했습니다. 다시 시도해주세요.');
     }
   }, [memberToRemove, removeMember]);
 
@@ -358,32 +352,30 @@ const ProjectMemberList = ({ projectId, projectStatus, isLeader, members }: Proj
       <p className="text-detail-base text-text-subtle font-normal">팀원 {members.length}명</p>
       <ul className="mt-2 flex flex-wrap gap-2">
         {members.map((member) => {
-          const showRemove = canRemoveMembers && member.reviewStatus !== 'self';
-          const handleRemove = () => setMemberToRemove(member);
+          const canRemove = isLeader && member.reviewStatus !== 'self';
+          const removeProps = canRemove
+            ? ({
+                removable: true as const,
+                onRemove: () => setMemberToRemove({ memberId: member.memberId, name: member.name }),
+              } as const)
+            : {};
+
+          if (member.reviewStatus === 'writable') {
+            return (
+              <li key={member.memberId}>
+                <ProjectMemberChip
+                  name={member.name}
+                  state="writable"
+                  onWriteReview={() => handleWriteReview(member)}
+                  {...removeProps}
+                />
+              </li>
+            );
+          }
 
           return (
             <li key={member.memberId}>
-              {member.reviewStatus === 'writable' ? (
-                showRemove ? (
-                  <ProjectMemberChip
-                    name={member.name}
-                    state="writable"
-                    removable
-                    onRemove={handleRemove}
-                    onWriteReview={() => handleWriteReview(member)}
-                  />
-                ) : (
-                  <ProjectMemberChip
-                    name={member.name}
-                    state="writable"
-                    onWriteReview={() => handleWriteReview(member)}
-                  />
-                )
-              ) : showRemove ? (
-                <ProjectMemberChip name={member.name} state={member.reviewStatus} removable onRemove={handleRemove} />
-              ) : (
-                <ProjectMemberChip name={member.name} state={member.reviewStatus} />
-              )}
+              <ProjectMemberChip name={member.name} state={member.reviewStatus} {...removeProps} />
             </li>
           );
         })}
@@ -391,9 +383,9 @@ const ProjectMemberList = ({ projectId, projectStatus, isLeader, members }: Proj
 
       <ConfirmationDialog
         open={memberToRemove != null}
-        title={memberToRemove ? `${memberToRemove.name}님을 프로젝트에서 보낼까요?` : ''}
-        description="팀원 목록에서 제거되며, 다시 초대 링크로 참여할 수 있습니다."
-        confirmText="보내기"
+        title={memberToRemove ? `${memberToRemove.name}님을 팀에서 제외할까요?` : ''}
+        description="제외한 팀원은 이 프로젝트에 다시 초대해야 합니다."
+        confirmText="제외하기"
         cancelText="취소"
         onOpenChange={(open) => {
           if (!open) {
@@ -401,8 +393,8 @@ const ProjectMemberList = ({ projectId, projectStatus, isLeader, members }: Proj
             setMemberToRemove(null);
           }
         }}
-        onConfirm={handleRemoveMember}
-        isConfirming={isRemoving}
+        onConfirm={handleConfirmRemoveMember}
+        isConfirming={isRemovingMember}
         errorMessage={removeError ?? undefined}
       />
     </div>
