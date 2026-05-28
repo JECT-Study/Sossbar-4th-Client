@@ -14,10 +14,12 @@ const nextConfig: NextConfig = {
 
     return {
       // 카카오 Redirect URI가 /api/v1/login/kakao 인 경우, 브라우저 진입만 콜백 페이지로 연결
+      // (fetch 호출은 afterFiles에서 백엔드로 프록시되도록 흘려보낸다)
       beforeFiles: [
         {
           source: '/api/v1/login/kakao',
           destination: '/login/kakao',
+          has: [{ type: 'header', key: 'sec-fetch-dest', value: 'document' }],
         },
       ],
       afterFiles: [
