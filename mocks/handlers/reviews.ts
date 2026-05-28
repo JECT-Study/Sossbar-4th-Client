@@ -65,7 +65,15 @@ export const reviewsHandlers = [
   }),
 
   http.get(`${BASE}/form-data`, () => {
-    return HttpResponse.json({ tags: mockTags, spectrums: [...mockReviewFormSpectrums] });
+    return HttpResponse.json({
+      tags: mockTags.map(({ tagId, name }) => ({ tagId, tagName: name })),
+      spectrumAxes: mockReviewFormSpectrums.map(({ spectrumId, leftLabel, rightLabel }) => ({
+        spectrumAxisId: spectrumId,
+        spectrumAxisName: `${leftLabel} / ${rightLabel}`,
+        leftLabel,
+        rightLabel,
+      })),
+    });
   }),
 
   http.get(`${BASE}/reviews`, () => {
