@@ -36,8 +36,6 @@ export const useSignupForm = () => {
       await signup({
         name: data.name,
         bio: data.bio,
-        requiredAgree: data.agreements.age && data.agreements.terms && data.agreements.privacy,
-        marketingAgree: data.agreements.marketing,
       });
       completeSignup();
     } catch (error) {

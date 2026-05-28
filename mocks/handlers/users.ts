@@ -20,7 +20,9 @@ export const usersHandlers = [
   }),
 
   http.post(`${BASE}/users/onboarding`, async ({ request }) => {
-    const body = (await request.json()) as { name?: string; bio?: string };
+    const formData = await request.formData();
+    const name = formData.get('name') as string | null;
+    const bio = formData.get('bio') as string | null;
 
     return HttpResponse.json({
       status: 200,
@@ -28,10 +30,10 @@ export const usersHandlers = [
       message: '요청이 성공했습니다.',
       data: {
         userId: 1,
-        username: body.name,
-        nickname: body.name,
+        username: name,
+        nickname: name,
         email: 'test@example.com',
-        bio: body.bio,
+        bio,
         profileImageUrl: null,
         userType: 'KAKAO',
       },
