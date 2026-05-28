@@ -7,6 +7,6 @@ export const ROUTES = {
   PRIVACY_POLICY: '/policies/privacy-policy',
   PROFILE_EXAMPLES: '/profile-examples',
   PROFILE: (userId: string | number) => `/profile/${userId}`,
-  PROJECT: (projectId: string | number) => `/project/${projectId}`,
+  PROJECT: (userId: string | number, projectId: string | number) => `/profile/${userId}/project/${projectId}`,
   TERMS_OF_SERVICE: '/policies/terms-of-service',
 } as const;
