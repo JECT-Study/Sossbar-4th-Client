@@ -1,6 +1,9 @@
 'use client';
 
+import { Button } from '@/shared/components/button';
+
 import { ReviewListCard } from './review-list-card';
+import { ReviewListEmpty } from './review-list-empty';
 import { useProjectReviews } from '../../api/queries';
 
 type ProjectReviewContainerProps = {
@@ -11,6 +14,23 @@ type ProjectReviewContainerProps = {
 
 export const ProjectReviewContainer = ({ userId, projectId, isMyProfile }: ProjectReviewContainerProps) => {
   const { data: reviews = [] } = useProjectReviews(userId, projectId);
+
+  if (reviews.length === 0) {
+    if (!isMyProfile) {
+      return <ReviewListEmpty />;
+    }
+
+    return (
+      <ReviewListEmpty
+        description="링크를 공유해 볼까요?"
+        action={
+          <Button type="button" variant="secondary" size="medium">
+            초대 링크 공유
+          </Button>
+        }
+      />
+    );
+  }
 
   return <ReviewListCard isMyProfile={isMyProfile} reviews={reviews} showThumbnail={false} />;
 };
