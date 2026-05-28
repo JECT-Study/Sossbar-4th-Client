@@ -69,7 +69,6 @@ export const reviewsHandlers = [
       tags: mockTags.map(({ tagId, name }) => ({ tagId, tagName: name })),
       spectrumAxes: mockReviewFormSpectrums.map(({ spectrumId, leftLabel, rightLabel }) => ({
         spectrumAxisId: spectrumId,
-        spectrumAxisName: `${leftLabel} / ${rightLabel}`,
         leftLabel,
         rightLabel,
       })),
