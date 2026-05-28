@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 import { ApiError } from '@/shared/lib/api';
@@ -20,16 +20,23 @@ const defaultValues: SignupFormData = {
   },
 };
 
+const hasRequiredAgreements = (agreements: SignupFormData['agreements'] | undefined) =>
+  agreements?.age === true && agreements?.terms === true && agreements?.privacy === true;
+
 export const useSignupForm = () => {
   const [isSignupCompleted, completeSignup] = useBooleanState();
   const { mutateAsync: signup, isPending } = useSignup();
 
   const form = useForm({
     defaultValues,
-    mode: 'onTouched',
+    mode: 'onChange',
     reValidateMode: 'onChange',
     resolver: zodResolver(SignupFormSchema),
   });
+
+  const watchedName = useWatch({ control: form.control, name: 'name' });
+  const watchedBio = useWatch({ control: form.control, name: 'bio' });
+  const watchedAgreements = useWatch({ control: form.control, name: 'agreements' });
 
   const onSubmit = async (data: Pick<SignupFormData, 'name' | 'bio'>) => {
     try {
@@ -47,7 +54,11 @@ export const useSignupForm = () => {
     }
   };
 
-  const canSubmit = form.formState.isValid && !isPending;
+  const canSubmit =
+    (watchedName?.trim().length ?? 0) >= 2 &&
+    (watchedBio?.trim().length ?? 0) >= 1 &&
+    hasRequiredAgreements(watchedAgreements) &&
+    !isPending;
 
   return {
     canSubmit,

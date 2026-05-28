@@ -20,7 +20,14 @@ export const SignupAgreement = ({ control, setValue }: Props) => {
   return (
     <div className="border-border-gray-light mt-[40px] space-y-4 rounded-xl border p-4">
       <label className="border-border-gray-light flex cursor-pointer items-center gap-3 border-b pb-4">
-        <Checkbox checked={agreeAll} onCheckedChange={handleAgreeAll} />
+        <Checkbox
+          checked={agreeAll}
+          onCheckedChange={(value) => {
+            if (value === true || value === false) {
+              handleAgreeAll(value);
+            }
+          }}
+        />
         <span className="text-detail-base font-bold">모두 동의합니다.</span>
       </label>
       {AGREEMENTS.map((agreement) => (
