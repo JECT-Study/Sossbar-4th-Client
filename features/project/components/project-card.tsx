@@ -68,7 +68,6 @@ interface ProjectCardActionsProps {
   projectId: number;
   isLeader: boolean;
   projectStatus: ProjectCardItem['projectStatus'];
-  projectLink: string;
 }
 
 interface ProjectMemberListProps {
@@ -108,12 +107,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           onDelete={isLeader ? () => setDeleteProjectOpen(true) : undefined}
         />
         <ProjectCardTitle projectName={project.projectName} host={project.host} />
-        <ProjectCardActions
-          projectId={project.projectId}
-          isLeader={isLeader}
-          projectStatus={project.projectStatus}
-          projectLink={project.projectLink}
-        />
+        <ProjectCardActions projectId={project.projectId} isLeader={isLeader} projectStatus={project.projectStatus} />
         <ProjectMemberList projectId={project.projectId} members={project.members} isLeader={isLeader} />
       </div>
 
@@ -217,7 +211,7 @@ const ProjectCardTitle = ({ host, projectName }: ProjectCardTitleProps) => {
   );
 };
 
-const ProjectCardActions = ({ projectId, isLeader, projectStatus, projectLink }: ProjectCardActionsProps) => {
+const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardActionsProps) => {
   const {
     open: isInviteTooltipOpen,
     message: inviteTooltipMessage,
@@ -239,11 +233,7 @@ const ProjectCardActions = ({ projectId, isLeader, projectStatus, projectLink }:
   }, [confirmTeam]);
 
   const handleCopyInviteLink = async () => {
-    if (!projectLink.trim()) {
-      return;
-    }
-
-    await copyLink(buildProjectInviteUrl(projectLink));
+    await copyLink(buildProjectInviteUrl(projectId));
   };
 
   if (!isLeader) {
