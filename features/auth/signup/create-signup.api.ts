@@ -2,10 +2,13 @@ import { apiRequest } from '@/shared/lib/api';
 
 import type { SignupPayload, SignupResponse } from './types';
 
-const createSignupFormData = ({ name, bio }: SignupPayload) => {
+const createSignupFormData = ({ name, bio, requiredAgree, marketingAgree }: SignupPayload) => {
   const formData = new FormData();
 
-  formData.append('onboarding', new Blob([JSON.stringify({ username: name, bio })], { type: 'application/json' }));
+  formData.append(
+    'onboarding',
+    new Blob([JSON.stringify({ username: name, bio, requiredAgree, marketingAgree })], { type: 'application/json' }),
+  );
   formData.append('profileImage', new Blob([]), '');
 
   return formData;

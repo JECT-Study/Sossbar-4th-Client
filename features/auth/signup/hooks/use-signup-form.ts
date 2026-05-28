@@ -38,9 +38,14 @@ export const useSignupForm = () => {
   const watchedBio = useWatch({ control: form.control, name: 'bio' });
   const watchedAgreements = useWatch({ control: form.control, name: 'agreements' });
 
-  const onSubmit = async (data: Pick<SignupFormData, 'name' | 'bio'>) => {
+  const onSubmit = async (data: SignupFormData) => {
     try {
-      await signup(data);
+      await signup({
+        name: data.name,
+        bio: data.bio,
+        requiredAgree: data.agreements.age && data.agreements.terms && data.agreements.privacy,
+        marketingAgree: data.agreements.marketing,
+      });
       completeSignup();
     } catch (error) {
       let message = '서버 오류가 발생했어요. 잠시 후 다시 시도해 주세요.';

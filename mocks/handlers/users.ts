@@ -27,7 +27,12 @@ export const usersHandlers = [
     let bio = '';
 
     if (onboardingPart instanceof Blob) {
-      const parsed = JSON.parse(await onboardingPart.text()) as { username?: string; bio?: string };
+      const parsed = JSON.parse(await onboardingPart.text()) as {
+        username?: string;
+        bio?: string;
+        requiredAgree?: boolean;
+        marketingAgree?: boolean;
+      };
       username = parsed.username ?? '';
       bio = parsed.bio ?? '';
     }
