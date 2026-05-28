@@ -11,7 +11,7 @@ import {
 } from './fetchers';
 import { reviewKeys } from './query-keys';
 
-export const useReviews = (userId: number) =>
+export const useUserReviews = (userId: number) =>
   useQuery({
     queryKey: reviewKeys.reviews(userId),
     queryFn: () => fetchReviews(userId),

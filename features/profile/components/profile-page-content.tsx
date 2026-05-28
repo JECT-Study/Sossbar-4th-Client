@@ -1,6 +1,6 @@
 'use client';
 
-import { ReviewListCard, SoftSkillsCard, TagCard } from '@/features/review';
+import { SoftSkillsCard, TagCard, UserReviewContainer } from '@/features/review';
 import { PageContainer } from '@/shared/components/page-container';
 import { Tab } from '@/shared/components/tab';
 
@@ -26,7 +26,7 @@ export const ProfilePageContent = ({ userId, isMyProfile }: ProfilePageContentPr
             <TagCard userId={userId} />
             <SoftSkillsCard userId={userId} showDistribution />
           </div>
-          <ReviewListCard variant="all" isMyProfile={isMyProfile} />
+          <UserReviewContainer userId={userId} isMyProfile={isMyProfile} />
         </Tab.Content>
         <Tab.Content value="projects" className="mt-10">
           <ProjectSection userId={userId} />

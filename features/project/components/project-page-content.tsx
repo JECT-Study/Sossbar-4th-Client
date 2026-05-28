@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import { ReviewListCard, SoftSkillsCard, TagCard } from '@/features/review';
+import { ProjectReviewContainer, SoftSkillsCard, TagCard } from '@/features/review';
 import { PageContainer } from '@/shared/components/page-container';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -63,7 +63,7 @@ export const ProjectPageContent = ({ userId, projectId, isMyProfile }: ProjectPa
           <TagCard userId={userId} projectId={projectId} collapsible />
           <SoftSkillsCard userId={userId} projectId={projectId} showDistribution={false} />
         </div>
-        <ReviewListCard variant="project" isMyProfile={isMyProfile} />
+        <ProjectReviewContainer userId={userId} projectId={projectId} isMyProfile={isMyProfile} />
       </div>
     </PageContainer>
   );
