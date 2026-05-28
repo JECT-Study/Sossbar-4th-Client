@@ -72,15 +72,25 @@ export const ReviewListCard = ({ variant, isMyProfile }: ReviewListCardProps) =>
       </div>
 
       <ul>
-        {visibleReviews.map((review) => (
-          <ReviewListItem
-            key={review.reviewId}
-            review={review}
-            tone={displayTone}
-            showThumbnail={showThumbnail}
-            showActionMenu={showItemMenu}
-          />
-        ))}
+        {visibleReviews.map((review) => {
+          const feedback = displayTone === 'positive' ? review.positiveFeedback : (review.negativeFeedback ?? '');
+
+          return (
+            <ReviewListItem.Root key={review.reviewId}>
+              <ReviewListItem.Heading>
+                {showThumbnail ? (
+                  <ReviewListItem.Image src={review.projectImage} alt={`${review.projectName} 썸네일`} />
+                ) : null}
+                <ReviewListItem.HeadingText
+                  projectName={review.projectName}
+                  meta={`${review.reviewerNickname} · ${review.host} · ${review.createdAt}`}
+                />
+              </ReviewListItem.Heading>
+              <ReviewListItem.Content>{feedback}</ReviewListItem.Content>
+              {showItemMenu ? <ReviewListItem.ActionMenu projectName={review.projectName} /> : null}
+            </ReviewListItem.Root>
+          );
+        })}
       </ul>
 
       {showMoreButton ? (
