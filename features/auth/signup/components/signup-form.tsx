@@ -25,7 +25,7 @@ export const SignupForm = () => {
     control,
   } = form;
 
-  const goToProfile = () => router.push('/');
+  const goToProjects = () => router.push('/projects');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-8 w-full max-w-[460px]">
@@ -66,11 +66,11 @@ export const SignupForm = () => {
             </>
           }
           description="협업 프로필을 공유해보세요!"
-          confirmText="프로필 공유하러 가기"
+          confirmText="프로젝트 관리로 가기"
           open={isSignupCompleted}
           icon={<Image src="/signup_image.svg" alt="" width={120} height={120} className="h-full w-full" />}
-          onOpenChange={goToProfile}
-          onConfirm={goToProfile}
+          onOpenChange={goToProjects}
+          onConfirm={goToProjects}
         />
       ) : null}
     </form>

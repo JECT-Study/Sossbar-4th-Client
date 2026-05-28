@@ -63,7 +63,12 @@ export const ProjectPageContent = ({ userId, projectId, isMyProfile }: ProjectPa
           <TagCard userId={userId} projectId={projectId} collapsible />
           <SoftSkillsCard userId={userId} projectId={projectId} showDistribution={false} />
         </div>
-        <ReviewListCard variant="project" isMyProfile={isMyProfile} />
+        <ReviewListCard
+          userId={userId}
+          variant="project"
+          isMyProfile={isMyProfile}
+          projectFilter={{ projectName: project.projectName, host: project.host }}
+        />
       </div>
     </PageContainer>
   );
