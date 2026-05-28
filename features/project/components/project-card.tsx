@@ -108,13 +108,6 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         />
         <ProjectCardTitle projectName={project.projectName} host={project.host} />
         <ProjectCardActions projectId={project.projectId} isLeader={isLeader} projectStatus={project.projectStatus} />
-        <ProjectMemberList projectId={project.projectId} members={project.members} />
-        <ProjectCardActions
-          projectId={project.projectId}
-          isLeader={isLeader}
-          projectStatus={project.projectStatus}
-          projectLink={project.projectLink}
-        />
         <ProjectMemberList projectId={project.projectId} members={project.members} isLeader={isLeader} />
       </div>
 
