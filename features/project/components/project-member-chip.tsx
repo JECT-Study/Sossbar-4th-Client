@@ -10,7 +10,6 @@ import { cn } from '@/shared/lib/cn';
 
 const DEFAULT_PROFILE_SRC = '/default-profile.png';
 
-// TODO: 백엔드 API 명세 확인 후 props에 반영
 export type ProjectMemberChipState = 'writable' | 'completed' | 'self';
 
 interface BaseProjectMemberChipProps extends ComponentPropsWithRef<'div'> {

@@ -29,6 +29,7 @@ export const useUpdateProject = (projectId: number) => {
     mutationFn: (payload: UpdateProjectPayload) => updateProject(projectId, payload),
     onSuccess: (data) => {
       queryClient.setQueryData(projectKeys.detail(data.projectId), data);
+      queryClient.invalidateQueries({ queryKey: projectKeys.list() });
     },
   });
 };
@@ -39,6 +40,7 @@ export const useDeleteProject = () => {
     mutationFn: (projectId: number) => deleteProject(projectId),
     onSuccess: (_data, projectId) => {
       queryClient.removeQueries({ queryKey: projectKeys.detail(projectId) });
+      queryClient.invalidateQueries({ queryKey: projectKeys.list() });
     },
   });
 };
@@ -59,6 +61,7 @@ export const useDeleteProjectMember = (projectId: number) => {
     mutationFn: (userId: number) => deleteProjectMember(projectId, userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
+      queryClient.invalidateQueries({ queryKey: projectKeys.list() });
     },
   });
 };
