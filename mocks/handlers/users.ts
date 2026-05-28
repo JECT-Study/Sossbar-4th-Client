@@ -10,7 +10,7 @@ export const usersHandlers = [
       message: '성공적으로 조회했습니다.',
       data: {
         userId: 1,
-        username: '테스트유저',
+        username: null,
         email: 'kakao-user@sossbar.mock',
         bio: null,
         profileImageUrl: null,
