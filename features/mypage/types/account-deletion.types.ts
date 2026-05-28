@@ -1,7 +1,5 @@
-import type { WithdrawReasonValue } from '../account-deletion.constants';
-
 export interface DeleteAccountPayload {
-  reason: WithdrawReasonValue;
+  userDeleteReasonEnum: string;
   detail?: string;
 }
 

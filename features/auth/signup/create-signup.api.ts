@@ -6,7 +6,7 @@ const createSignupFormData = ({ name, bio }: SignupPayload) => {
   const formData = new FormData();
 
   formData.append('onboarding', new Blob([JSON.stringify({ username: name, bio })], { type: 'application/json' }));
-  formData.append('profileImage', '');
+  formData.append('profileImage', new Blob([]), '');
 
   return formData;
 };
