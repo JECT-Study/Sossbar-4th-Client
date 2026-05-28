@@ -65,7 +65,7 @@ export const SignupForm = () => {
               가입이 완료되었습니다!
             </>
           }
-          description="협업 프로필을 공유해보세요!"
+          description="프로젝트 페이지에서 협업을 시작해보세요!"
           confirmText="프로젝트 관리로 가기"
           open={isSignupCompleted}
           icon={<Image src="/signup_image.svg" alt="" width={120} height={120} className="h-full w-full" />}
