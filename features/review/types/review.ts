@@ -6,7 +6,7 @@ export type Review = {
   projectName: string;
   host: string;
   projectImage: string | null;
-  reviewedAt: string;
+  createdAt: string;
   positiveFeedback: string;
   negativeFeedback?: string; // 본인 후기 조회 시에만 포함. 타인 조회 시 응답에서 제외.
   reviewerNickname: string;
