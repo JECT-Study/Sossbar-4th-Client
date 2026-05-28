@@ -4,6 +4,8 @@ import type { CreateReviewApiBody, CreateReviewRequest, Review, ReviewFormData }
 import type { SpectrumInfo } from '../types/spectrum';
 import type { ReceivedTags } from '../types/tag';
 
+import { mapReviewFormDataFromApi, type ReviewFormDataApiResponse } from './map-form-data';
+
 const toCreateReviewApiBody = (data: CreateReviewRequest): CreateReviewApiBody => {
   const improvement = data.improvement.trim();
 
@@ -22,7 +24,10 @@ const toCreateReviewApiBody = (data: CreateReviewRequest): CreateReviewApiBody =
   };
 };
 
-export const fetchReviewFormData = (): Promise<ReviewFormData> => apiRequest<ReviewFormData>('/form-data');
+export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
+  const raw = await apiRequest<ReviewFormDataApiResponse>('/form-data');
+  return mapReviewFormDataFromApi(raw);
+};
 
 export const fetchReviews = (userId: number): Promise<Review[]> => apiRequest<Review[]>(`/users/${userId}/reviews`);
 

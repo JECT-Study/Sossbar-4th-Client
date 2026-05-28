@@ -21,16 +21,16 @@ interface ReviewListCardProps {
 
 const createReviews = (isMyProfile: boolean) => {
   const projects = [
-    { projectName: '2025 해커톤 프로젝트', host: '테크 스타트업 컴퍼니', reviewedAt: '2025.07.10' },
-    { projectName: '스타트업 MVP 개발', host: '주최사', reviewedAt: '2025.04.10' },
-    { projectName: '헬스케어 앱 구축 프로젝트', host: '주최사', reviewedAt: '2024.09.10' },
-    { projectName: '2024 해커톤 프로젝트', host: '주최사', reviewedAt: '2024.03.10' },
-    { projectName: '모바일 앱 리디자인', host: '주최사', reviewedAt: '2024.01.10' },
-    { projectName: '브랜드 웹사이트 개편', host: '디자인 스튜디오', reviewedAt: '2023.12.15' },
-    { projectName: '커뮤니티 플랫폼 구축', host: '사이드 프로젝트', reviewedAt: '2023.10.20' },
-    { projectName: 'AI 추천 서비스 PoC', host: '테크랩', reviewedAt: '2023.08.30' },
-    { projectName: '사내 협업툴 개선', host: '주최사', reviewedAt: '2023.06.18' },
-    { projectName: '데이터 대시보드 개발', host: '데이터팀', reviewedAt: '2023.04.05' },
+    { projectName: '2025 해커톤 프로젝트', host: '테크 스타트업 컴퍼니', createdAt: '2025.07.10' },
+    { projectName: '스타트업 MVP 개발', host: '주최사', createdAt: '2025.04.10' },
+    { projectName: '헬스케어 앱 구축 프로젝트', host: '주최사', createdAt: '2024.09.10' },
+    { projectName: '2024 해커톤 프로젝트', host: '주최사', createdAt: '2024.03.10' },
+    { projectName: '모바일 앱 리디자인', host: '주최사', createdAt: '2024.01.10' },
+    { projectName: '브랜드 웹사이트 개편', host: '디자인 스튜디오', createdAt: '2023.12.15' },
+    { projectName: '커뮤니티 플랫폼 구축', host: '사이드 프로젝트', createdAt: '2023.10.20' },
+    { projectName: 'AI 추천 서비스 PoC', host: '테크랩', createdAt: '2023.08.30' },
+    { projectName: '사내 협업툴 개선', host: '주최사', createdAt: '2023.06.18' },
+    { projectName: '데이터 대시보드 개발', host: '데이터팀', createdAt: '2023.04.05' },
   ];
 
   return projects.map((project, index) => ({
