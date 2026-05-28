@@ -73,8 +73,6 @@ interface ProjectCardActionsProps {
 
 interface ProjectMemberListProps {
   projectId: number;
-  projectStatus: ProjectCardItem['projectStatus'];
-  isLeader: boolean;
   members: readonly ProjectCardMember[];
   isLeader: boolean;
 }
