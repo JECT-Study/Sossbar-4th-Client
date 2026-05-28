@@ -41,7 +41,13 @@ export const ProjectInvitePageContent = () => {
   const [joinError, setJoinError] = useState<string | null>(null);
 
   const hasSession = sessionUser != null && sessionUser.userId > 0;
-  const { data: project, isPending, isError, error } = useProject(projectId ?? 0, hasSession && projectId != null);
+  const {
+    data: project,
+    isPending,
+    isError,
+    error,
+    refetch,
+  } = useProject(projectId ?? 0, hasSession && projectId != null);
   const { mutateAsync: joinProject, isPending: isJoining } = useInviteProjectMember(projectId ?? 0);
 
   const isAlreadyMember = useMemo(() => {
@@ -111,7 +117,7 @@ export const ProjectInvitePageContent = () => {
     return (
       <PageContainer className="py-20">
         <p className="text-body-base text-text-error">프로젝트 정보를 불러오지 못했습니다.</p>
-        <Button type="button" variant="tertiary" size="medium" className="mt-6" onClick={() => router.refresh()}>
+        <Button type="button" variant="tertiary" size="medium" className="mt-6" onClick={() => void refetch()}>
           다시 시도
         </Button>
       </PageContainer>
