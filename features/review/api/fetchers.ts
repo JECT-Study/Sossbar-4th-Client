@@ -4,6 +4,7 @@ import type { CreateReviewApiBody, CreateReviewRequest, Review, ReviewFormData }
 import type { SpectrumInfo } from '../types/spectrum';
 import type { ReceivedTags } from '../types/tag';
 
+import { mapReviewFormDataFromApi, type ReviewFormDataApiResponse } from './map-form-data';
 import { mapReviewsFromApi, type ReviewApiResponse } from './map-review-from-api';
 
 const toCreateReviewApiBody = (data: CreateReviewRequest): CreateReviewApiBody => {
