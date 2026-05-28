@@ -16,9 +16,9 @@ const getSiteOrigin = (): string => {
   return '';
 };
 
-export const buildProjectInviteUrl = (projectLink: string): string => {
-  const token = projectLink.trim();
-  const path = `/projects/invite/${encodeURIComponent(token)}`;
+/** 초대 링크 — BE join API(`projectId`)와 맞춘 쿼리 URL */
+export const buildProjectInviteUrl = (projectId: number): string => {
+  const path = `/projects/invite?projectId=${projectId}`;
   const origin = getSiteOrigin();
 
   return origin ? `${origin}${path}` : path;
