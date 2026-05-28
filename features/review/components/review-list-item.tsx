@@ -64,7 +64,7 @@ export const ReviewListItem = ({ review, tone, showThumbnail, showActionMenu }: 
           <div>
             <h3 className="text-heading-xs text-text-subtler font-bold">{review.projectName}</h3>
             <p className="text-body-sm text-text-subtler mt-1 font-medium">
-              {`${review.reviewerNickname} · ${review.host} · ${review.createdAt}`}
+              {`${review.reviewerNickname} · ${review.host} · ${review.reviewedAt}`}
             </p>
           </div>
         </div>
