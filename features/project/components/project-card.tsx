@@ -376,9 +376,9 @@ const ProjectMemberList = ({ projectId, members, isLeader }: ProjectMemberListPr
 
       <ConfirmationDialog
         open={memberToRemove != null}
-        title={memberToRemove ? `${memberToRemove.name}님을 팀에서 제외할까요?` : ''}
-        description="제외한 팀원은 이 프로젝트에 다시 초대해야 합니다."
-        confirmText="제외하기"
+        title="팀원 내보내기"
+        description="팀원을 팀 목록에서 삭제할까요? 삭제된 팀원은 되돌릴 수 없습니다."
+        confirmText="내보내기"
         cancelText="취소"
         onOpenChange={(open) => {
           if (!open) {
