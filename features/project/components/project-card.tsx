@@ -17,6 +17,7 @@ import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { Dropdown } from '@/shared/components/dropdown';
 import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
+import { ApiError } from '@/shared/lib/api';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -330,8 +331,12 @@ const ProjectMemberList = ({ projectId, members, isLeader }: ProjectMemberListPr
     try {
       await removeMember(memberToRemove.memberId);
       setMemberToRemove(null);
-    } catch {
-      setRemoveError('팀원 삭제에 실패했습니다. 다시 시도해주세요.');
+    } catch (error) {
+      if (error instanceof ApiError && (error.status === 403 || error.status === 405)) {
+        setRemoveError('현재 팀원 제외 기능을 사용할 수 없습니다. 잠시 후 다시 시도해주세요.');
+        return;
+      }
+      setRemoveError('팀원 내보내기에 실패했습니다. 다시 시도해주세요.');
     }
   }, [memberToRemove, removeMember]);
 
