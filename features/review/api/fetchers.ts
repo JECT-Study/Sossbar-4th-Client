@@ -24,7 +24,10 @@ const toCreateReviewApiBody = (data: CreateReviewRequest): CreateReviewApiBody =
   };
 };
 
-export const fetchReviewFormData = (): Promise<ReviewFormData> => apiRequest<ReviewFormData>('/form-data');
+export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
+  const raw = await apiRequest<ReviewFormDataApiResponse>('/form-data');
+  return mapReviewFormDataFromApi(raw);
+};
 
 export const fetchReviews = async (userId: number): Promise<Review[]> => {
   const raw = await apiRequest<ReviewApiResponse[]>(`/users/${userId}/reviews`);
