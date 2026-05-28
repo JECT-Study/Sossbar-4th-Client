@@ -36,9 +36,14 @@ export const useSignupForm = () => {
       await signup(data);
       completeSignup();
     } catch (error) {
-      form.setError('root', {
-        message: error instanceof ApiError ? error.message : '서버 오류가 발생했어요. 잠시 후 다시 시도해주세요.',
-      });
+      let message = '서버 오류가 발생했어요. 잠시 후 다시 시도해 주세요.';
+
+      if (error instanceof ApiError) {
+        message =
+          error.status >= 500 ? '가입 처리 중 서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.' : error.message;
+      }
+
+      form.setError('root', { message });
     }
   };
 

@@ -20,7 +20,17 @@ export const usersHandlers = [
   }),
 
   http.post(`${BASE}/users/onboarding`, async ({ request }) => {
-    const body = (await request.json()) as { name?: string; bio?: string };
+    const formData = await request.formData();
+    const onboardingPart = formData.get('onboarding');
+
+    let username = '';
+    let bio = '';
+
+    if (onboardingPart instanceof Blob) {
+      const parsed = JSON.parse(await onboardingPart.text()) as { username?: string; bio?: string };
+      username = parsed.username ?? '';
+      bio = parsed.bio ?? '';
+    }
 
     return HttpResponse.json({
       status: 200,
@@ -28,10 +38,10 @@ export const usersHandlers = [
       message: '요청이 성공했습니다.',
       data: {
         userId: 1,
-        username: body.name,
-        nickname: body.name,
+        username,
+        nickname: username,
         email: 'test@example.com',
-        bio: body.bio,
+        bio,
         profileImageUrl: null,
         userType: 'KAKAO',
       },
