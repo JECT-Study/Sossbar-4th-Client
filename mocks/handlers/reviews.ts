@@ -68,22 +68,27 @@ export const reviewsHandlers = [
     return HttpResponse.json({ tags: mockTags, spectrums: [...mockReviewFormSpectrums] });
   }),
 
-  http.get(`${BASE}/reviews`, () => {
+  http.get(`${BASE}/users/:userId/reviews`, () => {
     return HttpResponse.json([
       {
         reviewId: 1,
-        projectId: 1,
-        authorNickname: '익명',
-        praise: '소통이 잘 되고 매우 꼼꼼하게 작업해주셨습니다.',
-        improvement: '일정 관리를 좀 더 세밀하게 하면 좋을 것 같아요.',
-        tags: [mockTags[0], mockTags[1]],
-        spectrums: [
-          { spectrumId: 1, value: 70 },
-          { spectrumId: 2, value: 55 },
-          { spectrumId: 3, value: 45 },
-          { spectrumId: 4, value: 60 },
-        ],
-        createdAt: '2026-04-20T00:00:00Z',
+        projectName: '소스바 프로젝트',
+        host: 'JECT',
+        projectImage: null,
+        createdAt: '2026-04-20T00:00:00',
+        positiveFeedback: '소통이 잘 되고 매우 꼼꼼하게 작업해주셨습니다.',
+        negativeFeedback: '일정 관리를 좀 더 세밀하게 하면 좋을 것 같아요.',
+        reviewerNickname: '익명의 동료',
+      },
+      {
+        reviewId: 2,
+        projectName: '2025 해커톤 프로젝트',
+        host: '테크 스타트업',
+        projectImage: null,
+        createdAt: '2025-07-10T00:00:00',
+        positiveFeedback: '항상 책임감 있게 작업을 수행해주시고 협업 분위기도 좋게 이끌어주셨습니다.',
+        negativeFeedback: '진행 상황 공유가 조금 더 빨라지면 협업 흐름을 맞추는 데 도움이 될 것 같습니다.',
+        reviewerNickname: '익명의 동료',
       },
     ]);
   }),
