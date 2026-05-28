@@ -58,6 +58,15 @@ export type ProjectCardItem = {
   members: readonly ProjectCardMember[];
 };
 
+export interface UserProjectResponse {
+  projectId: number;
+  projectName: string;
+  host: string;
+  startDate: string;
+  endDate: string;
+  projectImage: string | null;
+}
+
 export interface ProjectCreateRequest {
   projectName: string;
   host: string;

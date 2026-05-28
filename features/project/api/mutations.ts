@@ -10,7 +10,7 @@ import {
   inviteProjectMember,
   updateProject,
 } from './fetchers';
-import { projectKeys } from './queries';
+import { projectKeys } from './query-keys';
 
 export const useCreateProject = () => {
   const queryClient = useQueryClient();
