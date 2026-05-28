@@ -6,44 +6,18 @@ import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { SegmentedControl } from '@/shared/components/segmented-control';
 
-import type { Review } from '../types/review';
-
 import { ReviewListItem } from './review-list-item';
+import { useReviews } from '../api/queries';
 
 type ReviewListVariant = 'all' | 'project';
 
 const INITIAL_VISIBLE_REVIEW_COUNT = 5;
 
 interface ReviewListCardProps {
+  userId: number;
   variant: ReviewListVariant;
   isMyProfile: boolean;
 }
-
-const createReviews = (isMyProfile: boolean) => {
-  const projects = [
-    { projectName: '2025 해커톤 프로젝트', host: '테크 스타트업 컴퍼니', createdAt: '2025.07.10' },
-    { projectName: '스타트업 MVP 개발', host: '주최사', createdAt: '2025.04.10' },
-    { projectName: '헬스케어 앱 구축 프로젝트', host: '주최사', createdAt: '2024.09.10' },
-    { projectName: '2024 해커톤 프로젝트', host: '주최사', createdAt: '2024.03.10' },
-    { projectName: '모바일 앱 리디자인', host: '주최사', createdAt: '2024.01.10' },
-    { projectName: '브랜드 웹사이트 개편', host: '디자인 스튜디오', createdAt: '2023.12.15' },
-    { projectName: '커뮤니티 플랫폼 구축', host: '사이드 프로젝트', createdAt: '2023.10.20' },
-    { projectName: 'AI 추천 서비스 PoC', host: '테크랩', createdAt: '2023.08.30' },
-    { projectName: '사내 협업툴 개선', host: '주최사', createdAt: '2023.06.18' },
-    { projectName: '데이터 대시보드 개발', host: '데이터팀', createdAt: '2023.04.05' },
-  ];
-
-  return projects.map((project, index) => ({
-    reviewId: index + 1,
-    projectImage: null,
-    ...project,
-    positiveFeedback: '항상 책임감 있게 작업을 수행해주시고 협업 분위기도 좋게 이끌어주셨습니다.',
-    ...(isMyProfile
-      ? { negativeFeedback: '진행 상황 공유가 조금 더 빨라지면 협업 흐름을 맞추는 데 도움이 될 것 같습니다.' }
-      : {}),
-    reviewerNickname: '익명의 동료',
-  })) satisfies Review[];
-};
 
 const reviewToneOptions = [
   { value: 'positive', label: '칭찬해요' },
@@ -52,10 +26,11 @@ const reviewToneOptions = [
 
 type ReviewTone = (typeof reviewToneOptions)[number]['value'];
 
-export const ReviewListCard = ({ variant, isMyProfile }: ReviewListCardProps) => {
+export const ReviewListCard = ({ userId, variant, isMyProfile }: ReviewListCardProps) => {
   const [selectedTone, setSelectedTone] = useState<ReviewTone>('positive');
   const [isExpanded, setIsExpanded] = useState(false);
-  const reviews = createReviews(isMyProfile);
+  const { data: reviews = [], isPending } = useReviews(userId);
+
   const displayTone = isMyProfile ? selectedTone : 'positive';
   const showThumbnail = variant === 'all';
   const showItemMenu = isMyProfile && selectedTone === 'negative';
@@ -71,17 +46,23 @@ export const ReviewListCard = ({ variant, isMyProfile }: ReviewListCardProps) =>
         ) : null}
       </div>
 
-      <ul>
-        {visibleReviews.map((review) => (
-          <ReviewListItem
-            key={review.reviewId}
-            review={review}
-            tone={displayTone}
-            showThumbnail={showThumbnail}
-            showActionMenu={showItemMenu}
-          />
-        ))}
-      </ul>
+      {isPending ? (
+        <p className="text-body-sm text-text-subtle mt-6">후기를 불러오는 중...</p>
+      ) : reviews.length === 0 ? (
+        <p className="text-body-sm text-text-subtle mt-6">아직 받은 후기가 없습니다.</p>
+      ) : (
+        <ul>
+          {visibleReviews.map((review) => (
+            <ReviewListItem
+              key={review.reviewId}
+              review={review}
+              tone={displayTone}
+              showThumbnail={showThumbnail}
+              showActionMenu={showItemMenu}
+            />
+          ))}
+        </ul>
+      )}
 
       {showMoreButton ? (
         <Button

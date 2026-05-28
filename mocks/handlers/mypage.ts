@@ -14,14 +14,6 @@ const mockProfile = {
 };
 
 export const mypageHandlers = [
-  http.get(`${BASE}/users/profile`, () => {
-    return HttpResponse.json({
-      status: 200,
-      code: 'COMMON-200',
-      message: '성공적으로 조회했습니다.',
-      data: mockProfile,
-    });
-  }),
   // NOTE: API 명세에 없는 mock api입니다. 추후에 변경될 수 있어요.
   http.delete(`${BASE}/users/profile`, async () => {
     return HttpResponse.json({
