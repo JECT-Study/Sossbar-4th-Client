@@ -31,6 +31,9 @@ export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
 
 export const fetchReviews = (userId: number): Promise<Review[]> => apiRequest<Review[]>(`/users/${userId}/reviews`);
 
+export const fetchProjectReviews = (userId: number, projectId: number): Promise<Review[]> =>
+  apiRequest<Review[]>(`/users/${userId}/projects/${projectId}/reviews`);
+
 export const fetchReceivedTags = (userId: number): Promise<ReceivedTags> =>
   apiRequest<ReceivedTags>(`/reviews/tags/${userId}`);
 
