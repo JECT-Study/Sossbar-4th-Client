@@ -10,6 +10,7 @@ export type Review = {
   positiveFeedback: string;
   negativeFeedback?: string; // 본인 후기 조회 시에만 포함. 타인 조회 시 응답에서 제외.
   reviewerNickname: string;
+  projectStatus?: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED'; // 팀 확정 여부 필터링용
 };
 
 export type ReviewFormData = {
