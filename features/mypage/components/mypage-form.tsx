@@ -12,6 +12,8 @@ export const MypageForm = () => {
   const { data: profile } = useProfile();
 
   const [marketingAgreed, , , toggleMarketingAgreed] = useBooleanState(false);
+  const initialMarketingAgreed = false;
+  const isDirty = marketingAgreed !== initialMarketingAgreed;
   const [accountActionsOpen, openAccountActions, closeAccountActions] = useBooleanState(false);
 
   const handleAccountActionsChange = (open: boolean) => {
@@ -44,7 +46,7 @@ export const MypageForm = () => {
       </fieldset>
 
       <div className="flex w-full flex-col gap-4">
-        <Button type="submit" size="medium" className="text-body-xl h-14 w-full py-0">
+        <Button type="submit" size="medium" className="text-body-xl h-14 w-full py-0" disabled={!isDirty}>
           정보 수정
         </Button>
 

@@ -34,7 +34,14 @@ export const HomeFeaturesSection = () => {
         <HomeSectionHeader
           badge="주요 기능"
           heading="보이지 않던 협업 역량을 투명한 데이터로!"
-          description="기술, 스펙, 스킬은 포트폴리오나 깃허브로 증명할 수 있지만 소통 방식과 책임감과 같은 소프트스킬은 어떻게 보여주시나요?"
+          description={
+            <>
+              기술, 스펙, 스킬은 포트폴리오나 깃허브로 증명할 수 있지만 소통 방식과 책임감 같은 &apos;소프트
+              스킬&apos;은 증명하기 어렵지 않으셨나요?
+              <br />
+              눈에 보이지 않아 보여주기 어려웠던 진짜 역량을 이제 확인해보세요.
+            </>
+          }
         />
 
         <div className="mt-10 box-border flex h-[208px] w-full max-w-[1200px] flex-none items-stretch gap-6">

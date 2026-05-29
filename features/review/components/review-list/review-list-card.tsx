@@ -6,17 +6,16 @@ import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { SegmentedControl } from '@/shared/components/segmented-control';
 
-import { ReviewListItem } from './review-list-item';
-import { useReviews } from '../api/queries';
+import type { Review } from '../../types/review';
 
-type ReviewListVariant = 'all' | 'project';
+import { ReviewListItem } from './review-list-item';
 
 const INITIAL_VISIBLE_REVIEW_COUNT = 5;
 
 interface ReviewListCardProps {
-  userId: number;
-  variant: ReviewListVariant;
   isMyProfile: boolean;
+  reviews: Review[];
+  showThumbnail: boolean;
 }
 
 const reviewToneOptions = [
@@ -26,13 +25,10 @@ const reviewToneOptions = [
 
 type ReviewTone = (typeof reviewToneOptions)[number]['value'];
 
-export const ReviewListCard = ({ userId, variant, isMyProfile }: ReviewListCardProps) => {
+export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail }: ReviewListCardProps) => {
   const [selectedTone, setSelectedTone] = useState<ReviewTone>('positive');
   const [isExpanded, setIsExpanded] = useState(false);
-  const { data: reviews = [], isPending } = useReviews(userId);
-
   const displayTone = isMyProfile ? selectedTone : 'positive';
-  const showThumbnail = variant === 'all';
   const showItemMenu = isMyProfile && selectedTone === 'negative';
   const visibleReviews = isExpanded ? reviews : reviews.slice(0, INITIAL_VISIBLE_REVIEW_COUNT);
   const showMoreButton = reviews.length > INITIAL_VISIBLE_REVIEW_COUNT && !isExpanded;
@@ -46,23 +42,27 @@ export const ReviewListCard = ({ userId, variant, isMyProfile }: ReviewListCardP
         ) : null}
       </div>
 
-      {isPending ? (
-        <p className="text-body-sm text-text-subtle mt-6">후기를 불러오는 중...</p>
-      ) : reviews.length === 0 ? (
-        <p className="text-body-sm text-text-subtle mt-6">아직 받은 후기가 없습니다.</p>
-      ) : (
-        <ul>
-          {visibleReviews.map((review) => (
-            <ReviewListItem
-              key={review.reviewId}
-              review={review}
-              tone={displayTone}
-              showThumbnail={showThumbnail}
-              showActionMenu={showItemMenu}
-            />
-          ))}
-        </ul>
-      )}
+      <ul>
+        {visibleReviews.map((review) => {
+          const feedback = displayTone === 'positive' ? review.positiveFeedback : (review.negativeFeedback ?? '');
+
+          return (
+            <ReviewListItem.Root key={review.reviewId}>
+              <ReviewListItem.Heading>
+                {showThumbnail ? (
+                  <ReviewListItem.Image src={review.projectImage} alt={`${review.projectName} 썸네일`} />
+                ) : null}
+                <ReviewListItem.HeadingText
+                  projectName={review.projectName}
+                  meta={`${review.reviewerNickname} · ${review.host} · ${review.createdAt}`}
+                />
+              </ReviewListItem.Heading>
+              <ReviewListItem.Content>{feedback}</ReviewListItem.Content>
+              {showItemMenu ? <ReviewListItem.ActionMenu projectName={review.projectName} /> : null}
+            </ReviewListItem.Root>
+          );
+        })}
+      </ul>
 
       {showMoreButton ? (
         <Button
