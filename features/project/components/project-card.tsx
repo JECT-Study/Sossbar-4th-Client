@@ -167,17 +167,19 @@ const ProjectCardHeader = ({
   onEdit,
   onDelete,
 }: ProjectCardHeaderProps) => {
+  const isInProgress = projectStatus === 'IN_PROGRESS';
+
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-row gap-2">
-        <ProjectStateBadge variant={projectStatus === 'IN_PROGRESS' ? 'waiting' : 'success'} />
+        <ProjectStateBadge variant={isInProgress ? 'waiting' : 'success'} />
         {isLeader ? <ProjectStateBadge variant="leader" /> : null}
       </div>
       <div className="flex items-center gap-1">
         <time className="text-detail-base text-text-subtle font-normal" dateTime={startDate}>
           {formatIsoDateToDots(startDate)}
         </time>
-        {isLeader ? (
+        {isLeader && isInProgress ? (
           <Dropdown.Root>
             <Dropdown.Trigger asChild>
               <IconButton
@@ -241,25 +243,29 @@ const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardA
     return <Alert variant={projectStatus === 'IN_PROGRESS' ? 'warning' : 'success'} className="w-full" />;
   }
 
+  const isInProgress = projectStatus === 'IN_PROGRESS';
+
   return (
     <div className="flex gap-2">
-      <div className="relative inline-flex">
-        <Button
-          type="button"
-          variant="secondary"
-          size="medium"
-          leftIcon={<CopyIcon aria-hidden className="size-4" />}
-          className={cn(
-            isInviteTooltipOpen &&
-              'bg-button-secondary-fill-pressed hover:bg-button-secondary-fill-pressed focus:bg-button-secondary-fill-pressed active:bg-button-secondary-fill-pressed',
-          )}
-          onClick={() => void handleCopyInviteLink()}
-        >
-          초대 링크 복사
-        </Button>
-        <CopyFeedbackTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
-      </div>
-      {projectStatus === 'IN_PROGRESS' ? (
+      {isInProgress ? (
+        <div className="relative inline-flex">
+          <Button
+            type="button"
+            variant="secondary"
+            size="medium"
+            leftIcon={<CopyIcon aria-hidden className="size-4" />}
+            className={cn(
+              isInviteTooltipOpen &&
+                'bg-button-secondary-fill-pressed hover:bg-button-secondary-fill-pressed focus:bg-button-secondary-fill-pressed active:bg-button-secondary-fill-pressed',
+            )}
+            onClick={() => void handleCopyInviteLink()}
+          >
+            초대 링크 복사
+          </Button>
+          <CopyFeedbackTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
+        </div>
+      ) : null}
+      {isInProgress ? (
         <Button
           type="button"
           variant="primary"
