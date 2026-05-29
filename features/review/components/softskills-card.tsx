@@ -1,10 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-
 import { cn } from '@/shared/lib/cn';
 
-import type { SpectrumAxisInfo } from '../types/spectrum';
+import type { SpectrumAxisInfo, SpectrumInfo } from '../types/spectrum';
 
 import { useSpectrum } from '../api/queries';
 
@@ -15,8 +13,6 @@ type SoftSkillsCardProps = {
   projectId?: number;
   showDistribution?: boolean; // 전체 탭: true(스펙트럼+분포 차트) / 프로젝트별: false(스펙트럼만)
 };
-
-type CombinedAxis = SpectrumAxisInfo & { leftLabel: string; rightLabel: string };
 
 // 백엔드 API 요청 후 수정
 const spectrumRows = [
@@ -53,11 +49,15 @@ const spectrumVerticalDashPercents = [20, 40, 60, 80] as const;
 // averageStrength 1–5 → 20%–100% (5-point Likert scale)
 const getMarkerLeft = (averageStrength: number): string => `${(averageStrength / 5) * 100}%`;
 
-const getDistributionBars = (axes: CombinedAxis[]) =>
-  axes.flatMap((item) => [
-    { label: item.leftLabel, count: item.leftStrengthCount },
-    { label: item.rightLabel, count: item.rightStrengthCount },
-  ]);
+const getDistributionBars = (spectrumInfo: SpectrumAxisInfo[]) =>
+  spectrumInfo.flatMap((item, index) => {
+    const row = spectrumRows[index];
+
+    return [
+      { label: row.left, count: item.leftStrengthCount },
+      { label: row.right, count: item.rightStrengthCount },
+    ];
+  });
 
 const getBarHeight = (count: number, maxDistributionCount: number): number => {
   if (count <= 0 || maxDistributionCount <= 0) {
@@ -94,15 +94,15 @@ const SpectrumVerticalDashOverlay = ({ widthPx }: { widthPx: number }) => (
   </svg>
 );
 
-const SoftSkillsSpectrum = ({ axes }: { axes: CombinedAxis[] }) => (
+const SoftSkillsSpectrum = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }) => (
   <div className="w-fill mt-7">
     <h3 className="text-heading-xs text-text-subtle h-6 font-bold">평균 지표</h3>
 
     <div className="mt-3 flex h-[136px] items-start">
       <div className="flex h-[136px] w-[93px] flex-col gap-2">
-        {axes.map((axis) => (
-          <p key={`${axis.axisName}-left`} className="text-body-xs text-text-subtle flex h-7 items-center font-medium">
-            {axis.leftLabel}
+        {spectrumRows.map((row) => (
+          <p key={`${row.left}-left`} className="text-body-xs text-text-subtle flex h-7 items-center font-medium">
+            {row.left}
           </p>
         ))}
       </div>
@@ -110,7 +110,7 @@ const SoftSkillsSpectrum = ({ axes }: { axes: CombinedAxis[] }) => (
       <div className="relative mx-6 flex h-[136px] w-[286px] flex-col gap-2">
         <SpectrumVerticalDashOverlay widthPx={spectrumTrackWidthPx} />
 
-        {axes.map((axis) => (
+        {spectrumInfo.spectrumInfoResDtos.map((axis) => (
           <div key={axis.axisName} className="relative z-10 h-7">
             <div className="absolute top-1/2 left-0 z-10 h-1.5 w-full -translate-y-1/2 rounded-full bg-gray-300" />
 
@@ -124,12 +124,12 @@ const SoftSkillsSpectrum = ({ axes }: { axes: CombinedAxis[] }) => (
       </div>
 
       <div className="flex h-[136px] w-[113px] flex-col gap-2">
-        {axes.map((axis) => (
+        {spectrumRows.map((row) => (
           <p
-            key={`${axis.axisName}-right`}
+            key={`${row.right}-right`}
             className="text-body-xs text-text-subtle flex h-7 items-center justify-end font-medium"
           >
-            {axis.rightLabel}
+            {row.right}
           </p>
         ))}
       </div>
@@ -137,14 +137,16 @@ const SoftSkillsSpectrum = ({ axes }: { axes: CombinedAxis[] }) => (
   </div>
 );
 
-const SoftSkillsDistribution = ({ axes, totalCount }: { axes: CombinedAxis[]; totalCount: number }) => {
-  const bars = getDistributionBars(axes);
+const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }) => {
+  const bars = getDistributionBars(spectrumInfo.spectrumInfoResDtos);
   const tones = getTopBarTones(bars);
   const maxCount = Math.max(...bars.map((bar) => bar.count), 0);
 
   return (
     <div className="mt-[41px] w-[540px]">
-      <h3 className="text-heading-xs text-text-subtle h-6 font-bold">받은 평가 분포({totalCount}명 응답)</h3>
+      <h3 className="text-heading-xs text-text-subtle h-6 font-bold">
+        받은 평가 분포({spectrumInfo.totalCount}명 응답)
+      </h3>
 
       <div className="mx-auto mt-4 flex w-[513px] items-end justify-between" style={{ height: CHART_TOTAL_HEIGHT }}>
         {bars.map((bar, index) => (
@@ -168,15 +170,6 @@ const SoftSkillsDistribution = ({ axes, totalCount }: { axes: CombinedAxis[]; to
 
 export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: SoftSkillsCardProps) => {
   const { data: spectrumInfo, isPending, isError } = useSpectrum({ userId, projectId });
-  const [sorted, setSorted] = useState(false);
-
-  const combinedAxes: CombinedAxis[] = (spectrumInfo?.spectrumInfoResDtos ?? []).map((axis, i) => ({
-    ...axis,
-    leftLabel: spectrumRows[i]?.left ?? '',
-    rightLabel: spectrumRows[i]?.right ?? '',
-  }));
-
-  const displayAxes = sorted ? [...combinedAxes].sort((a, b) => a.averageStrength - b.averageStrength) : combinedAxes;
 
   return (
     <section
@@ -185,23 +178,7 @@ export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: S
         showDistribution ? 'h-[652px]' : 'h-auto',
       )}
     >
-      <div className="flex items-center justify-between">
-        <h2 className="text-heading-base h-6 leading-6 font-bold text-black">소프트 스킬 스펙트럼</h2>
-        {!isPending && !isError && spectrumInfo ? (
-          <button
-            type="button"
-            onClick={() => setSorted((prev) => !prev)}
-            className={cn(
-              'text-body-xs rounded px-2 py-1 font-medium transition-colors',
-              sorted
-                ? 'bg-graphic-yellow text-text-basic'
-                : 'border-border-gray text-text-subtle border hover:bg-gray-50',
-            )}
-          >
-            {sorted ? '원래 순서' : '오름차순 정렬'}
-          </button>
-        ) : null}
-      </div>
+      <h2 className="text-heading-base h-6 leading-6 font-bold text-black">소프트 스킬 스펙트럼</h2>
 
       {isPending ? <p className="text-body-sm text-text-subtle mt-7">스펙트럼 정보를 불러오는 중...</p> : null}
 
@@ -209,8 +186,8 @@ export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: S
 
       {!isPending && !isError && spectrumInfo ? (
         <>
-          <SoftSkillsSpectrum axes={displayAxes} />
-          {!!showDistribution && <SoftSkillsDistribution axes={displayAxes} totalCount={spectrumInfo.totalCount} />}
+          <SoftSkillsSpectrum spectrumInfo={spectrumInfo} />
+          {!!showDistribution && <SoftSkillsDistribution spectrumInfo={spectrumInfo} />}
         </>
       ) : null}
 
