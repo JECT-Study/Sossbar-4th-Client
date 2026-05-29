@@ -110,7 +110,7 @@ const SoftSkillsSpectrum = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }) =>
       <div className="relative mx-6 flex h-[136px] w-[286px] flex-col gap-2">
         <SpectrumVerticalDashOverlay widthPx={spectrumTrackWidthPx} />
 
-        {spectrumInfo.spectrumInfoResDtos.map((axis) => (
+        {(spectrumInfo.spectrumInfoResDtos ?? []).map((axis) => (
           <div key={axis.axisName} className="relative z-10 h-7">
             <div className="absolute top-1/2 left-0 z-10 h-1.5 w-full -translate-y-1/2 rounded-full bg-gray-300" />
 

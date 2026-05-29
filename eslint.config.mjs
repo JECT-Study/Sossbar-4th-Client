@@ -91,7 +91,7 @@ const eslintConfig = defineConfig([
     },
   },
   {
-    files: ['app/**/page.tsx', 'app/**/page.ts', 'app/**/layout.tsx', 'app/**/layout.ts', 'app/not-found.tsx'],
+    files: ['app/**/page.tsx', 'app/**/page.ts', 'app/**/layout.tsx', 'app/**/layout.ts', 'app/**/error.tsx', 'app/not-found.tsx'],
     rules: {
       'import/no-default-export': 'off',
     },

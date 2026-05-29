@@ -11,7 +11,11 @@ type ProjectReviewContainerProps = {
 };
 
 export const ProjectReviewContainer = ({ userId, projectId, isMyProfile }: ProjectReviewContainerProps) => {
-  const { data: reviews = [] } = useProjectReviews(userId, projectId);
+  const { data: reviews = [], isError } = useProjectReviews(userId, projectId);
+
+  if (isError) {
+    return <ReviewListEmpty title="후기를 불러오지 못했습니다." />;
+  }
 
   if (reviews.length === 0) {
     if (!isMyProfile) {
