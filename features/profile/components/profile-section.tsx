@@ -1,5 +1,6 @@
 'use client';
 
+import { notFound } from 'next/navigation';
 import { useState } from 'react';
 
 import { buildProfileShareClipboardText } from '@/features/profile/lib/build-profile-share-clipboard-text';
@@ -7,6 +8,7 @@ import { EditIcon, ShareIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
 import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
+import { ApiError } from '@/shared/lib/api/error';
 import { cn } from '@/shared/lib/cn';
 
 import type { UpdateProfilePayload } from '../types';
@@ -23,7 +25,7 @@ type ProfileSectionProps = {
 
 export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => {
   const isValidUserId = Number.isFinite(userId) && userId > 0;
-  const { data: profile, isPending, isError, refetch } = useProfile(userId);
+  const { data: profile, isPending, isError, error, refetch } = useProfile(userId);
   const { mutateAsync: updateProfile, isPending: isUpdatingProfile } = useUpdateProfile();
   const [isEditing, setIsEditing] = useState(false);
   const {
@@ -32,6 +34,10 @@ export const ProfileSection = ({ userId, isMyProfile }: ProfileSectionProps) => 
     close: closeShareTooltip,
     copyLink,
   } = useCopyLinkFeedback();
+
+  if (isError && error instanceof ApiError && error.status === 404) {
+    notFound();
+  }
 
   const handleShareProfile = async () => {
     if (!Number.isFinite(userId) || userId <= 0) {
