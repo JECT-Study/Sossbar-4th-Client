@@ -1,10 +1,6 @@
-import type { WithdrawReasonValue } from '../account-deletion.constants';
-
 export interface DeleteAccountPayload {
-  reason: WithdrawReasonValue;
+  userDeleteReasonEnum: string;
   detail?: string;
 }
 
-export interface DeleteAccountResponse {
-  userId: number;
-}
+export type DeleteAccountResponse = Record<string, never>;

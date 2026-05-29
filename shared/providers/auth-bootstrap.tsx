@@ -6,7 +6,7 @@ import { getMyProfile } from '@/features/auth/fetchers';
 import { mapProfileToSessionUser } from '@/features/auth/lib/map-profile-to-session';
 import { ApiError } from '@/shared/lib/api';
 import { clearAuthToken, getAuthToken } from '@/shared/lib/auth-token';
-import { getSessionUserFromStorage, setSessionUser } from '@/shared/lib/session-user';
+import { clearSessionUser, getSessionUserFromStorage, setSessionUser } from '@/shared/lib/session-user';
 
 export const AuthBootstrap = () => {
   const didRun = useRef(false);
@@ -25,8 +25,9 @@ export const AuthBootstrap = () => {
     void getMyProfile()
       .then((profile) => setSessionUser(mapProfileToSessionUser(profile)))
       .catch((error) => {
-        if (error instanceof ApiError && error.status === 401) {
+        if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
           clearAuthToken();
+          clearSessionUser();
         }
       });
   }, []);

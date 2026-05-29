@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import { ROUTES } from '@/shared/constants/routes';
+import { clearAuthToken } from '@/shared/lib/auth-token';
+import { clearSessionUser } from '@/shared/lib/session-user';
 
 import { kakaoLogin } from './fetchers';
 import { completeLoginSession } from '../lib/complete-login';
@@ -27,6 +29,8 @@ export const useKakaoCallback = (code: string | null, error: string | null) => {
 
     const handleLogin = async () => {
       try {
+        clearAuthToken();
+        clearSessionUser();
         const login = await kakaoLogin(code);
         const { needsOnboarding } = await completeLoginSession(login);
         router.replace(needsOnboarding ? ROUTES.SIGNUP : consumeLoginReturnPath());
