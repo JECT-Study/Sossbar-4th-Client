@@ -2,10 +2,10 @@
 
 import { cn } from '@/shared/lib/cn';
 
-import type { SpectrumAxisInfo, SpectrumInfo } from '../../types/spectrum';
+import type { SpectrumAxisInfo, SpectrumInfo } from '../types/spectrum';
 
-import { SoftskillsEmpty } from './softskills-empty';
-import { useSpectrum } from '../../api/queries';
+import { ReviewEmptyState } from './review-empty-state';
+import { useSpectrum } from '../api/queries';
 
 type DistributionBarTone = 'first' | 'second' | 'third' | 'none';
 
@@ -188,7 +188,7 @@ export const SoftSkillsCard = ({ userId, projectId, isMyProfile, showDistributio
 
       {!isPending && !isError && spectrumInfo ? (
         spectrumInfo.totalCount === 0 ? (
-          <SoftskillsEmpty
+          <ReviewEmptyState
             title="받은 후기가 없어요"
             description={isMyProfile ? '피드백이 쌓이면 나의 협업 스펙트럼이 분석돼요' : undefined}
             // 추후 버튼에 기능 연결 예정

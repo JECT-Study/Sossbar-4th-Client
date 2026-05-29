@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 
-type SoftskillsEmptyProps = {
+type ReviewEmptyStateProps = {
   title: string;
   description?: string;
   action?: ReactNode;
 };
 
-export const SoftskillsEmpty = ({ title, description, action }: SoftskillsEmptyProps) => {
+export const ReviewEmptyState = ({ title, description, action }: ReviewEmptyStateProps) => {
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-6">
       <div aria-hidden className="bg-bg-gray-subtle flex size-10 items-center justify-center rounded-full">
