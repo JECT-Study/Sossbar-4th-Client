@@ -25,9 +25,9 @@ export const HomeHeroSection = () => {
           </Button>
           <Button
             asChild
-            variant="secondary"
+            variant="tertiary"
             size="large"
-            className="text-text-basic border-none bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent"
+            className="bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent"
           >
             <AuthGateLink href="/mypage">내 프로필 보기</AuthGateLink>
           </Button>
