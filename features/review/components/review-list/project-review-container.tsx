@@ -1,7 +1,6 @@
 'use client';
 
 import { ReviewListCard } from './review-list-card';
-import { ReviewListEmpty } from './review-list-empty';
 import { useProjectReviews } from '../../api/queries';
 
 type ProjectReviewContainerProps = {
@@ -14,7 +13,7 @@ export const ProjectReviewContainer = ({ userId, projectId, isMyProfile }: Proje
   const { data: reviews = [], isError } = useProjectReviews(userId, projectId);
 
   if (isError) {
-    return <ReviewListEmpty title="후기를 불러오지 못했습니다." />;
+    return <p className="text-body-base text-text-subtle">후기를 불러오지 못했습니다.</p>;
   }
 
   return <ReviewListCard isMyProfile={isMyProfile} reviews={reviews} showThumbnail={false} />;
