@@ -11,7 +11,7 @@ import { Button } from '@/shared/components/button';
 import { ROUTES } from '@/shared/constants/routes';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
-const INITIAL_COUNT = 4;
+const INITIAL_COUNT = 8;
 
 const DEFAULT_IMAGE_PATH = '/default.png';
 
