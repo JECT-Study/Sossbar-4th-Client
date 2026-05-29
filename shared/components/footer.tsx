@@ -3,9 +3,6 @@ import Link from 'next/link';
 import { cn } from '@/shared/lib/cn';
 
 const footerLinks = [
-  { href: '#', label: '회사 소개' },
-  { href: '#', label: '문의하기' },
-  { href: '#', label: '커뮤니티' },
   { href: '/policies/privacy-policy', label: '개인정보 처리방침' },
   { href: '/policies/terms-of-service', label: '이용약관' },
 ] as const;

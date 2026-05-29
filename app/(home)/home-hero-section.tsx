@@ -23,7 +23,7 @@ export const HomeHeroSection = () => {
           <Button asChild variant="primary" size="large">
             <AuthGateLink href="/projects">프로젝트 시작하기</AuthGateLink>
           </Button>
-          <Button asChild variant="secondary" size="large">
+          <Button asChild variant="tertiary" size="large">
             <AuthGateLink href="/mypage">내 프로필 보기</AuthGateLink>
           </Button>
         </div>

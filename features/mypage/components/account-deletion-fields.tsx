@@ -40,13 +40,12 @@ export const AccountDeletionFields = ({
       />
 
       <TextareaField
-        label="상세 사유"
+        label="탈퇴 사유"
         placeholder="탈퇴 사유를 입력해주세요."
         disabled={!isDetailEnabled}
         textareaClassName="min-h-[144px] max-h-[144px]"
         className="w-full max-w-none shrink-0"
         errorMessage={detailErrorMessage}
-        maxLength={200}
         {...register('detail')}
       />
     </div>
