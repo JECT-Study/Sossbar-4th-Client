@@ -32,7 +32,7 @@ export const AccountDeletionModal = ({ open, onOpenChange }: Props) => {
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
           <Dialog.Content className="border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex h-[min(680px,calc(100vh-48px))] w-[min(592px,calc(100vw-32px))] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border p-10 shadow-xl">
-            <form onSubmit={handleFormSubmit} className="flex flex-col gap-6">
+            <form onSubmit={handleFormSubmit} className="flex min-h-0 flex-1 flex-col gap-6">
               <div className="flex shrink-0 flex-col gap-2">
                 <Dialog.Title className="text-heading-base text-text-basic font-bold tracking-normal">
                   회원 탈퇴
