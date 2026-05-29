@@ -61,7 +61,7 @@ export const ProjectPageContent = ({ userId, projectId, isMyProfile }: ProjectPa
       <div className="flex flex-col gap-6">
         <div className="flex gap-6">
           <TagCard userId={userId} projectId={projectId} collapsible />
-          <SoftSkillsCard userId={userId} projectId={projectId} showDistribution={false} />
+          <SoftSkillsCard userId={userId} projectId={projectId} isMyProfile={isMyProfile} showDistribution={false} />
         </div>
         <ProjectReviewContainer userId={userId} projectId={projectId} isMyProfile={isMyProfile} />
       </div>
