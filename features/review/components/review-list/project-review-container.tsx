@@ -1,7 +1,5 @@
 'use client';
 
-import { Button } from '@/shared/components/button';
-
 import { ReviewListCard } from './review-list-card';
 import { ReviewListEmpty } from './review-list-empty';
 import { useProjectReviews } from '../../api/queries';
@@ -23,12 +21,13 @@ export const ProjectReviewContainer = ({ userId, projectId, isMyProfile }: Proje
     return (
       <ReviewListEmpty
         title="아직 도착한 후기가 없어요."
-        description="링크를 공유해 볼까요?"
-        action={
-          <Button type="button" variant="secondary" size="medium">
-            초대 링크 공유
-          </Button>
-        }
+        // 추후 버튼에 기능 연결할 예정
+        // description="링크를 공유해 볼까요?"
+        // action={
+        //   <Button type="button" variant="secondary" size="medium">
+        //     초대 링크 공유
+        //   </Button>
+        // }
       />
     );
   }
