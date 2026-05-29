@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { clearSessionUser } from '@/shared/lib/session-user';
+
 import { deleteAccount } from '../apis/delete-account.api';
-import { mypageKeys } from '../mypage.query-key';
 
 export const useDeleteAccountMutation = () => {
   const queryClient = useQueryClient();
@@ -9,7 +10,8 @@ export const useDeleteAccountMutation = () => {
   return useMutation({
     mutationFn: deleteAccount,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: mypageKeys.all });
+      clearSessionUser();
+      queryClient.clear();
     },
   });
 };
