@@ -4,12 +4,12 @@ import { useState } from 'react';
 
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { EmptyState } from '@/shared/components/empty-state';
 import { SegmentedControl } from '@/shared/components/segmented-control';
 import { cn } from '@/shared/lib/cn';
 
 import type { Review } from '../../types/review';
 
-import { ReviewEmptyState } from '../review-empty-state';
 import { ReviewListItem } from './review-list-item';
 
 const INITIAL_VISIBLE_REVIEW_COUNT = 5;
@@ -48,7 +48,7 @@ export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail }: ReviewLi
       </div>
 
       {isEmpty ? (
-        <ReviewEmptyState title="아직 도착한 후기가 없어요." />
+        <EmptyState title="아직 도착한 후기가 없어요." />
       ) : (
         <>
           <ul>

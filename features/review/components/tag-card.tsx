@@ -4,10 +4,10 @@ import { useId, useState } from 'react';
 
 import { DownIcon, UpIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { EmptyState } from '@/shared/components/empty-state';
 import { TagBadge } from '@/shared/components/tag-badge';
 import { cn } from '@/shared/lib/cn';
 
-import { ReviewEmptyState } from './review-empty-state';
 import { useReceivedTags } from '../api/queries';
 
 const EMPTY_TAGS = [] as const;
@@ -42,7 +42,7 @@ export const TagCard = ({ userId, projectId, collapsible }: TagCardProps) => {
 
       {isError ? <p className="text-body-sm text-text-error mt-6">태그 정보를 불러오지 못했습니다.</p> : null}
 
-      {!isPending && !isError && !hasTags ? <ReviewEmptyState title="받은 태그가 없어요" /> : null}
+      {!isPending && !isError && !hasTags ? <EmptyState title="받은 태그가 없어요" /> : null}
 
       {!isPending && !isError && hasTags ? (
         <>
