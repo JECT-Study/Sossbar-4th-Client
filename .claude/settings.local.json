@@ -19,8 +19,7 @@
       "Bash(git add *)",
       "Bash(git rm *)",
       "Bash(git restore *)",
-      "Bash(git commit *)",
-      "Bash(pnpm lint *)"
+      "Bash(git commit *)"
     ]
   }
 }
