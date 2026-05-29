@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 import { ApiError } from '@/shared/lib/api';
@@ -20,29 +20,50 @@ const defaultValues: SignupFormData = {
   },
 };
 
+const hasRequiredAgreements = (agreements: SignupFormData['agreements'] | undefined) =>
+  agreements?.age === true && agreements?.terms === true && agreements?.privacy === true;
+
 export const useSignupForm = () => {
   const [isSignupCompleted, completeSignup] = useBooleanState();
   const { mutateAsync: signup, isPending } = useSignup();
 
   const form = useForm({
     defaultValues,
-    mode: 'onTouched',
+    mode: 'onChange',
     reValidateMode: 'onChange',
     resolver: zodResolver(SignupFormSchema),
   });
 
-  const onSubmit = async (data: Pick<SignupFormData, 'name' | 'bio'>) => {
+  const watchedName = useWatch({ control: form.control, name: 'name' });
+  const watchedBio = useWatch({ control: form.control, name: 'bio' });
+  const watchedAgreements = useWatch({ control: form.control, name: 'agreements' });
+
+  const onSubmit = async (data: SignupFormData) => {
     try {
-      await signup(data);
+      await signup({
+        name: data.name,
+        bio: data.bio,
+        requiredAgree: data.agreements.age && data.agreements.terms && data.agreements.privacy,
+        marketingAgree: data.agreements.marketing,
+      });
       completeSignup();
     } catch (error) {
-      form.setError('root', {
-        message: error instanceof ApiError ? error.message : '서버 오류가 발생했어요. 잠시 후 다시 시도해주세요.',
-      });
+      let message = '서버 오류가 발생했어요. 잠시 후 다시 시도해 주세요.';
+
+      if (error instanceof ApiError) {
+        message =
+          error.status >= 500 ? '가입 처리 중 서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.' : error.message;
+      }
+
+      form.setError('root', { message });
     }
   };
 
-  const canSubmit = form.formState.isValid && !isPending;
+  const canSubmit =
+    (watchedName?.trim().length ?? 0) >= 2 &&
+    (watchedBio?.trim().length ?? 0) >= 1 &&
+    hasRequiredAgreements(watchedAgreements) &&
+    !isPending;
 
   return {
     canSubmit,

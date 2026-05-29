@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Dialog } from 'radix-ui';
 
 import { Button } from '@/shared/components/button';
+import { clearAuthToken } from '@/shared/lib/auth-token';
 import { cn } from '@/shared/lib/cn';
+import { clearSessionUser } from '@/shared/lib/session-user';
 
 interface Props {
   open: boolean;
@@ -20,6 +22,8 @@ export const AccountDeletionCompleteModal = ({ open, onOpenChange, onConfirm }: 
 
     if (!nextOpen) {
       onConfirm?.();
+      clearSessionUser();
+      clearAuthToken();
       router.push('/');
     }
   };

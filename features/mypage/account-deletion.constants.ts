@@ -2,6 +2,15 @@ export const WITHDRAW_REASON_VALUES = ['low-quality', 'trust', 'alternative', 'd
 
 export type WithdrawReasonValue = (typeof WITHDRAW_REASON_VALUES)[number];
 
+export const WITHDRAW_REASON_ENUM_MAP: Record<WithdrawReasonValue, string> = {
+  'low-quality': 'LOW_QUALITY',
+  trust: 'LOW_TRUST',
+  alternative: 'FOUND_ALTERNATIVE',
+  difficulty: 'HARD_TO_USE',
+  burden: 'PRESSURE',
+  other: 'ETC',
+};
+
 const WITHDRAW_REASON_LABELS: Record<WithdrawReasonValue, string> = {
   'low-quality': '서비스 퀄리티가 낮아요',
   trust: '신뢰도가 떨어져요',

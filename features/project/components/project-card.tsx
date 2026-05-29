@@ -17,6 +17,7 @@ import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { Dropdown } from '@/shared/components/dropdown';
 import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
+import { ApiError } from '@/shared/lib/api';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -288,8 +289,8 @@ const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardA
       )}
       <ConfirmationDialog
         open={confirmDialogOpen}
-        title="우리 팀을 확정할까요?"
-        description="확정하면 팀원들과 후기를 주고받을 수 있습니다. 확정 후에는 되돌릴 수 없습니다."
+        title="팀 확정하기"
+        description="확정 후에는 팀원 추가 및 프로젝트 정보 수정이 불가능합니다. 진행하시겠습니까?"
         confirmText="확정하기"
         cancelText="취소"
         onOpenChange={(open) => {
@@ -330,8 +331,12 @@ const ProjectMemberList = ({ projectId, members, isLeader }: ProjectMemberListPr
     try {
       await removeMember(memberToRemove.memberId);
       setMemberToRemove(null);
-    } catch {
-      setRemoveError('팀원 삭제에 실패했습니다. 다시 시도해주세요.');
+    } catch (error) {
+      if (error instanceof ApiError && (error.status === 403 || error.status === 405)) {
+        setRemoveError('현재 팀원 제외 기능을 사용할 수 없습니다. 잠시 후 다시 시도해주세요.');
+        return;
+      }
+      setRemoveError('팀원 내보내기에 실패했습니다. 다시 시도해주세요.');
     }
   }, [memberToRemove, removeMember]);
 
@@ -371,9 +376,9 @@ const ProjectMemberList = ({ projectId, members, isLeader }: ProjectMemberListPr
 
       <ConfirmationDialog
         open={memberToRemove != null}
-        title={memberToRemove ? `${memberToRemove.name}님을 팀에서 제외할까요?` : ''}
-        description="제외한 팀원은 이 프로젝트에 다시 초대해야 합니다."
-        confirmText="제외하기"
+        title="팀원 내보내기"
+        description="팀원을 팀 목록에서 삭제할까요? 삭제된 팀원은 되돌릴 수 없습니다."
+        confirmText="내보내기"
         cancelText="취소"
         onOpenChange={(open) => {
           if (!open) {

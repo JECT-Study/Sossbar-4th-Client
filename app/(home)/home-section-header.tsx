@@ -1,9 +1,11 @@
+import type { ReactNode } from 'react';
+
 import { cn } from '@/shared/lib/cn';
 
 interface HomeSectionHeaderProps {
   badge: string;
   heading: string;
-  description?: string;
+  description?: ReactNode;
   className?: string;
   headingClassName?: string;
 }

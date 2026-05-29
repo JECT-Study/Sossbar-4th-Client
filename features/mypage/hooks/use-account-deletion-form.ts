@@ -6,6 +6,7 @@ import type { AccountDeletionFormData } from '../account-deletion-form.schema';
 import type { DeleteAccountPayload } from '../types/account-deletion.types';
 
 import { AccountDeletionFormSchema } from '../account-deletion-form.schema';
+import { WITHDRAW_REASON_ENUM_MAP } from '../account-deletion.constants';
 
 interface Params {
   open: boolean;
@@ -41,7 +42,7 @@ export const useAccountDeletionForm = ({ open }: Params) => {
     const detail = data.reason === 'other' ? data.detail?.trim() : undefined;
 
     return {
-      reason: data.reason,
+      userDeleteReasonEnum: WITHDRAW_REASON_ENUM_MAP[data.reason],
       ...(detail ? { detail } : {}),
     };
   }, []);

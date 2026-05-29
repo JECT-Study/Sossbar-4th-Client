@@ -12,7 +12,7 @@ interface Props {
 
 export const AgreementItem = ({ agreement, checked, onChange }: Props) => (
   <label className="flex cursor-pointer items-center gap-3">
-    <Checkbox checked={checked} onCheckedChange={onChange} />
+    <Checkbox checked={checked} onCheckedChange={(value) => onChange(value === true)} />
     <span className="text-text-basic text-[14px]">
       {'url' in agreement ? (
         <>
