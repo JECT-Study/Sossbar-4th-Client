@@ -1,6 +1,7 @@
 'use client';
 
 import { ReviewListCard } from './review-list-card';
+import { ReviewListEmpty } from './review-list-empty';
 import { useProjectReviews } from '../../api/queries';
 
 type ProjectReviewContainerProps = {
