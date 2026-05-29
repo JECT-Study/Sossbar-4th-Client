@@ -3,6 +3,4 @@ export interface DeleteAccountPayload {
   detail?: string;
 }
 
-export interface DeleteAccountResponse {
-  userId: number;
-}
+export type DeleteAccountResponse = Record<string, never>;
