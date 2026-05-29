@@ -289,8 +289,8 @@ const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardA
       )}
       <ConfirmationDialog
         open={confirmDialogOpen}
-        title="우리 팀을 확정할까요?"
-        description="확정하면 팀원들과 후기를 주고받을 수 있습니다. 확정 후에는 되돌릴 수 없습니다."
+        title="팀 확정하기"
+        description="확정 후에는 팀원 추가 및 프로젝트 정보 수정이 불가능합니다. 진행하시겠습니까?"
         confirmText="확정하기"
         cancelText="취소"
         onOpenChange={(open) => {
