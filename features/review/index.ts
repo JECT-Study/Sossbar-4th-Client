@@ -4,7 +4,7 @@ export { useCreateReview } from './api/mutations';
 export { reviewKeys } from './api/query-keys';
 export { useReceivedTags, useReviewFormData, useReviews, useSpectrum } from './api/queries';
 export { ReviewListCard } from './components/review-list-card';
-export { SoftSkillsCard } from './components/softskills-card';
+export { SoftSkillsCard } from './components/softskills/softskills-card';
 export { TagCard } from './components/tag-card';
 export type { CreateReviewRequest, Review, ReviewFormData } from './types/review';
 export type { Tag, ReceivedTags, ReceivedTagCount } from './types/tag';

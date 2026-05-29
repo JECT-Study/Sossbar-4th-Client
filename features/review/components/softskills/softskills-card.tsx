@@ -1,16 +1,19 @@
 'use client';
 
+import { Button } from '@/shared/components/button';
 import { cn } from '@/shared/lib/cn';
 
-import type { SpectrumAxisInfo, SpectrumInfo } from '../types/spectrum';
+import type { SpectrumAxisInfo, SpectrumInfo } from '../../types/spectrum';
 
-import { useSpectrum } from '../api/queries';
+import { SoftskillsEmpty } from './softskills-empty';
+import { useSpectrum } from '../../api/queries';
 
 type DistributionBarTone = 'first' | 'second' | 'third' | 'none';
 
 type SoftSkillsCardProps = {
   userId: number;
   projectId?: number;
+  isMyProfile: boolean;
   showDistribution?: boolean; // 전체 탭: true(스펙트럼+분포 차트) / 프로젝트별: false(스펙트럼만)
 };
 
@@ -168,13 +171,13 @@ const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }
   );
 };
 
-export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: SoftSkillsCardProps) => {
+export const SoftSkillsCard = ({ userId, projectId, isMyProfile, showDistribution = true }: SoftSkillsCardProps) => {
   const { data: spectrumInfo, isPending, isError } = useSpectrum({ userId, projectId });
 
   return (
     <section
       className={cn(
-        'border-border-gray w-[588px] overflow-hidden rounded-2xl border bg-white p-6',
+        'border-border-gray flex w-[588px] flex-col overflow-hidden rounded-2xl border bg-white p-6',
         showDistribution ? 'h-[652px]' : 'h-auto',
       )}
     >
@@ -185,15 +188,28 @@ export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: S
       {isError ? <p className="text-body-sm text-text-error mt-7">스펙트럼 정보를 불러오지 못했습니다.</p> : null}
 
       {!isPending && !isError && spectrumInfo ? (
-        <>
-          <SoftSkillsSpectrum spectrumInfo={spectrumInfo} />
-          {!!showDistribution && <SoftSkillsDistribution spectrumInfo={spectrumInfo} />}
-        </>
+        spectrumInfo.totalCount === 0 ? (
+          <SoftskillsEmpty
+            title="받은 후기가 없어요"
+            description={isMyProfile ? '피드백이 쌓이면 나의 협업 스펙트럼이 분석돼요' : undefined}
+            action={
+              isMyProfile ? (
+                <Button variant="secondary" size="medium">
+                  초대 링크 복사
+                </Button>
+              ) : null
+            }
+          />
+        ) : (
+          <>
+            <SoftSkillsSpectrum spectrumInfo={spectrumInfo} />
+            {!!showDistribution && <SoftSkillsDistribution spectrumInfo={spectrumInfo} />}
+            <p className="text-detail-base text-text-disabled mt-7 h-6 font-normal">
+              * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
+            </p>
+          </>
+        )
       ) : null}
-
-      <p className="text-detail-base text-text-disabled mt-7 h-6 w-[540px] font-normal">
-        * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
-      </p>
     </section>
   );
 };
