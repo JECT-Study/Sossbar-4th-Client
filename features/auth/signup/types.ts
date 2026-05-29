@@ -13,7 +13,7 @@ export type SignupPayload = {
 export interface SignupResponse {
   userId: number;
   username: string;
-  nickname: string;
+  nickname?: string;
   email: string;
   bio: string;
   profileImageUrl: string | null;
