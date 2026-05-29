@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/shared/components/button';
 import { cn } from '@/shared/lib/cn';
 
 import type { SpectrumAxisInfo, SpectrumInfo } from '../../types/spectrum';
@@ -192,13 +191,14 @@ export const SoftSkillsCard = ({ userId, projectId, isMyProfile, showDistributio
           <SoftskillsEmpty
             title="받은 후기가 없어요"
             description={isMyProfile ? '피드백이 쌓이면 나의 협업 스펙트럼이 분석돼요' : undefined}
-            action={
-              isMyProfile ? (
-                <Button variant="secondary" size="medium">
-                  초대 링크 복사
-                </Button>
-              ) : null
-            }
+            // 추후 버튼에 기능 연결 예정
+            // action={
+            //   isMyProfile ? (
+            //     <Button variant="secondary" size="medium">
+            //       초대 링크 복사
+            //     </Button>
+            //   ) : null
+            // }
           />
         ) : (
           <>
