@@ -142,16 +142,14 @@ const SoftSkillsSpectrum = ({ sortedAxes }: { sortedAxes: SpectrumAxisInfo[] }) 
   </div>
 );
 
-const SoftSkillsDistribution = ({ sortedAxes }: { sortedAxes: SpectrumAxisInfo[] }) => {
+const SoftSkillsDistribution = ({ sortedAxes, totalCount }: { sortedAxes: SpectrumAxisInfo[]; totalCount: number }) => {
   const bars = getDistributionBars(sortedAxes);
   const tones = getTopBarTones(bars);
   const maxCount = Math.max(...bars.map((bar) => bar.count), 0);
 
   return (
     <div className="mt-[41px] w-[540px]">
-      <h3 className="text-heading-xs text-text-subtle h-6 font-bold">
-        받은 평가 분포({spectrumInfo.totalCount}명 응답)
-      </h3>
+      <h3 className="text-heading-xs text-text-subtle h-6 font-bold">받은 평가 분포({totalCount}명 응답)</h3>
 
       <div className="mx-auto mt-4 flex w-[513px] items-end justify-between" style={{ height: CHART_TOTAL_HEIGHT }}>
         {bars.map((bar, index) => (
@@ -208,7 +206,9 @@ export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: S
         ) : (
           <>
             <SoftSkillsSpectrum sortedAxes={sortedAxes} />
-            {!!showDistribution && <SoftSkillsDistribution sortedAxes={sortedAxes} />}
+            {!!showDistribution && (
+              <SoftSkillsDistribution sortedAxes={sortedAxes} totalCount={spectrumInfo.totalCount} />
+            )}
             <p className="text-detail-base text-text-disabled mt-7 h-6 font-normal">
               * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
             </p>

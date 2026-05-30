@@ -1,3 +1,5 @@
+'use client';
+
 import { useSyncExternalStore } from 'react';
 
 import { isServer } from '@/shared/constants/env';
