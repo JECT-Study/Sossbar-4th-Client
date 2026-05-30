@@ -1,8 +1,6 @@
 import { apiRequest } from '@/shared/lib/api';
 
-import type { Profile, UpdateProfilePayload, UpdateProfileResponse } from './types';
-
-export const fetchProfile = (userId: number): Promise<Profile> => apiRequest<Profile>(`/users/profile/${userId}`);
+import type { UpdateProfilePayload, UpdateProfileResponse } from '../types';
 
 const createUpdateProfileFormData = ({ info, profileImage }: UpdateProfilePayload) => {
   const formData = new FormData();
