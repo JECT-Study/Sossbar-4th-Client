@@ -52,6 +52,8 @@ export const ProjectInviteHandler = () => {
     return project.members.some((member) => member.userId === sessionUser.userId);
   }, [project, sessionUser]);
 
+  const isProjectConfirmed = project != null && project.projectStatus !== 'IN_PROGRESS';
+
   useEffect(() => {
     const raw = searchParams.get(PROJECT_INVITE_QUERY_KEY);
     if (raw != null && projectId == null) {
@@ -77,7 +79,22 @@ export const ProjectInviteHandler = () => {
   }, [clearInviteParam, isAlreadyMember, isPending, project, shouldFetchProject]);
 
   const acceptModalOpen =
-    projectId != null && hasSession && !isPending && !isError && project != null && !isAlreadyMember;
+    projectId != null &&
+    hasSession &&
+    !isPending &&
+    !isError &&
+    project != null &&
+    !isAlreadyMember &&
+    !isProjectConfirmed;
+
+  const confirmedProjectModalOpen =
+    projectId != null &&
+    hasSession &&
+    !isPending &&
+    !isError &&
+    project != null &&
+    !isAlreadyMember &&
+    isProjectConfirmed;
 
   const invalidInviteModalOpen = projectId != null && hasSession && shouldFetchProject && !isPending && isError;
 
@@ -117,6 +134,15 @@ export const ProjectInviteHandler = () => {
     [clearInviteParam],
   );
 
+  const handleConfirmedOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        clearInviteParam();
+      }
+    },
+    [clearInviteParam],
+  );
+
   if (projectId == null) {
     return null;
   }
@@ -133,6 +159,15 @@ export const ProjectInviteHandler = () => {
           errorMessage={joinError ?? undefined}
         />
       ) : null}
+      <ConfirmationDialog
+        open={confirmedProjectModalOpen}
+        title="팀 확정이 완료된 프로젝트입니다"
+        description="팀원 확정이 완료되어 더 이상 참여할 수 없습니다. 프로젝트 방장에게 문의해 주세요."
+        confirmText="확인"
+        cancelText="닫기"
+        onOpenChange={handleConfirmedOpenChange}
+        onConfirm={() => handleConfirmedOpenChange(false)}
+      />
       <ConfirmationDialog
         open={invalidInviteModalOpen}
         title="유효하지 않은 링크입니다"

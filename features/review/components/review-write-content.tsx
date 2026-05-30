@@ -82,7 +82,7 @@ export const ReviewWriteContent = () => {
   const improvementOk = improvementTrimmed.length === 0 || improvementTrimmed.length >= PRAISE_MIN_LENGTH;
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
   const spectrumsOk = !!formData?.spectrums?.length;
-  const canSubmit = praiseOk && tagsOk && spectrumsOk && !isSubmitting;
+  const canSubmit = praiseOk && improvementOk && tagsOk && spectrumsOk && !isSubmitting;
 
   const handleSubmitFromDialog = useCallback(async () => {
     if (!formData || !canSubmit || projectId == null || revieweeId == null) {
