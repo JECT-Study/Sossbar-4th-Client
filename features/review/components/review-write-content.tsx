@@ -7,8 +7,6 @@ import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 
-import type { Tag } from '../types/tag';
-
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';
 import { useCreateReview } from '../api/mutations';
@@ -18,18 +16,6 @@ const PRAISE_MIN_LENGTH = 10;
 const TEXT_MAX_LENGTH = 250;
 const MAX_TAGS = 3;
 const DEFAULT_SPECTRUM_STEP = 2;
-
-/** Figma: 6 + 4 + 5 + 5 tags per row (mock/API order must match). */
-const TAG_ROW_SIZES = [6, 4, 5, 5] as const;
-
-const chunkTagsByRowSizes = (items: Tag[], sizes: readonly [number, number, number, number]): Tag[][] => {
-  let offset = 0;
-  return sizes.map((count) => {
-    const row = items.slice(offset, offset + count);
-    offset += count;
-    return row;
-  });
-};
 
 export const ReviewWriteContent = () => {
   const router = useRouter();
@@ -181,36 +167,32 @@ export const ReviewWriteContent = () => {
             <h2 id="review-tags-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
               태그 선택(최대 {MAX_TAGS}개)
             </h2>
-            <div className="flex max-w-[781px] flex-col gap-y-2">
-              {chunkTagsByRowSizes(formData.tags, TAG_ROW_SIZES).map((row) => (
-                <div key={row.map((t) => t.tagId).join('-')} className="flex flex-wrap gap-x-2 gap-y-2">
-                  {row.map((tag) => {
-                    const selected = selectedTagIds.has(tag.tagId);
-                    return (
-                      <button
-                        key={tag.tagId}
-                        type="button"
-                        aria-pressed={selected}
-                        disabled={!selected && selectedTagIds.size >= MAX_TAGS}
-                        className={cn(
-                          'text-body-sm inline-flex h-[33px] max-w-full shrink-0 items-center justify-center rounded-full border px-2.5 font-normal transition-colors outline-none focus-visible:ring-2 focus-visible:ring-(--color-border-primary) focus-visible:ring-offset-1',
-                          selected
-                            ? 'border-border-gray-light bg-action-secondary-pressed text-text-basic'
-                            : 'border-border-gray-light bg-action-gray-light text-text-basic hover:border-action-secondary-hover hover:bg-action-secondary-hover',
-                          !selected &&
-                            selectedTagIds.size >= MAX_TAGS &&
-                            'hover:border-border-gray-light hover:bg-action-gray-light cursor-not-allowed opacity-30',
-                        )}
-                        onClick={() => {
-                          toggleTag(tag.tagId);
-                        }}
-                      >
-                        {tag.name}
-                      </button>
-                    );
-                  })}
-                </div>
-              ))}
+            <div className="flex max-w-[781px] flex-wrap gap-x-2 gap-y-2">
+              {formData.tags.map((tag) => {
+                const selected = selectedTagIds.has(tag.tagId);
+                return (
+                  <button
+                    key={tag.tagId}
+                    type="button"
+                    aria-pressed={selected}
+                    disabled={!selected && selectedTagIds.size >= MAX_TAGS}
+                    className={cn(
+                      'text-body-sm inline-flex h-[33px] max-w-full shrink-0 items-center justify-center rounded-full border px-2.5 font-normal transition-colors outline-none focus-visible:ring-2 focus-visible:ring-(--color-border-primary) focus-visible:ring-offset-1',
+                      selected
+                        ? 'border-border-gray-light bg-action-secondary-pressed text-text-basic'
+                        : 'border-border-gray-light bg-action-gray-light text-text-basic hover:border-action-secondary-hover hover:bg-action-secondary-hover',
+                      !selected &&
+                        selectedTagIds.size >= MAX_TAGS &&
+                        'hover:border-border-gray-light hover:bg-action-gray-light cursor-not-allowed opacity-30',
+                    )}
+                    onClick={() => {
+                      toggleTag(tag.tagId);
+                    }}
+                  >
+                    {tag.name}
+                  </button>
+                );
+              })}
             </div>
           </section>
 
