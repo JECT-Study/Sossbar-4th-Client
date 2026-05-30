@@ -8,10 +8,10 @@ import { useConfirmProjectMembers, useDeleteProject, useDeleteProjectMember } fr
 import { EditProjectModal } from '@/features/project/components/edit-project-modal';
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
+import { ProjectStatusAlert } from '@/features/project/components/project-status-alert';
 import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
 import { buildReviewWriteUrl } from '@/features/project/lib/build-review-write-url';
 import { CopyIcon, EditIcon, EllipsisVerticalIcon, RoundCheckIcon, TrashIcon } from '@/shared/assets/icons';
-import { Alert } from '@/shared/components/alert';
 import { Button, IconButton } from '@/shared/components/button';
 import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
@@ -240,7 +240,7 @@ const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardA
   };
 
   if (!isLeader) {
-    return <Alert variant={projectStatus === 'IN_PROGRESS' ? 'warning' : 'success'} className="w-full" />;
+    return <ProjectStatusAlert variant={projectStatus === 'IN_PROGRESS' ? 'warning' : 'success'} />;
   }
 
   const isInProgress = projectStatus === 'IN_PROGRESS';

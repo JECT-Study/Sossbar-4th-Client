@@ -45,7 +45,6 @@ export const TextareaField = ({
           value={value}
           defaultValue={defaultValue}
           aria-describedby={errorMessage ? `${name}-error-message` : undefined}
-          placeholder="내용을 입력해주세요."
           className={textareaClassName}
           error={!!errorMessage}
           {...restProps}
