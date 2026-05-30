@@ -3,10 +3,12 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
+import { useProject } from '@/features/project';
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { ApiError } from '@/shared/lib/api';
 import { cn } from '@/shared/lib/cn';
+import { useSessionUser } from '@/shared/lib/session-user';
 
 import type { Tag } from '../types/tag';
 
@@ -48,8 +50,18 @@ export const ReviewWriteContent = () => {
   const revieweeName = searchParams.get('reviewee')?.trim() || '';
   const hasRequiredParams = projectId != null && revieweeId != null && revieweeName.length > 0;
 
+  const sessionUser = useSessionUser();
+  const { data: projectData } = useProject(projectId ?? 0, projectId != null, { throwOnError: false });
   const { data: formData, isPending, isError, refetch } = useReviewFormData();
   const { mutateAsync: submitReview, isPending: isSubmitting } = useCreateReview();
+
+  // 같은 프로젝트에서 이미 한 명이라도 리뷰를 제출했으면 스펙트럼은 이미 서버에 저장된 상태
+  const hasSubmittedAnyReview = useMemo(() => {
+    if (!projectData || !sessionUser) {
+      return false;
+    }
+    return projectData.members.some((m) => m.userId !== sessionUser.userId && m.reviewWritten === true);
+  }, [projectData, sessionUser]);
 
   const [selectedTagIds, setSelectedTagIds] = useState<Set<number>>(() => new Set());
   const [spectrumSteps, setSpectrumSteps] = useState<Record<number, number>>({});
@@ -83,7 +95,8 @@ export const ReviewWriteContent = () => {
   const praiseOk = praiseTrimmed.length >= PRAISE_MIN_LENGTH;
   const improvementOk = improvementTrimmed.length === 0 || improvementTrimmed.length >= PRAISE_MIN_LENGTH;
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
-  const spectrumsOk = !!formData?.spectrums?.length;
+  // 이미 스펙트럼을 제출한 프로젝트라면 스펙트럼 데이터를 전송하지 않으므로 항상 통과
+  const spectrumsOk = hasSubmittedAnyReview || !!formData?.spectrums?.length;
   const canSubmit = praiseOk && improvementOk && tagsOk && spectrumsOk && !isSubmitting;
 
   const handleSubmitFromDialog = useCallback(async () => {
@@ -96,10 +109,13 @@ export const ReviewWriteContent = () => {
     isSubmittingRef.current = true;
     setSubmitError(null);
     const tagIds = [...selectedTagIds];
-    const spectrums = formData.spectrums.map((s) => ({
-      spectrumId: s.spectrumId,
-      value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
-    }));
+    // 같은 프로젝트에 이미 후기를 제출한 적 있으면 스펙트럼은 빈 배열로 전송 (중복 저장 방지)
+    const spectrums = hasSubmittedAnyReview
+      ? []
+      : formData.spectrums.map((s) => ({
+          spectrumId: s.spectrumId,
+          value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
+        }));
     try {
       await submitReview({
         projectId,
@@ -123,6 +139,7 @@ export const ReviewWriteContent = () => {
   }, [
     formData,
     canSubmit,
+    hasSubmittedAnyReview,
     selectedTagIds,
     spectrumSteps,
     projectId,
@@ -230,18 +247,24 @@ export const ReviewWriteContent = () => {
             <h2 id="review-spectrum-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
               소프트 스킬 스펙트럼 성향
             </h2>
-            <div className="grid w-full max-w-[781px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-[15px] gap-y-4">
-              {formData.spectrums.map((spectrum) => (
-                <ReviewSpectrumRow
-                  key={spectrum.spectrumId}
-                  spectrumId={spectrum.spectrumId}
-                  leftLabel={spectrum.leftLabel}
-                  rightLabel={spectrum.rightLabel}
-                  valueStep={spectrumSteps[spectrum.spectrumId] ?? DEFAULT_SPECTRUM_STEP}
-                  onChange={onSpectrumChange}
-                />
-              ))}
-            </div>
+            {hasSubmittedAnyReview ? (
+              <p className="text-body-sm text-text-subtle">
+                이 프로젝트에서 이미 후기를 제출하셨습니다. 스펙트럼 데이터는 첫 번째 후기 제출 시 기록됩니다.
+              </p>
+            ) : (
+              <div className="grid w-full max-w-[781px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-[15px] gap-y-4">
+                {formData.spectrums.map((spectrum) => (
+                  <ReviewSpectrumRow
+                    key={spectrum.spectrumId}
+                    spectrumId={spectrum.spectrumId}
+                    leftLabel={spectrum.leftLabel}
+                    rightLabel={spectrum.rightLabel}
+                    valueStep={spectrumSteps[spectrum.spectrumId] ?? DEFAULT_SPECTRUM_STEP}
+                    onChange={onSpectrumChange}
+                  />
+                ))}
+              </div>
+            )}
           </section>
         </div>
 
