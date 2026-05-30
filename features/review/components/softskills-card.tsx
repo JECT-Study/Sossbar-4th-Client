@@ -47,8 +47,16 @@ const spectrumTrackWidthPx = 286;
 
 const spectrumVerticalDashPercents = [20, 40, 60, 80] as const;
 
+// 구 버전(0–100 스케일)으로 저장된 데이터를 신 버전(1–6)으로 변환
+const normalizeStrength = (v: number): number => {
+  if (v > 6) {
+    return Math.max(1, Math.min(6, Math.round(v / 20) + 1));
+  }
+  return Math.round(v);
+};
+
 // averageStrength 1–6 → 0%–100% (strength 1 = leftmost, 6 = rightmost)
-const getMarkerLeft = (averageStrength: number): string => `${((Math.round(averageStrength) - 1) / 5) * 100}%`;
+const getMarkerLeft = (averageStrength: number): string => `${((normalizeStrength(averageStrength) - 1) / 5) * 100}%`;
 
 const getDistributionBars = (spectrumInfo: SpectrumAxisInfo[]) =>
   spectrumInfo.flatMap((item, index) => {
