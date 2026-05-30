@@ -12,7 +12,6 @@ type DistributionBarTone = 'first' | 'second' | 'third' | 'none';
 type SoftSkillsCardProps = {
   userId: number;
   projectId?: number;
-  isMyProfile: boolean;
   showDistribution?: boolean; // 전체 탭: true(스펙트럼+분포 차트) / 프로젝트별: false(스펙트럼만)
 };
 
@@ -170,7 +169,7 @@ const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }
   );
 };
 
-export const SoftSkillsCard = ({ userId, projectId, isMyProfile, showDistribution = true }: SoftSkillsCardProps) => {
+export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: SoftSkillsCardProps) => {
   const { data: spectrumInfo, isPending, isError } = useSpectrum({ userId, projectId });
 
   return (
@@ -190,7 +189,7 @@ export const SoftSkillsCard = ({ userId, projectId, isMyProfile, showDistributio
         spectrumInfo.totalCount === 0 ? (
           <EmptyState
             title="받은 후기가 없어요"
-            description={isMyProfile ? '피드백이 쌓이면 나의 협업 스펙트럼이 분석돼요' : undefined}
+            // description={isMyProfile ? '피드백이 쌓이면 나의 협업 스펙트럼이 분석돼요' : undefined}
             // 추후 버튼에 기능 연결 예정
             // action={
             //   isMyProfile ? (

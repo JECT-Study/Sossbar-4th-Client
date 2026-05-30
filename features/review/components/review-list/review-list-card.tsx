@@ -48,7 +48,7 @@ export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail }: ReviewLi
       </div>
 
       {isEmpty ? (
-        <EmptyState title="아직 도착한 후기가 없어요." />
+        <EmptyState title="아직 도착한 후기가 없어요" />
       ) : (
         <>
           <ul>
