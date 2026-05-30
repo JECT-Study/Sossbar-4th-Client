@@ -10,7 +10,7 @@ export const useSignup = () => {
     onSuccess: (user) => {
       setSessionUser({
         userId: user.userId,
-        nickname: user.nickname,
+        nickname: user.nickname ?? user.username,
         email: user.email,
         profileImageUrl: user.profileImageUrl,
       });
