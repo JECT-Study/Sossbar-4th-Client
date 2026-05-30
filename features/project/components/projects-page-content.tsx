@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { CreateProjectModal } from '@/features/project/components/create-project-modal';
 import { ProjectCard } from '@/features/project/components/project-card';
+import { ProjectInviteHandler } from '@/features/project/components/project-invite-handler';
 import { useProjectCards } from '@/features/project/hooks/use-project-cards';
 import { SettingIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
@@ -87,6 +88,7 @@ export const ProjectsPageContent = () => {
       <div className="my-10.5">{renderProjectList()}</div>
 
       <CreateProjectModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
+      <ProjectInviteHandler />
     </PageContainer>
   );
 };

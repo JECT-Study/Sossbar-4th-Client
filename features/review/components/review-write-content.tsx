@@ -76,10 +76,14 @@ export const ReviewWriteContent = () => {
     setSpectrumSteps((prev) => ({ ...prev, [spectrumId]: step }));
   }, []);
 
-  const praiseOk = praise.trim().length >= PRAISE_MIN_LENGTH;
+  const praiseTrimmed = praise.trim();
+  const improvementTrimmed = improvement.trim();
+  const praiseOk = praiseTrimmed.length === 0 || praiseTrimmed.length >= PRAISE_MIN_LENGTH;
+  const improvementOk = improvementTrimmed.length === 0 || improvementTrimmed.length >= PRAISE_MIN_LENGTH;
+  const anyFeedbackOk = (praiseTrimmed.length > 0 && praiseOk) || (improvementTrimmed.length > 0 && improvementOk);
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
   const spectrumsOk = !!formData?.spectrums?.length;
-  const canSubmit = praiseOk && tagsOk && spectrumsOk && !isSubmitting;
+  const canSubmit = anyFeedbackOk && tagsOk && spectrumsOk && !isSubmitting;
 
   const handleSubmitFromDialog = useCallback(async () => {
     if (!formData || !canSubmit || projectId == null || revieweeId == null) {
@@ -162,8 +166,8 @@ export const ReviewWriteContent = () => {
         errorMessage={submitError ?? undefined}
         onConfirm={handleSubmitFromDialog}
       />
-      <header className="border-divider-gray-light bg-surface-white w-full border-b-2">
-        <div className="mx-auto w-full max-w-[1200px] px-4 pt-[62px] pb-8 md:px-10">
+      <header className="bg-surface-white w-full">
+        <div className="border-divider-gray-light mx-auto w-full max-w-[1200px] border-b-2 px-4 pt-[62px] pb-8 md:px-10">
           <h1 className="text-heading-lg text-text-basic leading-normal font-bold">후기 작성</h1>
           <p className="text-body-base text-text-basic mt-2 leading-normal">
             <span className="font-bold">{revieweeName}</span>
@@ -196,7 +200,7 @@ export const ReviewWriteContent = () => {
                             : 'border-border-gray-light bg-action-gray-light text-text-basic hover:border-action-secondary-hover hover:bg-action-secondary-hover',
                           !selected &&
                             selectedTagIds.size >= MAX_TAGS &&
-                            'hover:border-border-gray-light hover:bg-action-gray-light cursor-not-allowed opacity-50',
+                            'hover:border-border-gray-light hover:bg-action-gray-light cursor-not-allowed opacity-30',
                         )}
                         onClick={() => {
                           toggleTag(tag.tagId);
@@ -235,7 +239,9 @@ export const ReviewWriteContent = () => {
             <h2 id="review-praise-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
               칭찬해요
             </h2>
-            <p className="text-body-sm text-text-subtle">(필수) 최소 {PRAISE_MIN_LENGTH}자 이상 작성해주세요.</p>
+            <p className="text-body-sm text-text-subtle">
+              최소 {PRAISE_MIN_LENGTH}자 이상 작성해주세요. (칭찬해요·아쉬워요 중 하나 필수)
+            </p>
             <Textarea
               name="praise"
               className="text-body-sm min-h-[144px] rounded-md"
@@ -243,26 +249,34 @@ export const ReviewWriteContent = () => {
               value={praise}
               maxLength={TEXT_MAX_LENGTH}
               error={praise.length > 0 && !praiseOk}
+              helperText={
+                praise.length > 0 && !praiseOk ? `칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.` : undefined
+              }
               onChange={(e) => {
                 setPraise(e.target.value);
               }}
             />
-            {praise.length > 0 && !praiseOk ? (
-              <p className="text-body-sm text-text-error">{`칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.`}</p>
-            ) : null}
           </section>
 
           <section className="flex flex-col gap-2" aria-labelledby="review-improve-heading">
             <h2 id="review-improve-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
               아쉬워요
             </h2>
-            <p className="text-body-sm text-text-subtle">이 팀원과 협업하며 아쉬웠던 점을 작성해주세요.</p>
+            <p className="text-body-sm text-text-subtle">
+              최소 {PRAISE_MIN_LENGTH}자 이상 작성해주세요. (칭찬해요·아쉬워요 중 하나 필수)
+            </p>
             <Textarea
               name="improvement"
               className="text-body-sm min-h-[144px] rounded-md"
               placeholder="ex) 소통이 조금 더 적극적이었으면 좋았을 것 같다."
               value={improvement}
               maxLength={TEXT_MAX_LENGTH}
+              error={improvement.length > 0 && !improvementOk}
+              helperText={
+                improvement.length > 0 && !improvementOk
+                  ? `아쉬워요는 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.`
+                  : undefined
+              }
               onChange={(e) => {
                 setImprovement(e.target.value);
               }}

@@ -1,6 +1,7 @@
-import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 
-import { ProjectInvitePageContent } from '@/features/project/components/project-invite-page-content';
+import { parseProjectInviteId } from '@/features/project/lib/parse-project-invite-id';
+import { PROJECT_INVITE_QUERY_KEY } from '@/features/project/lib/project-invite-query';
 
 import type { Metadata } from 'next';
 
@@ -9,16 +10,19 @@ export const metadata: Metadata = {
   description: '프로젝트 팀에 참여하고 동료와 후기를 나눠 보세요',
 };
 
-const ProjectInviteFallback = () => (
-  <div className="flex min-h-[240px] items-center justify-center">
-    <p className="text-body-base text-text-subtle">화면을 불러오는 중…</p>
-  </div>
-);
+type ProjectInvitePageProps = {
+  searchParams: Promise<{ projectId?: string }>;
+};
 
-const ProjectInvitePage = () => (
-  <Suspense fallback={<ProjectInviteFallback />}>
-    <ProjectInvitePageContent />
-  </Suspense>
-);
+const ProjectInviteRedirectPage = async ({ searchParams }: ProjectInvitePageProps) => {
+  const { projectId: rawProjectId } = await searchParams;
+  const projectId = parseProjectInviteId(rawProjectId ?? null);
 
-export default ProjectInvitePage;
+  if (projectId != null) {
+    redirect(`/projects?${PROJECT_INVITE_QUERY_KEY}=${projectId}`);
+  }
+
+  redirect('/projects');
+};
+
+export default ProjectInviteRedirectPage;
