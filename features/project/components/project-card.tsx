@@ -179,7 +179,7 @@ const ProjectCardHeader = ({
         <time className="text-detail-base text-text-subtle font-normal" dateTime={startDate}>
           {formatIsoDateToDots(startDate)}
         </time>
-        {isLeader && isInProgress ? (
+        {isLeader ? (
           <Dropdown.Root>
             <Dropdown.Trigger asChild>
               <IconButton
@@ -190,9 +190,11 @@ const ProjectCardHeader = ({
               />
             </Dropdown.Trigger>
             <Dropdown.Content align="end" sideOffset={0} className="w-44 gap-1">
-              <Dropdown.Item onSelect={() => onEdit?.()}>
-                수정 <EditIcon className="size-5" />
-              </Dropdown.Item>
+              {isInProgress ? (
+                <Dropdown.Item onSelect={() => onEdit?.()}>
+                  수정 <EditIcon className="size-5" />
+                </Dropdown.Item>
+              ) : null}
               <Dropdown.Item onSelect={() => onDelete?.()}>
                 삭제
                 <TrashIcon className="size-5 stroke-[1.5]" />
