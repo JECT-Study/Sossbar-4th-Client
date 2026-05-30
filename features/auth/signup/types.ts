@@ -6,12 +6,15 @@ export type SignupFormData = z.infer<typeof SignupFormSchema>;
 export type SignupPayload = {
   name: string;
   bio: string;
+  requiredAgree: boolean;
+  marketingAgree: boolean;
+  profileImage: File | null;
 };
 
 export interface SignupResponse {
   userId: number;
   username: string;
-  nickname: string;
+  nickname?: string;
   email: string;
   bio: string;
   profileImageUrl: string | null;
