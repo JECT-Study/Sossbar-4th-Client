@@ -47,8 +47,8 @@ const spectrumTrackWidthPx = 286;
 
 const spectrumVerticalDashPercents = [20, 40, 60, 80] as const;
 
-// averageStrength 1–5 → 20%–100% (5-point Likert scale)
-const getMarkerLeft = (averageStrength: number): string => `${(averageStrength / 5) * 100}%`;
+// averageStrength 1–6 → 0%–100% (strength 1 = leftmost, 6 = rightmost)
+const getMarkerLeft = (averageStrength: number): string => `${((averageStrength - 1) / 5) * 100}%`;
 
 const getDistributionBars = (spectrumInfo: SpectrumAxisInfo[]) =>
   spectrumInfo.flatMap((item, index) => {
