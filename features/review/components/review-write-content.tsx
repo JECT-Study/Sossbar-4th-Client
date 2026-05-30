@@ -3,9 +3,11 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 
+import { useProject } from '@/features/project';
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
+import { useSessionUser } from '@/shared/lib/session-user';
 
 import type { Tag } from '../types/tag';
 
@@ -47,8 +49,18 @@ export const ReviewWriteContent = () => {
   const revieweeName = searchParams.get('reviewee')?.trim() || '';
   const hasRequiredParams = projectId != null && revieweeId != null && revieweeName.length > 0;
 
+  const sessionUser = useSessionUser();
+  const { data: projectData } = useProject(projectId ?? 0, projectId != null, { throwOnError: false });
   const { data: formData, isPending, isError, refetch } = useReviewFormData();
   const { mutateAsync: submitReview, isPending: isSubmitting } = useCreateReview();
+
+  // 같은 프로젝트에서 이미 한 명에게 후기를 제출했으면 스펙트럼은 서버에 저장된 상태 → 빈 배열로 전송
+  const hasSubmittedAnyReview = useMemo(() => {
+    if (!projectData || !sessionUser) {
+      return false;
+    }
+    return projectData.members.some((m) => m.userId !== sessionUser.userId && m.reviewWritten === true);
+  }, [projectData, sessionUser]);
 
   const [selectedTagIds, setSelectedTagIds] = useState<Set<number>>(() => new Set());
   const [spectrumSteps, setSpectrumSteps] = useState<Record<number, number>>({});
@@ -90,10 +102,12 @@ export const ReviewWriteContent = () => {
     }
     setSubmitError(null);
     const tagIds = [...selectedTagIds];
-    const spectrums = formData.spectrums.map((s) => ({
-      spectrumId: s.spectrumId,
-      value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
-    }));
+    const spectrums = hasSubmittedAnyReview
+      ? []
+      : formData.spectrums.map((s) => ({
+          spectrumId: s.spectrumId,
+          value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
+        }));
     try {
       await submitReview({
         projectId,
@@ -111,6 +125,7 @@ export const ReviewWriteContent = () => {
   }, [
     formData,
     canSubmit,
+    hasSubmittedAnyReview,
     selectedTagIds,
     spectrumSteps,
     projectId,
