@@ -42,15 +42,25 @@ const ReviewListItemImage = ({ src, alt }: ImageProps) => (
 );
 
 interface HeadingTextProps {
-  projectName: string;
-  meta: string;
+  children: ReactNode;
 }
 
-const ReviewListItemHeadingText = ({ projectName, meta }: HeadingTextProps) => (
-  <div>
-    <h3 className="text-heading-xs text-text-subtler font-bold">{projectName}</h3>
-    <p className="text-body-sm text-text-subtler mt-1 font-medium">{meta}</p>
-  </div>
+const ReviewListItemHeadingText = ({ children }: HeadingTextProps) => <div className="space-y-1">{children}</div>;
+
+interface TitleProps {
+  children: ReactNode;
+}
+
+const ReviewListItemTitle = ({ children }: TitleProps) => (
+  <h3 className="text-heading-xs text-text-subtler font-bold">{children}</h3>
+);
+
+interface DescriptionProps {
+  children: ReactNode;
+}
+
+const ReviewListItemDescription = ({ children }: DescriptionProps) => (
+  <p className="text-body-sm text-text-subtler font-medium">{children}</p>
 );
 
 interface ContentProps {
@@ -91,6 +101,8 @@ export const ReviewListItem = {
   Heading: ReviewListItemHeading,
   Image: ReviewListItemImage,
   HeadingText: ReviewListItemHeadingText,
+  Title: ReviewListItemTitle,
+  Description: ReviewListItemDescription,
   Content: ReviewListItemContent,
   ActionMenu: ReviewListItemActionMenu,
 };

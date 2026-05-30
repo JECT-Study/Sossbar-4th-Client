@@ -18,6 +18,7 @@ interface ReviewListCardProps {
   isMyProfile: boolean;
   reviews: Review[];
   showThumbnail: boolean;
+  showTitle: boolean;
 }
 
 const reviewToneOptions = [
@@ -27,7 +28,7 @@ const reviewToneOptions = [
 
 type ReviewTone = (typeof reviewToneOptions)[number]['value'];
 
-export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail }: ReviewListCardProps) => {
+export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail, showTitle }: ReviewListCardProps) => {
   const isEmpty = reviews.length === 0;
   const [selectedTone, setSelectedTone] = useState<ReviewTone>('positive');
   const [isExpanded, setIsExpanded] = useState(false);
@@ -61,10 +62,12 @@ export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail }: ReviewLi
                     {showThumbnail ? (
                       <ReviewListItem.Image src={review.projectImage} alt={`${review.projectName} 썸네일`} />
                     ) : null}
-                    <ReviewListItem.HeadingText
-                      projectName={review.projectName}
-                      meta={`${review.reviewerNickname} · ${review.host} · ${review.createdAt}`}
-                    />
+                    <ReviewListItem.HeadingText>
+                      {showTitle ? <ReviewListItem.Title>{review.projectName}</ReviewListItem.Title> : null}
+                      <ReviewListItem.Description>
+                        {`${review.reviewerNickname} · ${review.host} · ${review.createdAt}`}
+                      </ReviewListItem.Description>
+                    </ReviewListItem.HeadingText>
                   </ReviewListItem.Heading>
                   <ReviewListItem.Content>{feedback}</ReviewListItem.Content>
                   {showItemMenu ? <ReviewListItem.ActionMenu projectName={review.projectName} /> : null}

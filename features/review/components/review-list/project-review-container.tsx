@@ -12,5 +12,5 @@ type ProjectReviewContainerProps = {
 export const ProjectReviewContainer = ({ userId, projectId, isMyProfile }: ProjectReviewContainerProps) => {
   const { data: reviews = [] } = useProjectReviews(userId, projectId);
 
-  return <ReviewListCard isMyProfile={isMyProfile} reviews={reviews} showThumbnail={false} />;
+  return <ReviewListCard isMyProfile={isMyProfile} reviews={reviews} showThumbnail={false} showTitle={false} />;
 };

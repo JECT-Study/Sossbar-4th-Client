@@ -11,5 +11,5 @@ type UserReviewContainerProps = {
 export const UserReviewContainer = ({ userId, isMyProfile }: UserReviewContainerProps) => {
   const { data: reviews = [] } = useUserReviews(userId);
 
-  return <ReviewListCard isMyProfile={isMyProfile} reviews={reviews} showThumbnail />;
+  return <ReviewListCard isMyProfile={isMyProfile} reviews={reviews} showThumbnail showTitle />;
 };
