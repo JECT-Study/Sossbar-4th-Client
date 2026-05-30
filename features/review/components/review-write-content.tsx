@@ -3,7 +3,12 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-import { useProject } from '@/features/project';
+import { useProjects } from '@/features/project/api/queries';
+import {
+  hasSubmittedProjectSpectrum,
+  hasWrittenReviewForMember,
+  markProjectSpectrumSubmitted,
+} from '@/features/review/lib/project-review-submit-state';
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { ApiError } from '@/shared/lib/api';
@@ -51,17 +56,27 @@ export const ReviewWriteContent = () => {
   const hasRequiredParams = projectId != null && revieweeId != null && revieweeName.length > 0;
 
   const sessionUser = useSessionUser();
-  const { data: projectData } = useProject(projectId ?? 0, projectId != null, { throwOnError: false });
-  const { data: formData, isPending, isError, refetch } = useReviewFormData();
+  const hasSession = sessionUser != null && sessionUser.userId > 0;
+  const { data: myProjects, isPending: isProjectsPending } = useProjects(hasSession && projectId != null);
+  const { data: formData, isPending: isFormPending, isError, refetch } = useReviewFormData();
   const { mutateAsync: submitReview, isPending: isSubmitting } = useCreateReview();
 
-  // 같은 프로젝트에서 이미 한 명이라도 리뷰를 제출했으면 스펙트럼은 이미 서버에 저장된 상태
-  const hasSubmittedAnyReview = useMemo(() => {
-    if (!projectData || !sessionUser) {
+  const projectMembership = useMemo(
+    () => myProjects?.find((project) => project.projectId === projectId),
+    [myProjects, projectId],
+  );
+
+  const hasSubmittedProjectSpectrumState = useMemo(() => {
+    if (projectId == null || !sessionUser) {
       return false;
     }
-    return projectData.members.some((m) => m.userId !== sessionUser.userId && m.reviewWritten === true);
-  }, [projectData, sessionUser]);
+    return hasSubmittedProjectSpectrum(projectId, projectMembership?.members, sessionUser.userId);
+  }, [projectId, projectMembership?.members, sessionUser]);
+
+  const hasAlreadyReviewedReviewee = useMemo(
+    () => hasWrittenReviewForMember(projectMembership?.members, revieweeId ?? 0),
+    [projectMembership?.members, revieweeId],
+  );
 
   const [selectedTagIds, setSelectedTagIds] = useState<Set<number>>(() => new Set());
   const [spectrumSteps, setSpectrumSteps] = useState<Record<number, number>>({});
@@ -95,9 +110,8 @@ export const ReviewWriteContent = () => {
   const praiseOk = praiseTrimmed.length >= PRAISE_MIN_LENGTH;
   const improvementOk = improvementTrimmed.length === 0 || improvementTrimmed.length >= PRAISE_MIN_LENGTH;
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
-  // 이미 스펙트럼을 제출한 프로젝트라면 스펙트럼 데이터를 전송하지 않으므로 항상 통과
-  const spectrumsOk = hasSubmittedAnyReview || !!formData?.spectrums?.length;
-  const canSubmit = praiseOk && improvementOk && tagsOk && spectrumsOk && !isSubmitting;
+  const spectrumsOk = hasSubmittedProjectSpectrumState || !!formData?.spectrums?.length;
+  const canSubmit = praiseOk && improvementOk && tagsOk && spectrumsOk && !isSubmitting && !hasAlreadyReviewedReviewee;
 
   const handleSubmitFromDialog = useCallback(async () => {
     if (!formData || !canSubmit || projectId == null || revieweeId == null) {
@@ -110,7 +124,7 @@ export const ReviewWriteContent = () => {
     setSubmitError(null);
     const tagIds = [...selectedTagIds];
     // 같은 프로젝트에 이미 후기를 제출한 적 있으면 스펙트럼은 빈 배열로 전송 (중복 저장 방지)
-    const spectrums = hasSubmittedAnyReview
+    const spectrums = hasSubmittedProjectSpectrumState
       ? []
       : formData.spectrums.map((s) => ({
           spectrumId: s.spectrumId,
@@ -125,6 +139,9 @@ export const ReviewWriteContent = () => {
         tagIds,
         spectrums,
       });
+      if (spectrums.length > 0) {
+        markProjectSpectrumSubmitted(projectId);
+      }
       setSubmitDialogOpen(false);
       router.push('/projects');
     } catch (err) {
@@ -139,7 +156,7 @@ export const ReviewWriteContent = () => {
   }, [
     formData,
     canSubmit,
-    hasSubmittedAnyReview,
+    hasSubmittedProjectSpectrumState,
     selectedTagIds,
     spectrumSteps,
     projectId,
@@ -161,10 +178,23 @@ export const ReviewWriteContent = () => {
     );
   }
 
-  if (isPending) {
+  if (isFormPending || (hasSession && projectId != null && isProjectsPending)) {
     return (
       <div className="border-divider-gray-light bg-surface-white flex min-h-[320px] w-full items-center justify-center border-b">
         <p className="text-body-base text-text-subtle">불러오는 중…</p>
+      </div>
+    );
+  }
+
+  if (hasAlreadyReviewedReviewee) {
+    return (
+      <div className="border-divider-gray-light bg-surface-white flex min-h-[320px] w-full flex-col items-center justify-center gap-4 border-b px-4">
+        <p className="text-body-base text-text-basic text-center">
+          <span className="font-bold">{revieweeName}</span>님에게는 이미 후기를 제출하셨습니다.
+        </p>
+        <Button type="button" variant="secondary" size="medium" onClick={() => router.push('/projects')}>
+          프로젝트 관리로 돌아가기
+        </Button>
       </div>
     );
   }
@@ -247,7 +277,7 @@ export const ReviewWriteContent = () => {
             <h2 id="review-spectrum-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
               소프트 스킬 스펙트럼 성향
             </h2>
-            {hasSubmittedAnyReview ? (
+            {hasSubmittedProjectSpectrumState ? (
               <p className="text-body-sm text-text-subtle">
                 이 프로젝트에서 이미 후기를 제출하셨습니다. 스펙트럼 데이터는 첫 번째 후기 제출 시 기록됩니다.
               </p>

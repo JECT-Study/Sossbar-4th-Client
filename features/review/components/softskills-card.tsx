@@ -1,9 +1,10 @@
 'use client';
 
+import { spectrumStrengthToMarkerPercent } from '@/features/review/lib/spectrum-strength';
 import { EmptyState } from '@/shared/components/empty-state';
 import { cn } from '@/shared/lib/cn';
 
-import type { SpectrumAxisInfo, SpectrumInfo } from '../types/spectrum';
+import type { SpectrumAxisInfo } from '../types/spectrum';
 
 import { useSpectrum } from '../api/queries';
 
@@ -47,12 +48,15 @@ const spectrumTrackWidthPx = 286;
 
 const spectrumVerticalDashPercents = [20, 40, 60, 80] as const;
 
-// averageStrength 1–5 → 20%–100% (5-point Likert scale)
-const getMarkerLeft = (averageStrength: number): string => `${(averageStrength / 5) * 100}%`;
+const sortSpectrumAxes = (axes: SpectrumAxisInfo[]): SpectrumAxisInfo[] =>
+  [...axes].sort((a, b) => a.spectrumAxisId - b.spectrumAxisId);
 
-const getDistributionBars = (spectrumInfo: SpectrumAxisInfo[]) =>
-  spectrumInfo.flatMap((item, index) => {
+const getDistributionBars = (sortedAxes: SpectrumAxisInfo[]) =>
+  sortedAxes.flatMap((item, index) => {
     const row = spectrumRows[index];
+    if (!row) {
+      return [];
+    }
 
     return [
       { label: row.left, count: item.leftStrengthCount },
@@ -95,7 +99,7 @@ const SpectrumVerticalDashOverlay = ({ widthPx }: { widthPx: number }) => (
   </svg>
 );
 
-const SoftSkillsSpectrum = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }) => (
+const SoftSkillsSpectrum = ({ sortedAxes }: { sortedAxes: SpectrumAxisInfo[] }) => (
   <div className="w-fill mt-7">
     <h3 className="text-heading-xs text-text-subtle h-6 font-bold">평균 지표</h3>
 
@@ -111,14 +115,14 @@ const SoftSkillsSpectrum = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }) =>
       <div className="relative mx-6 flex h-[136px] w-[286px] flex-col gap-2">
         <SpectrumVerticalDashOverlay widthPx={spectrumTrackWidthPx} />
 
-        {(spectrumInfo.spectrumInfoResDtos ?? []).map((axis) => (
-          <div key={axis.axisName} className="relative z-10 h-7">
+        {sortedAxes.map((axis) => (
+          <div key={axis.spectrumAxisId} className="relative z-10 h-7">
             <div className="absolute top-1/2 left-0 z-10 h-1.5 w-full -translate-y-1/2 rounded-full bg-gray-300" />
 
             <div
               aria-hidden
               className="border-border-gray-darker bg-bg-white absolute top-1/2 z-20 box-border size-4 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full border shadow-sm"
-              style={{ left: getMarkerLeft(axis.averageStrength) }}
+              style={{ left: spectrumStrengthToMarkerPercent(axis.averageStrength) }}
             />
           </div>
         ))}
@@ -138,8 +142,8 @@ const SoftSkillsSpectrum = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }) =>
   </div>
 );
 
-const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }) => {
-  const bars = getDistributionBars(spectrumInfo.spectrumInfoResDtos);
+const SoftSkillsDistribution = ({ sortedAxes }: { sortedAxes: SpectrumAxisInfo[] }) => {
+  const bars = getDistributionBars(sortedAxes);
   const tones = getTopBarTones(bars);
   const maxCount = Math.max(...bars.map((bar) => bar.count), 0);
 
@@ -171,6 +175,8 @@ const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }
 
 export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: SoftSkillsCardProps) => {
   const { data: spectrumInfo, isPending, isError } = useSpectrum({ userId, projectId });
+  const sortedAxes =
+    spectrumInfo?.spectrumInfoResDtos != null ? sortSpectrumAxes(spectrumInfo.spectrumInfoResDtos) : [];
 
   return (
     <section
@@ -186,7 +192,7 @@ export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: S
       {isError ? <p className="text-body-sm text-text-error mt-7">스펙트럼 정보를 불러오지 못했습니다.</p> : null}
 
       {!isPending && !isError && spectrumInfo ? (
-        spectrumInfo.totalCount === 0 ? (
+        spectrumInfo.totalCount === 0 || sortedAxes.length === 0 ? (
           <EmptyState
             title="받은 후기가 없어요"
             // description={isMyProfile ? '피드백이 쌓이면 나의 협업 스펙트럼이 분석돼요' : undefined}
@@ -201,8 +207,8 @@ export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: S
           />
         ) : (
           <>
-            <SoftSkillsSpectrum spectrumInfo={spectrumInfo} />
-            {!!showDistribution && <SoftSkillsDistribution spectrumInfo={spectrumInfo} />}
+            <SoftSkillsSpectrum sortedAxes={sortedAxes} />
+            {!!showDistribution && <SoftSkillsDistribution sortedAxes={sortedAxes} />}
             <p className="text-detail-base text-text-disabled mt-7 h-6 font-normal">
               * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.
             </p>

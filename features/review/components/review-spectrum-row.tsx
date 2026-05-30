@@ -44,4 +44,4 @@ export const ReviewSpectrumRow = ({
   );
 };
 
-export const spectrumStepToValue = (step: number): number => Math.round((step / (STEP_COUNT - 1)) * 100);
+export { spectrumStepToStrength as spectrumStepToValue } from '@/features/review/lib/spectrum-strength';
