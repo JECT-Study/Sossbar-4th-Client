@@ -13,7 +13,7 @@ import { cn } from '@/shared/lib/cn';
 
 import type { UpdateProfilePayload } from '../types';
 
-import { useUpdateProfile } from '../mutations';
+import { useUpdateProfile } from '../hooks/use-update-profile.mutation';
 import { useProfile } from '../queries';
 import { ProfileAvatar } from './profile-avatar';
 import { ProfileEditForm } from './profile-edit-form';
