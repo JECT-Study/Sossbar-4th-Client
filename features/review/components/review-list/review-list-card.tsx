@@ -7,6 +7,7 @@ import { Button } from '@/shared/components/button';
 import { EmptyState } from '@/shared/components/empty-state';
 import { SegmentedControl } from '@/shared/components/segmented-control';
 import { cn } from '@/shared/lib/cn';
+import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
 import type { Review } from '../../types/review';
 
@@ -65,7 +66,7 @@ export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail, showTitle 
                     <ReviewListItem.HeadingText>
                       {showTitle ? <ReviewListItem.Title>{review.projectName}</ReviewListItem.Title> : null}
                       <ReviewListItem.Description>
-                        {`${review.reviewerNickname} · ${review.host} · ${review.createdAt}`}
+                        {`${review.reviewerNickname} · ${review.host} · ${formatIsoDateToDots(review.createdAt)}`}
                       </ReviewListItem.Description>
                     </ReviewListItem.HeadingText>
                   </ReviewListItem.Heading>
