@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react';
 
-import NextImage from 'next/image';
-
 import { EllipsisVerticalIcon, EmergencyIcon } from '@/shared/assets/icons';
 import { IconButton } from '@/shared/components/button';
 import { Dropdown } from '@/shared/components/dropdown';
+import { ImageWithFallback } from '@/shared/components/image-with-fallback';
 
 const DEFAULT_IMAGE_PATH = '/default.png';
 
@@ -32,8 +31,9 @@ interface ImageProps {
 }
 
 const ReviewListItemImage = ({ src, alt }: ImageProps) => (
-  <NextImage
-    src={src ?? DEFAULT_IMAGE_PATH}
+  <ImageWithFallback
+    src={src}
+    fallbackSrc={DEFAULT_IMAGE_PATH}
     width={72}
     height={54}
     alt={alt}
