@@ -8,10 +8,10 @@ import { useConfirmProjectMembers, useDeleteProject, useDeleteProjectMember } fr
 import { EditProjectModal } from '@/features/project/components/edit-project-modal';
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
+import { ProjectStatusAlert } from '@/features/project/components/project-status-alert';
 import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
 import { buildReviewWriteUrl } from '@/features/project/lib/build-review-write-url';
 import { CopyIcon, EditIcon, EllipsisVerticalIcon, RoundCheckIcon, TrashIcon } from '@/shared/assets/icons';
-import { Alert } from '@/shared/components/alert';
 import { Button, IconButton } from '@/shared/components/button';
 import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
@@ -167,10 +167,12 @@ const ProjectCardHeader = ({
   onEdit,
   onDelete,
 }: ProjectCardHeaderProps) => {
+  const isInProgress = projectStatus === 'IN_PROGRESS';
+
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-row gap-2">
-        <ProjectStateBadge variant={projectStatus === 'IN_PROGRESS' ? 'waiting' : 'success'} />
+        <ProjectStateBadge variant={isInProgress ? 'waiting' : 'success'} />
         {isLeader ? <ProjectStateBadge variant="leader" /> : null}
       </div>
       <div className="flex items-center gap-1">
@@ -188,9 +190,11 @@ const ProjectCardHeader = ({
               />
             </Dropdown.Trigger>
             <Dropdown.Content align="end" sideOffset={0} className="w-44 gap-1">
-              <Dropdown.Item onSelect={() => onEdit?.()}>
-                수정 <EditIcon className="size-5" />
-              </Dropdown.Item>
+              {isInProgress ? (
+                <Dropdown.Item onSelect={() => onEdit?.()}>
+                  수정 <EditIcon className="size-5" />
+                </Dropdown.Item>
+              ) : null}
               <Dropdown.Item onSelect={() => onDelete?.()}>
                 삭제
                 <TrashIcon className="size-5 stroke-[1.5]" />
@@ -238,28 +242,32 @@ const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardA
   };
 
   if (!isLeader) {
-    return <Alert variant={projectStatus === 'IN_PROGRESS' ? 'warning' : 'success'} className="w-full" />;
+    return <ProjectStatusAlert variant={projectStatus === 'IN_PROGRESS' ? 'warning' : 'success'} />;
   }
+
+  const isInProgress = projectStatus === 'IN_PROGRESS';
 
   return (
     <div className="flex gap-2">
-      <div className="relative inline-flex">
-        <Button
-          type="button"
-          variant="secondary"
-          size="medium"
-          leftIcon={<CopyIcon aria-hidden className="size-4" />}
-          className={cn(
-            isInviteTooltipOpen &&
-              'bg-button-secondary-fill-pressed hover:bg-button-secondary-fill-pressed focus:bg-button-secondary-fill-pressed active:bg-button-secondary-fill-pressed',
-          )}
-          onClick={() => void handleCopyInviteLink()}
-        >
-          초대 링크 복사
-        </Button>
-        <CopyFeedbackTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
-      </div>
-      {projectStatus === 'IN_PROGRESS' ? (
+      {isInProgress ? (
+        <div className="relative inline-flex">
+          <Button
+            type="button"
+            variant="secondary"
+            size="medium"
+            leftIcon={<CopyIcon aria-hidden className="size-4" />}
+            className={cn(
+              isInviteTooltipOpen &&
+                'bg-button-secondary-fill-pressed hover:bg-button-secondary-fill-pressed focus:bg-button-secondary-fill-pressed active:bg-button-secondary-fill-pressed',
+            )}
+            onClick={() => void handleCopyInviteLink()}
+          >
+            초대 링크 복사
+          </Button>
+          <CopyFeedbackTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
+        </div>
+      ) : null}
+      {isInProgress ? (
         <Button
           type="button"
           variant="primary"
