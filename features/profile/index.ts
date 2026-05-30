@@ -1,5 +1,6 @@
 export { useUpdateProfile } from './mutations';
 export { useProfile } from './queries';
+export { ProfileAvatar } from './components/profile-avatar';
 export { ProfilePageContent } from './components/profile-page-content';
 export { ProfileSection } from './components/profile-section';
 export { ProjectSection } from './components/project-section';

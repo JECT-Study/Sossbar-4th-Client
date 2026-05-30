@@ -36,6 +36,7 @@ export const useProjectReviews = (userId: number, projectId: number) =>
     queryKey: reviewKeys.projectReviews(userId, projectId),
     queryFn: () => fetchProjectReviews(userId, projectId),
     enabled: userId > 0 && projectId > 0,
+    throwOnError: false,
   });
 
 export const useSpectrum = ({ userId, projectId }: { userId: number; projectId?: number }) =>
