@@ -24,11 +24,11 @@ export const useProjectCards = (): UseProjectCardsResult => {
   const query = useProjects(hasSession);
 
   const projects = useMemo(() => {
-    if (!query.data || sessionUserId == null) {
+    if (!query.data || !sessionUser) {
       return [];
     }
-    return mapMyProjectsToCardItems(query.data, sessionUserId);
-  }, [query.data, sessionUserId]);
+    return mapMyProjectsToCardItems(query.data, sessionUser);
+  }, [query.data, sessionUser]);
 
   return {
     projects,
