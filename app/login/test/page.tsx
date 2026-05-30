@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { getMyProfile } from '@/features/auth/fetchers';
@@ -10,6 +10,10 @@ import { setAuthToken } from '@/shared/lib/auth-token';
 import { setSessionUser } from '@/shared/lib/session-user';
 
 const TestLoginPage = () => {
+  if (process.env.NODE_ENV === 'production') {
+    notFound();
+  }
+
   const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
