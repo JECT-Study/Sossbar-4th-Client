@@ -152,7 +152,7 @@ export const ReviewWriteContent = () => {
         onConfirm={handleSubmitFromDialog}
       />
       <header className="bg-surface-white w-full">
-        <div className="border-divider-gray-light mx-auto w-full max-w-[1200px] border-b-2 px-4 pt-[62px] pb-8 md:px-10">
+        <div className="border-divider-gray-light mx-auto w-full max-w-[1200px] border-b-2 px-4 pt-[62px] pb-8 md:px-0">
           <h1 className="text-heading-lg text-text-basic leading-normal font-bold">후기 작성</h1>
           <p className="text-body-base text-text-basic mt-2 leading-normal">
             <span className="font-bold">{revieweeName}</span>
@@ -161,7 +161,7 @@ export const ReviewWriteContent = () => {
         </div>
       </header>
 
-      <div className="mx-auto w-full max-w-[1200px] px-4 pt-[46px] pb-10 md:px-10">
+      <div className="mx-auto w-full max-w-[1200px] px-4 pt-[46px] pb-20">
         <div className="flex flex-col gap-10">
           <section className="flex flex-col gap-4" aria-labelledby="review-tags-heading">
             <h2 id="review-tags-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
