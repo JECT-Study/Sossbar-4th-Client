@@ -10,14 +10,20 @@ const toCreateReviewBody = (data: CreateReviewRequest) => {
   const praise = data.praise.trim();
   const improvement = data.improvement.trim();
 
+  const reviewReqDto = {
+    projectId: data.projectId,
+    revieweeId: data.revieweeId,
+    ...(praise.length > 0 ? { positiveFeedback: praise } : {}),
+    ...(improvement.length > 0 ? { negativeFeedback: improvement } : {}),
+    tagIds: data.tagIds,
+  };
+
+  if (data.spectrums.length === 0) {
+    return { reviewReqDto };
+  }
+
   return {
-    reviewReqDto: {
-      projectId: data.projectId,
-      revieweeId: data.revieweeId,
-      ...(praise.length > 0 ? { positiveFeedback: praise } : {}),
-      ...(improvement.length > 0 ? { negativeFeedback: improvement } : {}),
-      tagIds: data.tagIds,
-    },
+    reviewReqDto,
     spectrumReqDtos: data.spectrums.map((spectrum) => ({
       spectrumAxisId: spectrum.spectrumId,
       spectrumStrength: spectrum.value,

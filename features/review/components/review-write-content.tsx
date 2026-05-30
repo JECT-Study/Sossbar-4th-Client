@@ -1,9 +1,12 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useProjects } from '@/features/project/api/queries';
+import { projectKeys } from '@/features/project/api/query-keys';
+import type { MyProjectResponse } from '@/features/project/types';
 import {
   hasSubmittedProjectSpectrum,
   hasWrittenReviewForMember,
@@ -41,6 +44,7 @@ const chunkTagsByRowSizes = (items: Tag[], sizes: readonly [number, number, numb
 
 export const ReviewWriteContent = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const projectId = useMemo(() => {
     const raw = searchParams.get('projectId');
@@ -65,13 +69,6 @@ export const ReviewWriteContent = () => {
     () => myProjects?.find((project) => project.projectId === projectId),
     [myProjects, projectId],
   );
-
-  const hasSubmittedProjectSpectrumState = useMemo(() => {
-    if (projectId == null || !sessionUser) {
-      return false;
-    }
-    return hasSubmittedProjectSpectrum(projectId, projectMembership?.members, sessionUser.userId);
-  }, [projectId, projectMembership?.members, sessionUser]);
 
   const hasAlreadyReviewedReviewee = useMemo(
     () => hasWrittenReviewForMember(projectMembership?.members, revieweeId ?? 0),
@@ -110,8 +107,24 @@ export const ReviewWriteContent = () => {
   const praiseOk = praiseTrimmed.length >= PRAISE_MIN_LENGTH;
   const improvementOk = improvementTrimmed.length === 0 || improvementTrimmed.length >= PRAISE_MIN_LENGTH;
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
-  const spectrumsOk = hasSubmittedProjectSpectrumState || !!formData?.spectrums?.length;
+  const spectrumsOk = !!formData?.spectrums?.length;
   const canSubmit = praiseOk && improvementOk && tagsOk && spectrumsOk && !isSubmitting && !hasAlreadyReviewedReviewee;
+
+  const resolveSkipSpectrum = useCallback(async (): Promise<boolean> => {
+    if (projectId == null || !sessionUser) {
+      return false;
+    }
+    if (hasSubmittedProjectSpectrum(projectId, projectMembership?.members, sessionUser.userId)) {
+      return true;
+    }
+    if (!hasSession) {
+      return false;
+    }
+    await queryClient.refetchQueries({ queryKey: projectKeys.list() });
+    const freshProjects = queryClient.getQueryData<MyProjectResponse[]>(projectKeys.list());
+    const freshMembers = freshProjects?.find((project) => project.projectId === projectId)?.members;
+    return hasSubmittedProjectSpectrum(projectId, freshMembers, sessionUser.userId);
+  }, [hasSession, projectId, projectMembership?.members, queryClient, sessionUser]);
 
   const handleSubmitFromDialog = useCallback(async () => {
     if (!formData || !canSubmit || projectId == null || revieweeId == null) {
@@ -123,25 +136,39 @@ export const ReviewWriteContent = () => {
     isSubmittingRef.current = true;
     setSubmitError(null);
     const tagIds = [...selectedTagIds];
-    // 같은 프로젝트에 이미 후기를 제출한 적 있으면 스펙트럼은 빈 배열로 전송 (중복 저장 방지)
-    const spectrums = hasSubmittedProjectSpectrumState
-      ? []
-      : formData.spectrums.map((s) => ({
-          spectrumId: s.spectrumId,
-          value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
-        }));
+    const buildSpectrums = (skipSpectrum: boolean) =>
+      skipSpectrum
+        ? []
+        : formData.spectrums.map((s) => ({
+            spectrumId: s.spectrumId,
+            value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
+          }));
+
+    const reviewPayload = (spectrums: { spectrumId: number; value: number }[]) => ({
+      projectId,
+      revieweeId,
+      praise: praise.trim(),
+      improvement: improvement.trim(),
+      tagIds,
+      spectrums,
+    });
+
     try {
-      await submitReview({
-        projectId,
-        revieweeId,
-        praise: praise.trim(),
-        improvement: improvement.trim(),
-        tagIds,
-        spectrums,
-      });
-      if (spectrums.length > 0) {
-        markProjectSpectrumSubmitted(projectId);
+      const skipSpectrum = await resolveSkipSpectrum();
+      let spectrums = buildSpectrums(skipSpectrum);
+
+      try {
+        await submitReview(reviewPayload(spectrums));
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 409 && spectrums.length > 0) {
+          spectrums = [];
+          await submitReview(reviewPayload(spectrums));
+        } else {
+          throw err;
+        }
       }
+
+      markProjectSpectrumSubmitted(projectId);
       setSubmitDialogOpen(false);
       router.push('/projects');
     } catch (err) {
@@ -156,7 +183,7 @@ export const ReviewWriteContent = () => {
   }, [
     formData,
     canSubmit,
-    hasSubmittedProjectSpectrumState,
+    resolveSkipSpectrum,
     selectedTagIds,
     spectrumSteps,
     projectId,
@@ -277,24 +304,18 @@ export const ReviewWriteContent = () => {
             <h2 id="review-spectrum-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
               소프트 스킬 스펙트럼 성향
             </h2>
-            {hasSubmittedProjectSpectrumState ? (
-              <p className="text-body-sm text-text-subtle">
-                이 프로젝트에서 이미 후기를 제출하셨습니다. 스펙트럼 데이터는 첫 번째 후기 제출 시 기록됩니다.
-              </p>
-            ) : (
-              <div className="grid w-full max-w-[781px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-[15px] gap-y-4">
-                {formData.spectrums.map((spectrum) => (
-                  <ReviewSpectrumRow
-                    key={spectrum.spectrumId}
-                    spectrumId={spectrum.spectrumId}
-                    leftLabel={spectrum.leftLabel}
-                    rightLabel={spectrum.rightLabel}
-                    valueStep={spectrumSteps[spectrum.spectrumId] ?? DEFAULT_SPECTRUM_STEP}
-                    onChange={onSpectrumChange}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="grid w-full max-w-[781px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-[15px] gap-y-4">
+              {formData.spectrums.map((spectrum) => (
+                <ReviewSpectrumRow
+                  key={spectrum.spectrumId}
+                  spectrumId={spectrum.spectrumId}
+                  leftLabel={spectrum.leftLabel}
+                  rightLabel={spectrum.rightLabel}
+                  valueStep={spectrumSteps[spectrum.spectrumId] ?? DEFAULT_SPECTRUM_STEP}
+                  onChange={onSpectrumChange}
+                />
+              ))}
+            </div>
           </section>
         </div>
 
