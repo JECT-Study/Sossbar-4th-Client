@@ -10,11 +10,12 @@ export const useProjects = (enabled = true) =>
     enabled,
   });
 
-export const useProject = (projectId: number, enabled = true) =>
+export const useProject = (projectId: number, enabled = true, options?: { throwOnError?: boolean }) =>
   useQuery({
     queryKey: projectKeys.detail(projectId),
     queryFn: () => fetchProject(projectId),
     enabled: enabled && projectId > 0,
+    ...options,
   });
 
 export const useUserProjects = (userId: number) =>
