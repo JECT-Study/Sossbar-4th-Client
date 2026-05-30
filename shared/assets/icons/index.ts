@@ -16,7 +16,7 @@ export { default as EllipsisVerticalIcon } from './ellipsis-vertical.svg';
 export { default as EmergencyIcon } from './emergency.svg';
 export { default as FileMinusFilledIcon } from './file-minus-filled.svg';
 export { default as FlameFilledIcon } from './flame-filled.svg';
-export { default as ImgIcon } from './img.svg';
+export { default as FileUploadIcon } from './file-upload.svg';
 export { default as InfoIcon } from './info.svg';
 export { default as InputClearIcon } from './input-clear.svg';
 export { default as KakaoTalkIcon } from './kakao-talk.svg';

@@ -8,6 +8,7 @@ export type SignupPayload = {
   bio: string;
   requiredAgree: boolean;
   marketingAgree: boolean;
+  profileImage: File | null;
 };
 
 export interface SignupResponse {

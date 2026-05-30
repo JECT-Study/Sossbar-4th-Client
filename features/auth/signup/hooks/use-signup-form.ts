@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
@@ -12,6 +13,7 @@ import { SignupFormSchema } from '../signup-form.schema';
 const defaultValues: SignupFormData = {
   name: '',
   bio: '',
+  profileImage: null,
   agreements: {
     age: false,
     terms: false,
@@ -25,6 +27,8 @@ const hasRequiredAgreements = (agreements: SignupFormData['agreements'] | undefi
 
 export const useSignupForm = () => {
   const [isSignupCompleted, completeSignup] = useBooleanState();
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const previewImageUrlRef = useRef<string | null>(null);
   const { mutateAsync: signup, isPending } = useSignup();
 
   const form = useForm({
@@ -38,6 +42,26 @@ export const useSignupForm = () => {
   const watchedBio = useWatch({ control: form.control, name: 'bio' });
   const watchedAgreements = useWatch({ control: form.control, name: 'agreements' });
 
+  const revokePreviewUrl = useCallback(() => {
+    if (previewImageUrlRef.current) {
+      URL.revokeObjectURL(previewImageUrlRef.current);
+      previewImageUrlRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => revokePreviewUrl, [revokePreviewUrl]);
+
+  const setProfileImage = useCallback(
+    (file: File | null) => {
+      revokePreviewUrl();
+      const objectUrl = file ? URL.createObjectURL(file) : null;
+      previewImageUrlRef.current = objectUrl;
+      setPreviewImageUrl(objectUrl);
+      form.setValue('profileImage', file, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+    },
+    [form, revokePreviewUrl],
+  );
+
   const onSubmit = async (data: SignupFormData) => {
     try {
       await signup({
@@ -45,6 +69,7 @@ export const useSignupForm = () => {
         bio: data.bio,
         requiredAgree: data.agreements.age && data.agreements.terms && data.agreements.privacy,
         marketingAgree: data.agreements.marketing,
+        profileImage: data.profileImage ?? null,
       });
       completeSignup();
     } catch (error) {
@@ -70,5 +95,7 @@ export const useSignupForm = () => {
     onSubmit,
     form,
     isSignupCompleted,
+    previewImageUrl,
+    setProfileImage,
   };
 };
