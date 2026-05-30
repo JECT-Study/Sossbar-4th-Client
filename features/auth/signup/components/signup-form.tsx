@@ -1,20 +1,26 @@
 'use client';
 
+import type { ChangeEvent } from 'react';
+
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 
+import { ProfileAvatar } from '@/features/profile';
+import { CameraIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { InformationDialog } from '@/shared/components/dialog/information-dialog';
 import { TextField } from '@/shared/components/text-field';
 import { TextareaField } from '@/shared/components/textarea-field';
 
-import { BIO_MAX_LENGTH } from '../signup-constants';
+import { BIO_MAX_LENGTH, PROFILE_IMAGE_ACCEPT } from '../signup-constants';
 import { SignupAgreement } from './signup-agreement';
 import { useSignupForm } from '../hooks/use-signup-form';
 
 export const SignupForm = () => {
   const router = useRouter();
-  const { isSignupCompleted, canSubmit, form, onSubmit } = useSignupForm();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const { isSignupCompleted, canSubmit, form, onSubmit, previewImageUrl, setProfileImage } = useSignupForm();
 
   const {
     formState: { errors },
@@ -23,12 +29,45 @@ export const SignupForm = () => {
     setValue,
     getValues,
     control,
+    watch,
   } = form;
 
+  const watchedName = watch('name');
   const goToProfile = () => router.push('/');
+
+  const handleClickImageButton = () => fileInputRef.current?.click();
+
+  const handleChangeProfileImage = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
+    setProfileImage(file);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-8 w-full max-w-[460px]">
+      <div className="flex flex-col items-center">
+        <div className="relative">
+          <ProfileAvatar username={watchedName.trim() || '이름'} profileImageUrl={previewImageUrl} />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept={PROFILE_IMAGE_ACCEPT}
+            className="sr-only"
+            onChange={handleChangeProfileImage}
+          />
+          <button
+            type="button"
+            className="border-icon-gray-fill absolute top-14.5 left-16.75 flex size-10.5 cursor-pointer items-center justify-center rounded-full border bg-white"
+            aria-label="프로필 이미지 선택"
+            onClick={handleClickImageButton}
+          >
+            <CameraIcon className="text-icon-gray-fill size-6" />
+          </button>
+        </div>
+        {errors.profileImage ? (
+          <p className="text-body-sm text-text-error mt-2">{errors.profileImage.message}</p>
+        ) : null}
+      </div>
+
       <TextField
         label="이름"
         placeholder="입력해주세요."
@@ -36,6 +75,7 @@ export const SignupForm = () => {
         required
         clearable
         maxLength={20}
+        className="mt-8"
         {...register('name')}
       />
 
