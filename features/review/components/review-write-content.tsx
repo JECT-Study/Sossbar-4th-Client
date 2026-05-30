@@ -1,10 +1,11 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
+import { ApiError } from '@/shared/lib/api';
 import { cn } from '@/shared/lib/cn';
 
 import type { Tag } from '../types/tag';
@@ -56,6 +57,7 @@ export const ReviewWriteContent = () => {
   const [improvement, setImprovement] = useState('');
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const isSubmittingRef = useRef(false);
 
   const toggleTag = useCallback((tagId: number) => {
     setSelectedTagIds((prev) => {
@@ -88,6 +90,10 @@ export const ReviewWriteContent = () => {
     if (!formData || !canSubmit || projectId == null || revieweeId == null) {
       return;
     }
+    if (isSubmittingRef.current) {
+      return;
+    }
+    isSubmittingRef.current = true;
     setSubmitError(null);
     const tagIds = [...selectedTagIds];
     const spectrums = formData.spectrums.map((s) => ({
@@ -105,8 +111,14 @@ export const ReviewWriteContent = () => {
       });
       setSubmitDialogOpen(false);
       router.push('/projects');
-    } catch {
-      setSubmitError('제출에 실패했습니다. 다시 시도해주세요.');
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 409) {
+        setSubmitError('이미 이 팀원에 대한 후기를 제출하셨습니다.');
+      } else {
+        setSubmitError('제출에 실패했습니다. 다시 시도해주세요.');
+      }
+    } finally {
+      isSubmittingRef.current = false;
     }
   }, [
     formData,
