@@ -76,9 +76,11 @@ export const ReviewWriteContent = () => {
     setSpectrumSteps((prev) => ({ ...prev, [spectrumId]: step }));
   }, []);
 
-  const praiseOk = praise.trim().length === 0 || praise.trim().length >= PRAISE_MIN_LENGTH;
-  const improvementOk = improvement.trim().length === 0 || improvement.trim().length >= PRAISE_MIN_LENGTH;
-  const anyFeedbackOk = (praise.trim().length > 0 && praiseOk) || (improvement.trim().length > 0 && improvementOk);
+  const praiseTrimmed = praise.trim();
+  const improvementTrimmed = improvement.trim();
+  const praiseOk = praiseTrimmed.length === 0 || praiseTrimmed.length >= PRAISE_MIN_LENGTH;
+  const improvementOk = improvementTrimmed.length === 0 || improvementTrimmed.length >= PRAISE_MIN_LENGTH;
+  const anyFeedbackOk = (praiseTrimmed.length > 0 && praiseOk) || (improvementTrimmed.length > 0 && improvementOk);
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
   const spectrumsOk = !!formData?.spectrums?.length;
   const canSubmit = anyFeedbackOk && tagsOk && spectrumsOk && !isSubmitting;

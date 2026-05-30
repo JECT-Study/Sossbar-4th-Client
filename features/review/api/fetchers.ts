@@ -7,12 +7,13 @@ import type { ReceivedTags } from '../types/tag';
 import { mapReviewFormDataFromApi, type ReviewFormDataApiResponse } from './map-form-data';
 
 const toCreateReviewFormData = (data: CreateReviewRequest): FormData => {
+  const praise = data.praise.trim();
   const improvement = data.improvement.trim();
 
   const reviewReqDto = {
     projectId: data.projectId,
     revieweeId: data.revieweeId,
-    positiveFeedback: data.praise,
+    ...(praise.length > 0 ? { positiveFeedback: praise } : {}),
     ...(improvement.length > 0 ? { negativeFeedback: improvement } : {}),
     tagIds: data.tagIds,
   };
