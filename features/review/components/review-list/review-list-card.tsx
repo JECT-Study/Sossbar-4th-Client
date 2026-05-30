@@ -29,52 +29,56 @@ const reviewToneOptions = [
 
 type ReviewTone = (typeof reviewToneOptions)[number]['value'];
 
+type ViewState = 'empty' | 'restricted' | 'list';
+
 export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail, showTitle }: ReviewListCardProps) => {
-  const isEmpty = reviews.length === 0;
   const [selectedTone, setSelectedTone] = useState<ReviewTone>('positive');
   const [isExpanded, setIsExpanded] = useState(false);
-  const displayTone = isMyProfile ? selectedTone : 'positive';
-  const showItemMenu = isMyProfile && selectedTone === 'negative';
+  const isNegativeTone = selectedTone === 'negative';
+  const viewState: ViewState = reviews.length === 0 ? 'empty' : !isMyProfile && isNegativeTone ? 'restricted' : 'list';
   const visibleReviews = isExpanded ? reviews : reviews.slice(0, INITIAL_VISIBLE_REVIEW_COUNT);
   const showMoreButton = reviews.length > INITIAL_VISIBLE_REVIEW_COUNT && !isExpanded;
 
   return (
     <section
-      className={cn('border-border-gray flex w-full flex-col rounded-2xl border bg-white p-6', isEmpty && 'h-136')}
+      className={cn(
+        'border-border-gray flex w-full flex-col rounded-2xl border bg-white p-6',
+        viewState !== 'list' && 'h-136',
+      )}
     >
       <div className="flex items-center justify-between">
         <h2 className="text-heading-base text-text-basic font-bold">받은 후기</h2>
-        {isMyProfile && !isEmpty ? (
+        {viewState !== 'empty' ? (
           <SegmentedControl options={reviewToneOptions} value={selectedTone} onValueChange={setSelectedTone} />
         ) : null}
       </div>
 
-      {isEmpty ? (
-        <EmptyState title="아직 도착한 후기가 없어요" />
-      ) : (
+      {viewState === 'empty' && <EmptyState title="아직 도착한 후기가 없어요" />}
+
+      {viewState === 'restricted' && <EmptyState title="'아쉬워요' 후기는 본인만 확인 가능해요" />}
+
+      {viewState === 'list' && (
         <>
           <ul>
-            {visibleReviews.map((review) => {
-              const feedback = displayTone === 'positive' ? review.positiveFeedback : (review.negativeFeedback ?? '');
-
-              return (
-                <ReviewListItem.Root key={review.reviewId}>
-                  <ReviewListItem.Heading>
-                    {showThumbnail ? (
-                      <ReviewListItem.Image src={review.projectImage} alt={`${review.projectName} 썸네일`} />
-                    ) : null}
-                    <ReviewListItem.HeadingText>
-                      {showTitle ? <ReviewListItem.Title>{review.projectName}</ReviewListItem.Title> : null}
-                      <ReviewListItem.Description>
-                        {`${review.reviewerNickname} · ${review.host} · ${formatIsoDateToDots(review.createdAt)}`}
-                      </ReviewListItem.Description>
-                    </ReviewListItem.HeadingText>
-                  </ReviewListItem.Heading>
-                  <ReviewListItem.Content>{feedback}</ReviewListItem.Content>
-                  {showItemMenu ? <ReviewListItem.ActionMenu projectName={review.projectName} /> : null}
-                </ReviewListItem.Root>
-              );
-            })}
+            {visibleReviews.map((review) => (
+              <ReviewListItem.Root key={review.reviewId}>
+                <ReviewListItem.Heading>
+                  {showThumbnail ? (
+                    <ReviewListItem.Image src={review.projectImage} alt={`${review.projectName} 썸네일`} />
+                  ) : null}
+                  <ReviewListItem.HeadingText>
+                    {showTitle ? <ReviewListItem.Title>{review.projectName}</ReviewListItem.Title> : null}
+                    <ReviewListItem.Description>
+                      {`${review.reviewerNickname} · ${review.host} · ${formatIsoDateToDots(review.createdAt)}`}
+                    </ReviewListItem.Description>
+                  </ReviewListItem.HeadingText>
+                </ReviewListItem.Heading>
+                <ReviewListItem.Content>
+                  {selectedTone === 'positive' ? review.positiveFeedback : (review.negativeFeedback ?? '')}
+                </ReviewListItem.Content>
+                {isMyProfile && isNegativeTone ? <ReviewListItem.ActionMenu projectName={review.projectName} /> : null}
+              </ReviewListItem.Root>
+            ))}
           </ul>
 
           {showMoreButton ? (
