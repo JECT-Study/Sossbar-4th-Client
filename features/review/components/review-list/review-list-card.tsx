@@ -35,9 +35,19 @@ export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail, showTitle 
   const [selectedTone, setSelectedTone] = useState<ReviewTone>('positive');
   const [isExpanded, setIsExpanded] = useState(false);
   const isNegativeTone = selectedTone === 'negative';
-  const viewState: ViewState = reviews.length === 0 ? 'empty' : !isMyProfile && isNegativeTone ? 'restricted' : 'list';
-  const visibleReviews = isExpanded ? reviews : reviews.slice(0, INITIAL_VISIBLE_REVIEW_COUNT);
-  const showMoreButton = reviews.length > INITIAL_VISIBLE_REVIEW_COUNT && !isExpanded;
+  const filteredReviews = isNegativeTone
+    ? reviews.filter((review) => review.negativeFeedback != null && review.negativeFeedback.trim() !== '')
+    : reviews;
+  const viewState: ViewState =
+    reviews.length === 0
+      ? 'empty'
+      : !isMyProfile && isNegativeTone
+        ? 'restricted'
+        : filteredReviews.length === 0
+          ? 'empty'
+          : 'list';
+  const visibleReviews = isExpanded ? filteredReviews : filteredReviews.slice(0, INITIAL_VISIBLE_REVIEW_COUNT);
+  const showMoreButton = filteredReviews.length > INITIAL_VISIBLE_REVIEW_COUNT && !isExpanded;
 
   return (
     <section
