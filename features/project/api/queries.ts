@@ -23,4 +23,5 @@ export const useUserProjects = (userId: number) =>
     queryKey: projectKeys.byUser(userId),
     queryFn: () => fetchUserProjects(userId),
     enabled: userId > 0,
+    throwOnError: false,
   });

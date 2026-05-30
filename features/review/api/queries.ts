@@ -15,6 +15,7 @@ export const useUserReviews = (userId: number) =>
   useQuery({
     queryKey: reviewKeys.reviews(userId),
     queryFn: () => fetchReviews(userId),
+    throwOnError: false,
   });
 
 export const useReviewFormData = () =>
@@ -29,6 +30,7 @@ export const useReceivedTags = ({ userId, projectId }: { userId: number; project
     queryFn: () =>
       projectId === undefined ? fetchReceivedTags(userId) : fetchReceivedTagsByProject(userId, projectId),
     enabled: userId > 0 && (projectId === undefined || projectId > 0),
+    throwOnError: false,
   });
 
 export const useProjectReviews = (userId: number, projectId: number) =>
@@ -44,4 +46,5 @@ export const useSpectrum = ({ userId, projectId }: { userId: number; projectId?:
     queryKey: reviewKeys.spectrum(userId, projectId),
     queryFn: () => (projectId === undefined ? fetchSpectrum(userId) : fetchSpectrumByProject(userId, projectId)),
     enabled: userId > 0 && (projectId === undefined || projectId > 0),
+    throwOnError: false,
   });
