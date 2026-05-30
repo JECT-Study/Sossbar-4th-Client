@@ -24,7 +24,7 @@ export const ProfilePageContent = ({ userId, isMyProfile }: ProfilePageContentPr
         <Tab.Content value="all" className="mt-6 flex flex-col gap-6">
           <div className="flex gap-6">
             <TagCard userId={userId} />
-            <SoftSkillsCard userId={userId} isMyProfile={isMyProfile} showDistribution />
+            <SoftSkillsCard userId={userId} showDistribution />
           </div>
           <UserReviewContainer userId={userId} isMyProfile={isMyProfile} />
         </Tab.Content>

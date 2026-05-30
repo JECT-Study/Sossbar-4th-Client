@@ -16,5 +16,5 @@ export const UserReviewContainer = ({ userId, isMyProfile }: UserReviewContainer
     (r) => r.projectStatus === undefined || r.projectStatus === 'COMPLETED' || r.projectStatus === 'ARCHIVED',
   );
 
-  return <ReviewListCard isMyProfile={isMyProfile} reviews={reviews} showThumbnail />;
+  return <ReviewListCard isMyProfile={isMyProfile} reviews={reviews} showThumbnail showTitle />;
 };

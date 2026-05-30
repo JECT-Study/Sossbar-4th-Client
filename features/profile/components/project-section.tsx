@@ -8,6 +8,7 @@ import { useUserProjects } from '@/features/project';
 import type { UserProjectResponse } from '@/features/project';
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { EmptyState } from '@/shared/components/empty-state';
 import { ROUTES } from '@/shared/constants/routes';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -60,7 +61,11 @@ export const ProjectSection = ({ userId }: ProjectSectionProps) => {
   }
 
   if (projects.length === 0) {
-    return <p className="text-body-sm text-text-subtle">아직 참여한 프로젝트가 없습니다.</p>;
+    return (
+      <div className="flex h-136 w-full flex-col">
+        <EmptyState title="등록된 프로젝트가 없어요" />
+      </div>
+    );
   }
 
   const visibleProjects = showAll ? projects : projects.slice(0, INITIAL_COUNT);
