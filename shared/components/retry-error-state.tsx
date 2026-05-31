@@ -1,4 +1,4 @@
-import { Button } from '@/shared/components/button';
+import { PressableButton } from '@/shared/components/button';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
@@ -29,9 +29,10 @@ export const RetryErrorState = ({
         <h2 className="text-heading-sm text-text-basic font-bold">{title}</h2>
         <p className="text-body-base text-text-subtle">{description}</p>
       </div>
-      <Button type="button" size="medium" onClick={onRetry} className={cn('mx-auto', actionClassName)}>
+
+      <PressableButton size="medium" onClick={onRetry} className={cn('mx-auto', actionClassName)}>
         {actionLabel}
-      </Button>
+      </PressableButton>
     </section>
   );
 };
