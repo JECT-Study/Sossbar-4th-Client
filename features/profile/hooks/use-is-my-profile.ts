@@ -8,5 +8,5 @@ import { useMyProfile } from './use-my-profile.query';
  */
 export const useIsMyProfile = (userId: number) => {
   const { data: myProfile } = useMyProfile();
-  return myProfile.userId === userId;
+  return myProfile?.userId === userId;
 };
