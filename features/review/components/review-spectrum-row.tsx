@@ -44,4 +44,5 @@ export const ReviewSpectrumRow = ({
   );
 };
 
-export const spectrumStepToValue = (step: number): number => Math.round((step / (STEP_COUNT - 1)) * 100);
+// step 0–5 → backend strength 1–6
+export const spectrumStepToValue = (step: number): number => step + 1;

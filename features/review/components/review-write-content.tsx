@@ -3,9 +3,11 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 
+import { useProject } from '@/features/project';
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
+import { useSessionUser } from '@/shared/lib/session-user';
 
 import type { Tag } from '../types/tag';
 
@@ -47,8 +49,18 @@ export const ReviewWriteContent = () => {
   const revieweeName = searchParams.get('reviewee')?.trim() || '';
   const hasRequiredParams = projectId != null && revieweeId != null && revieweeName.length > 0;
 
+  const sessionUser = useSessionUser();
+  const { data: projectData } = useProject(projectId ?? 0, projectId != null, { throwOnError: false });
   const { data: formData, isPending, isError, refetch } = useReviewFormData();
   const { mutateAsync: submitReview, isPending: isSubmitting } = useCreateReview();
+
+  // 같은 프로젝트에서 이미 한 명에게 후기를 제출했으면 스펙트럼은 서버에 저장된 상태 → 빈 배열로 전송
+  const hasSubmittedAnyReview = useMemo(() => {
+    if (!projectData || !sessionUser) {
+      return false;
+    }
+    return projectData.members.some((m) => m.userId !== sessionUser.userId && m.reviewWritten === true);
+  }, [projectData, sessionUser]);
 
   const [selectedTagIds, setSelectedTagIds] = useState<Set<number>>(() => new Set());
   const [spectrumSteps, setSpectrumSteps] = useState<Record<number, number>>({});
@@ -76,7 +88,10 @@ export const ReviewWriteContent = () => {
     setSpectrumSteps((prev) => ({ ...prev, [spectrumId]: step }));
   }, []);
 
-  const praiseOk = praise.trim().length >= PRAISE_MIN_LENGTH;
+  const praiseTrimmed = praise.trim();
+  const improvementTrimmed = improvement.trim();
+  const praiseOk = praiseTrimmed.length >= PRAISE_MIN_LENGTH;
+  const improvementOk = improvementTrimmed.length === 0 || improvementTrimmed.length >= PRAISE_MIN_LENGTH;
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
   const spectrumsOk = !!formData?.spectrums?.length;
   const canSubmit = praiseOk && tagsOk && spectrumsOk && !isSubmitting;
@@ -87,10 +102,12 @@ export const ReviewWriteContent = () => {
     }
     setSubmitError(null);
     const tagIds = [...selectedTagIds];
-    const spectrums = formData.spectrums.map((s) => ({
-      spectrumId: s.spectrumId,
-      value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
-    }));
+    const spectrums = hasSubmittedAnyReview
+      ? []
+      : formData.spectrums.map((s) => ({
+          spectrumId: s.spectrumId,
+          value: spectrumStepToValue(spectrumSteps[s.spectrumId] ?? DEFAULT_SPECTRUM_STEP),
+        }));
     try {
       await submitReview({
         projectId,
@@ -108,6 +125,7 @@ export const ReviewWriteContent = () => {
   }, [
     formData,
     canSubmit,
+    hasSubmittedAnyReview,
     selectedTagIds,
     spectrumSteps,
     projectId,
@@ -162,8 +180,8 @@ export const ReviewWriteContent = () => {
         errorMessage={submitError ?? undefined}
         onConfirm={handleSubmitFromDialog}
       />
-      <header className="border-divider-gray-light bg-surface-white w-full border-b-2">
-        <div className="mx-auto w-full max-w-[1200px] px-4 pt-[62px] pb-8 md:px-10">
+      <header className="bg-surface-white w-full">
+        <div className="border-divider-gray-light mx-auto w-full max-w-[1200px] border-b-2 px-4 pt-[62px] pb-8 md:px-10">
           <h1 className="text-heading-lg text-text-basic leading-normal font-bold">후기 작성</h1>
           <p className="text-body-base text-text-basic mt-2 leading-normal">
             <span className="font-bold">{revieweeName}</span>
@@ -196,7 +214,7 @@ export const ReviewWriteContent = () => {
                             : 'border-border-gray-light bg-action-gray-light text-text-basic hover:border-action-secondary-hover hover:bg-action-secondary-hover',
                           !selected &&
                             selectedTagIds.size >= MAX_TAGS &&
-                            'hover:border-border-gray-light hover:bg-action-gray-light cursor-not-allowed opacity-50',
+                            'hover:border-border-gray-light hover:bg-action-gray-light cursor-not-allowed opacity-30',
                         )}
                         onClick={() => {
                           toggleTag(tag.tagId);
@@ -243,13 +261,13 @@ export const ReviewWriteContent = () => {
               value={praise}
               maxLength={TEXT_MAX_LENGTH}
               error={praise.length > 0 && !praiseOk}
+              helperText={
+                praise.length > 0 && !praiseOk ? `칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.` : undefined
+              }
               onChange={(e) => {
                 setPraise(e.target.value);
               }}
             />
-            {praise.length > 0 && !praiseOk ? (
-              <p className="text-body-sm text-text-error">{`칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.`}</p>
-            ) : null}
           </section>
 
           <section className="flex flex-col gap-2" aria-labelledby="review-improve-heading">
@@ -263,6 +281,12 @@ export const ReviewWriteContent = () => {
               placeholder="ex) 소통이 조금 더 적극적이었으면 좋았을 것 같다."
               value={improvement}
               maxLength={TEXT_MAX_LENGTH}
+              error={improvement.length > 0 && !improvementOk}
+              helperText={
+                improvement.length > 0 && !improvementOk
+                  ? `아쉬워요는 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.`
+                  : undefined
+              }
               onChange={(e) => {
                 setImprovement(e.target.value);
               }}

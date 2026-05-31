@@ -1,3 +1,5 @@
+import { PROJECT_INVITE_QUERY_KEY } from './project-invite-query';
+
 const getSiteOrigin = (): string => {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim();
   if (fromEnv) {
@@ -16,9 +18,9 @@ const getSiteOrigin = (): string => {
   return '';
 };
 
-/** 초대 링크 — BE join API(`projectId`)와 맞춘 쿼리 URL */
+/** 초대 링크 — 프로젝트 관리 화면에서 수락 모달을 띄우는 쿼리 URL */
 export const buildProjectInviteUrl = (projectId: number): string => {
-  const path = `/projects/invite?projectId=${projectId}`;
+  const path = `/projects?${PROJECT_INVITE_QUERY_KEY}=${projectId}`;
   const origin = getSiteOrigin();
 
   return origin ? `${origin}${path}` : path;

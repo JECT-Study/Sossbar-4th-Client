@@ -1,19 +1,20 @@
 import { apiRequest } from '@/shared/lib/api';
 
-import type { CreateReviewApiBody, CreateReviewRequest, Review, ReviewFormData } from '../types/review';
+import type { CreateReviewRequest, Review, ReviewFormData } from '../types/review';
 import type { SpectrumInfo } from '../types/spectrum';
 import type { ReceivedTags } from '../types/tag';
 
 import { mapReviewFormDataFromApi, type ReviewFormDataApiResponse } from './map-form-data';
 
-const toCreateReviewApiBody = (data: CreateReviewRequest): CreateReviewApiBody => {
+const toCreateReviewBody = (data: CreateReviewRequest) => {
+  const praise = data.praise.trim();
   const improvement = data.improvement.trim();
 
   return {
     reviewReqDto: {
       projectId: data.projectId,
       revieweeId: data.revieweeId,
-      positiveFeedback: data.praise,
+      ...(praise.length > 0 ? { positiveFeedback: praise } : {}),
       ...(improvement.length > 0 ? { negativeFeedback: improvement } : {}),
       tagIds: data.tagIds,
     },
@@ -47,4 +48,4 @@ export const fetchSpectrumByProject = (userId: number, projectId: number): Promi
   apiRequest<SpectrumInfo>(`/reviews/spectrums/${userId}/${projectId}`);
 
 export const createReview = (data: CreateReviewRequest): Promise<void> =>
-  apiRequest<void>('/reviews', { method: 'POST', body: toCreateReviewApiBody(data) });
+  apiRequest<void>('/reviews', { method: 'POST', body: toCreateReviewBody(data) });

@@ -39,6 +39,7 @@ const textareaVariants = cva(
 interface Props extends ComponentProps<'textarea'>, Omit<VariantProps<typeof textareaVariants>, 'disabled'> {
   name: string;
   wrapperClassName?: string;
+  helperText?: string;
 }
 
 export const Textarea = ({
@@ -52,6 +53,7 @@ export const Textarea = ({
   onChange,
   onFocus,
   onBlur,
+  helperText,
   ...restProps
 }: Props) => {
   const { mergedRef, valueLength, isFocused, handleChange, handleFocus, handleBlur } = useTextareaInteraction({
@@ -63,6 +65,7 @@ export const Textarea = ({
 
   const showCount = maxLength != null && !disabled;
   const countState = error ? 'error' : isFocused ? 'focused' : valueLength > 0 ? 'filled' : 'idle';
+  const hasBottomRow = showCount || !!helperText;
 
   return (
     <div className={cn('relative flex w-full flex-col gap-2', wrapperClassName)}>
@@ -78,7 +81,12 @@ export const Textarea = ({
         disabled={disabled}
         {...restProps}
       />
-      {showCount ? <CharCount current={valueLength} max={maxLength!} state={countState} /> : null}
+      {hasBottomRow ? (
+        <div className="flex items-center">
+          {helperText ? <span className="text-body-sm text-text-error">{helperText}</span> : null}
+          {showCount ? <CharCount current={valueLength} max={maxLength!} state={countState} /> : null}
+        </div>
+      ) : null}
     </div>
   );
 };
