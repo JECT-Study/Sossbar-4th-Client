@@ -10,7 +10,7 @@ interface Props {
   onRetry: () => void;
 }
 
-export const RetryErrorState = ({
+export const RetryErrorCard = ({
   title,
   description,
   actionLabel = '다시 시도',
