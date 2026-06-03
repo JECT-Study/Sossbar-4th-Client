@@ -46,7 +46,7 @@ const Page = async ({ params }: ProfilePageProps) => {
       queryFn: () => fetchProfileById(profileUserId),
     }),
     queryClient.prefetchQuery({
-      queryKey: profileKeys.detail(profileUserId),
+      queryKey: profileKeys.my,
       queryFn: () => fetchMyProfile(),
     }),
   ]);
