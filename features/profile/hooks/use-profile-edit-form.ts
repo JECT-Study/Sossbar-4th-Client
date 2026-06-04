@@ -4,10 +4,10 @@ import { useForm } from 'react-hook-form';
 
 import { ApiError } from '@/shared/lib/api';
 
-import type { Profile, UpdateProfilePayload } from './types';
+import type { Profile, UpdateProfilePayload } from '../types';
 import type { z } from 'zod';
 
-import { ProfileEditFormSchema } from './schemas';
+import { ProfileEditFormSchema } from '../schemas';
 
 export type ProfileEditFormData = z.infer<typeof ProfileEditFormSchema>;
 

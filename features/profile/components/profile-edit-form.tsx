@@ -13,8 +13,8 @@ import { TextareaField } from '@/shared/components/textarea-field';
 import type { Profile, UpdateProfilePayload } from '../types';
 
 import { PROFILE_BIO_MAX_LENGTH, PROFILE_IMAGE_ACCEPT, PROFILE_NICKNAME_MAX_LENGTH } from '../constants';
-import { useProfileEditForm } from '../use-profile-edit-form';
 import { ProfileAvatar } from './profile-avatar';
+import { useProfileEditForm } from '../hooks/use-profile-edit-form';
 
 type ProfileEditFormProps = {
   profile: Profile;
