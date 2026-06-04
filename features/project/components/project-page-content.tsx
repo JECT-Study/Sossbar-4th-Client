@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 
-import { ProjectReviewContainer, SoftSkillsCard, TagCard } from '@/features/review';
+import { ProjectReviewContainer } from '@/features/review';
+import { SoftSkillsCardBoundary } from '@/features/soft-skills';
+import { TagCardBoundary } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -60,8 +62,8 @@ export const ProjectPageContent = ({ userId, projectId, isMyProfile }: ProjectPa
 
       <div className="flex flex-col gap-6">
         <div className="flex gap-6">
-          <TagCard userId={userId} projectId={projectId} collapsible />
-          <SoftSkillsCard userId={userId} projectId={projectId} showDistribution={false} />
+          <TagCardBoundary userId={userId} projectId={projectId} collapsible />
+          <SoftSkillsCardBoundary userId={userId} projectId={projectId} showDistribution={false} />
         </div>
         <ProjectReviewContainer userId={userId} projectId={projectId} isMyProfile={isMyProfile} />
       </div>

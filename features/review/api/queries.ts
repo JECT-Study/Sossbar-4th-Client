@@ -1,18 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import {
-  fetchProjectReviews,
-  fetchReceivedTags,
-  fetchReceivedTagsByProject,
-  fetchReviewFormData,
-  fetchReviews,
-  fetchSpectrum,
-  fetchSpectrumByProject,
-} from './fetchers';
+import { fetchProjectReviews, fetchReviewFormData, fetchReviews } from './fetchers';
 import { reviewKeys } from './query-keys';
 
 export const useUserReviews = (userId: number) =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: reviewKeys.reviews(userId),
     queryFn: () => fetchReviews(userId),
   });
@@ -23,25 +15,10 @@ export const useReviewFormData = () =>
     queryFn: fetchReviewFormData,
   });
 
-export const useReceivedTags = ({ userId, projectId }: { userId: number; projectId?: number }) =>
-  useQuery({
-    queryKey: reviewKeys.receivedTags(userId, projectId),
-    queryFn: () =>
-      projectId === undefined ? fetchReceivedTags(userId) : fetchReceivedTagsByProject(userId, projectId),
-    enabled: userId > 0 && (projectId === undefined || projectId > 0),
-  });
-
 export const useProjectReviews = (userId: number, projectId: number) =>
   useQuery({
     queryKey: reviewKeys.projectReviews(userId, projectId),
     queryFn: () => fetchProjectReviews(userId, projectId),
     enabled: userId > 0 && projectId > 0,
     throwOnError: false,
-  });
-
-export const useSpectrum = ({ userId, projectId }: { userId: number; projectId?: number }) =>
-  useQuery({
-    queryKey: reviewKeys.spectrum(userId, projectId),
-    queryFn: () => (projectId === undefined ? fetchSpectrum(userId) : fetchSpectrumByProject(userId, projectId)),
-    enabled: userId > 0 && (projectId === undefined || projectId > 0),
   });
