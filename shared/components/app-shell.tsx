@@ -7,6 +7,7 @@ import { Suspense } from 'react';
 
 import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { Footer } from '@/shared/components/footer';
+import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-page-view';
 import { Header } from '@/shared/components/header/header';
 import { AuthBootstrap } from '@/shared/providers/auth-bootstrap';
 
@@ -22,6 +23,9 @@ const AppShellInner = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <GoogleAnalyticsPageView />
+      </Suspense>
       <AuthBootstrap />
       <Suspense fallback={null}>
         <Header />
