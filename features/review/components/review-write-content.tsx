@@ -4,12 +4,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 
 import { useProject } from '@/features/project';
+import type { Tag } from '@/features/tag';
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 import { useSessionUser } from '@/shared/lib/session-user';
-
-import type { Tag } from '../types/tag';
 
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';

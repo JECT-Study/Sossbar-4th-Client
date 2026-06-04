@@ -1,6 +1,7 @@
+import type { Tag } from '@/features/tag';
+
 import type { ReviewFormData } from '../types/review';
 import type { Spectrum } from '../types/spectrum';
-import type { Tag } from '../types/tag';
 
 /** GET /api/v1/form-data — 백엔드 FormDataResDto */
 type FormDataTagApi = {
