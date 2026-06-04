@@ -15,9 +15,11 @@ export const completeLoginSession = async (login: LoginInfoResDto): Promise<Comp
   setAuthToken({ accessToken: login.accessToken, userId: login.userId });
 
   const profile = await getMyProfile();
-  setSessionUser(mapProfileToSessionUser(profile));
-
   const needsOnboarding = !profile.username?.trim();
+
+  if (!needsOnboarding) {
+    setSessionUser(mapProfileToSessionUser(profile));
+  }
 
   return { profile, needsOnboarding };
 };

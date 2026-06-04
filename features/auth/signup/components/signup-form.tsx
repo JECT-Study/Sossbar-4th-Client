@@ -84,6 +84,7 @@ export const SignupForm = () => {
         placeholder="내용을 입력해 주세요. (기본상태)"
         maxLength={BIO_MAX_LENGTH}
         errorMessage={errors.bio?.message}
+        required
         className="mt-10"
         {...register('bio')}
       />
