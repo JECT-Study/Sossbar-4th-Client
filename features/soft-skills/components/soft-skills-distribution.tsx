@@ -1,7 +1,7 @@
 import { cn } from '@/shared/lib/cn';
 
-import type { DistributionBarTone } from '../types/distribution-bar.types';
-import type { SpectrumInfo } from '../types/soft-skills.types';
+import type { DistributionBarTone } from '../distribution-bar.types';
+import type { SpectrumInfo } from '../soft-skills.types';
 
 import { assignBarTones } from '../utils/assign-bar-tones';
 import { scaleBarHeight } from '../utils/scale-bar-height';
@@ -27,7 +27,11 @@ const barToneBgClasses: Record<DistributionBarTone, string> = {
   none: 'bg-gray-300',
 };
 
-export const SoftSkillsDistribution = ({ spectrumInfo }: { spectrumInfo: SpectrumInfo }) => {
+interface SoftSkillsDistributionProps {
+  spectrumInfo: SpectrumInfo;
+}
+
+export const SoftSkillsDistribution = ({ spectrumInfo }: SoftSkillsDistributionProps) => {
   const bars = toDistributionBars(spectrumInfo.spectrumInfoResDtos);
   const tones = assignBarTones(bars);
   const maxCount = Math.max(...bars.map((bar) => bar.count), 0);

@@ -9,13 +9,13 @@ import { RetryErrorCard } from '@/shared/components/retry-error-card';
 import { SoftSkillsCard } from './soft-skills-card';
 import { SoftSkillsCardSkeleton } from './soft-skills-card.skeleton';
 
-interface Props {
+interface SoftSkillsCardBoundaryProps {
   userId: number;
   projectId?: number;
   showDistribution?: boolean;
 }
 
-export const SoftSkillsCardBoundary = ({ userId, projectId, showDistribution }: Props) => {
+export const SoftSkillsCardBoundary = ({ userId, projectId, showDistribution }: SoftSkillsCardBoundaryProps) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (

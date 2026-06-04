@@ -7,13 +7,13 @@ import { fetchSpectrumByProject } from '../api/fetch-spectrum-by-project.api';
 import { fetchSpectrum } from '../api/fetch-spectrum.api';
 import { softSkillsKeys } from '../soft-skills.query-key';
 
-interface Props {
+interface SoftSkillsCardStreamProps {
   userId: number;
   projectId?: number;
   showDistribution?: boolean;
 }
 
-export const SoftSkillsCardStream = async ({ userId, projectId, showDistribution }: Props) => {
+export const SoftSkillsCardStream = async ({ userId, projectId, showDistribution }: SoftSkillsCardStreamProps) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({

@@ -1,4 +1,4 @@
-import type { DistributionBar, DistributionBarTone } from '../types/distribution-bar.types';
+import type { DistributionBar, DistributionBarTone } from '../distribution-bar.types';
 
 const RANK_TONES: DistributionBarTone[] = ['first', 'second', 'third'];
 
