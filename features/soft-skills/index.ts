@@ -6,5 +6,5 @@ export { SoftSkillsCardSkeleton } from './components/soft-skills-card.skeleton';
 export { SoftSkillsCardStream } from './components/soft-skills-card-stream';
 export { useSpectrum } from './hooks/use-spectrum';
 export { softSkillsKeys } from './soft-skills.query-key';
-export type { DistributionBar, DistributionBarTone } from './distribution-bar.types';
-export type { SpectrumAxisInfo, SpectrumInfo } from './soft-skills.types';
+export type { DistributionBar, DistributionBarTone } from './types/distribution-bar.types';
+export type { SpectrumAxisInfo, SpectrumInfo } from './types/soft-skills.types';

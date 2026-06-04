@@ -1,4 +1,4 @@
-import type { SpectrumInfo } from '../soft-skills.types';
+import type { SpectrumInfo } from '../types/soft-skills.types';
 
 import { spectrumAxisLabels } from '../constants/spectrum-axis-labels';
 import { toMarkerLeft } from '../utils/to-marker-left';

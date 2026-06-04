@@ -1,7 +1,7 @@
 import { cn } from '@/shared/lib/cn';
 
-import type { DistributionBarTone } from '../distribution-bar.types';
-import type { SpectrumInfo } from '../soft-skills.types';
+import type { DistributionBarTone } from '../types/distribution-bar.types';
+import type { SpectrumInfo } from '../types/soft-skills.types';
 
 import { assignBarTones } from '../utils/assign-bar-tones';
 import { scaleBarHeight } from '../utils/scale-bar-height';
@@ -49,7 +49,7 @@ export const SoftSkillsDistribution = ({ spectrumInfo }: Props) => {
               {bar.count}명
             </span>
             <div
-              className={cn('w-[50px] shrink-0 rounded-t', barToneBgClasses[tones[index]])}
+              className={cn('w-[50px] shrink-0 rounded-t', barToneBgClasses[tones[index] as DistributionBarTone])}
               style={{ height: `${scaleBarHeight(bar.count, maxCount)}px` }}
             />
             <div className="text-body-xs text-text-subtle mt-2 flex h-9 shrink-0 items-start justify-center text-center font-medium break-keep whitespace-pre-line">

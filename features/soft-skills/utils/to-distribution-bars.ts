@@ -1,5 +1,5 @@
-import type { DistributionBar } from '../distribution-bar.types';
-import type { SpectrumAxisInfo } from '../soft-skills.types';
+import type { DistributionBar } from '../types/distribution-bar.types';
+import type { SpectrumAxisInfo } from '../types/soft-skills.types';
 
 import { spectrumAxisLabels } from '../constants/spectrum-axis-labels';
 
