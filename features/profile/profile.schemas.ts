@@ -1,6 +1,9 @@
 import { z } from 'zod';
 
-import { PROFILE_BIO_MAX_LENGTH, PROFILE_IMAGE_MAX_SIZE, PROFILE_NICKNAME_MAX_LENGTH } from './constants';
+import { PROFILE_BIO_MAX_LENGTH, PROFILE_NICKNAME_MAX_LENGTH } from './profile.constants';
+
+/** 프로필 이미지 업로드 최대 용량 (5MB) */
+const PROFILE_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
 const imageMimeTypes = ['image/png', 'image/jpeg', 'image/webp'];
 

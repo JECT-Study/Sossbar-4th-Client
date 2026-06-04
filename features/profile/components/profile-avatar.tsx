@@ -1,6 +1,7 @@
 import { Avatar } from 'radix-ui';
 
-import { DEFAULT_PROFILE_IMAGE_SRC } from '../constants';
+/** 업로드 이미지가 없을 때 표시하는 기본 프로필 이미지 */
+const DEFAULT_PROFILE_IMAGE_SRC = '/default-profile.png';
 
 type ProfileAvatarProps = {
   username: string;

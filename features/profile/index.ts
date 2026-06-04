@@ -4,6 +4,6 @@ export { useProfileById } from './hooks/use-profile-by-id.query';
 export { useUpdateProfile } from './hooks/use-update-profile.mutation';
 export { ProfileAvatar } from './components/profile-avatar';
 export { ProfileSection } from './components/profile-section';
-export { ProjectSection } from './components/project-section';
 export { ProfileSectionBoundary } from './components/profile-section-boundary';
-export type { Profile, UpdateProfilePayload } from './types';
+export { ProfileSectionStream } from './components/profile-section-stream';
+export type { Profile, UpdateProfilePayload } from './profile.types';
