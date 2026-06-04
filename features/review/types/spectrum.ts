@@ -1,10 +1,10 @@
-export type Spectrum = {
+export interface Spectrum {
   spectrumId: number;
   leftLabel: string;
   rightLabel: string;
-};
+}
 
-export type SpectrumWithValue = {
+export interface SpectrumWithValue {
   spectrumId: number;
   value: number;
-};
+}

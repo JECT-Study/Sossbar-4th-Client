@@ -5,9 +5,9 @@ import { useIsMyProfile } from '@/features/profile';
 import { ReviewListCard } from './review-list-card';
 import { useUserReviews } from '../../api/queries';
 
-type UserReviewContainerProps = {
+interface UserReviewContainerProps {
   userId: number;
-};
+}
 
 export const UserReviewContainer = ({ userId }: UserReviewContainerProps) => {
   const isMyProfile = useIsMyProfile(userId);

@@ -2,13 +2,13 @@
 
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 
-type ReviewSubmitDialogProps = {
+interface ReviewSubmitDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void | Promise<void>;
   isSubmitting?: boolean;
   errorMessage?: string;
-};
+}
 
 export const ReviewSubmitDialog = ({
   open,

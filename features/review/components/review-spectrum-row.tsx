@@ -6,13 +6,13 @@ import { ProgressStepper } from '@/shared/components/stepper';
 
 const STEP_COUNT = 6;
 
-type ReviewSpectrumRowProps = {
+interface ReviewSpectrumRowProps {
   spectrumId: number;
   leftLabel: string;
   rightLabel: string;
   valueStep: number;
   onChange: (spectrumId: number, step: number) => void;
-};
+}
 
 export const ReviewSpectrumRow = ({
   spectrumId,
