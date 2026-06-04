@@ -3,12 +3,12 @@ import { Avatar } from 'radix-ui';
 /** 업로드 이미지가 없을 때 표시하는 기본 프로필 이미지 */
 const DEFAULT_PROFILE_IMAGE_SRC = '/default-profile.png';
 
-type ProfileAvatarProps = {
+interface Props {
   username: string;
   profileImageUrl: string | null;
-};
+}
 
-export const ProfileAvatar = ({ username, profileImageUrl }: ProfileAvatarProps) => {
+export const ProfileAvatar = ({ username, profileImageUrl }: Props) => {
   const fallbackText = username.trim().slice(0, 1) || '이름';
   const avatarSrc = profileImageUrl || DEFAULT_PROFILE_IMAGE_SRC;
 

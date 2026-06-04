@@ -4,11 +4,11 @@ import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 
 import { buildProfileShareClipboardText } from '../lib/build-profile-share-clipboard-text';
 
-type UseProfileShareParams = {
+interface Params {
   userId: number;
-};
+}
 
-export const useProfileShare = ({ userId }: UseProfileShareParams) => {
+export const useProfileShare = ({ userId }: Params) => {
   const {
     open: isShareTooltipOpen,
     message: shareTooltipMessage,

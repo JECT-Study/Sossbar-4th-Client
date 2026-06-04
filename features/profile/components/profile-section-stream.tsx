@@ -5,7 +5,11 @@ import { fetchProfileById } from '@/features/profile/api/fetch-profile-by-id';
 import { profileKeys } from '@/features/profile/profile.query-keys';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
-export const ProfileSectionStream = async ({ userId }: { userId: number }) => {
+interface Props {
+  userId: number;
+}
+
+export const ProfileSectionStream = async ({ userId }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({

@@ -19,14 +19,14 @@ import { useProfileEditForm } from '../hooks/use-profile-edit-form';
 /** 프로필 이미지 file input accept 속성 */
 const PROFILE_IMAGE_ACCEPT = 'image/png,image/jpeg,image/webp';
 
-type ProfileEditFormProps = {
+interface Props {
   profile: Profile;
   isSubmitting: boolean;
   onCancel: () => void;
   onSubmitProfile: (payload: UpdateProfilePayload) => Promise<void>;
-};
+}
 
-export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfile }: ProfileEditFormProps) => {
+export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfile }: Props) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { form, onSubmit, previewImageUrl, setProfileImage } = useProfileEditForm({ profile, onSubmitProfile });
   const {
