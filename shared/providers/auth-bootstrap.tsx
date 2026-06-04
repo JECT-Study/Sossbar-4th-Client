@@ -23,7 +23,13 @@ export const AuthBootstrap = () => {
     }
 
     void getMyProfile()
-      .then((profile) => setSessionUser(mapProfileToSessionUser(profile)))
+      .then((profile) => {
+        if (!profile.username?.trim()) {
+          clearAuthToken();
+          return;
+        }
+        setSessionUser(mapProfileToSessionUser(profile));
+      })
       .catch((error) => {
         if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
           clearAuthToken();
