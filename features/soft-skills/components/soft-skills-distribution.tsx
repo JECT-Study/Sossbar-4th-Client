@@ -27,11 +27,11 @@ const barToneBgClasses: Record<DistributionBarTone, string> = {
   none: 'bg-gray-300',
 };
 
-interface SoftSkillsDistributionProps {
+interface Props {
   spectrumInfo: SpectrumInfo;
 }
 
-export const SoftSkillsDistribution = ({ spectrumInfo }: SoftSkillsDistributionProps) => {
+export const SoftSkillsDistribution = ({ spectrumInfo }: Props) => {
   const bars = toDistributionBars(spectrumInfo.spectrumInfoResDtos);
   const tones = assignBarTones(bars);
   const maxCount = Math.max(...bars.map((bar) => bar.count), 0);

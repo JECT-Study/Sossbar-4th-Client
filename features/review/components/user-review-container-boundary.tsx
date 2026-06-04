@@ -9,11 +9,11 @@ import { RetryErrorCard } from '@/shared/components/retry-error-card';
 import { UserReviewContainer } from './review-list/user-review-container';
 import { UserReviewContainerSkeleton } from './user-review-container.skeleton';
 
-interface UserReviewContainerBoundaryProps {
+interface Props {
   userId: number;
 }
 
-export const UserReviewContainerBoundary = ({ userId }: UserReviewContainerBoundaryProps) => {
+export const UserReviewContainerBoundary = ({ userId }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (

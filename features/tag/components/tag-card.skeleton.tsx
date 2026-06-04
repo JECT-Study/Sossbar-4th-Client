@@ -1,10 +1,14 @@
 import { cn } from '@/shared/lib/cn';
 
-const SkeletonLine = ({ className }: { className?: string }) => (
+interface Props {
+  className?: string;
+}
+
+const SkeletonLine = ({ className }: Props) => (
   <div className={cn('bg-action-gray-light animate-pulse rounded-sm', className)} />
 );
 
-const SkeletonBadge = ({ className }: { className?: string }) => (
+const SkeletonBadge = ({ className }: Props) => (
   <div className={cn('bg-action-gray-light h-9 shrink-0 animate-pulse rounded-full', className)} />
 );
 

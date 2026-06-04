@@ -12,11 +12,7 @@ const SPECTRUM_TRACK_HEIGHT_PX = 136;
 /** 트랙 위 세로 점선 가이드 위치(%) — 5구간 시각 보조 */
 const SPECTRUM_VERTICAL_DASH_PERCENTS = [20, 40, 60, 80] as const;
 
-interface SpectrumVerticalDashOverlayProps {
-  widthPx: number;
-}
-
-const SpectrumVerticalDashOverlay = ({ widthPx }: SpectrumVerticalDashOverlayProps) => (
+const SpectrumVerticalDashOverlay = ({ widthPx }: { widthPx: number }) => (
   <svg
     aria-hidden
     className="pointer-events-none absolute top-0 left-0 select-none"
@@ -33,11 +29,11 @@ const SpectrumVerticalDashOverlay = ({ widthPx }: SpectrumVerticalDashOverlayPro
   </svg>
 );
 
-interface SoftSkillsSpectrumProps {
+interface Props {
   spectrumInfo: SpectrumInfo;
 }
 
-export const SoftSkillsSpectrum = ({ spectrumInfo }: SoftSkillsSpectrumProps) => (
+export const SoftSkillsSpectrum = ({ spectrumInfo }: Props) => (
   <div className="w-fill mt-7">
     <h3 className="text-heading-xs text-text-subtle h-6 font-bold">평균 지표</h3>
 

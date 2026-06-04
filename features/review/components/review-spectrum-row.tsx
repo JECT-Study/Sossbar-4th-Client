@@ -6,7 +6,7 @@ import { ProgressStepper } from '@/shared/components/stepper';
 
 const STEP_COUNT = 6;
 
-interface ReviewSpectrumRowProps {
+interface Props {
   spectrumId: number;
   leftLabel: string;
   rightLabel: string;
@@ -14,13 +14,7 @@ interface ReviewSpectrumRowProps {
   onChange: (spectrumId: number, step: number) => void;
 }
 
-export const ReviewSpectrumRow = ({
-  spectrumId,
-  leftLabel,
-  rightLabel,
-  valueStep,
-  onChange,
-}: ReviewSpectrumRowProps) => {
+export const ReviewSpectrumRow = ({ spectrumId, leftLabel, rightLabel, valueStep, onChange }: Props) => {
   return (
     <Fragment>
       <span className="text-detail-xs text-text-subtle min-w-0 shrink-0 text-left leading-normal font-medium whitespace-nowrap">

@@ -4,10 +4,10 @@ import { fetchReceivedTagsByProject } from '../api/fetch-received-tags-by-projec
 import { fetchReceivedTags } from '../api/fetch-received-tags.api';
 import { tagKeys } from '../tag.query-key';
 
-type Params = {
+interface Params {
   userId: number;
   projectId?: number;
-};
+}
 
 export const useReceivedTags = ({ userId, projectId }: Params) =>
   useSuspenseQuery({

@@ -5,11 +5,11 @@ import { reviewKeys } from '@/features/review/api/query-keys';
 import { UserReviewContainerBoundary } from '@/features/review/components/user-review-container-boundary';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
-interface UserReviewStreamProps {
+interface Props {
   userId: number;
 }
 
-export const UserReviewStream = async ({ userId }: UserReviewStreamProps) => {
+export const UserReviewStream = async ({ userId }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
