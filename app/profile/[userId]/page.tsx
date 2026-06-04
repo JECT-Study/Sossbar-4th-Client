@@ -1,12 +1,16 @@
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
-import { fetchMyProfile } from '@/features/mypage/apis/fetch-my-profile.api';
-import { fetchProfileById } from '@/features/profile/api/fetch-profile-by-id';
+import { ProfileSectionStream } from '@/features/profile';
+import { ProfileSectionSkeleton } from '@/features/profile/components/profile-section-skeleton';
 import { buildProfileShareMetadata } from '@/features/profile/lib/build-profile-share-metadata';
-import { profileKeys } from '@/features/profile/query-keys';
+import { ProjectSectionStream } from '@/features/project/components/project-section-stream';
+import { ProjectSectionSkeleton } from '@/features/project/components/project-section.skeleton';
+import { UserReviewStream } from '@/features/review';
+import { UserReviewContainerSkeleton } from '@/features/review/components/user-review-container.skeleton';
+import { SoftSkillsCardSkeleton, SoftSkillsCardStream } from '@/features/soft-skills';
+import { TagCardSkeleton, TagCardStream } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
-import { getQueryClient } from '@/shared/lib/get-query-client';
 import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
 
 import type { Metadata } from 'next';
@@ -38,24 +42,35 @@ const Page = async ({ params }: ProfilePageProps) => {
     return notFound();
   }
 
-  const queryClient = getQueryClient();
-
-  await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: profileKeys.detail(profileUserId),
-      queryFn: () => fetchProfileById(profileUserId),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: profileKeys.my,
-      queryFn: () => fetchMyProfile(),
-    }),
-  ]);
-
   return (
     <PageContainer className="mb-20">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <ProfileDetailView userId={profileUserId} />
-      </HydrationBoundary>
+      <Suspense fallback={<ProfileSectionSkeleton />}>
+        <ProfileSectionStream userId={profileUserId} />
+      </Suspense>
+
+      <ProfileDetailView
+        userId={profileUserId}
+        allTabContent={
+          <>
+            <div className="flex gap-6">
+              <Suspense fallback={<TagCardSkeleton />}>
+                <TagCardStream userId={profileUserId} />
+              </Suspense>
+              <Suspense fallback={<SoftSkillsCardSkeleton />}>
+                <SoftSkillsCardStream userId={profileUserId} showDistribution />
+              </Suspense>
+            </div>
+            <Suspense fallback={<UserReviewContainerSkeleton />}>
+              <UserReviewStream userId={profileUserId} />
+            </Suspense>
+          </>
+        }
+        projectsTabContent={
+          <Suspense fallback={<ProjectSectionSkeleton />}>
+            <ProjectSectionStream userId={profileUserId} />
+          </Suspense>
+        }
+      />
     </PageContainer>
   );
 };
