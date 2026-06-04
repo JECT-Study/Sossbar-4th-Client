@@ -23,9 +23,6 @@ const AppShellInner = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Suspense fallback={null}>
-        <GoogleAnalyticsPageView />
-      </Suspense>
       <AuthBootstrap />
       <Suspense fallback={null}>
         <Header />
@@ -42,6 +39,7 @@ const AppShellInner = ({ children }: { children: ReactNode }) => {
 export const AppShell = ({ children }: { children: ReactNode }) => {
   return (
     <Suspense fallback={null}>
+      <GoogleAnalyticsPageView />
       <AppShellInner>{children}</AppShellInner>
     </Suspense>
   );
