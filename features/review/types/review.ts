@@ -1,5 +1,9 @@
 import type { Spectrum, SpectrumWithValue } from './spectrum';
-import type { Tag } from './tag';
+
+interface Tag {
+  tagId: number;
+  name: string;
+}
 
 export type Review = {
   reviewId: number;
