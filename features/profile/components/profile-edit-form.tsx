@@ -10,20 +10,23 @@ import { Button } from '@/shared/components/button';
 import { TextField } from '@/shared/components/text-field';
 import { TextareaField } from '@/shared/components/textarea-field';
 
-import type { Profile, UpdateProfilePayload } from '../types';
+import type { Profile, UpdateProfilePayload } from '../profile.types';
 
-import { PROFILE_BIO_MAX_LENGTH, PROFILE_IMAGE_ACCEPT, PROFILE_NICKNAME_MAX_LENGTH } from '../constants';
+import { PROFILE_BIO_MAX_LENGTH, PROFILE_NICKNAME_MAX_LENGTH } from '../profile.constants';
 import { ProfileAvatar } from './profile-avatar';
 import { useProfileEditForm } from '../hooks/use-profile-edit-form';
 
-type ProfileEditFormProps = {
+/** 프로필 이미지 file input accept 속성 */
+const PROFILE_IMAGE_ACCEPT = 'image/png,image/jpeg,image/webp';
+
+interface Props {
   profile: Profile;
   isSubmitting: boolean;
   onCancel: () => void;
   onSubmitProfile: (payload: UpdateProfilePayload) => Promise<void>;
-};
+}
 
-export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfile }: ProfileEditFormProps) => {
+export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfile }: Props) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { form, onSubmit, previewImageUrl, setProfileImage } = useProfileEditForm({ profile, onSubmitProfile });
   const {

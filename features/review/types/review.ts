@@ -1,7 +1,8 @@
-import type { Spectrum, SpectrumWithValue } from './spectrum';
-import type { Tag } from './tag';
+import type { Tag } from '@/features/tag';
 
-export type Review = {
+import type { Spectrum, SpectrumWithValue } from './spectrum';
+
+export interface Review {
   reviewId: number;
   projectName: string;
   host: string;
@@ -11,33 +12,37 @@ export type Review = {
   negativeFeedback?: string; // 본인 후기 조회 시에만 포함. 타인 조회 시 응답에서 제외.
   reviewerNickname: string;
   projectStatus?: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED'; // 팀 확정 여부 필터링용
-};
+}
 
-export type ReviewFormData = {
+export interface ReviewFormData {
   tags: Tag[];
   spectrums: Spectrum[];
-};
+}
 
-export type CreateReviewRequest = {
+export interface CreateReviewRequest {
   projectId: number;
   revieweeId: number;
   praise: string;
   improvement: string;
   tagIds: number[];
   spectrums: SpectrumWithValue[];
-};
+}
+
+export interface CreateReviewReviewReqDto {
+  projectId: number;
+  revieweeId: number;
+  positiveFeedback: string;
+  negativeFeedback?: string;
+  tagIds: number[];
+}
+
+export interface CreateReviewSpectrumReqDto {
+  spectrumAxisId: number;
+  spectrumStrength: number;
+}
 
 /** POST /api/v1/reviews 요청 본문 (백엔드 ReviewCreateReqDto) */
-export type CreateReviewApiBody = {
-  reviewReqDto: {
-    projectId: number;
-    revieweeId: number;
-    positiveFeedback: string;
-    negativeFeedback?: string;
-    tagIds: number[];
-  };
-  spectrumReqDtos: {
-    spectrumAxisId: number;
-    spectrumStrength: number;
-  }[];
-};
+export interface CreateReviewApiBody {
+  reviewReqDto: CreateReviewReviewReqDto;
+  spectrumReqDtos: CreateReviewSpectrumReqDto[];
+}

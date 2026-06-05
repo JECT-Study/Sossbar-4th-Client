@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
+import { ProfileSectionBoundary } from '@/features/profile';
 import { ProfileSectionSkeleton } from '@/features/profile/components/profile-section-skeleton';
 
 const ProfileDetailView = dynamic(
@@ -20,5 +21,10 @@ interface Props {
 }
 
 export const ProfileExamplesClient = ({ userId }: Props) => {
-  return <ProfileDetailView userId={userId} />;
+  return (
+    <>
+      <ProfileSectionBoundary userId={userId} />
+      <ProfileDetailView userId={userId} />
+    </>
+  );
 };

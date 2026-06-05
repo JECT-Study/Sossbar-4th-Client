@@ -8,14 +8,14 @@ export interface Profile {
   userType: string;
 }
 
-export type UpdateProfileInfo = {
+export interface UpdateProfileInfo {
   username: string;
   bio: string;
-};
+}
 
-export type UpdateProfilePayload = {
+export interface UpdateProfilePayload {
   info: UpdateProfileInfo;
   profileImage?: File | null;
-};
+}
 
 export type UpdateProfileResponse = Profile;

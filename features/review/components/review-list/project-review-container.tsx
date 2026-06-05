@@ -3,13 +3,13 @@
 import { ReviewListCard } from './review-list-card';
 import { useProjectReviews } from '../../api/queries';
 
-type ProjectReviewContainerProps = {
+interface Props {
   userId: number;
   projectId: number;
   isMyProfile: boolean;
-};
+}
 
-export const ProjectReviewContainer = ({ userId, projectId, isMyProfile }: ProjectReviewContainerProps) => {
+export const ProjectReviewContainer = ({ userId, projectId, isMyProfile }: Props) => {
   const { data: reviews = [], isError } = useProjectReviews(userId, projectId);
 
   if (isError) {

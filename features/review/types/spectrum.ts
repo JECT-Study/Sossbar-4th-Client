@@ -1,23 +1,10 @@
-export type Spectrum = {
+export interface Spectrum {
   spectrumId: number;
   leftLabel: string;
   rightLabel: string;
-};
+}
 
-export type SpectrumWithValue = {
+export interface SpectrumWithValue {
   spectrumId: number;
   value: number;
-};
-
-export type SpectrumAxisInfo = {
-  spectrumAxisId: number;
-  axisName: string;
-  averageStrength: number;
-  leftStrengthCount: number;
-  rightStrengthCount: number;
-};
-
-export type SpectrumInfo = {
-  totalCount: number;
-  spectrumInfoResDtos: SpectrumAxisInfo[];
-};
+}

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
-import type { UpdateProfilePayload } from '../types';
+import type { UpdateProfilePayload } from '../profile.types';
 
 import { useUpdateProfile } from './use-update-profile.mutation';
 

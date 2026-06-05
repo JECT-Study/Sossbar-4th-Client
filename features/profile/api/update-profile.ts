@@ -1,6 +1,6 @@
 import { apiRequest } from '@/shared/lib/api';
 
-import type { UpdateProfilePayload, UpdateProfileResponse } from '../types';
+import type { UpdateProfilePayload, UpdateProfileResponse } from '../profile.types';
 
 const createUpdateProfileFormData = ({ info, profileImage }: UpdateProfilePayload) => {
   const formData = new FormData();

@@ -1,23 +1,24 @@
+import type { Tag } from '@/features/tag';
+
 import type { ReviewFormData } from '../types/review';
 import type { Spectrum } from '../types/spectrum';
-import type { Tag } from '../types/tag';
 
 /** GET /api/v1/form-data — 백엔드 FormDataResDto */
-type FormDataTagApi = {
+interface FormDataTagApi {
   tagId: number;
   tagName: string;
-};
+}
 
-type FormDataSpectrumAxisApi = {
+interface FormDataSpectrumAxisApi {
   spectrumAxisId: number;
   leftLabel: string;
   rightLabel: string;
-};
+}
 
-export type ReviewFormDataApiResponse = {
+export interface ReviewFormDataApiResponse {
   tags: FormDataTagApi[];
   spectrumAxes: FormDataSpectrumAxisApi[];
-};
+}
 
 const mapTag = (tag: FormDataTagApi): Tag | null => {
   const name = tag.tagName.trim();

@@ -4,13 +4,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { useUserProjects } from '@/features/project';
-import type { UserProjectResponse } from '@/features/project';
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { EmptyState } from '@/shared/components/empty-state';
 import { ROUTES } from '@/shared/constants/routes';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
+
+import type { UserProjectResponse } from '../types';
+
+import { useUserProjects } from '../api/queries';
 
 const INITIAL_COUNT = 8;
 

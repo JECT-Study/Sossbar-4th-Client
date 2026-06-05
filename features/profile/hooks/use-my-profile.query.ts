@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAuthToken } from '@/shared/lib/auth-token';
 
 import { fetchMyProfile } from '../api/fetch-my-profile';
-import { profileKeys } from '../query-keys';
+import { profileKeys } from '../profile.query-keys';
 
 export const useMyProfile = () => {
   const hasAuthToken = getAuthToken() !== null;

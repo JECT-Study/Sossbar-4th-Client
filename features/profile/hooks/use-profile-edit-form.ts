@@ -4,19 +4,19 @@ import { useForm } from 'react-hook-form';
 
 import { ApiError } from '@/shared/lib/api';
 
-import type { Profile, UpdateProfilePayload } from '../types';
+import type { Profile, UpdateProfilePayload } from '../profile.types';
 import type { z } from 'zod';
 
-import { ProfileEditFormSchema } from '../schemas';
+import { ProfileEditFormSchema } from '../profile.schemas';
 
 export type ProfileEditFormData = z.infer<typeof ProfileEditFormSchema>;
 
-type UseProfileEditFormParams = {
+interface Params {
   profile: Profile;
   onSubmitProfile: (payload: UpdateProfilePayload) => Promise<void>;
-};
+}
 
-export const useProfileEditForm = ({ profile, onSubmitProfile }: UseProfileEditFormParams) => {
+export const useProfileEditForm = ({ profile, onSubmitProfile }: Params) => {
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
   const previewImageUrlRef = useRef<string | null>(null);
 
