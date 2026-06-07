@@ -1,9 +1,14 @@
 import type { ReactNode } from 'react';
 
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import localFont from 'next/font/local';
+import { cookies } from 'next/headers';
 
+import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
+import { profileKeys } from '@/features/profile/profile.query-keys';
 import { AppShell } from '@/shared/components/app-shell';
 import { GoogleAnalytics } from '@/shared/components/google-analytics';
+import { getQueryClient } from '@/shared/lib/get-query-client';
 import { MswProvider } from '@/shared/providers/msw-provider';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
@@ -40,23 +45,33 @@ const pretendard = localFont({
   display: 'swap',
 });
 
-const RootLayout = ({
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) => {
+  const queryClient = getQueryClient();
+  const cookieStore = await cookies();
+
+  await queryClient.prefetchQuery({
+    queryKey: profileKeys.my,
+    queryFn: () => fetchMyProfile({ headers: { Cookie: cookieStore.toString() } }),
+  });
+
   return (
     <html lang="ko" className={pretendard.variable}>
       <body className="bg-gray-0 flex min-h-screen flex-col text-gray-900 antialiased">
         <GoogleAnalytics />
         <QueryProvider>
-          {process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_MSW !== 'false' ? (
-            <MswProvider>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            {process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_MSW !== 'false' ? (
+              <MswProvider>
+                <AppShell>{children}</AppShell>
+              </MswProvider>
+            ) : (
               <AppShell>{children}</AppShell>
-            </MswProvider>
-          ) : (
-            <AppShell>{children}</AppShell>
-          )}
+            )}
+          </HydrationBoundary>
         </QueryProvider>
       </body>
     </html>
