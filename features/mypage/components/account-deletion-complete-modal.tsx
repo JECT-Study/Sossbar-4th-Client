@@ -1,13 +1,12 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Dialog } from 'radix-ui';
 
 import { Button } from '@/shared/components/button';
-import { clearAuthToken } from '@/shared/lib/auth-token';
 import { cn } from '@/shared/lib/cn';
-import { clearSessionUser } from '@/shared/lib/session-user';
 
 interface Props {
   open: boolean;
@@ -17,13 +16,13 @@ interface Props {
 
 export const AccountDeletionCompleteModal = ({ open, onOpenChange, onConfirm }: Props) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const handleOpenChange = (nextOpen: boolean) => {
     onOpenChange(nextOpen);
 
     if (!nextOpen) {
       onConfirm?.();
-      clearSessionUser();
-      clearAuthToken();
+      queryClient.clear();
       router.push('/');
     }
   };

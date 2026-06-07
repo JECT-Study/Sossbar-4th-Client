@@ -9,13 +9,11 @@ import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { Footer } from '@/shared/components/footer';
 import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-page-view';
 import { Header } from '@/shared/components/header/header';
-import { AuthBootstrap } from '@/shared/providers/auth-bootstrap';
 
 const AppShellInner = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const hideChrome = pathname?.startsWith('/signup') ?? false;
-  const isHome = pathname === '/' || pathname === '/login';
-  const footerVariant = isHome ? 'dark' : 'light';
+  const footerVariant = pathname === '/' ? 'dark' : 'light';
 
   if (hideChrome) {
     return children;
@@ -23,7 +21,6 @@ const AppShellInner = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <AuthBootstrap />
       <Suspense fallback={null}>
         <Header />
       </Suspense>

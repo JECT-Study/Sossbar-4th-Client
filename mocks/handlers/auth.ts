@@ -5,7 +5,6 @@ import { http, HttpResponse } from 'msw';
  *
  * - GET  /api/v1/login/kakao?code=…     카카오 로그인 (토큰)
  * - POST /api/v1/login/local            개발용 이메일 로그인 (토큰)
- * - POST /api/v1/login/test-account     개발용 테스트 계정 로그인 (토큰)
  * - POST /api/v1/login/reissue          리프레시 (실서버는 HttpOnly 쿠키 기준)
  * - DELETE /api/v1/login/:userId        회원 탈퇴 (204)
  */
@@ -13,7 +12,7 @@ const BASE = '/api/v1';
 
 const MOCK_USER_ID = 1;
 
-/** 개발용 테스트 계정 — 명세: 카카오 대신 이메일로 토큰 발급 검증용 */
+/** 개발용 이메일 로그인 — 명세: 카카오 대신 이메일로 토큰 발급 검증용 */
 const LOCAL_TEST_EMAIL = 'test@sossbar.dev';
 const LOCAL_TEST_PASSWORD = 'sossbar123!';
 
@@ -22,7 +21,6 @@ const jsonError = (status: number, message: string) => HttpResponse.json({ messa
 const withRefreshCookie = (body: Record<string, unknown>) =>
   HttpResponse.json(body, {
     headers: {
-      // 실제 BE와 같이 리프레시는 쿠키로 줄 수 있음 (브라우저/요청 설정에 따라 동작 상이)
       'Set-Cookie': `refreshToken=mock-refresh-token-${MOCK_USER_ID}; Path=/; SameSite=Lax`,
     },
   });
@@ -40,18 +38,6 @@ export const authHandlers = [
       email: 'kakao-user@sossbar.mock',
     });
   }),
-
-  http.post(`${BASE}/login/test-account`, () =>
-    HttpResponse.json({
-      status: 200,
-      code: 'COMMON-200',
-      message: '성공적으로 처리했습니다.',
-      data: {
-        accessToken: 'mock-test-access-token',
-        userId: MOCK_USER_ID,
-      },
-    }),
-  ),
 
   http.post(`${BASE}/login/local`, async ({ request }) => {
     let body: { email?: string; password?: string };

@@ -1,13 +1,13 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Avatar } from 'radix-ui';
 
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { ROUTES } from '@/shared/constants/routes';
-import { clearAuthToken } from '@/shared/lib/auth-token';
 import { cn } from '@/shared/lib/cn';
-import { clearSessionUser, useSessionUser } from '@/shared/lib/session-user';
 
 import { KakaoLoginButton } from '../button/kakao-login-button';
 import { Dropdown } from '../dropdown';
@@ -19,14 +19,15 @@ const dropdownItemClassName =
 
 export const HeaderAuthArea = () => {
   const router = useRouter();
-  const sessionUser = useSessionUser();
+  const queryClient = useQueryClient();
+  const { data: profile } = useMyProfile();
 
-  if (!sessionUser) {
+  if (!profile) {
     return <KakaoLoginButton />;
   }
 
-  const avatarSrc = sessionUser.profileImageUrl || DEFAULT_AVATAR_SRC;
-  const name = sessionUser.nickname;
+  const avatarSrc = profile.profileImageUrl || DEFAULT_AVATAR_SRC;
+  const name = profile.username ?? profile.email;
 
   return (
     <Dropdown.Root>
@@ -36,7 +37,7 @@ export const HeaderAuthArea = () => {
           'flex min-h-10 max-w-[220px] items-center gap-[8px] rounded-lg px-1 outline-none',
           'hover:bg-surface-gray-subtler focus-visible:ring-border-primary focus-visible:ring-2',
         )}
-        aria-label={`계정 메뉴, ${sessionUser.nickname}`}
+        aria-label={`계정 메뉴, ${name}`}
       >
         <Avatar.Root className="bg-surface-gray-subtle relative h-[30px] w-[30px] shrink-0 overflow-hidden rounded-full">
           <Avatar.Image src={avatarSrc} alt={`${name}의 프로필 이미지`} />
@@ -57,9 +58,9 @@ export const HeaderAuthArea = () => {
         </Dropdown.Item>
         <Dropdown.Item
           className={dropdownItemClassName}
-          onSelect={() => {
-            clearAuthToken();
-            clearSessionUser();
+          onSelect={async () => {
+            await fetch('/api/logout', { method: 'POST' });
+            queryClient.clear();
             router.push(ROUTES.HOME);
           }}
         >

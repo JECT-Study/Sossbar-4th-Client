@@ -1,19 +1,16 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { setSessionUser } from '@/shared/lib/session-user';
+import { profileKeys } from '@/features/profile/profile.query-keys';
 
 import { createSignup } from '../create-signup.api';
 
 export const useSignup = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: createSignup,
-    onSuccess: (user) => {
-      setSessionUser({
-        userId: user.userId,
-        nickname: user.nickname ?? user.username,
-        email: user.email,
-        profileImageUrl: user.profileImageUrl,
-      });
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: profileKeys.my });
     },
   });
 };

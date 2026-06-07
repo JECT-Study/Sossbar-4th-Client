@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useSessionUser } from '@/shared/lib/session-user';
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 
 import { useQueryParam } from './use-query-param';
 
@@ -8,16 +8,16 @@ const LOGIN_MODAL_VALUE = 'login';
 
 export const useLoginModal = () => {
   const { queryParamValue, updateQueryParam, removeQueryParam } = useQueryParam('modal');
-  const sessionUser = useSessionUser();
+  const { data: profile } = useMyProfile();
 
   const hasLoginParam = queryParamValue === LOGIN_MODAL_VALUE;
-  const isOpen = hasLoginParam && !sessionUser;
+  const isOpen = hasLoginParam && !profile;
 
   useEffect(() => {
-    if (hasLoginParam && sessionUser) {
+    if (hasLoginParam && profile) {
       removeQueryParam();
     }
-  }, [hasLoginParam, sessionUser, removeQueryParam]);
+  }, [hasLoginParam, profile, removeQueryParam]);
 
   const onOpenChange = (nextOpen: boolean) => {
     if (nextOpen) {
