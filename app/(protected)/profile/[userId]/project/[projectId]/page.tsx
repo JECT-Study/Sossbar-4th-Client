@@ -2,8 +2,8 @@
 
 import { use } from 'react';
 
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { ProjectPageContent } from '@/features/project';
-import { useSessionUser } from '@/shared/lib/session-user';
 
 type ProjectPageProps = {
   params: Promise<{
@@ -16,8 +16,8 @@ const ProjectPage = ({ params }: ProjectPageProps) => {
   const { userId, projectId } = use(params);
   const profileUserId = Number(userId);
   const projectIdNum = Number(projectId);
-  const sessionUser = useSessionUser();
-  const isMyProfile = profileUserId === sessionUser?.userId;
+  const { data: profile } = useMyProfile();
+  const isMyProfile = profileUserId === profile?.userId;
 
   return <ProjectPageContent userId={profileUserId} projectId={projectIdNum} isMyProfile={isMyProfile} />;
 };
