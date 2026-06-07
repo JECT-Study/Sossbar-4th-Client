@@ -13,8 +13,7 @@ import { Header } from '@/shared/components/header/header';
 const AppShellInner = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const hideChrome = pathname?.startsWith('/signup') ?? false;
-  const isHome = pathname === '/' || pathname === '/login';
-  const footerVariant = isHome ? 'dark' : 'light';
+  const footerVariant = pathname === '/' ? 'dark' : 'light';
 
   if (hideChrome) {
     return children;
