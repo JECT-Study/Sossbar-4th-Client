@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { AuthGateLink } from '@/shared/components/auth-gate-link';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
-import { useSessionUser } from '@/shared/lib/session-user';
 
 import { Button } from '../button/button';
 
@@ -19,8 +19,8 @@ const navLinks = (userId: number | null) =>
 
 export const HeaderMainNav = () => {
   const pathname = usePathname();
-  const sessionUser = useSessionUser();
-  const userId = sessionUser?.userId ?? null;
+  const { data: profile } = useMyProfile();
+  const userId = profile?.userId ?? null;
 
   return (
     <nav aria-label="주요 메뉴">

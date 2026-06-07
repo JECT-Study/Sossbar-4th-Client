@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { saveLoginReturnPath } from '@/features/auth/lib/login-return-path';
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { useInviteProjectMember } from '@/features/project/api/mutations';
 import { useProject } from '@/features/project/api/queries';
 import { ProjectInviteAcceptModal } from '@/features/project/components/project-invite-accept-modal';
@@ -12,7 +13,6 @@ import { PROJECT_INVITE_QUERY_KEY } from '@/features/project/lib/project-invite-
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { useLoginModal } from '@/shared/hooks/use-login-modal';
 import { ApiError } from '@/shared/lib/api';
-import { useSessionUser } from '@/shared/lib/session-user';
 
 const removeInviteParamFromUrl = (pathname: string, searchParams: URLSearchParams): string => {
   const next = new URLSearchParams(searchParams.toString());
@@ -25,14 +25,14 @@ export const ProjectInviteHandler = () => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const sessionUser = useSessionUser();
+  const { data: profile } = useMyProfile();
   const { openLoginModal } = useLoginModal();
 
   const projectId = useMemo(() => parseProjectInviteId(searchParams.get(PROJECT_INVITE_QUERY_KEY)), [searchParams]);
 
   const [joinError, setJoinError] = useState<string | null>(null);
 
-  const hasSession = sessionUser != null && sessionUser.userId > 0;
+  const hasSession = profile != null;
 
   const clearInviteParam = useCallback(() => {
     if (searchParams.get(PROJECT_INVITE_QUERY_KEY) == null) {
@@ -46,11 +46,11 @@ export const ProjectInviteHandler = () => {
   const { mutateAsync: joinProject, isPending: isJoining } = useInviteProjectMember(projectId ?? 0);
 
   const isAlreadyMember = useMemo(() => {
-    if (!project || !sessionUser) {
+    if (!project || !profile) {
       return false;
     }
-    return project.members.some((member) => member.userId === sessionUser.userId);
-  }, [project, sessionUser]);
+    return project.members.some((member) => member.userId === profile.userId);
+  }, [project, profile]);
 
   useEffect(() => {
     const raw = searchParams.get(PROJECT_INVITE_QUERY_KEY);

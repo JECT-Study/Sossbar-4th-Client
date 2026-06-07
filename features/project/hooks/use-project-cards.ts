@@ -2,10 +2,10 @@
 
 import { useMemo } from 'react';
 
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { useProjects } from '@/features/project/api/queries';
 import { mapMyProjectsToCardItems } from '@/features/project/lib/map-my-project-to-card';
 import type { ProjectCardItem } from '@/features/project/types';
-import { useSessionUser } from '@/shared/lib/session-user';
 
 type UseProjectCardsResult = {
   projects: ProjectCardItem[];
@@ -16,19 +16,17 @@ type UseProjectCardsResult = {
   refetch: ReturnType<typeof useProjects>['refetch'];
 };
 
-/** 2단계 `/projects` 화면용: 목록 조회 + 카드 UI 매핑 */
 export const useProjectCards = (): UseProjectCardsResult => {
-  const sessionUser = useSessionUser();
-  const sessionUserId = sessionUser?.userId;
-  const hasSession = sessionUserId != null && sessionUserId > 0;
+  const { data: profile } = useMyProfile();
+  const hasSession = profile != null;
   const query = useProjects(hasSession);
 
   const projects = useMemo(() => {
-    if (!query.data || !sessionUser) {
+    if (!query.data || !profile) {
       return [];
     }
-    return mapMyProjectsToCardItems(query.data, sessionUser);
-  }, [query.data, sessionUser]);
+    return mapMyProjectsToCardItems(query.data, { userId: profile.userId, nickname: profile.username ?? '' });
+  }, [query.data, profile]);
 
   return {
     projects,
