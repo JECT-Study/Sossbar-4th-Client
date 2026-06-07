@@ -1,12 +1,12 @@
 export { ReviewSubmitDialog } from './components/review-submit-dialog';
 export { ReviewWriteContent } from './components/review-write-content';
 export { useCreateReview } from './api/mutations';
+export { fetchReviewFormData } from './api/fetchers';
 export { reviewKeys } from './api/query-keys';
 export { useReviewFormData, useUserReviews, useProjectReviews } from './api/queries';
 export { ProjectReviewContainer } from './components/review-list/project-review-container';
 export { UserReviewContainer } from './components/review-list/user-review-container';
 export { UserReviewContainerBoundary } from './components/user-review-container-boundary';
-export { ReviewFormDataStream } from './components/review-form-data-stream';
 export { UserReviewStream } from './components/user-review-stream';
 export type { CreateReviewRequest, Review, ReviewFormData } from './types/review';
 export type { Spectrum, SpectrumWithValue } from './types/spectrum';
