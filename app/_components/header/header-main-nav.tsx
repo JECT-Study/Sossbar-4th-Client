@@ -5,10 +5,9 @@ import { usePathname } from 'next/navigation';
 
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { AuthGateLink } from '@/shared/components/auth-gate-link';
+import { Button } from '@/shared/components/button';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
-
-import { Button } from '../button/button';
 
 const navLinks = (userId: number | null) =>
   [
