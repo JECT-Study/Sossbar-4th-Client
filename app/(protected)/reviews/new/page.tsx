@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { ReviewWriteContent } from '@/features/review';
+import { ReviewFormDataStream } from '@/features/review';
 
 import type { Metadata } from 'next';
 
@@ -29,7 +29,7 @@ const ReviewNewPage = () => {
   return (
     <section className="min-h-0 flex-1" aria-label="후기 작성">
       <Suspense fallback={<ReviewNewFallback />}>
-        <ReviewWriteContent />
+        <ReviewFormDataStream />
       </Suspense>
     </section>
   );
