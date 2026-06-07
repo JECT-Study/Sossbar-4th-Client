@@ -6,13 +6,13 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { forwardRef } from 'react';
 
-import { useSessionUser } from '@/shared/lib/session-user';
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 
 type AuthGateLinkProps = ComponentProps<typeof Link>;
 
 export const AuthGateLink = forwardRef<HTMLAnchorElement | HTMLButtonElement, AuthGateLinkProps>(
   ({ href, onClick, children, className, ...props }, ref) => {
-    const sessionUser = useSessionUser();
+    const { data: profile } = useMyProfile();
     const pathname = usePathname();
     const router = useRouter();
 
@@ -22,7 +22,7 @@ export const AuthGateLink = forwardRef<HTMLAnchorElement | HTMLButtonElement, Au
       router.push(`${pathname}?${params.toString()}`, { scroll: false });
     };
 
-    if (sessionUser) {
+    if (profile) {
       return (
         <Link ref={ref as Ref<HTMLAnchorElement>} href={href} onClick={onClick} className={className} {...props}>
           {children}

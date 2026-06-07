@@ -7,7 +7,7 @@ import { ProfileSectionSkeleton } from '@/features/profile/components/profile-se
 
 const ProfileDetailView = dynamic(
   () =>
-    import('../profile/[userId]/_components/profile-detail-view').then((mod) => ({
+    import('@/app/(protected)/profile/[userId]/_components/profile-detail-view').then((mod) => ({
       default: mod.ProfileDetailView,
     })),
   {

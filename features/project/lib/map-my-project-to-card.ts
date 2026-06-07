@@ -5,9 +5,7 @@ import type {
   ProjectMemberResponse,
   ProjectMemberReviewStatus,
 } from '@/features/project/types';
-import type { SessionUser } from '@/shared/lib/session-user';
-
-type SessionInfo = Pick<SessionUser, 'userId' | 'nickname'>;
+type SessionInfo = { userId: number; nickname: string };
 
 const toReviewStatus = (member: ProjectMemberResponse, sessionUserId: number): ProjectMemberReviewStatus => {
   if (member.userId === sessionUserId) {
