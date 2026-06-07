@@ -4,7 +4,11 @@ import { ApiError, type ApiErrorData } from './error';
 
 export type ApiRequestOptions = Omit<RequestInit, 'body'> & { body?: unknown };
 
-const API_BASE = '/api/v1';
+// 서버에서는 Next.js 프록시 rewrite를 거치지 않으므로 백엔드로 직접 절대 URL 사용
+const API_BASE =
+  typeof window === 'undefined'
+    ? `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://api.sossbar.com'}/api/v1`
+    : '/api/v1';
 
 const tryReissueToken = async (): Promise<boolean> => {
   try {
