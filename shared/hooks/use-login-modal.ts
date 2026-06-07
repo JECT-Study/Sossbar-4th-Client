@@ -8,16 +8,16 @@ const LOGIN_MODAL_VALUE = 'login';
 
 export const useLoginModal = () => {
   const { queryParamValue, updateQueryParam, removeQueryParam } = useQueryParam('modal');
-  const { data: profile } = useMyProfile();
+  const { data: profile, isPending } = useMyProfile();
 
   const hasLoginParam = queryParamValue === LOGIN_MODAL_VALUE;
-  const isOpen = hasLoginParam && !profile;
+  const isOpen = hasLoginParam && !isPending && !profile;
 
   useEffect(() => {
-    if (hasLoginParam && profile) {
+    if (hasLoginParam && !isPending && profile) {
       removeQueryParam();
     }
-  }, [hasLoginParam, profile, removeQueryParam]);
+  }, [hasLoginParam, isPending, profile, removeQueryParam]);
 
   const onOpenChange = (nextOpen: boolean) => {
     if (nextOpen) {
