@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import type { NextRequest } from 'next/server';
 
-const PROTECTED_PREFIXES = ['/mypage', '/personal', '/projects', '/reviews', '/profile'];
+const PROTECTED_PREFIXES = ['/mypage', '/personal', '/projects', '/reviews', '/profile', '/signup'];
 
 export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
