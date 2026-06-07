@@ -1,9 +1,4 @@
-'use client';
-
-import { use } from 'react';
-
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
-import { ProjectPageContent } from '@/features/project';
+import { ProjectDetailStream } from '@/features/project/components/project-detail-stream';
 
 type ProjectPageProps = {
   params: Promise<{
@@ -12,14 +7,10 @@ type ProjectPageProps = {
   }>;
 };
 
-const ProjectPage = ({ params }: ProjectPageProps) => {
-  const { userId, projectId } = use(params);
-  const profileUserId = Number(userId);
-  const projectIdNum = Number(projectId);
-  const { data: profile } = useMyProfile();
-  const isMyProfile = profileUserId === profile?.userId;
+const ProjectPage = async ({ params }: ProjectPageProps) => {
+  const { userId, projectId } = await params;
 
-  return <ProjectPageContent userId={profileUserId} projectId={projectIdNum} isMyProfile={isMyProfile} />;
+  return <ProjectDetailStream userId={Number(userId)} projectId={Number(projectId)} />;
 };
 
 export default ProjectPage;

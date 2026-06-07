@@ -14,6 +14,8 @@ export { useProject, useProjects, useUserProjects } from './api/queries';
 export { projectKeys } from './api/query-keys';
 export { ProjectPageContent } from './components/project-page-content';
 export { ProjectSection } from './components/project-section';
+export { ProjectDetailStream } from './components/project-detail-stream';
+export { ProjectsStream } from './components/projects-stream';
 export { ProjectSectionStream } from './components/project-section-stream';
 export { ProjectSectionSkeleton } from './components/project-section.skeleton';
 export { useProjectCards } from './hooks/use-project-cards';

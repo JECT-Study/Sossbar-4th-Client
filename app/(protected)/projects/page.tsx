@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import { ProjectsPageContent } from '@/features/project/components/projects-page-content';
+import { ProjectsStream } from '@/features/project/components/projects-stream';
 
 const ProjectsPageFallback = () => (
   <div className="flex min-h-[240px] items-center justify-center">
@@ -10,7 +10,7 @@ const ProjectsPageFallback = () => (
 
 const ProjectsPage = () => (
   <Suspense fallback={<ProjectsPageFallback />}>
-    <ProjectsPageContent />
+    <ProjectsStream />
   </Suspense>
 );
 
