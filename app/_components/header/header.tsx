@@ -10,6 +10,10 @@ import { getQueryClient } from '@/shared/lib/get-query-client';
 import { HeaderAuthArea } from './header-auth-area';
 import { HeaderMainNav } from './header-main-nav';
 
+/**
+ * 헤더 (Server Component).
+ * 로그인 상태에 따라 헤더 영역을 동적으로 렌더링한다.
+ */
 export const Header = async () => {
   const queryClient = getQueryClient();
   const cookieStore = await cookies();
