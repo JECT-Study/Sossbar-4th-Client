@@ -6,11 +6,10 @@ import { useRouter } from 'next/navigation';
 import { Avatar } from 'radix-ui';
 
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
+import { Dropdown } from '@/shared/components/dropdown';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
-
-import { KakaoLoginButton } from '../button/kakao-login-button';
-import { Dropdown } from '../dropdown';
 
 const DEFAULT_AVATAR_SRC = '/sample_user.svg';
 
