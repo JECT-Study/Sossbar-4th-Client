@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 
-import { ProjectStatusAlert } from '@/features/project/components/project-status-alert';
+import { ProjectStatusAlert } from '@/features/project';
 import { CopyIcon, SettingIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';

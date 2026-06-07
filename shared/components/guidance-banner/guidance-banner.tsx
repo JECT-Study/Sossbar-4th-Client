@@ -48,7 +48,11 @@ export const GuidanceBanner = ({
   action,
   ...restProps
 }: GuidanceBannerProps) => (
-  <div role="status" className={cn(guidanceBannerVariants({ variant }), className)} {...restProps}>
+  <div
+    role={variant === 'error' ? 'alert' : 'status'}
+    className={cn(guidanceBannerVariants({ variant }), className)}
+    {...restProps}
+  >
     {iconByVariant[variant ?? 'info']}
     <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
       <span className="leading-normal">{children}</span>
