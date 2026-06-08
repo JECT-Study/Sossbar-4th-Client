@@ -19,7 +19,7 @@ export const FileInput = ({
   value = null,
   onChange,
   disabled,
-  label = '이미지 업로드하기',
+  label = '파일 업로드하기',
   ...props
 }: FileInputProps) => {
   const { inputRef, inputId, openPicker, handleFileChange } = useFileInput({ disabled, onChange });
