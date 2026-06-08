@@ -1,6 +1,7 @@
 export { ReviewSubmitDialog } from './components/review-submit-dialog';
 export { ReviewWriteContent } from './components/review-write-content';
 export { useCreateReview } from './api/mutations';
+export { fetchReviewFormData } from './api/fetchers';
 export { reviewKeys } from './api/query-keys';
 export { useReviewFormData, useUserReviews, useProjectReviews } from './api/queries';
 export { ProjectReviewContainer } from './components/review-list/project-review-container';
