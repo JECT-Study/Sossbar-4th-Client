@@ -3,6 +3,7 @@ export { default as AiIcon } from './ai.svg';
 export { default as ArrowDownIcon } from './arrow-down.svg';
 export { default as ArrowLeftIcon } from './arrow-left.svg';
 export { default as ArrowRightIcon } from './arrow-right.svg';
+export { default as BellFilledIcon } from './bell-filled.svg';
 export { default as CameraIcon } from './camera.svg';
 export { default as CheckFilledIcon } from './check-filled.svg';
 export { default as CheckIcon } from './check.svg';
