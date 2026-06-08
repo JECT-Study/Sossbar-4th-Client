@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
 import { profileKeys } from '@/features/profile/profile.query-keys';
+import type { Profile } from '@/features/profile/profile.types';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import { HeaderAuthArea } from './header-auth-area';
@@ -22,6 +23,7 @@ export const Header = async () => {
     queryKey: profileKeys.my,
     queryFn: () => fetchMyProfile({ headers: { Cookie: cookieStore.toString() } }),
   });
+  const profile = queryClient.getQueryData<Profile>(profileKeys.my) ?? null;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
@@ -40,7 +42,7 @@ export const Header = async () => {
             </Link>
             <HeaderMainNav />
           </div>
-          <HeaderAuthArea />
+          <HeaderAuthArea initialProfile={profile} />
         </div>
       </header>
     </HydrationBoundary>
