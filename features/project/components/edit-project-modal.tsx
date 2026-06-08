@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog } from 'radix-ui';
-import { useId, useState } from 'react';
+import { useState } from 'react';
 
 import { useUpdateProject } from '@/features/project/api/mutations';
 import { Button } from '@/shared/components/button';
@@ -29,8 +29,6 @@ export const EditProjectModal = ({
   defaultHost,
   className,
 }: EditProjectModalProps) => {
-  const headingId = useId();
-  const descriptionId = useId();
   const [projectName, setProjectName] = useState(defaultProjectName);
   const [host, setHost] = useState(defaultHost);
   const [image, setImage] = useState<File | null>(null);
@@ -73,18 +71,14 @@ export const EditProjectModal = ({
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
         <Dialog.Content
-          aria-labelledby={headingId}
-          aria-describedby={descriptionId}
           className={cn(
             'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100vh-48px)] w-[min(592px,calc(100vw-32px))] -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-y-auto rounded-xl border p-10 shadow-xl',
             className,
           )}
         >
           <div className="flex flex-col gap-2 px-4">
-            <Dialog.Title id={headingId} className="text-heading-base text-text-basic font-bold">
-              프로젝트 수정
-            </Dialog.Title>
-            <Dialog.Description id={descriptionId} className="text-body-base text-text-subtle leading-normal">
+            <Dialog.Title className="text-heading-base text-text-basic font-bold">프로젝트 수정</Dialog.Title>
+            <Dialog.Description className="text-body-base text-text-subtle leading-normal">
               프로젝트명과 주최사를 수정할 수 있습니다. 이미지를 새로 올리면 대표 이미지가 바뀝니다.
             </Dialog.Description>
           </div>

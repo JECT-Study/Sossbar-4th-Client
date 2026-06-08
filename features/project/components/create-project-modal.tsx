@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog } from 'radix-ui';
-import { useId, useState } from 'react';
+import { useState } from 'react';
 
 import { useCreateProject } from '@/features/project/api/mutations';
 import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
@@ -20,8 +20,6 @@ export type CreateProjectModalProps = {
 };
 
 export const CreateProjectModal = ({ open, onOpenChange, className }: CreateProjectModalProps) => {
-  const headingId = useId();
-  const descriptionId = useId();
   const [projectName, setProjectName] = useState('');
   const [host, setHost] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -94,8 +92,6 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: CreateProj
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
         <Dialog.Content
-          aria-labelledby={headingId}
-          aria-describedby={descriptionId}
           className={cn(
             'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100vh-48px)] w-[min(592px,calc(100vw-32px))] -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-y-auto rounded-xl border p-10 shadow-xl',
             className,
@@ -104,10 +100,10 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: CreateProj
           {createdProjectId !== null ? (
             <>
               <div className="flex flex-col gap-2 px-4">
-                <Dialog.Title id={headingId} className="text-heading-base text-text-basic font-bold">
+                <Dialog.Title className="text-heading-base text-text-basic font-bold">
                   프로젝트가 생성되었습니다!
                 </Dialog.Title>
-                <Dialog.Description id={descriptionId} className="text-body-base text-text-subtle leading-normal">
+                <Dialog.Description className="text-body-base text-text-subtle leading-normal">
                   아래 초대 링크를 복사해 팀원들에게 공유하세요.
                 </Dialog.Description>
               </div>
@@ -130,10 +126,8 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: CreateProj
           ) : (
             <>
               <div className="flex flex-col gap-2 px-4">
-                <Dialog.Title id={headingId} className="text-heading-base text-text-basic font-bold">
-                  새 프로젝트 생성
-                </Dialog.Title>
-                <Dialog.Description id={descriptionId} className="text-body-base text-text-subtle leading-normal">
+                <Dialog.Title className="text-heading-base text-text-basic font-bold">새 프로젝트 생성</Dialog.Title>
+                <Dialog.Description className="text-body-base text-text-subtle leading-normal">
                   <span className="block">프로젝트 정보를 입력하고 팀원들을 초대하세요.</span>
                   <span className="block">생성된 프로젝트는 내 페이지에 공개됩니다.</span>
                 </Dialog.Description>
