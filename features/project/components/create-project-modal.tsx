@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useCreateProject } from '@/features/project/hooks/use-create-project.mutation';
 import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
 import { Button } from '@/shared/components/button';
-import { FileInput } from '@/shared/components/file-input';
+import { ImageFileInput } from '@/shared/components/file-input';
 import { Label } from '@/shared/components/label';
 import { TextField } from '@/shared/components/text-field';
 import { cn } from '@/shared/lib/cn';
@@ -158,7 +158,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                   <p className="text-detail-sm text-text-subtle">
                     * JPG, JPEG, PNG 형식의 이미지를 첨부할 수 있습니다.
                   </p>
-                  <FileInput
+                  <ImageFileInput
                     value={image}
                     onChange={setImage}
                     label="이미지 업로드하기"
