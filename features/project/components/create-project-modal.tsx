@@ -3,7 +3,7 @@
 import { Dialog } from 'radix-ui';
 import { useState } from 'react';
 
-import { useCreateProject } from '@/features/project/api/mutations';
+import { useCreateProject } from '@/features/project/hooks/use-create-project';
 import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
 import { Button } from '@/shared/components/button';
 import { FileInput } from '@/shared/components/file-input';
