@@ -1,29 +1,17 @@
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { HydrationBoundary } from '@tanstack/react-query';
 
-import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
-import { profileKeys } from '@/features/profile/profile.query-keys';
-import { getQueryClient } from '@/shared/lib/get-query-client';
+import type { DehydratedState } from '@tanstack/react-query';
 
 import { ProjectPageClientWrapper } from './project-page-client-wrapper';
-import { fetchProject } from '../api/fetchers';
-import { projectKeys } from '../api/query-keys';
 
-type Props = {
+interface Props {
   userId: number;
   projectId: number;
-};
+  state: DehydratedState;
+}
 
-export const ProjectDetailStream = async ({ userId, projectId }: Props) => {
-  const queryClient = getQueryClient();
-
-  await Promise.all([
-    queryClient.prefetchQuery({ queryKey: projectKeys.detail(projectId), queryFn: () => fetchProject(projectId) }),
-    queryClient.prefetchQuery({ queryKey: profileKeys.my, queryFn: fetchMyProfile }),
-  ]);
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProjectPageClientWrapper userId={userId} projectId={projectId} />
-    </HydrationBoundary>
-  );
-};
+export const ProjectDetailStream = ({ userId, projectId, state }: Props) => (
+  <HydrationBoundary state={state}>
+    <ProjectPageClientWrapper userId={userId} projectId={projectId} />
+  </HydrationBoundary>
+);
