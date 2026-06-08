@@ -15,8 +15,8 @@ export { ProjectSection } from './components/project-section';
 export { ProjectSectionStream } from './components/project-section-stream';
 export { ProjectSectionSkeleton } from './components/project-section.skeleton';
 export { useProjectCards } from './hooks/use-project-cards';
-export { useCreateProject } from './hooks/use-create-project';
-export { useUpdateProject } from './hooks/use-update-project';
+export { useCreateProject } from './hooks/use-create-project.mutation';
+export { useUpdateProject } from './hooks/use-update-project.mutation';
 export { mapMyProjectToCardItem, mapMyProjectsToCardItems } from './lib/map-my-project-to-card';
 export type {
   CreateProjectPayload,
