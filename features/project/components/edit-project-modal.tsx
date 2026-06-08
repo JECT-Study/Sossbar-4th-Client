@@ -12,14 +12,14 @@ import { cn } from '@/shared/lib/cn';
 
 const MAX_FIELD_LENGTH = 20;
 
-export type EditProjectModalProps = {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   projectId: number;
   defaultProjectName: string;
   defaultHost: string;
   className?: string;
-};
+}
 
 export const EditProjectModal = ({
   open,
@@ -28,7 +28,7 @@ export const EditProjectModal = ({
   defaultProjectName,
   defaultHost,
   className,
-}: EditProjectModalProps) => {
+}: Props) => {
   const [projectName, setProjectName] = useState(defaultProjectName);
   const [host, setHost] = useState(defaultHost);
   const [image, setImage] = useState<File | null>(null);

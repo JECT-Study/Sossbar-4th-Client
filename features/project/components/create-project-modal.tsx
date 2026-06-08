@@ -13,13 +13,13 @@ import { cn } from '@/shared/lib/cn';
 
 const MAX_FIELD_LENGTH = 20;
 
-export type CreateProjectModalProps = {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   className?: string;
-};
+}
 
-export const CreateProjectModal = ({ open, onOpenChange, className }: CreateProjectModalProps) => {
+export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => {
   const [projectName, setProjectName] = useState('');
   const [host, setHost] = useState('');
   const [image, setImage] = useState<File | null>(null);
