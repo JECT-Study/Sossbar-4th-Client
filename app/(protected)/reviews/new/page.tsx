@@ -1,6 +1,8 @@
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { ReviewWriteContent } from '@/features/review';
+import { fetchReviewFormData, ReviewWriteContent, reviewKeys } from '@/features/review';
+import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import type { Metadata } from 'next';
 
@@ -25,12 +27,21 @@ const ReviewNewFallback = () => (
   </div>
 );
 
-const ReviewNewPage = () => {
+const ReviewNewPage = async () => {
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: reviewKeys.formData(),
+    queryFn: fetchReviewFormData,
+  });
+
   return (
     <section className="min-h-0 flex-1" aria-label="후기 작성">
-      <Suspense fallback={<ReviewNewFallback />}>
-        <ReviewWriteContent />
-      </Suspense>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense fallback={<ReviewNewFallback />}>
+          <ReviewWriteContent />
+        </Suspense>
+      </HydrationBoundary>
     </section>
   );
 };
