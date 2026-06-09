@@ -5,7 +5,7 @@ import { useId, useState } from 'react';
 
 import { useUpdateProject } from '@/features/project/api/mutations';
 import { Button } from '@/shared/components/button';
-import { FileInput } from '@/shared/components/file-input';
+import { ImageFileInput } from '@/shared/components/file-input';
 import { Label } from '@/shared/components/label';
 import { TextField } from '@/shared/components/text-field';
 import { cn } from '@/shared/lib/cn';
@@ -114,7 +114,7 @@ export const EditProjectModal = ({
               <p className="text-detail-sm text-text-subtle">
                 * JPG, JPEG, PNG 형식. 비워 두면 기존 이미지를 유지합니다.
               </p>
-              <FileInput
+              <ImageFileInput
                 value={image}
                 onChange={setImage}
                 label="이미지 업로드하기"

@@ -26,13 +26,13 @@ export const ProjectInviteHandler = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: profile } = useMyProfile();
-  const { openLoginModal } = useLoginModal();
 
   const projectId = useMemo(() => parseProjectInviteId(searchParams.get(PROJECT_INVITE_QUERY_KEY)), [searchParams]);
 
   const [joinError, setJoinError] = useState<string | null>(null);
 
   const hasSession = profile != null;
+  const { openLoginModal } = useLoginModal({ isAuthenticated: hasSession });
 
   const clearInviteParam = useCallback(() => {
     if (searchParams.get(PROJECT_INVITE_QUERY_KEY) == null) {
