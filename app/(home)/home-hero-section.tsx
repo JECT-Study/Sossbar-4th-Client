@@ -4,6 +4,8 @@ import { AuthGateLink } from '@/shared/components/auth-gate-link';
 import { Button } from '@/shared/components/button/button';
 import { PageContainer } from '@/shared/components/page-container';
 
+import { HomeProfileButton } from './home-profile-button';
+
 export const HomeHeroSection = () => {
   return (
     <PageContainer className="flex justify-center pt-40 pb-64">
@@ -23,9 +25,7 @@ export const HomeHeroSection = () => {
           <Button asChild variant="primary" size="large">
             <AuthGateLink href="/projects">프로젝트 시작하기</AuthGateLink>
           </Button>
-          <Button asChild variant="tertiary" size="large">
-            <AuthGateLink href="/mypage">내 프로필 보기</AuthGateLink>
-          </Button>
+          <HomeProfileButton />
         </div>
       </div>
 
