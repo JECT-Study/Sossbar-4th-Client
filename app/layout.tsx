@@ -2,12 +2,12 @@ import type { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 
-import { AppShell } from '@/shared/components/app-shell';
 import { GoogleAnalytics } from '@/shared/components/google-analytics';
-import { MswProvider } from '@/shared/providers/msw-provider';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
 import type { Metadata } from 'next';
+
+import { MainLayout } from './_components/main-layout';
 
 import '@/styles/globals.css';
 
@@ -50,13 +50,7 @@ const RootLayout = ({
       <body className="bg-gray-0 flex min-h-screen flex-col text-gray-900 antialiased">
         <GoogleAnalytics />
         <QueryProvider>
-          {process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_MSW !== 'false' ? (
-            <MswProvider>
-              <AppShell>{children}</AppShell>
-            </MswProvider>
-          ) : (
-            <AppShell>{children}</AppShell>
-          )}
+          <MainLayout>{children}</MainLayout>
         </QueryProvider>
       </body>
     </html>
