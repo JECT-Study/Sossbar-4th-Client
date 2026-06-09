@@ -19,17 +19,15 @@ export { useCreateProject } from './hooks/use-create-project.mutation';
 export { useUpdateProject } from './hooks/use-update-project.mutation';
 export { mapMyProjectToCardItem, mapMyProjectsToCardItems } from './lib/map-my-project-to-card';
 export type {
-  CreateProjectPayload,
   MemberStatus,
   MyProjectResponse,
   ProjectCardItem,
   ProjectCardMember,
-  ProjectCreateRequest,
   ProjectMemberResponse,
   ProjectMemberReviewStatus,
+  ProjectPayload,
+  ProjectRequest,
   ProjectResponse,
   ProjectStatus,
-  ProjectUpdateRequest,
-  UpdateProjectPayload,
   UserProjectResponse,
 } from './types';

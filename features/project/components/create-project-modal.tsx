@@ -1,17 +1,16 @@
 'use client';
 
 import { Dialog } from 'radix-ui';
-import { useState } from 'react';
+import { Controller } from 'react-hook-form';
 
-import { useCreateProject } from '@/features/project/hooks/use-create-project.mutation';
-import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
+import { useCreateProjectModal } from '@/features/project/hooks/use-create-project-modal';
+import { PROJECT_FIELD_MAX_LENGTH, PROJECT_IMAGE_ACCEPT } from '@/features/project/project.constants';
 import { Button } from '@/shared/components/button';
+import { ErrorMessage } from '@/shared/components/error-message';
 import { ImageFileInput } from '@/shared/components/file-input';
 import { Label } from '@/shared/components/label';
 import { TextField } from '@/shared/components/text-field';
 import { cn } from '@/shared/lib/cn';
-
-const MAX_FIELD_LENGTH = 20;
 
 interface Props {
   open: boolean;
@@ -20,72 +19,13 @@ interface Props {
 }
 
 export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => {
-  const [projectName, setProjectName] = useState('');
-  const [host, setHost] = useState('');
-  const [image, setImage] = useState<File | null>(null);
-  const [createdProjectId, setCreatedProjectId] = useState<number | null>(null);
-  const [linkCopied, setLinkCopied] = useState(false);
-
-  const { mutate: createProject, isPending } = useCreateProject();
-
-  const canSubmit = projectName.trim().length > 0 && host.trim().length > 0 && image != null && !isPending;
-
-  const resetAll = () => {
-    setProjectName('');
-    setHost('');
-    setImage(null);
-    setCreatedProjectId(null);
-    setLinkCopied(false);
-  };
-
-  const handleOpenChange = (next: boolean) => {
-    if (!next) {
-      resetAll();
-    }
-    onOpenChange(next);
-  };
-
-  const handleSubmit = () => {
-    if (!canSubmit) {
-      return;
-    }
-
-    createProject(
-      {
-        request: {
-          projectName: projectName.trim(),
-          host: host.trim(),
-        },
-        image,
-      },
-      {
-        onSuccess: (data) => {
-          setProjectName('');
-          setHost('');
-          setImage(null);
-          setCreatedProjectId(data.projectId);
-        },
-      },
-    );
-  };
-
-  const handleCopyLink = () => {
-    if (createdProjectId === null) {
-      return;
-    }
-    const url = buildProjectInviteUrl(createdProjectId);
-    void navigator.clipboard.writeText(url).then(() => {
-      setLinkCopied(true);
-      window.setTimeout(() => setLinkCopied(false), 3000);
-    });
-  };
-
-  const handleClose = () => {
-    resetAll();
-    onOpenChange(false);
-  };
-
-  const inviteUrl = createdProjectId !== null ? buildProjectInviteUrl(createdProjectId) : '';
+  const { createdProjectId, form, handleCopyLink, handleOpenChange, inviteUrl, isSubmitting, linkCopied, onSubmit } =
+    useCreateProjectModal({ onOpenChange });
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+  } = form;
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
@@ -118,7 +58,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
               </div>
 
               <div className="flex items-center justify-end gap-2">
-                <Button type="button" variant="primary" size="medium" onClick={handleClose}>
+                <Button type="button" variant="primary" size="medium" onClick={() => handleOpenChange(false)}>
                   닫기
                 </Button>
               </div>
@@ -133,24 +73,36 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                 </Dialog.Description>
               </div>
 
-              <div className="flex flex-col gap-2 px-4">
-                <TextField
+              <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 px-4">
+                <Controller
+                  control={control}
                   name="projectName"
-                  label="프로젝트명"
-                  required
-                  maxLength={MAX_FIELD_LENGTH}
-                  placeholder="내용을 입력하세요"
-                  value={projectName}
-                  onChange={(e) => setProjectName(e.target.value)}
+                  render={({ field }) => (
+                    <TextField
+                      label="프로젝트명"
+                      required
+                      maxLength={PROJECT_FIELD_MAX_LENGTH}
+                      placeholder="내용을 입력하세요"
+                      errorMessage={errors.projectName?.message}
+                      disabled={isSubmitting}
+                      {...field}
+                    />
+                  )}
                 />
-                <TextField
+                <Controller
+                  control={control}
                   name="host"
-                  label="주최사"
-                  required
-                  maxLength={MAX_FIELD_LENGTH}
-                  placeholder="내용을 입력하세요"
-                  value={host}
-                  onChange={(e) => setHost(e.target.value)}
+                  render={({ field }) => (
+                    <TextField
+                      label="주최사"
+                      required
+                      maxLength={PROJECT_FIELD_MAX_LENGTH}
+                      placeholder="내용을 입력하세요"
+                      errorMessage={errors.host?.message}
+                      disabled={isSubmitting}
+                      {...field}
+                    />
+                  )}
                 />
 
                 <div className="flex flex-col gap-2">
@@ -158,23 +110,38 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                   <p className="text-detail-sm text-text-subtle">
                     * JPG, JPEG, PNG 형식의 이미지를 첨부할 수 있습니다.
                   </p>
-                  <ImageFileInput
-                    value={image}
-                    onChange={setImage}
-                    label="이미지 업로드하기"
-                    accept="image/jpeg,image/jpg,image/png"
+                  <Controller
+                    control={control}
+                    name="image"
+                    render={({ field: { value, onChange } }) => (
+                      <ImageFileInput
+                        value={value}
+                        onChange={onChange}
+                        label="이미지 업로드하기"
+                        accept={PROJECT_IMAGE_ACCEPT}
+                        errorMessage={errors.image?.message}
+                      />
+                    )}
                   />
                 </div>
-              </div>
 
-              <div className="flex items-center justify-end gap-2">
-                <Button type="button" variant="tertiary" size="medium" onClick={() => handleOpenChange(false)}>
-                  취소
-                </Button>
-                <Button type="button" variant="primary" size="medium" disabled={!canSubmit} onClick={handleSubmit}>
-                  생성하기
-                </Button>
-              </div>
+                {errors.root?.message ? <ErrorMessage className="static">{errors.root.message}</ErrorMessage> : null}
+
+                <div className="flex items-center justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="tertiary"
+                    size="medium"
+                    onClick={() => handleOpenChange(false)}
+                    disabled={isSubmitting}
+                  >
+                    취소
+                  </Button>
+                  <Button type="submit" variant="primary" size="medium" disabled={isSubmitting}>
+                    생성하기
+                  </Button>
+                </div>
+              </form>
             </>
           )}
         </Dialog.Content>
