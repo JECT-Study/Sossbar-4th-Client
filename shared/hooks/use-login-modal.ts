@@ -10,20 +10,25 @@ interface Params {
 
 export const useLoginModal = ({ isAuthenticated = false }: Params = {}) => {
   const { queryParamValue, updateQueryParam, removeQueryParam } = useQueryParam('modal');
-  const { data: profile, isPending } = useMyProfile();
 
   const hasLoginParam = queryParamValue === LOGIN_MODAL_VALUE;
-  const isOpen = hasLoginParam && !isPending && !profile;
+  const isOpen = hasLoginParam && !isAuthenticated;
 
   useEffect(() => {
-    if (hasLoginParam && !isPending && profile) {
+    if (hasLoginParam && isAuthenticated) {
       removeQueryParam();
     }
-  }, [hasLoginParam, isPending, profile, removeQueryParam]);
+  }, [hasLoginParam, isAuthenticated, removeQueryParam]);
 
-      removeQueryParam();
+  const onOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (nextOpen) {
+        updateQueryParam(LOGIN_MODAL_VALUE);
+      } else {
+        removeQueryParam();
+      }
     },
-    [isAuthenticated, removeQueryParam, updateQueryParam],
+    [removeQueryParam, updateQueryParam],
   );
 
   const openLoginModal = useCallback(() => {
