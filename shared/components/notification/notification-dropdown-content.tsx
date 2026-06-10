@@ -17,6 +17,7 @@ export const NotificationDropdownContent = ({
   className,
 }: NotificationDropdownContentProps) => {
   const hasUnread = notifications.some((item) => !item.isRead);
+  const unreadCount = notifications.filter((item) => !item.isRead).length;
   const isEmpty = notifications.length === 0;
 
   if (isEmpty) {
@@ -40,18 +41,16 @@ export const NotificationDropdownContent = ({
       )}
     >
       <div className="flex items-center justify-between px-4 pt-4 pb-3">
-        <p className="text-detail-base text-text-basic leading-normal font-bold">알림</p>
+        <p className="text-heading-xs text-text-basic leading-normal font-bold">알림</p>
         {hasUnread ? (
           <button
             type="button"
             onClick={onMarkAllRead}
             className="text-detail-xs text-text-primary leading-normal font-medium hover:underline"
           >
-            모두 읽음
+            {unreadCount}건
           </button>
-        ) : (
-          <span className="text-detail-xs text-text-disabled leading-normal font-medium">모두 읽음</span>
-        )}
+        ) : null}
       </div>
 
       <div className="flex max-h-[min(320px,60vh)] flex-col overflow-y-auto">

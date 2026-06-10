@@ -25,7 +25,7 @@ export const NotificationItem = ({ notification, onSelect, className }: Notifica
       ) : null}
       <span className="flex min-w-0 flex-col gap-1 pl-5">
         <span className="text-body-sm text-text-basic leading-normal font-medium">{title}</span>
-        <span className="text-detail-xs text-text-subtle leading-normal font-normal">{description}</span>
+        <span className="text-body-sm text-text-subtle leading-normal font-normal">{description}</span>
         <span className="text-detail-xs text-text-subtler leading-normal font-normal">
           {formatRelativeTime(createdAt)}
         </span>
