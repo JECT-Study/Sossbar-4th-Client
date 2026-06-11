@@ -1,4 +1,4 @@
-import { dehydrate} from '@tanstack/react-query';
+import { dehydrate } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 
@@ -10,7 +10,7 @@ import { ProjectDetailStream } from '@/features/project/components/project-detai
 import { getQueryClient } from '@/shared/lib/get-query-client';
 import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
 
-interface Props = {
+interface Props {
   params: Promise<{
     userId: string;
     projectId: string;
@@ -19,36 +19,31 @@ interface Props = {
 
 const ProjectPage = async ({ params }: Props) => {
   const { userId, projectId } = await params;
+  const profileUserId = parsePositiveInt(userId);
+  const projectIdNum = parsePositiveInt(projectId);
+
+  if (profileUserId === null || projectIdNum === null) {
+    return notFound();
+  }
+
   const queryClient = getQueryClient();
+  const cookieStore = await cookies();
 
-const queryClient = getQueryClient();
-const cookieStore = awaitcookies();
-const cookieHeader = { Cookie: cookieStore.toString() };  
-
-try {
-      await
-  queryClient.fetchQuery({   
-        queryKey: projectKeys
-  .detail(projectIdNum),     
-        queryFn: () =>       
-  fetchProject(projectIdNum, 
-  { headers: cookieHeader }),
-      });
-    } catch {
-      return notFound();     
-    }
-
-await
-  queryClient.prefetchQuery({ queryKey: profileKeys.my,queryFn: () =>
-  fetchMyProfile({ headers:  
-  cookieHeader }),
+  try {
+    await queryClient.fetchQuery({
+      queryKey: projectKeys.detail(projectIdNum),
+      queryFn: () => fetchProject(projectIdNum, { headers: { Cookie: cookieStore.toString() } }),
     });
+  } catch {
+    return notFound();
+  }
 
- return
-  <ProjectDetailStream       
-  userId={profileUserId}     
-  projectId={projectIdNum}   
-  state={dehydrate(queryClient)} />;
+  await queryClient.prefetchQuery({
+    queryKey: profileKeys.my,
+    queryFn: () => fetchMyProfile({ headers: { Cookie: cookieStore.toString() } }),
+  });
+
+  return <ProjectDetailStream userId={profileUserId} projectId={projectIdNum} state={dehydrate(queryClient)} />;
 };
 
 export default ProjectPage;

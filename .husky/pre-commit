@@ -1,1 +1,2 @@
+export PATH="$PATH:./node_modules/.bin"
 pnpm exec lint-staged
