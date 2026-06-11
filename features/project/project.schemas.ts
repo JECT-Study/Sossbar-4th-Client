@@ -19,7 +19,7 @@ export const CreateProjectFormSchema = z.object({
     .max(PROJECT_FIELD_MAX_LENGTH, `주최사는 ${PROJECT_FIELD_MAX_LENGTH}자 이하로 입력해 주세요.`),
   image: z
     .custom<File | null>((value) => value === null || isFile(value), { message: '이미지 파일을 선택해 주세요.' })
-    .refine((file) => file !== null, { message: '이미지를 첨부해 주세요.' })
+    .refine((file) => file !== null, { message: '이미지를 첨부해 주세요.', abort: true })
     .refine((file) => imageMimeTypes.includes(file.type), {
       message: 'JPG, JPEG, PNG 이미지만 업로드할 수 있습니다.',
     })
