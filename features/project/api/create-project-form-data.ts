@@ -4,7 +4,9 @@ export const createProjectFormData = (request: ProjectRequest, image?: File | nu
   const formData = new FormData();
 
   formData.append('request', new Blob([JSON.stringify(request)], { type: 'application/json' }));
-  formData.append('image', image ?? '');
+  if (image) {
+    formData.append('image', image);
+  }
 
   return formData;
 };
