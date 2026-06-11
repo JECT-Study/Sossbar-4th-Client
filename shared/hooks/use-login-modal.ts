@@ -22,14 +22,13 @@ export const useLoginModal = ({ isAuthenticated = false }: Params = {}) => {
 
   const onOpenChange = useCallback(
     (nextOpen: boolean) => {
-      if (nextOpen && !isAuthenticated) {
+      if (nextOpen) {
         updateQueryParam(LOGIN_MODAL_VALUE);
-        return;
+      } else {
+        removeQueryParam();
       }
-
-      removeQueryParam();
     },
-    [isAuthenticated, removeQueryParam, updateQueryParam],
+    [removeQueryParam, updateQueryParam],
   );
 
   const openLoginModal = useCallback(() => {
