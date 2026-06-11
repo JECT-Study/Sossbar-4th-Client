@@ -46,3 +46,15 @@ export interface CreateReviewApiBody {
   reviewReqDto: CreateReviewReviewReqDto;
   spectrumReqDtos: CreateReviewSpectrumReqDto[];
 }
+
+export type ReviewValidReason =
+  | 'VALID'
+  | 'SELF_REVIEW'
+  | 'REVIEWER_NOT_IN_PROJECT'
+  | 'REVIEWEE_NOT_IN_PROJECT'
+  | 'ALREADY_REVIEWED';
+
+export interface ReviewValidation {
+  canReview: boolean;
+  reviewValidReason: ReviewValidReason;
+}

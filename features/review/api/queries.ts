@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import { fetchProjectReviews, fetchReviewFormData, fetchReviews } from './fetchers';
+import { fetchProjectReviews, fetchReviewFormData, fetchReviewValidation, fetchReviews } from './fetchers';
 import { reviewKeys } from './query-keys';
 
 export const useUserReviews = (userId: number) =>
@@ -20,5 +20,13 @@ export const useProjectReviews = (userId: number, projectId: number) =>
     queryKey: reviewKeys.projectReviews(userId, projectId),
     queryFn: () => fetchProjectReviews(userId, projectId),
     enabled: userId > 0 && projectId > 0,
+    throwOnError: false,
+  });
+
+export const useReviewValidation = (projectId: number, revieweeId: number) =>
+  useQuery({
+    queryKey: reviewKeys.validate(projectId, revieweeId),
+    queryFn: () => fetchReviewValidation(projectId, revieweeId),
+    enabled: projectId > 0 && revieweeId > 0,
     throwOnError: false,
   });
