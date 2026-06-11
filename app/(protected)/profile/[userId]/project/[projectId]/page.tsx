@@ -1,25 +1,32 @@
-'use client';
+import { dehydrate } from '@tanstack/react-query';
 
-import { use } from 'react';
+import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
+import { profileKeys } from '@/features/profile/profile.query-keys';
+import { fetchProject } from '@/features/project/api/fetchers';
+import { projectKeys } from '@/features/project/api/query-keys';
+import { ProjectDetailStream } from '@/features/project/components/project-detail-stream';
+import { getQueryClient } from '@/shared/lib/get-query-client';
 
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
-import { ProjectPageContent } from '@/features/project';
-
-type ProjectPageProps = {
+interface Props {
   params: Promise<{
     userId: string;
     projectId: string;
   }>;
-};
+}
 
-const ProjectPage = ({ params }: ProjectPageProps) => {
-  const { userId, projectId } = use(params);
-  const profileUserId = Number(userId);
-  const projectIdNum = Number(projectId);
-  const { data: profile } = useMyProfile();
-  const isMyProfile = profileUserId === profile?.userId;
+const ProjectPage = async ({ params }: Props) => {
+  const { userId, projectId } = await params;
+  const queryClient = getQueryClient();
 
-  return <ProjectPageContent userId={profileUserId} projectId={projectIdNum} isMyProfile={isMyProfile} />;
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: projectKeys.detail(Number(projectId)),
+      queryFn: () => fetchProject(Number(projectId)),
+    }),
+    queryClient.prefetchQuery({ queryKey: profileKeys.my, queryFn: fetchMyProfile }),
+  ]);
+
+  return <ProjectDetailStream userId={Number(userId)} projectId={Number(projectId)} state={dehydrate(queryClient)} />;
 };
 
 export default ProjectPage;
