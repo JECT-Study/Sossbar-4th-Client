@@ -11,9 +11,10 @@ import { ProfileSectionSkeleton } from './profile-section-skeleton';
 
 interface Props {
   userId: number;
+  isMyProfile?: boolean;
 }
 
-export const ProfileSectionBoundary = ({ userId }: Props) => {
+export const ProfileSectionBoundary = ({ userId, isMyProfile }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -30,7 +31,7 @@ export const ProfileSectionBoundary = ({ userId }: Props) => {
       )}
     >
       <Suspense fallback={<ProfileSectionSkeleton />}>
-        <ProfileSection userId={userId} />
+        <ProfileSection userId={userId} isMyProfile={isMyProfile} />
       </Suspense>
     </ErrorBoundary>
   );
