@@ -4,23 +4,30 @@ import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Avatar } from 'radix-ui';
+import { useState } from 'react';
 
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import type { Profile } from '@/features/profile/profile.types';
+import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
+import { Dropdown } from '@/shared/components/dropdown';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
-
-import { KakaoLoginButton } from '../button/kakao-login-button';
-import { Dropdown } from '../dropdown';
 
 const DEFAULT_AVATAR_SRC = '/sample_user.svg';
 
 const dropdownItemClassName =
   'text-body-sm text-text-basic !h-[44px] min-h-0 shrink-0 justify-start rounded-md px-2 py-0 font-normal';
 
-export const HeaderAuthArea = () => {
+interface Props {
+  initialProfile: Profile;
+}
+
+export const HeaderAuthAreaClient = ({ initialProfile }: Props) => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: profile } = useMyProfile();
+  const { data: queryProfile } = useMyProfile();
+  const [hasLoggedOut, setHasLoggedOut] = useState(false);
+  const profile = hasLoggedOut ? null : (queryProfile ?? initialProfile);
 
   if (!profile) {
     return <KakaoLoginButton />;
@@ -59,6 +66,7 @@ export const HeaderAuthArea = () => {
         <Dropdown.Item
           className={dropdownItemClassName}
           onSelect={async () => {
+            setHasLoggedOut(true);
             await fetch('/api/logout', { method: 'POST' });
             queryClient.clear();
             router.push(ROUTES.HOME);

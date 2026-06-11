@@ -25,14 +25,14 @@ export const ProjectInviteHandler = () => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { data: profile } = useMyProfile();
+  const { data: profile, isPending: isProfilePending } = useMyProfile();
   const { openLoginModal } = useLoginModal();
 
   const projectId = useMemo(() => parseProjectInviteId(searchParams.get(PROJECT_INVITE_QUERY_KEY)), [searchParams]);
 
   const [joinError, setJoinError] = useState<string | null>(null);
 
-  const hasSession = profile != null;
+  const hasSession = !isProfilePending && profile != null;
 
   const clearInviteParam = useCallback(() => {
     if (searchParams.get(PROJECT_INVITE_QUERY_KEY) == null) {

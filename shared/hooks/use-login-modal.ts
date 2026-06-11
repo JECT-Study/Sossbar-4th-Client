@@ -1,31 +1,41 @@
-import { useEffect } from 'react';
-
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { useCallback, useEffect } from 'react';
 
 import { useQueryParam } from './use-query-param';
 
 const LOGIN_MODAL_VALUE = 'login';
 
-export const useLoginModal = () => {
+interface Params {
+  isAuthenticated?: boolean;
+}
+
+export const useLoginModal = ({ isAuthenticated = false }: Params = {}) => {
   const { queryParamValue, updateQueryParam, removeQueryParam } = useQueryParam('modal');
-  const { data: profile } = useMyProfile();
 
   const hasLoginParam = queryParamValue === LOGIN_MODAL_VALUE;
-  const isOpen = hasLoginParam && !profile;
+  const isOpen = hasLoginParam && !isAuthenticated;
 
   useEffect(() => {
-    if (hasLoginParam && profile) {
+    if (hasLoginParam && isAuthenticated) {
       removeQueryParam();
     }
-  }, [hasLoginParam, profile, removeQueryParam]);
+  }, [hasLoginParam, isAuthenticated, removeQueryParam]);
 
-  const onOpenChange = (nextOpen: boolean) => {
-    if (nextOpen) {
+  const onOpenChange = useCallback(
+    (nextOpen: boolean) => {
+      if (nextOpen) {
+        updateQueryParam(LOGIN_MODAL_VALUE);
+      } else {
+        removeQueryParam();
+      }
+    },
+    [removeQueryParam, updateQueryParam],
+  );
+
+  const openLoginModal = useCallback(() => {
+    if (!isAuthenticated) {
       updateQueryParam(LOGIN_MODAL_VALUE);
-    } else {
-      removeQueryParam();
     }
-  };
+  }, [isAuthenticated, updateQueryParam]);
 
-  return { isOpen, onOpenChange, openLoginModal: () => onOpenChange(true) };
+  return { isOpen, onOpenChange, openLoginModal };
 };
