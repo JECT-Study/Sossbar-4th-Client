@@ -9,19 +9,10 @@ import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 
-import type { ReviewValidReason } from '../types/review';
-
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';
 import { useCreateReview } from '../api/mutations';
-import { useReviewFormData, useReviewValidation } from '../api/queries';
-
-const VALIDATION_MESSAGES: Partial<Record<ReviewValidReason, string>> = {
-  SELF_REVIEW: '본인에게는 후기를 작성할 수 없습니다.',
-  ALREADY_REVIEWED: '이미 후기를 작성한 팀원입니다.',
-  REVIEWER_NOT_IN_PROJECT: '프로젝트 참여 정보를 확인할 수 없습니다.',
-  REVIEWEE_NOT_IN_PROJECT: '프로젝트 참여 정보를 확인할 수 없습니다.',
-};
+import { useReviewFormData } from '../api/queries';
 
 const PRAISE_MIN_LENGTH = 10;
 const TEXT_MAX_LENGTH = 250;
@@ -48,7 +39,6 @@ export const ReviewWriteContent = () => {
   const { data: projectData } = useProject(projectId ?? 0, projectId != null, { throwOnError: false });
   const { data: formData, isPending, isError, refetch } = useReviewFormData();
   const { mutateAsync: submitReview, isPending: isSubmitting } = useCreateReview();
-  const { data: validation, isPending: isValidating } = useReviewValidation(projectId ?? 0, revieweeId ?? 0);
 
   // 같은 프로젝트에서 이미 한 명에게 후기를 제출했으면 스펙트럼은 서버에 저장된 상태 → 빈 배열로 전송
   const hasSubmittedAnyReview = useMemo(() => {
@@ -143,7 +133,7 @@ export const ReviewWriteContent = () => {
     );
   }
 
-  if (isPending || isValidating) {
+  if (isPending) {
     return (
       <div className="border-divider-gray-light bg-surface-white flex min-h-[320px] w-full items-center justify-center border-b">
         <p className="text-body-base text-text-subtle">불러오는 중…</p>
@@ -157,19 +147,6 @@ export const ReviewWriteContent = () => {
         <p className="text-body-base text-text-basic text-center">폼 데이터를 불러오지 못했습니다.</p>
         <Button type="button" variant="secondary" size="medium" onClick={() => void refetch()}>
           다시 시도
-        </Button>
-      </div>
-    );
-  }
-
-  if (validation?.canReview === false) {
-    return (
-      <div className="border-divider-gray-light bg-surface-white flex min-h-[320px] w-full flex-col items-center justify-center gap-4 border-b px-4">
-        <p className="text-body-base text-text-basic text-center">
-          {VALIDATION_MESSAGES[validation.reviewValidReason] ?? '후기를 작성할 수 없습니다.'}
-        </p>
-        <Button type="button" variant="secondary" size="medium" onClick={() => router.push('/projects')}>
-          프로젝트 관리로 돌아가기
         </Button>
       </div>
     );

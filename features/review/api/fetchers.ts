@@ -1,4 +1,5 @@
 import { apiRequest } from '@/shared/lib/api';
+import type { ApiRequestOptions } from '@/shared/lib/api';
 
 import type { CreateReviewRequest, Review, ReviewFormData, ReviewValidation } from '../types/review';
 
@@ -36,7 +37,11 @@ export const fetchProjectReviews = (userId: number, projectId: number): Promise<
 export const createReview = (data: CreateReviewRequest): Promise<void> =>
   apiRequest<void>('/reviews', { method: 'POST', body: toCreateReviewBody(data) });
 
-export const fetchReviewValidation = (projectId: number, revieweeId: number): Promise<ReviewValidation> => {
+export const fetchReviewValidation = (
+  projectId: number,
+  revieweeId: number,
+  init?: ApiRequestOptions,
+): Promise<ReviewValidation> => {
   const params = new URLSearchParams({ projectId: String(projectId), revieweeId: String(revieweeId) });
-  return apiRequest<ReviewValidation>(`/reviews/validate?${params}`);
+  return apiRequest<ReviewValidation>(`/reviews/validate?${params}`, init);
 };
