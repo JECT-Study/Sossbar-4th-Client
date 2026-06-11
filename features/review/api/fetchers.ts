@@ -3,6 +3,7 @@ import { apiRequest } from '@/shared/lib/api';
 import type { CreateReviewRequest, Review, ReviewFormData } from '../types/review';
 
 import { mapReviewFormDataFromApi, type ReviewFormDataApiResponse } from './map-form-data';
+import { mapUserReviewsFromApi, type UserReviewsApiResponse } from './map-user-reviews';
 
 const toCreateReviewBody = (data: CreateReviewRequest) => {
   const praise = data.praise.trim();
@@ -28,7 +29,10 @@ export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
   return mapReviewFormDataFromApi(raw);
 };
 
-export const fetchReviews = (userId: number): Promise<Review[]> => apiRequest<Review[]>(`/users/${userId}/reviews`);
+export const fetchReviews = async (userId: number): Promise<Review[]> => {
+  const raw = await apiRequest<UserReviewsApiResponse | Review[]>(`/users/${userId}/reviews`);
+  return mapUserReviewsFromApi(raw);
+};
 
 export const fetchProjectReviews = (userId: number, projectId: number): Promise<Review[]> =>
   apiRequest<Review[]>(`/users/${userId}/projects/${projectId}/reviews`);
