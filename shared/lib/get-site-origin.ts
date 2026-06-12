@@ -13,5 +13,5 @@ export const getSiteOrigin = (): string => {
     return `https://${vercelHost}`;
   }
 
-  return '';
+  return 'https://sossbar.com';
 };

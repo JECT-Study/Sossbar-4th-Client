@@ -3,51 +3,53 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { fetchProfileById } from '@/features/profile/api/fetch-profile-by-id';
-import { buildReviewRequestDescription, PROFILE_SHARE_TITLE } from '@/features/profile/lib/profile-share-content';
+import { buildReviewRequestDescription } from '@/features/profile/lib/profile-share-content';
 import { fetchReviewFormData, ReviewWriteContent, reviewKeys } from '@/features/review';
 import { fetchReviewValidation } from '@/features/review/api/fetchers';
+import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
+import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
+import { parseShareDisplayName } from '@/shared/lib/parse-share-display-name';
 
 import type { Metadata } from 'next';
 
 type ReviewNewPageMetadataProps = {
-  searchParams: Promise<{ revieweeId?: string }>;
+  searchParams: Promise<{
+    projectId?: string;
+    revieweeId?: string;
+    reviewee?: string;
+    [SHARE_INVITER_NAME_PARAM]?: string;
+  }>;
 };
 
 export const generateMetadata = async ({ searchParams }: ReviewNewPageMetadataProps): Promise<Metadata> => {
-  const { revieweeId: rawRevieweeId } = await searchParams;
-  const revieweeId = parsePositiveInt(rawRevieweeId ?? '');
+  const params = await searchParams;
+  const inviterName = parseShareDisplayName(params[SHARE_INVITER_NAME_PARAM]);
+  const revieweeName = parseShareDisplayName(params.reviewee);
+  const displayName = inviterName ?? revieweeName ?? '';
+  const description = buildReviewRequestDescription(displayName);
 
-  let description = buildReviewRequestDescription('');
-
-  if (revieweeId !== null) {
-    try {
-      const cookieStore = await cookies();
-      const profile = await fetchProfileById(revieweeId, { headers: { Cookie: cookieStore.toString() } });
-      description = buildReviewRequestDescription(profile.username);
-    } catch {
-      // 유저 정보 조회 실패 시 기본 문구 유지
-    }
+  const pathSearchParams = new URLSearchParams();
+  if (params.projectId) {
+    pathSearchParams.set('projectId', params.projectId);
+  }
+  if (params.revieweeId) {
+    pathSearchParams.set('revieweeId', params.revieweeId);
+  }
+  if (revieweeName) {
+    pathSearchParams.set('reviewee', revieweeName);
+  }
+  if (inviterName) {
+    pathSearchParams.set(SHARE_INVITER_NAME_PARAM, inviterName);
   }
 
-  return {
-    title: PROFILE_SHARE_TITLE,
+  const path = pathSearchParams.size > 0 ? `/reviews/new?${pathSearchParams.toString()}` : '/reviews/new';
+
+  return buildShareOgMetadata({
     description,
-    openGraph: {
-      title: PROFILE_SHARE_TITLE,
-      description,
-      type: 'website',
-      images: [{ url: '/Sossbar_logo.png', alt: 'Sossbar' }],
-    },
-    twitter: {
-      card: 'summary',
-      title: PROFILE_SHARE_TITLE,
-      description,
-      images: ['/Sossbar_logo.png'],
-    },
-  };
+    path,
+  });
 };
 
 type ReviewNewPageProps = {

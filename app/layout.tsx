@@ -11,7 +11,7 @@ import { MainLayout } from './_components/main-layout';
 
 import '@/styles/globals.css';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sossbar.vercel.app';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sossbar.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -26,11 +26,21 @@ export const metadata: Metadata = {
     type: 'website',
     url: siteUrl,
     siteName: 'Sossbar',
+    images: [
+      {
+        url: '/Sossbar_logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Sossbar',
+        type: 'image/png',
+      },
+    ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Sossbar - 프로젝트 동료와 성장 기록을 남기다',
     description: '함께한 동료의 피드백으로 협업 성향과 신뢰를 기록하는 성장 프로필 서비스',
+    images: ['/Sossbar_logo.png'],
   },
 };
 
