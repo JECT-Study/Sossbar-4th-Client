@@ -1,4 +1,5 @@
 import { dehydrate } from '@tanstack/react-query';
+import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
 import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
@@ -55,11 +56,18 @@ const ProjectsPageFallback = () => (
 
 const ProjectsPage = async () => {
   const queryClient = getQueryClient();
+  const cookieStore = await cookies();
 
-  await Promise.all([
-    queryClient.prefetchQuery({ queryKey: projectKeys.list(), queryFn: fetchProjects }),
-    queryClient.prefetchQuery({ queryKey: profileKeys.my, queryFn: fetchMyProfile }),
-  ]);
+  if (cookieStore.has('accessToken')) {
+    try {
+      await Promise.all([
+        queryClient.prefetchQuery({ queryKey: projectKeys.list(), queryFn: fetchProjects }),
+        queryClient.prefetchQuery({ queryKey: profileKeys.my, queryFn: fetchMyProfile }),
+      ]);
+    } catch {
+      // 비로그인·만료 세션 등 prefetch 실패 시에도 초대 링크 랜딩은 허용
+    }
+  }
 
   return (
     <Suspense fallback={<ProjectsPageFallback />}>
