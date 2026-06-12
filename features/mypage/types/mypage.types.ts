@@ -6,6 +6,7 @@ export interface Profile {
   bio: string;
   profileImageUrl: string | null;
   userType: string;
+  marketingAgree: boolean;
 }
 
 export interface ProfileResponse {
