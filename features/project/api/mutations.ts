@@ -1,44 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
-import type { CreateProjectPayload, UpdateProjectPayload } from '@/features/project/types';
 
-import {
-  confirmProjectMembers,
-  createProject,
-  deleteProject,
-  deleteProjectMember,
-  inviteProjectMember,
-  updateProject,
-} from './fetchers';
+import { confirmProjectMembers, deleteProject, deleteProjectMember, inviteProjectMember } from './fetchers';
 import { projectKeys } from './query-keys';
 import { invalidateProjectListQueries } from '../lib/invalidate-project-queries';
-
-export const useCreateProject = () => {
-  const queryClient = useQueryClient();
-  const { data: profile } = useMyProfile();
-
-  return useMutation({
-    mutationFn: (payload: CreateProjectPayload) => createProject(payload),
-    onSuccess: (data) => {
-      queryClient.setQueryData(projectKeys.detail(data.projectId), data);
-      invalidateProjectListQueries(queryClient, profile?.userId);
-    },
-  });
-};
-
-export const useUpdateProject = (projectId: number) => {
-  const queryClient = useQueryClient();
-  const { data: profile } = useMyProfile();
-
-  return useMutation({
-    mutationFn: (payload: UpdateProjectPayload) => updateProject(projectId, payload),
-    onSuccess: (data) => {
-      queryClient.setQueryData(projectKeys.detail(data.projectId), data);
-      invalidateProjectListQueries(queryClient, profile?.userId);
-    },
-  });
-};
 
 export const useDeleteProject = () => {
   const queryClient = useQueryClient();

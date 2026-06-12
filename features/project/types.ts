@@ -67,26 +67,12 @@ export interface UserProjectResponse {
   projectImage: string | null;
 }
 
-export interface ProjectCreateRequest {
+export interface ProjectRequest {
   projectName: string;
   host: string;
-  startDate?: string | null;
-  endDate?: string | null;
 }
 
-export interface ProjectUpdateRequest {
-  projectName?: string;
-  host?: string;
-  startDate?: string | null;
-  endDate?: string | null;
-}
-
-export type CreateProjectPayload = {
-  request: ProjectCreateRequest;
-  image?: File | null;
-};
-
-export type UpdateProjectPayload = {
-  request: ProjectUpdateRequest;
+export type ProjectPayload = {
+  request: ProjectRequest;
   image?: File | null;
 };
