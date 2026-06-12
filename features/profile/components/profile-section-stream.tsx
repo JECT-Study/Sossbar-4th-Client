@@ -7,9 +7,10 @@ import { getQueryClient } from '@/shared/lib/get-query-client';
 
 interface Props {
   userId: number;
+  isMyProfile?: boolean;
 }
 
-export const ProfileSectionStream = async ({ userId }: Props) => {
+export const ProfileSectionStream = async ({ userId, isMyProfile }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
@@ -19,7 +20,7 @@ export const ProfileSectionStream = async ({ userId }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProfileSectionBoundary userId={userId} />
+      <ProfileSectionBoundary userId={userId} isMyProfile={isMyProfile} />
     </HydrationBoundary>
   );
 };
