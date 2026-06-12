@@ -3,6 +3,8 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+import { fetchProfileById } from '@/features/profile/api/fetch-profile-by-id';
+import { buildReviewRequestDescription, PROFILE_SHARE_TITLE } from '@/features/profile/lib/profile-share-content';
 import { fetchReviewFormData, ReviewWriteContent, reviewKeys } from '@/features/review';
 import { fetchReviewValidation } from '@/features/review/api/fetchers';
 import { getQueryClient } from '@/shared/lib/get-query-client';
@@ -10,19 +12,42 @@ import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
 
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Sossbar - 프로젝트 동료 리뷰',
-  description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
-  openGraph: {
-    title: 'Sossbar - 프로젝트 동료 리뷰',
-    description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary',
-    title: 'Sossbar - 프로젝트 동료 리뷰',
-    description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
-  },
+type ReviewNewPageMetadataProps = {
+  searchParams: Promise<{ revieweeId?: string }>;
+};
+
+export const generateMetadata = async ({ searchParams }: ReviewNewPageMetadataProps): Promise<Metadata> => {
+  const { revieweeId: rawRevieweeId } = await searchParams;
+  const revieweeId = parsePositiveInt(rawRevieweeId ?? '');
+
+  let description = buildReviewRequestDescription('');
+
+  if (revieweeId !== null) {
+    try {
+      const cookieStore = await cookies();
+      const profile = await fetchProfileById(revieweeId, { headers: { Cookie: cookieStore.toString() } });
+      description = buildReviewRequestDescription(profile.username);
+    } catch {
+      // 유저 정보 조회 실패 시 기본 문구 유지
+    }
+  }
+
+  return {
+    title: PROFILE_SHARE_TITLE,
+    description,
+    openGraph: {
+      title: PROFILE_SHARE_TITLE,
+      description,
+      type: 'website',
+      images: [{ url: '/Sossbar_logo.png', alt: 'Sossbar' }],
+    },
+    twitter: {
+      card: 'summary',
+      title: PROFILE_SHARE_TITLE,
+      description,
+      images: ['/Sossbar_logo.png'],
+    },
+  };
 };
 
 type ReviewNewPageProps = {
