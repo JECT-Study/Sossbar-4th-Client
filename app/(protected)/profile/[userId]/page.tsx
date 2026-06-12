@@ -8,7 +8,9 @@ import { fetchProfileById } from '@/features/profile/api/fetch-profile-by-id';
 import { ProfileSectionSkeleton } from '@/features/profile/components/profile-section-skeleton';
 import { buildProfileShareMetadata } from '@/features/profile/lib/build-profile-share-metadata';
 import { PageContainer } from '@/shared/components/page-container';
+import { SHARE_USER_NAME_PARAM } from '@/shared/constants/share-query';
 import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
+import { parseShareDisplayName } from '@/shared/lib/parse-share-display-name';
 
 import type { Metadata } from 'next';
 
@@ -18,23 +20,51 @@ type ProfilePageProps = {
   params: Promise<{
     userId: string;
   }>;
+  searchParams: Promise<{
+    [SHARE_USER_NAME_PARAM]?: string;
+  }>;
 };
 
-export const generateMetadata = async ({ params }: ProfilePageProps): Promise<Metadata> => {
+const resolveProfileShareUserName = async (
+  profileUserId: number,
+  queryUserName?: string,
+): Promise<string | undefined> => {
+  const fromQuery = parseShareDisplayName(queryUserName);
+  if (fromQuery) {
+    return fromQuery;
+  }
+
+  try {
+    const profile = await fetchProfileById(profileUserId);
+    return profile.username;
+  } catch {
+    return undefined;
+  }
+};
+
+export const generateMetadata = async ({ params, searchParams }: ProfilePageProps): Promise<Metadata> => {
   const { userId } = await params;
+  const { [SHARE_USER_NAME_PARAM]: rawUserName } = await searchParams;
   const profileUserId = parsePositiveInt(userId);
 
   if (profileUserId === null) {
     return { title: '프로필' };
   }
 
-  try {
-    const cookieStore = await cookies();
-    const profile = await fetchProfileById(profileUserId, { headers: { Cookie: cookieStore.toString() } });
-    return buildProfileShareMetadata(profileUserId, profile.username);
-  } catch {
-    return buildProfileShareMetadata(profileUserId);
+  const userName = await resolveProfileShareUserName(profileUserId, rawUserName);
+  const queryUserName = parseShareDisplayName(rawUserName);
+  const pathSearchParams = new URLSearchParams();
+
+  if (queryUserName) {
+    pathSearchParams.set(SHARE_USER_NAME_PARAM, queryUserName);
   }
+
+  const profilePath =
+    pathSearchParams.size > 0
+      ? `/profile/${profileUserId}?${pathSearchParams.toString()}`
+      : `/profile/${profileUserId}`;
+
+  return buildProfileShareMetadata(profileUserId, userName, profilePath);
 };
 
 const Page = async ({ params }: ProfilePageProps) => {

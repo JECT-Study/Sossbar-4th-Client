@@ -1,37 +1,16 @@
+import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
+
 import type { Metadata } from 'next';
 
-import { buildProfileShareDescription, PROFILE_SHARE_TITLE } from './profile-share-content';
+import { buildProfileShareDescription } from './profile-share-content';
 
-export const buildProfileShareMetadata = (userId: number, userName?: string): Metadata => {
+export const buildProfileShareMetadata = (userId: number, userName?: string, path?: string): Metadata => {
   const displayName = userName?.trim() || '회원';
   const description = buildProfileShareDescription(displayName);
-  const profilePath = `/profile/${userId}`;
+  const profilePath = path ?? `/profile/${userId}`;
 
-  return {
-    title: PROFILE_SHARE_TITLE,
+  return buildShareOgMetadata({
     description,
-    alternates: {
-      canonical: profilePath,
-    },
-    openGraph: {
-      type: 'website',
-      locale: 'ko_KR',
-      title: PROFILE_SHARE_TITLE,
-      description,
-      url: profilePath,
-      siteName: 'Sossbar',
-      images: [
-        {
-          url: '/Sossbar_logo.png',
-          alt: 'Sossbar',
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary',
-      title: PROFILE_SHARE_TITLE,
-      description,
-      images: ['/Sossbar_logo.png'],
-    },
-  };
+    path: profilePath,
+  });
 };
