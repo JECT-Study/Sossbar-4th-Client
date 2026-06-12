@@ -10,10 +10,12 @@ import { useProfileShare } from '../hooks/use-profile-share';
 
 interface Props {
   userId: number;
+  isMyProfile?: boolean;
 }
 
-export const ProfileSection = ({ userId }: Props) => {
-  const isMyProfile = useIsMyProfile(userId);
+export const ProfileSection = ({ userId, isMyProfile: isMyProfileProp }: Props) => {
+  const isMyProfileFromQuery = useIsMyProfile(userId);
+  const isMyProfile = isMyProfileProp ?? isMyProfileFromQuery;
   const { data: profile } = useProfileById(userId);
   const { isEditing, isUpdatingProfile, startEditing, stopEditing, submitProfile } = useProfileEditing();
   const { isShareTooltipOpen, shareTooltipMessage, closeShareTooltip, shareProfile } = useProfileShare({ userId });
