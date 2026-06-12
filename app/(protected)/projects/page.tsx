@@ -25,7 +25,7 @@ type ProjectsPageMetadataProps = {
 
 export const generateMetadata = async ({ searchParams }: ProjectsPageMetadataProps): Promise<Metadata> => {
   const params = await searchParams;
-  const projectId = parseProjectInviteId(params[PROJECT_INVITE_QUERY_KEY]);
+  const projectId = parseProjectInviteId(params[PROJECT_INVITE_QUERY_KEY] ?? null);
 
   if (projectId === null) {
     return { title: '프로젝트' };
