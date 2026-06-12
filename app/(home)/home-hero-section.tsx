@@ -4,6 +4,8 @@ import { Button } from '@/shared/components/button/button';
 import { PageContainer } from '@/shared/components/page-container';
 import { ProtectedLink } from '@/shared/components/protected-link';
 
+import { HomeProfileButton } from './home-profile-button';
+
 export const HomeHeroSection = () => {
   return (
     <PageContainer className="flex justify-center pt-40 pb-64">
@@ -23,9 +25,7 @@ export const HomeHeroSection = () => {
           <Button asChild variant="primary" size="large">
             <ProtectedLink href="/projects">프로젝트 시작하기</ProtectedLink>
           </Button>
-          <Button asChild variant="tertiary" size="large">
-            <ProtectedLink href="/mypage">내 프로필 보기</ProtectedLink>
-          </Button>
+          <HomeProfileButton />
         </div>
       </div>
 
