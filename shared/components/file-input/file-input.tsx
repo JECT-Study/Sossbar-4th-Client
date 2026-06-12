@@ -40,6 +40,7 @@ export const FileInput = ({
 
       {value === null ? (
         <Button
+          type="button"
           variant="secondary"
           size="small"
           onClick={openPicker}
@@ -49,7 +50,7 @@ export const FileInput = ({
           {label}
         </Button>
       ) : (
-        <Button variant="secondary" size="small" onClick={openPicker} className="px-4 py-2.5">
+        <Button type="button" variant="secondary" size="small" onClick={openPicker} className="px-4 py-2.5">
           {value.name}
         </Button>
       )}
