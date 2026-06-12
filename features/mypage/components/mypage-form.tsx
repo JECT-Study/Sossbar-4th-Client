@@ -1,5 +1,7 @@
 'use client';
 
+import type { FormEvent } from 'react';
+
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';
@@ -7,13 +9,14 @@ import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
 import { AccountDeletionModal } from './account-deletion-modal';
 import { useProfile } from '../hooks/use-profile';
+import { useUpdateMarketingAgree } from '../hooks/use-update-marketing-agree.mutation';
 
 export const MypageForm = () => {
   const { data: profile } = useProfile();
+  const { mutate: updateMarketingAgree, isPending } = useUpdateMarketingAgree();
 
-  const [marketingAgreed, , , toggleMarketingAgreed] = useBooleanState(false);
-  const initialMarketingAgreed = false;
-  const isDirty = marketingAgreed !== initialMarketingAgreed;
+  const [marketingAgreed, , , toggleMarketingAgreed] = useBooleanState(profile.marketingAgree);
+  const isDirty = marketingAgreed !== profile.marketingAgree;
   const [accountActionsOpen, openAccountActions, closeAccountActions] = useBooleanState(false);
 
   const handleAccountActionsChange = (open: boolean) => {
@@ -25,8 +28,13 @@ export const MypageForm = () => {
     closeAccountActions();
   };
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    updateMarketingAgree({ username: profile.username, bio: profile.bio ?? '', marketingAgree: marketingAgreed });
+  };
+
   return (
-    <form className="mx-auto flex w-full max-w-[480px] flex-col gap-10 py-20" onSubmit={(e) => e.preventDefault()}>
+    <form className="mx-auto flex w-full max-w-[480px] flex-col gap-10 py-20" onSubmit={handleSubmit}>
       <fieldset className="flex flex-col gap-8">
         <legend className="text-heading-base text-text-basic mb-8 font-bold">기본 정보</legend>
         <div className="flex flex-col gap-2">
@@ -46,7 +54,7 @@ export const MypageForm = () => {
       </fieldset>
 
       <div className="flex w-full flex-col gap-4">
-        <Button type="submit" size="medium" className="text-body-xl h-14 w-full py-0" disabled={!isDirty}>
+        <Button type="submit" size="medium" className="text-body-xl h-14 w-full py-0" disabled={!isDirty || isPending}>
           정보 수정
         </Button>
 

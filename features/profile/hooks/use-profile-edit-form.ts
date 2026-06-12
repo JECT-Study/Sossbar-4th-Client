@@ -64,6 +64,7 @@ export const useProfileEditForm = ({ profile, onSubmitProfile }: Params) => {
         info: {
           username: data.username.trim(),
           bio: data.bio.trim(),
+          marketingAgree: profile.marketingAgree,
         },
         profileImage: data.profileImage,
       });

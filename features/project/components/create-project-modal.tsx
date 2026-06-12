@@ -108,6 +108,9 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                 <div className="flex flex-col gap-2">
                   <Label required>협업 인증 사진 첨부</Label>
                   <p className="text-detail-sm text-text-subtle">
+                    프로젝트 썸네일, 깃허브 레포지토리 제목 또는 로고 등의 이미지를 첨부해주세요.
+                  </p>
+                  <p className="text-detail-sm text-text-subtle">
                     * JPG, JPEG, PNG 형식의 이미지를 첨부할 수 있습니다.
                   </p>
                   <Controller
