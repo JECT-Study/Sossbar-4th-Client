@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
-import { buildProfileShareDescription, getProfileShareDisplayName, PROFILE_SHARE_TITLE } from './profile-share-content';
+import { buildProfileShareDescription, PROFILE_SHARE_TITLE } from './profile-share-content';
 
 export const buildProfileShareMetadata = (userId: number, userName?: string): Metadata => {
-  const displayName = userName?.trim() || getProfileShareDisplayName(userId);
+  const displayName = userName?.trim() || '회원';
   const description = buildProfileShareDescription(displayName);
   const profilePath = `/profile/${userId}`;
 
@@ -22,7 +22,7 @@ export const buildProfileShareMetadata = (userId: number, userName?: string): Me
       siteName: 'Sossbar',
       images: [
         {
-          url: '/Sossbar_logo.svg',
+          url: '/Sossbar_logo.png',
           alt: 'Sossbar',
         },
       ],
@@ -31,7 +31,7 @@ export const buildProfileShareMetadata = (userId: number, userName?: string): Me
       card: 'summary',
       title: PROFILE_SHARE_TITLE,
       description,
-      images: ['/Sossbar_logo.svg'],
+      images: ['/Sossbar_logo.png'],
     },
   };
 };

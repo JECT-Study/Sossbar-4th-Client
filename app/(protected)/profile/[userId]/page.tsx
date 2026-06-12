@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 
 import { ProfileSectionStream } from '@/features/profile';
 import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
+import { fetchProfileById } from '@/features/profile/api/fetch-profile-by-id';
 import { ProfileSectionSkeleton } from '@/features/profile/components/profile-section-skeleton';
 import { buildProfileShareMetadata } from '@/features/profile/lib/build-profile-share-metadata';
 import { PageContainer } from '@/shared/components/page-container';
@@ -27,7 +28,13 @@ export const generateMetadata = async ({ params }: ProfilePageProps): Promise<Me
     return { title: '프로필' };
   }
 
-  return buildProfileShareMetadata(profileUserId);
+  try {
+    const cookieStore = await cookies();
+    const profile = await fetchProfileById(profileUserId, { headers: { Cookie: cookieStore.toString() } });
+    return buildProfileShareMetadata(profileUserId, profile.username);
+  } catch {
+    return buildProfileShareMetadata(profileUserId);
+  }
 };
 
 const Page = async ({ params }: ProfilePageProps) => {
