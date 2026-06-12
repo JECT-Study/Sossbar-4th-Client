@@ -6,11 +6,13 @@ export interface Profile {
   bio: string | null;
   profileImageUrl: string | null;
   userType: string;
+  marketingAgree: boolean;
 }
 
 export interface UpdateProfileInfo {
   username: string;
   bio: string;
+  marketingAgree: boolean;
 }
 
 export interface UpdateProfilePayload {
