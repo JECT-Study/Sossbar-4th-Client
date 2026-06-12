@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw';
 
 import type { Spectrum } from '@/features/review/types/spectrum';
 
-import { markMockReviewSubmitted } from '../lib/submitted-reviews';
+import { isMockReviewSubmitted, markMockReviewSubmitted } from '../lib/submitted-reviews';
 
 const BASE = '/api/v1';
 
@@ -109,5 +109,22 @@ export const reviewsHandlers = [
 
   http.get(`${BASE}/reviews/spectrums/:userId/:projectId`, () => {
     return HttpResponse.json(mockSpectrumInfo);
+  }),
+
+  http.get(`${BASE}/reviews/validate`, ({ request }) => {
+    const url = new URL(request.url);
+    const projectId = Number(url.searchParams.get('projectId'));
+    const revieweeId = Number(url.searchParams.get('revieweeId'));
+
+    const alreadyReviewed = isMockReviewSubmitted(projectId, revieweeId);
+    return HttpResponse.json({
+      status: 200,
+      code: 'COMMON-200',
+      message: '성공적으로 조회했습니다.',
+      data: {
+        canReview: !alreadyReviewed,
+        reviewValidReason: alreadyReviewed ? 'ALREADY_REVIEWED' : 'VALID',
+      },
+    });
   }),
 ];
