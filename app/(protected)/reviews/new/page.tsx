@@ -83,7 +83,7 @@ const ReviewNewPage = async ({ searchParams }: ReviewNewPageProps) => {
       return notFound();
     }
   } catch {
-    return notFound();
+    // API 오류(401·네트워크·서버 장애)는 404로 처리하지 않고 폼을 표시; 제출 시 백엔드가 재검증한다.
   }
 
   const queryClient = getQueryClient();
