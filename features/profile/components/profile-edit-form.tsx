@@ -94,7 +94,7 @@ export const ProfileEditForm = ({ profile, isSubmitting, onCancel, onSubmitProfi
                   maxLength={PROFILE_NICKNAME_MAX_LENGTH}
                   errorMessage={errors.username?.message}
                   {...field}
-                  disabled
+                  disabled={isSubmitting}
                 />
               )}
             />

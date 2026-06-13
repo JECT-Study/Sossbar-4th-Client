@@ -1,12 +1,52 @@
 import { dehydrate } from '@tanstack/react-query';
+import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
 import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
+import { buildReviewRequestDescription } from '@/features/profile/lib/profile-share-content';
 import { profileKeys } from '@/features/profile/profile.query-keys';
 import { fetchProjects } from '@/features/project/api/fetchers';
 import { projectKeys } from '@/features/project/api/query-keys';
 import { ProjectsStream } from '@/features/project/components/projects-stream';
+import { parseProjectInviteId } from '@/features/project/lib/parse-project-invite-id';
+import { PROJECT_INVITE_QUERY_KEY } from '@/features/project/lib/project-invite-query';
+import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
+import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
 import { getQueryClient } from '@/shared/lib/get-query-client';
+import { parseShareDisplayName } from '@/shared/lib/parse-share-display-name';
+
+import type { Metadata } from 'next';
+
+type ProjectsPageMetadataProps = {
+  searchParams: Promise<{
+    [PROJECT_INVITE_QUERY_KEY]?: string;
+    [SHARE_INVITER_NAME_PARAM]?: string;
+  }>;
+};
+
+export const generateMetadata = async ({ searchParams }: ProjectsPageMetadataProps): Promise<Metadata> => {
+  const params = await searchParams;
+  const projectId = parseProjectInviteId(params[PROJECT_INVITE_QUERY_KEY] ?? null);
+
+  if (projectId === null) {
+    return { title: '프로젝트' };
+  }
+
+  const inviterName = parseShareDisplayName(params[SHARE_INVITER_NAME_PARAM]) ?? '';
+  const description = buildReviewRequestDescription(inviterName);
+  const pathSearchParams = new URLSearchParams({
+    [PROJECT_INVITE_QUERY_KEY]: String(projectId),
+  });
+
+  if (inviterName) {
+    pathSearchParams.set(SHARE_INVITER_NAME_PARAM, inviterName);
+  }
+
+  return buildShareOgMetadata({
+    description,
+    path: `/projects?${pathSearchParams.toString()}`,
+  });
+};
 
 const ProjectsPageFallback = () => (
   <div className="flex min-h-[240px] items-center justify-center">
@@ -16,11 +56,18 @@ const ProjectsPageFallback = () => (
 
 const ProjectsPage = async () => {
   const queryClient = getQueryClient();
+  const cookieStore = await cookies();
 
-  await Promise.all([
-    queryClient.prefetchQuery({ queryKey: projectKeys.list(), queryFn: fetchProjects }),
-    queryClient.prefetchQuery({ queryKey: profileKeys.my, queryFn: fetchMyProfile }),
-  ]);
+  if (cookieStore.has('accessToken')) {
+    try {
+      await Promise.all([
+        queryClient.prefetchQuery({ queryKey: projectKeys.list(), queryFn: fetchProjects }),
+        queryClient.prefetchQuery({ queryKey: profileKeys.my, queryFn: fetchMyProfile }),
+      ]);
+    } catch {
+      // 비로그인·만료 세션 등 prefetch 실패 시에도 초대 링크 랜딩은 허용
+    }
+  }
 
   return (
     <Suspense fallback={<ProjectsPageFallback />}>

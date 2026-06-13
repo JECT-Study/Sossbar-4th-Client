@@ -3,26 +3,53 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+import { buildReviewRequestDescription } from '@/features/profile/lib/profile-share-content';
 import { fetchReviewFormData, ReviewWriteContent, reviewKeys } from '@/features/review';
 import { fetchReviewValidation } from '@/features/review/api/fetchers';
+import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
+import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
+import { parseShareDisplayName } from '@/shared/lib/parse-share-display-name';
 
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Sossbar - 프로젝트 동료 리뷰',
-  description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
-  openGraph: {
-    title: 'Sossbar - 프로젝트 동료 리뷰',
-    description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary',
-    title: 'Sossbar - 프로젝트 동료 리뷰',
-    description: '함께 프로젝트를 진행한 팀원에게 후기를 남겨보세요',
-  },
+type ReviewNewPageMetadataProps = {
+  searchParams: Promise<{
+    projectId?: string;
+    revieweeId?: string;
+    reviewee?: string;
+    [SHARE_INVITER_NAME_PARAM]?: string;
+  }>;
+};
+
+export const generateMetadata = async ({ searchParams }: ReviewNewPageMetadataProps): Promise<Metadata> => {
+  const params = await searchParams;
+  const inviterName = parseShareDisplayName(params[SHARE_INVITER_NAME_PARAM]);
+  const revieweeName = parseShareDisplayName(params.reviewee);
+  const displayName = inviterName ?? revieweeName ?? '';
+  const description = buildReviewRequestDescription(displayName);
+
+  const pathSearchParams = new URLSearchParams();
+  if (params.projectId) {
+    pathSearchParams.set('projectId', params.projectId);
+  }
+  if (params.revieweeId) {
+    pathSearchParams.set('revieweeId', params.revieweeId);
+  }
+  if (revieweeName) {
+    pathSearchParams.set('reviewee', revieweeName);
+  }
+  if (inviterName) {
+    pathSearchParams.set(SHARE_INVITER_NAME_PARAM, inviterName);
+  }
+
+  const path = pathSearchParams.size > 0 ? `/reviews/new?${pathSearchParams.toString()}` : '/reviews/new';
+
+  return buildShareOgMetadata({
+    description,
+    path,
+  });
 };
 
 type ReviewNewPageProps = {

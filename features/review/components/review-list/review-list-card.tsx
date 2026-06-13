@@ -58,7 +58,7 @@ export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail, showTitle 
     >
       <div className="flex items-center justify-between">
         <h2 className="text-heading-base text-text-basic font-bold">받은 후기</h2>
-        {viewState !== 'empty' ? (
+        {reviews.length > 0 ? (
           <SegmentedControl options={reviewToneOptions} value={selectedTone} onValueChange={setSelectedTone} />
         ) : null}
       </div>

@@ -18,7 +18,10 @@ export const ProfileSection = ({ userId, isMyProfile: isMyProfileProp }: Props) 
   const isMyProfile = isMyProfileProp ?? isMyProfileFromQuery;
   const { data: profile } = useProfileById(userId);
   const { isEditing, isUpdatingProfile, startEditing, stopEditing, submitProfile } = useProfileEditing();
-  const { isShareTooltipOpen, shareTooltipMessage, closeShareTooltip, shareProfile } = useProfileShare({ userId });
+  const { isShareTooltipOpen, shareTooltipMessage, closeShareTooltip, shareProfile } = useProfileShare({
+    userId,
+    userName: profile?.username,
+  });
 
   if (isMyProfile && isEditing) {
     return (
