@@ -1,3 +1,4 @@
+import { HomeComparisonSection } from './home-comparison-section';
 import { HomeCtaSection } from './home-cta-section';
 import { HomeFeaturesSection } from './home-features-section';
 import { HomeHeroSection } from './home-hero-section';
@@ -8,6 +9,7 @@ const Home = () => {
   return (
     <>
       <HomeHeroSection />
+      <HomeComparisonSection />
       <HomeFeaturesSection />
       <HomeHowItWorksSection />
       <HomeShowcaseSection />
