@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { ApiError } from '@/shared/lib/api';
 
 import type { CreateProjectFormValues } from './use-create-project-form';
@@ -16,6 +17,7 @@ export const useCreateProjectModal = ({ onOpenChange }: Params) => {
   const [createdProjectId, setCreatedProjectId] = useState<number | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const copyResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { data: myProfile } = useMyProfile();
   const { mutateAsync: createProject, isPending: isSubmitting } = useCreateProject();
   const { form, resetForm } = useCreateProjectForm();
 
@@ -31,8 +33,8 @@ export const useCreateProjectModal = ({ onOpenChange }: Params) => {
   }, [clearCopyResetTimer]);
 
   const inviteUrl = useMemo(
-    () => (createdProjectId !== null ? buildProjectInviteUrl(createdProjectId) : ''),
-    [createdProjectId],
+    () => (createdProjectId !== null ? buildProjectInviteUrl(createdProjectId, myProfile?.username) : ''),
+    [createdProjectId, myProfile?.username],
   );
 
   const resetAll = useCallback(() => {

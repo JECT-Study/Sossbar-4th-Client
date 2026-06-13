@@ -6,9 +6,10 @@ import { buildProfileShareClipboardText } from '../lib/build-profile-share-clipb
 
 interface Params {
   userId: number;
+  userName?: string;
 }
 
-export const useProfileShare = ({ userId }: Params) => {
+export const useProfileShare = ({ userId, userName }: Params) => {
   const {
     open: isShareTooltipOpen,
     message: shareTooltipMessage,
@@ -17,8 +18,8 @@ export const useProfileShare = ({ userId }: Params) => {
   } = useCopyLinkFeedback();
 
   const shareProfile = useCallback(async () => {
-    await copyLink(buildProfileShareClipboardText(userId));
-  }, [copyLink, userId]);
+    await copyLink(buildProfileShareClipboardText(userId, userName));
+  }, [copyLink, userId, userName]);
 
   return {
     isShareTooltipOpen,

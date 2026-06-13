@@ -7,6 +7,12 @@ export const saveLoginReturnPath = () => {
     return;
   }
 
+  // proxy에서 이미 복귀 경로를 설정한 경우 덮어쓰지 않음
+  const hasCookie = document.cookie.split('; ').some((row) => row.startsWith(`${COOKIE_NAME}=`));
+  if (hasCookie) {
+    return;
+  }
+
   const url = new URL(window.location.href);
   url.searchParams.delete('modal');
   const query = url.searchParams.toString();

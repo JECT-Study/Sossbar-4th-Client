@@ -77,9 +77,9 @@ export const apiRequest = async <T>(path: string, { body, headers, ...init }: Ap
       if (reissued) {
         return parseResponse<T>(await fetch(buildRequest()));
       }
+      // 토큰 만료 후 재발급도 실패한 경우에만 캐시 초기화
+      getQueryClient().clear();
     }
-
-    getQueryClient().clear();
   }
 
   return parseResponse<T>(res);

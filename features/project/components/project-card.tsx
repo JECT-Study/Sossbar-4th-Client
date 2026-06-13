@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 
+import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { useConfirmProjectMembers, useDeleteProject, useDeleteProjectMember } from '@/features/project/api/mutations';
 import { EditProjectModal } from '@/features/project/components/edit-project-modal';
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
@@ -217,6 +218,7 @@ const ProjectCardTitle = ({ host, projectName }: ProjectCardTitleProps) => {
 };
 
 const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardActionsProps) => {
+  const { data: myProfile } = useMyProfile();
   const {
     open: isInviteTooltipOpen,
     message: inviteTooltipMessage,
@@ -238,7 +240,7 @@ const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardA
   }, [confirmTeam]);
 
   const handleCopyInviteLink = async () => {
-    await copyLink(buildProjectInviteUrl(projectId));
+    await copyLink(buildProjectInviteUrl(projectId, myProfile?.username));
   };
 
   if (!isLeader) {

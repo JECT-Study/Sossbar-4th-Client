@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import type { Profile } from '@/features/profile/profile.types';
+import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
 import { Dropdown } from '@/shared/components/dropdown';
 import { NotificationBell } from '@/shared/components/notification';
 import { ROUTES } from '@/shared/constants/routes';
@@ -30,7 +31,7 @@ export const HeaderAuthAreaClient = ({ initialProfile }: Props) => {
   const profile = hasLoggedOut ? null : (queryProfile ?? initialProfile);
 
   if (!profile) {
-    return null;
+    return <KakaoLoginButton />;
   }
 
   const avatarSrc = profile.profileImageUrl || DEFAULT_AVATAR_SRC;
