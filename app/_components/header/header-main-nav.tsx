@@ -3,40 +3,45 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Button } from '@/shared/components/button';
 import { ProtectedLink } from '@/shared/components/protected-link';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
 const NAV_LINKS = [
-  { href: '/profile', label: '내 프로필', requiresAuth: true },
+  { href: '/profile', label: '내 소스', requiresAuth: true },
   { href: '/projects', label: '프로젝트 관리', requiresAuth: true },
-  { href: ROUTES.PROFILE_EXAMPLES, label: '프로필 예시 보기', requiresAuth: false },
+  { href: ROUTES.PROFILE_EXAMPLES, label: '소스 예시 보기', requiresAuth: false },
 ] as const;
+
+const getNavLinkClassName = (isActive: boolean) =>
+  cn(
+    'inline-flex h-10 min-w-[68px] shrink-0 items-center justify-center rounded-md px-5',
+    'text-body-base font-medium text-text-subtle transition-colors',
+    'hover:bg-button-tertiary-fill-hover',
+    isActive && 'text-text-basic',
+  );
 
 export const HeaderMainNav = () => {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="주요 메뉴">
-      <ul className="flex items-center gap-4">
+    <nav aria-label="주요 메뉴" className="h-10">
+      <ul className="gap-margin-m flex h-10 items-center">
         {NAV_LINKS.map(({ href, label, requiresAuth }) => {
           const isActive = pathname === href;
-          const linkClassName = cn('h-10 px-5', isActive && 'bg-surface-gray-subtle rounded-md');
+          const linkClassName = getNavLinkClassName(isActive);
 
           return (
-            <li key={label}>
-              <Button asChild size="small" variant="tertiary">
-                {requiresAuth ? (
-                  <ProtectedLink href={href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
-                    {label}
-                  </ProtectedLink>
-                ) : (
-                  <Link href={href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
-                    {label}
-                  </Link>
-                )}
-              </Button>
+            <li key={label} className="h-10">
+              {requiresAuth ? (
+                <ProtectedLink href={href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
+                  {label}
+                </ProtectedLink>
+              ) : (
+                <Link href={href} className={linkClassName} aria-current={isActive ? 'page' : undefined}>
+                  {label}
+                </Link>
+              )}
             </li>
           );
         })}
