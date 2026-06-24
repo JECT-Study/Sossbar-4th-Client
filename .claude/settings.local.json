@@ -19,7 +19,15 @@
       "Bash(git add *)",
       "Bash(git rm *)",
       "Bash(git restore *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -TimeoutSec 3 -UseBasicParsing; \"running: $\\($r.StatusCode\\)\" } catch { \"not running\" })",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "PowerShell(\\(Get-Command npx -ErrorAction SilentlyContinue\\) -and \\(npx playwright --version 2>$null\\))",
+      "PowerShell(npx playwright --version)",
+      "PowerShell(Set-Location \"C:\\\\JECT_Sossbar\\\\Sossbar\\\\Sossbar-4th-Client\"; npx playwright --version; ls node_modules | Where-Object { $_.Name -match 'playwright' })",
+      "PowerShell($pw = \\(Get-Command npx\\).Source; $pwPath = npx --yes playwright --version 2>&1; npx --yes node -e \"console.log\\(require.resolve\\('playwright/package.json'\\)\\)\" 2>&1 | Select-Object -First 5)",
+      "PowerShell(node -e \"console.log\\(require.resolve\\('playwright'\\)\\)\" 2>&1; $env:npm_config_prefix)",
+      "PowerShell(Get-ChildItem *)"
     ]
   }
 }
