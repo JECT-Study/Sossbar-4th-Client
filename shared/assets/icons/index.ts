@@ -11,6 +11,7 @@ export { default as CopyIcon } from './copy.svg';
 export { default as DangerIcon } from './danger.svg';
 export { default as DeleteIcon } from './delete.svg';
 export { default as DownIcon } from './down.svg';
+export { default as DropdownIcon } from './dropdown.svg';
 export { default as EditIcon } from './edit.svg';
 export { default as EllipsisHorizontalIcon } from './ellipsis-horizontal.svg';
 export { default as EllipsisVerticalIcon } from './ellipsis-vertical.svg';
