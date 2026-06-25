@@ -4,9 +4,14 @@ import type { ComponentPropsWithRef } from 'react';
 
 import { Select as SelectPrimitive } from 'radix-ui';
 
+import { DropdownIcon } from '@/shared/assets/icons';
 import { cn } from '@/shared/lib/cn';
 
-const SelectTrigger = ({ className, ...restProps }: ComponentPropsWithRef<typeof SelectPrimitive.Trigger>) => {
+const SelectTrigger = ({
+  children,
+  className,
+  ...restProps
+}: ComponentPropsWithRef<typeof SelectPrimitive.Trigger>) => {
   return (
     <SelectPrimitive.Trigger
       className={cn(
@@ -14,7 +19,10 @@ const SelectTrigger = ({ className, ...restProps }: ComponentPropsWithRef<typeof
         className,
       )}
       {...restProps}
-    />
+    >
+      {children}
+      <DropdownIcon aria-hidden className="text-input-border size-5" />
+    </SelectPrimitive.Trigger>
   );
 };
 
