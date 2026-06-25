@@ -7,7 +7,6 @@ import { Avatar } from 'radix-ui';
 import { useState } from 'react';
 
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
-import type { Profile } from '@/features/profile/profile.types';
 import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
 import { Dropdown } from '@/shared/components/dropdown';
 import { NotificationBell } from '@/shared/components/notification';
@@ -19,16 +18,12 @@ const DEFAULT_AVATAR_SRC = '/sample_user.svg';
 const dropdownItemClassName =
   'text-body-sm text-text-basic !h-[44px] min-h-0 shrink-0 justify-start rounded-md px-2 py-0 font-normal';
 
-interface Props {
-  initialProfile: Profile;
-}
-
-export const HeaderAuthAreaClient = ({ initialProfile }: Props) => {
+export const HeaderAuthAreaClient = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: queryProfile } = useMyProfile();
+  const { data: profileFromQuery } = useMyProfile();
   const [hasLoggedOut, setHasLoggedOut] = useState(false);
-  const profile = hasLoggedOut ? null : (queryProfile ?? initialProfile);
+  const profile = hasLoggedOut ? null : profileFromQuery;
 
   if (!profile) {
     return <KakaoLoginButton />;
