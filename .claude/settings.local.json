@@ -19,9 +19,7 @@
       "Bash(git add *)",
       "Bash(git rm *)",
       "Bash(git restore *)",
-      "Bash(git commit *)",
-      "Bash(Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue)",
-      "Bash(Write-Host \"done\")"
+      "Bash(git commit *)"
     ]
   }
 }
