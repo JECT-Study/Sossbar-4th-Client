@@ -1,6 +1,6 @@
 import { PageContainer } from '@/shared/components/page-container';
 
-import { HowItWorksDevicePreview } from './home-renewal-how-it-works-device-preview';
+import { HowItWorksStepPreview } from './home-renewal-how-it-works-step-preview';
 import { HomeSectionHeader } from './home-section-header';
 
 const STEPS = [
@@ -8,13 +8,13 @@ const STEPS = [
     step: 'STEP 1',
     title: '프로젝트 생성',
     description: ['회원가입 이후 프로젝트 관리 페이지로 들어가', '프로젝트를 생성하세요.'],
-    imageSrc: '/home-renewal/how-it-works-ui-step1.png',
+    variant: 'step1',
   },
   {
     step: 'STEP 2',
     title: '후기 요청',
     description: ['프로젝트 생성 후 함께 일한 동료에게', '후기 요청 링크를 보내세요.'],
-    imageSrc: '/home-renewal/how-it-works-ui-step2.png',
+    variant: 'step2',
   },
   {
     step: 'STEP 3',
@@ -23,20 +23,20 @@ const STEPS = [
       '동료에게 받은 후기가 ‘내 소스’ 페이지에 자동으로 반영됩니다.',
       '해당 페이지에서 본인의 소프트 스킬을 확인 후 공유해보세요.',
     ],
-    imageSrc: null,
+    variant: 'step3',
   },
 ] as const;
 
 export const HomeRenewalHowItWorksSection = () => {
   return (
-    <section className="py-margin-xxl box-border flex h-[1329px] flex-col items-center bg-white">
-      <PageContainer className="gap-margin-xl flex w-full max-w-[1200px] flex-1 flex-col items-center">
+    <section className="py-margin-xxl box-border flex flex-col items-center bg-white">
+      <PageContainer className="gap-margin-xl flex w-full max-w-[1200px] flex-col items-center">
         <HomeSectionHeader badge="사용법" heading="Sossbar 이용 방법" />
 
-        <div className="gap-margin-xl flex w-full max-w-[1200px] flex-col">
+        <div className="flex w-full max-w-[1200px] flex-col gap-10">
           {STEPS.map((step) => (
-            <div key={step.step} className="flex flex-col items-center gap-6 lg:flex-row lg:gap-6">
-              <div className="gap-margin-m relative flex h-[300px] w-full flex-col py-4 lg:w-[580px]">
+            <div key={step.step} className="flex w-full flex-col items-center gap-6 lg:flex-row">
+              <div className="gap-margin-m py-padding-m relative flex h-[300px] w-full flex-col lg:w-[622px]">
                 <div
                   aria-hidden
                   className="bg-divider-1 pointer-events-none absolute top-11 right-0 left-[7.09%] h-px"
@@ -54,7 +54,7 @@ export const HomeRenewalHowItWorksSection = () => {
                 </div>
               </div>
 
-              <HowItWorksDevicePreview imageSrc={step.imageSrc} title={step.title} />
+              <HowItWorksStepPreview variant={step.variant} title={step.title} />
             </div>
           ))}
         </div>
