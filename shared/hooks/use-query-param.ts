@@ -1,25 +1,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
-/** query string에서 대상 key만 갱신한다. */
-const setParam = (params: URLSearchParams, key: string, value: string): URLSearchParams => {
-  const next = new URLSearchParams(params.toString());
-  next.set(key, value);
-  return next;
-};
-
-/** query string에서 대상 key만 제거한다. */
-const removeParam = (params: URLSearchParams, key: string): URLSearchParams => {
-  const next = new URLSearchParams(params.toString());
-  next.delete(key);
-  return next;
-};
-
-/** pathname과 query string을 URL로 합친다. */
-const buildUrl = (pathname: string, params: URLSearchParams): string => {
-  const query = params.toString();
-  return query ? `${pathname}?${query}` : pathname;
-};
+import { buildPathWithSearch, removeSearchParam, setSearchParam } from '@/shared/lib/url/search-params';
 
 /**
  * 현재 URL의 특정 query parameter를 읽고, 스크롤 위치를 유지한 채 갱신하거나 제거한다.
@@ -32,13 +14,14 @@ export const useQueryParam = (key: string) => {
   const queryParamValue = searchParams.get(key);
 
   const updateQueryParam = useCallback(
-    (value: string) => router.push(buildUrl(pathname, setParam(searchParams, key, value)), { scroll: false }),
+    (value: string) =>
+      router.push(buildPathWithSearch(pathname, setSearchParam(searchParams, key, value)), { scroll: false }),
     [key, pathname, router, searchParams],
   );
 
   const removeQueryParam = useCallback(
     () =>
-      router.replace(buildUrl(pathname, removeParam(searchParams, key)), {
+      router.replace(buildPathWithSearch(pathname, removeSearchParam(searchParams, key)), {
         scroll: false,
       }),
     [key, pathname, router, searchParams],
