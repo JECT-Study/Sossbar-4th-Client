@@ -1,12 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { fetchMyProfile } from '../api/fetch-my-profile';
+import { fetchMyProfileOptional } from '../api/fetch-my-profile-optional';
 import { profileKeys } from '../profile.query-keys';
 
 export const useMyProfile = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: profileKeys.my,
-    queryFn: () => fetchMyProfile(),
-    throwOnError: false,
+    queryFn: () => fetchMyProfileOptional(),
   });
 };
