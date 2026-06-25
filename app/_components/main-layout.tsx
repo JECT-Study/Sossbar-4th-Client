@@ -1,8 +1,14 @@
 import type { ReactNode } from 'react';
 
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
+import { fetchMyProfileOptional } from '@/features/profile/api/fetch-my-profile-optional';
+import { profileKeys } from '@/features/profile/profile.query-keys';
+import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-page-view';
+import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import { Header } from './header/header';
 import { MainLayoutClient } from './main-layout-client';
@@ -13,13 +19,28 @@ interface Props {
 
 /**
  * 앱 전역 페이지 틀 (Server Component).
- * GA 페이지뷰 + 클라이언트 레이아웃(헤더·푸터·로그인 모달)을 감싼다.
+ * myProfile prefetch + HydrationBoundary로 전역 Client subtree에 suspense query 캐시를 공급한다.
  */
-export const MainLayout = ({ children }: Props) => {
+export const MainLayout = async ({ children }: Props) => {
+  const cookieStore = await cookies();
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: profileKeys.my,
+    queryFn: () => fetchMyProfileOptional({ headers: { Cookie: cookieStore.toString() } }),
+  });
+
   return (
-    <Suspense fallback={null}>
-      <GoogleAnalyticsPageView />
-      <MainLayoutClient header={<Header />}>{children}</MainLayoutClient>
-    </Suspense>
+    <>
+      <Suspense fallback={null}>
+        <GoogleAnalyticsPageView />
+      </Suspense>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <MainLayoutClient header={<Header />}>{children}</MainLayoutClient>
+        <Suspense fallback={null}>
+          <LoginModal />
+        </Suspense>
+      </HydrationBoundary>
+    </>
   );
 };

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Suspense } from 'react';
 
 import { Button } from '@/shared/components/button/button';
 import { PageContainer } from '@/shared/components/page-container';
@@ -25,7 +26,15 @@ export const HomeHeroSection = () => {
           <Button asChild variant="primary" size="large">
             <ProtectedLink href="/projects">프로젝트 시작하기</ProtectedLink>
           </Button>
-          <HomeProfileButton />
+          <Suspense
+            fallback={
+              <Button variant="tertiary" size="large" disabled>
+                내 프로필 보기
+              </Button>
+            }
+          >
+            <HomeProfileButton />
+          </Suspense>
         </div>
       </div>
 
