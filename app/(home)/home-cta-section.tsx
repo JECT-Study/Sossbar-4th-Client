@@ -42,7 +42,7 @@ export const HomeCtaSection = () => {
             </div>
 
             <Button asChild variant="primary" size="large" className="mx-auto mt-10">
-              <ProtectedLink href="/mypage">로그인하고 시작하기</ProtectedLink>
+              <ProtectedLink href="/mypage">프로젝트 생성하러 가기</ProtectedLink>
             </Button>
           </div>
         </div>
