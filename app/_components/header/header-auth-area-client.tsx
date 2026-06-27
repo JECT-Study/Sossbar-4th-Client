@@ -33,13 +33,13 @@ export const HeaderAuthAreaClient = () => {
   const name = profile.username ?? profile.email;
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex h-10 items-center gap-4">
       <NotificationBell />
       <Dropdown.Root>
         <Dropdown.Trigger
           type="button"
           className={cn(
-            'flex min-h-10 max-w-[220px] items-center gap-2 rounded-lg px-1 outline-none',
+            'flex h-10 max-w-[220px] items-center gap-2 rounded-lg px-1 outline-none',
             'hover:bg-surface-gray-subtler focus-visible:ring-border-primary focus-visible:ring-2',
           )}
           aria-label={`계정 메뉴, ${name}`}
