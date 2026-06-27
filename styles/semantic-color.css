@@ -58,6 +58,7 @@
 
   /* Divider */
   --color-divider-gray-light: var(--color-gray-200);
+  --color-divider-1: #e8eef2;
   --color-divider-gray: var(--color-gray-400);
   --color-divider-gray-dark: var(--color-gray-500);
   --color-divider-gray-darker: var(--color-gray-900);
@@ -222,6 +223,7 @@
 
   /* Divider */
   --color-divider-gray-light: var(--color-divider-gray-light);
+  --color-divider-1: var(--color-divider-1);
   --color-divider-gray: var(--color-divider-gray);
   --color-divider-gray-dark: var(--color-divider-gray-dark);
   --color-divider-gray-darker: var(--color-divider-gray-darker);

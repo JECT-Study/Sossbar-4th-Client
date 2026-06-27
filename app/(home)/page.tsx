@@ -1,16 +1,16 @@
 import { HomeCtaSection } from './home-cta-section';
-import { HomeFeaturesSection } from './home-features-section';
 import { HomeHeroSection } from './home-hero-section';
-import { HomeHowItWorksSection } from './home-how-it-works-section';
-import { HomeShowcaseSection } from './home-showcase-section';
-
+import { HomeRenewalCareerSection } from './home-renewal-career-section';
+import { HomeRenewalFeaturesSection } from './home-renewal-features-section';
+import { HomeRenewalHowItWorksSection } from './home-renewal-how-it-works-section';
 const Home = () => {
   return (
     <>
       <HomeHeroSection />
-      <HomeFeaturesSection />
-      <HomeHowItWorksSection />
-      <HomeShowcaseSection />
+      <HomeRenewalFeaturesSection />
+      <HomeRenewalHowItWorksSection />
+
+      <HomeRenewalCareerSection />
       <HomeCtaSection />
     </>
   );
