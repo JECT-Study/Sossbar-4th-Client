@@ -24,7 +24,7 @@ export const LoginModal = () => {
       <Dialog.Portal>
         <Dialog.Overlay className="bg-black-75 fixed inset-0 z-20" />
         <Dialog.Content className="fixed top-1/2 left-1/2 z-20 flex w-lg -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-2xl border bg-white p-10 text-center">
-          <Dialog.Close className="flex w-full cursor-pointer justify-end">
+          <Dialog.Close className="ml-auto w-fit cursor-pointer">
             <XIcon width={24} height={24} />
           </Dialog.Close>
           <div className="flex w-full flex-col gap-6">
