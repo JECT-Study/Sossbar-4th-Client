@@ -47,3 +47,5 @@ next-env.d.ts
 
 # local SSR guide (not tracked)
 docs/tanstack-query-ssr.md
+
+.claude
