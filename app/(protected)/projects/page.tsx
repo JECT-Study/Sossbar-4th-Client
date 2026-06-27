@@ -2,7 +2,7 @@ import { dehydrate } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
-import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
+import { fetchMyProfileOptional } from '@/features/profile/api/fetch-my-profile-optional';
 import { buildReviewRequestDescription } from '@/features/profile/lib/profile-share-content';
 import { profileKeys } from '@/features/profile/profile.query-keys';
 import { fetchProjects } from '@/features/project/api/fetchers';
@@ -62,7 +62,10 @@ const ProjectsPage = async () => {
     try {
       await Promise.all([
         queryClient.prefetchQuery({ queryKey: projectKeys.list(), queryFn: fetchProjects }),
-        queryClient.prefetchQuery({ queryKey: profileKeys.my, queryFn: fetchMyProfile }),
+        queryClient.prefetchQuery({
+          queryKey: profileKeys.my,
+          queryFn: () => fetchMyProfileOptional({ headers: { Cookie: cookieStore.toString() } }),
+        }),
       ]);
     } catch {
       // 비로그인·만료 세션 등 prefetch 실패 시에도 초대 링크 랜딩은 허용

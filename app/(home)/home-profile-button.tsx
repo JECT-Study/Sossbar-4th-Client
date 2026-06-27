@@ -7,9 +7,11 @@ import { ROUTES } from '@/shared/constants/routes';
 
 export const HomeProfileButton = () => {
   const { data: profile } = useMyProfile();
+  const profileHref = profile ? ROUTES.PROFILE(profile.userId) : '/profile';
+
   return (
     <Button asChild variant="tertiary" size="large">
-      <ProtectedLink href={ROUTES.PROFILE(profile?.userId ?? '')}>내 프로필 보기</ProtectedLink>
+      <ProtectedLink href={profileHref}>내 프로필 보기</ProtectedLink>
     </Button>
   );
 };

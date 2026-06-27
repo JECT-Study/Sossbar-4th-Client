@@ -12,7 +12,7 @@ const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${proc
 
 export const LoginModal = () => {
   const { data: profile } = useMyProfile();
-  const { isOpen, onOpenChange } = useLoginModal({ isAuthenticated: profile !== null && profile !== undefined });
+  const { isOpen, onOpenChange } = useLoginModal({ isAuthenticated: profile != null });
 
   const handleKakaoLogin = () => {
     saveLoginReturnPath();

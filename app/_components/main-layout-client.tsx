@@ -3,9 +3,7 @@
 import type { ReactNode } from 'react';
 
 import { usePathname } from 'next/navigation';
-import { Suspense } from 'react';
 
-import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { Footer } from '@/shared/components/footer';
 
 interface Props {
@@ -32,10 +30,6 @@ export const MainLayoutClient = ({ children, header }: Props) => {
       {header}
       <main className="flex-1">{children}</main>
       <Footer variant={footerVariant} />
-      {/* useLoginModal → useSearchParams 사용으로 Suspense boundary 필요 */}
-      <Suspense fallback={null}>
-        <LoginModal />
-      </Suspense>
     </>
   );
 };
