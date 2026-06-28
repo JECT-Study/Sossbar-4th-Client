@@ -35,12 +35,21 @@ export const ProfileSection = ({ userId, isMyProfile: isMyProfileProp }: Props) 
   }
 
   return (
-    <section className="mt-15.5 mb-8 flex w-full flex-row">
-      <div className="flex h-[104px] w-[540px] flex-row gap-6">
+    <section className="mb-10 flex w-full flex-row justify-between pt-8">
+      <div className="flex flex-row gap-6">
         <ProfileAvatar username={profile.username} profileImageUrl={profile.profileImageUrl} />
-        <div className="flex flex-1 flex-col">
-          <h2 className="text-heading-lg text-text-basic pb-2 font-bold">{profile.username}</h2>
-          <p className="text-heading-xs text-text-subtle font-normal">{profile.bio}</p>
+        <div className="flex flex-1 flex-col gap-4 py-1">
+          <div className="flex items-center gap-2">
+            <h2 className="text-heading-lg text-text-basic font-bold">{profile.username}</h2>
+            {/* 직무 배지: API 미제공 — 데이터 추가 시 노출 */}
+          </div>
+          {profile.bio ? (
+            <div className="flex flex-col gap-1">
+              <p className="text-heading-xs text-text-basic font-medium">한 줄 소개</p>
+              <p className="text-body-base text-text-subtle font-normal">{profile.bio}</p>
+            </div>
+          ) : null}
+          {/* 하드 스킬: API 미제공 — 링크 데이터 추가 시 노출 */}
         </div>
       </div>
       {isMyProfile ? (

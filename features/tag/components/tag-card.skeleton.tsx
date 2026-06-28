@@ -31,26 +31,29 @@ export const TagCardSkeleton = () => (
   <section
     aria-busy="true"
     aria-label="받은 태그를 불러오는 중"
-    className="border-border-gray flex h-[652px] w-[588px] flex-col overflow-hidden rounded-2xl border bg-white p-6"
+    className="border-border-gray flex h-[652px] w-[585px] flex-col overflow-hidden rounded-2xl border bg-white"
   >
-    <SkeletonLine className="h-6 w-24" />
+    <div className="bg-surface-gray-subtler flex items-center px-6 py-5">
+      <SkeletonLine className="h-5 w-24" />
+    </div>
 
-    <div className="mt-6 flex min-h-0 flex-1 flex-col gap-6">
-      <div>
-        <SkeletonLine className="h-5 w-32" />
-        <div className="mt-4 flex flex-col items-start gap-2">
+    <div className="flex min-h-0 flex-1 flex-col px-6 py-6">
+      <SkeletonLine className="h-5 w-40" />
+
+      <div className="mt-5 flex min-h-0 flex-1 flex-col gap-7">
+        <div className="flex flex-col items-start gap-2.5">
           {TOP3_BADGE_WIDTHS.map((width) => (
             <SkeletonBadge key={width} className={width} />
           ))}
         </div>
-      </div>
 
-      <div>
-        <SkeletonLine className="h-5 w-44" />
-        <div className="mt-4 flex flex-wrap gap-2">
-          {ALL_TAG_BADGE_SKELETONS.map(({ id, width }) => (
-            <SkeletonBadge key={id} className={width} />
-          ))}
+        <div>
+          <SkeletonLine className="h-5 w-24" />
+          <div className="mt-4 flex flex-wrap gap-2">
+            {ALL_TAG_BADGE_SKELETONS.map(({ id, width }) => (
+              <SkeletonBadge key={id} className={width} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

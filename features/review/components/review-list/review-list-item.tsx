@@ -1,18 +1,19 @@
+'use client';
+
 import type { ReactNode } from 'react';
+
+import { useLayoutEffect, useRef, useState } from 'react';
 
 import { EllipsisVerticalIcon, EmergencyIcon } from '@/shared/assets/icons';
 import { IconButton } from '@/shared/components/button';
 import { Dropdown } from '@/shared/components/dropdown';
-import { ImageWithFallback } from '@/shared/components/image-with-fallback';
-
-const DEFAULT_IMAGE_PATH = '/default.png';
 
 interface RootProps {
   children: ReactNode;
 }
 
 const ReviewListItemRoot = ({ children }: RootProps) => (
-  <li className="border-border-gray-light border-b py-6">
+  <li className="border-border-gray-light border-b py-6 first:pt-0 last:border-b-0">
     <article className="relative">{children}</article>
   </li>
 );
@@ -22,54 +23,85 @@ interface HeadingProps {
 }
 
 const ReviewListItemHeading = ({ children }: HeadingProps) => (
-  <div className="flex items-center gap-6 pr-8">{children}</div>
+  <div className="flex items-center gap-4 pr-8">{children}</div>
 );
 
-interface ImageProps {
-  src: string | null;
-  alt: string;
+interface AvatarProps {
+  name: string;
 }
 
-const ReviewListItemImage = ({ src, alt }: ImageProps) => (
-  <ImageWithFallback
-    src={src}
-    fallbackSrc={DEFAULT_IMAGE_PATH}
-    width={72}
-    height={54}
-    alt={alt}
-    className="h-[54px] w-[72px] rounded-lg object-cover"
-  />
-);
+const ReviewListItemAvatar = ({ name }: AvatarProps) => {
+  const fallbackText = name.trim().slice(0, 1) || '?';
+
+  return (
+    <div
+      aria-hidden
+      className="bg-action-gray-light text-text-subtle text-heading-xs flex size-[54px] shrink-0 items-center justify-center rounded-full font-bold"
+    >
+      {fallbackText}
+    </div>
+  );
+};
 
 interface HeadingTextProps {
   children: ReactNode;
 }
 
-const ReviewListItemHeadingText = ({ children }: HeadingTextProps) => <div className="space-y-1">{children}</div>;
-
-interface TitleProps {
-  children: ReactNode;
-}
-
-const ReviewListItemTitle = ({ children }: TitleProps) => (
-  <h3 className="text-heading-xs text-text-subtler font-bold">{children}</h3>
+const ReviewListItemHeadingText = ({ children }: HeadingTextProps) => (
+  <div className="flex flex-col gap-1">{children}</div>
 );
 
-interface DescriptionProps {
+interface NameProps {
   children: ReactNode;
 }
 
-const ReviewListItemDescription = ({ children }: DescriptionProps) => (
+const ReviewListItemName = ({ children }: NameProps) => (
+  <p className="text-heading-xs text-text-subtler font-bold">{children}</p>
+);
+
+interface MetaProps {
+  children: ReactNode;
+}
+
+const ReviewListItemMeta = ({ children }: MetaProps) => (
   <p className="text-body-sm text-text-subtler font-medium">{children}</p>
 );
 
+/** 본문 3줄 초과 시 "더보기"로 펼치는 후기 텍스트 */
 interface ContentProps {
-  children: ReactNode;
+  children: string;
 }
 
-const ReviewListItemContent = ({ children }: ContentProps) => (
-  <p className="text-body-base text-text-basic mt-4 font-normal">{children}</p>
-);
+const ReviewListItemContent = ({ children }: ContentProps) => {
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const [isClamped, setIsClamped] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useLayoutEffect(() => {
+    const el = textRef.current;
+    if (!el) {
+      return;
+    }
+    setIsClamped(el.scrollHeight > el.clientHeight + 1);
+  }, [children]);
+
+  return (
+    <div className="mt-4">
+      <p ref={textRef} className={`text-body-base text-text-basic font-normal ${isExpanded ? '' : 'line-clamp-3'}`}>
+        {children}
+      </p>
+      {isClamped && !isExpanded ? (
+        <button
+          type="button"
+          className="text-body-sm text-text-subtle mt-1 cursor-pointer font-medium"
+          onClick={() => setIsExpanded(true)}
+        >
+          더보기
+        </button>
+      ) : null}
+    </div>
+  );
+};
 
 interface ActionMenuProps {
   projectName: string;
@@ -99,10 +131,10 @@ const ReviewListItemActionMenu = ({ projectName }: ActionMenuProps) => (
 export const ReviewListItem = {
   Root: ReviewListItemRoot,
   Heading: ReviewListItemHeading,
-  Image: ReviewListItemImage,
+  Avatar: ReviewListItemAvatar,
   HeadingText: ReviewListItemHeadingText,
-  Title: ReviewListItemTitle,
-  Description: ReviewListItemDescription,
+  Name: ReviewListItemName,
+  Meta: ReviewListItemMeta,
   Content: ReviewListItemContent,
   ActionMenu: ReviewListItemActionMenu,
 };

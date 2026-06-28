@@ -18,17 +18,18 @@ export const ProfileOwnerActions = ({
   onEditProfile,
   onShareProfile,
 }: Props) => (
-  <div className="ml-auto">
-    <Button variant="secondary" size="medium" leftIcon={<EditIcon />} onClick={onEditProfile}>
+  <div className="ml-auto flex shrink-0 items-start gap-2">
+    <Button variant="secondary" size="small" leftIcon={<EditIcon className="size-4" />} onClick={onEditProfile}>
       프로필 수정
     </Button>
-    <div className="relative ml-2 inline-flex">
+    <div className="relative inline-flex">
       <Button
         type="button"
         variant="primary"
         size="medium"
         leftIcon={<ShareIcon aria-hidden />}
         className={cn(
+          'h-11',
           isShareTooltipOpen &&
             'bg-button-primary-fill-pressed hover:bg-button-primary-fill-pressed focus:bg-button-primary-fill-pressed active:bg-button-primary-fill-pressed',
         )}

@@ -1,6 +1,7 @@
 'use client';
 
 import { EmptyState } from '@/shared/components/empty-state';
+import { ProfileStatCard } from '@/shared/components/profile-stat-card';
 import { cn } from '@/shared/lib/cn';
 
 import { TagCollapseButton } from './tag-collapse-button';
@@ -22,18 +23,17 @@ export const TagCard = ({ userId, projectId, collapsible }: Props) => {
   const hasTags = top3Tags.length > 0 || allTags.length > 0;
 
   return (
-    <section
-      className={cn(
-        'border-border-gray flex w-[588px] flex-col overflow-hidden rounded-2xl border bg-white p-6',
-        isCollapsed ? 'h-[398px]' : 'h-[652px]',
-      )}
+    <ProfileStatCard
+      title="받은 태그"
+      info
+      infoLabel="동료들이 남긴 후기에서 많이 선택된 태그예요"
+      className={cn('w-[585px]', collapsible ? (isCollapsed ? 'h-[462px]' : 'h-[716px]') : 'h-[652px]')}
     >
-      <h2 className="text-heading-base text-text-basic h-6 leading-6 font-bold">받은 태그</h2>
-
-      {!hasTags ? <EmptyState title="받은 태그가 없어요" /> : null}
-
-      {hasTags ? (
+      {!hasTags ? (
+        <EmptyState title="받은 태그가 없어요" />
+      ) : (
         <>
+          <p className="text-body-base text-text-subtle font-medium">이런 리뷰가 많았어요 🙂</p>
           <TagCollapsibleContent
             contentId={contentId}
             isCollapsed={isCollapsed}
@@ -42,7 +42,7 @@ export const TagCard = ({ userId, projectId, collapsible }: Props) => {
           />
           {collapsible ? <TagCollapseButton isCollapsed={isCollapsed} contentId={contentId} onToggle={toggle} /> : null}
         </>
-      ) : null}
-    </section>
+      )}
+    </ProfileStatCard>
   );
 };
