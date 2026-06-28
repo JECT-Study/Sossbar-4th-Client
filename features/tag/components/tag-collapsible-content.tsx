@@ -11,8 +11,8 @@ interface Props {
 }
 
 export const TagCollapsibleContent = ({ contentId, isCollapsed, top3Tags, allTags }: Props) => (
-  <div id={contentId} className="relative mt-5 min-h-0 flex-1 overflow-hidden">
-    <div className="flex w-full flex-col gap-7">
+  <div id={contentId} className="relative min-h-0 flex-1 overflow-hidden">
+    <div className="flex w-full flex-col gap-8">
       <TagTop3Section tags={top3Tags} />
       <TagAllSection tags={allTags} />
     </div>

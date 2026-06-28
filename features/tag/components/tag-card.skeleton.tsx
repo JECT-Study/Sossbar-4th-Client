@@ -9,7 +9,7 @@ const SkeletonLine = ({ className }: Props) => (
 );
 
 const SkeletonBadge = ({ className }: Props) => (
-  <div className={cn('bg-action-gray-light h-9 shrink-0 animate-pulse rounded-full', className)} />
+  <div className={cn('bg-action-gray-light h-10 shrink-0 animate-pulse rounded-full', className)} />
 );
 
 const TOP3_BADGE_WIDTHS = ['w-52', 'w-44', 'w-40'] as const;
@@ -37,23 +37,22 @@ export const TagCardSkeleton = () => (
       <SkeletonLine className="h-5 w-24" />
     </div>
 
-    <div className="flex min-h-0 flex-1 flex-col px-6 py-6">
-      <SkeletonLine className="h-5 w-40" />
-
-      <div className="mt-5 flex min-h-0 flex-1 flex-col gap-7">
-        <div className="flex flex-col items-start gap-2.5">
+    <div className="flex min-h-0 flex-1 flex-col gap-8 px-6 py-6">
+      <div className="flex flex-col gap-4">
+        <SkeletonLine className="h-5 w-44" />
+        <div className="flex flex-col items-start gap-2">
           {TOP3_BADGE_WIDTHS.map((width) => (
             <SkeletonBadge key={width} className={width} />
           ))}
         </div>
+      </div>
 
-        <div>
-          <SkeletonLine className="h-5 w-24" />
-          <div className="mt-4 flex flex-wrap gap-2">
-            {ALL_TAG_BADGE_SKELETONS.map(({ id, width }) => (
-              <SkeletonBadge key={id} className={width} />
-            ))}
-          </div>
+      <div className="flex flex-col gap-4">
+        <SkeletonLine className="h-5 w-24" />
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
+          {ALL_TAG_BADGE_SKELETONS.map(({ id, width }) => (
+            <SkeletonBadge key={id} className={width} />
+          ))}
         </div>
       </div>
     </div>

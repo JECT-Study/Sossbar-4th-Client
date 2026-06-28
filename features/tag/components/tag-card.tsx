@@ -28,12 +28,12 @@ export const TagCard = ({ userId, projectId, collapsible }: Props) => {
       info
       infoLabel="동료들이 남긴 후기에서 많이 선택된 태그예요"
       className={cn('w-[585px]', collapsible ? (isCollapsed ? 'h-[462px]' : 'h-[716px]') : 'h-[652px]')}
+      bodyClassName="gap-8"
     >
       {!hasTags ? (
         <EmptyState title="받은 태그가 없어요" />
       ) : (
         <>
-          <p className="text-body-base text-text-subtle font-medium">이런 리뷰가 많았어요 🙂</p>
           <TagCollapsibleContent
             contentId={contentId}
             isCollapsed={isCollapsed}
