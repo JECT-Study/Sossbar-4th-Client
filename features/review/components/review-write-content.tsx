@@ -9,15 +9,29 @@ import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 
+import type { UserPosition } from '../types/review';
+
 import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';
 import { useCreateReview } from '../api/mutations';
 import { useReviewFormData } from '../api/queries';
 
-const PRAISE_MIN_LENGTH = 10;
-const TEXT_MAX_LENGTH = 250;
+const FEEDBACK_MIN_LENGTH = 10;
+const FEEDBACK_MAX_LENGTH = 1000;
 const MAX_TAGS = 3;
 const DEFAULT_SPECTRUM_STEP = 2;
+
+const USER_POSITION_LABELS: Record<UserPosition, string> = {
+  FRONTEND: '프론트엔드',
+  BACKEND: '백엔드',
+  PM: 'PM',
+  PD: 'PD',
+  AI: 'AI',
+  QA: 'QA',
+  ETC: '기타',
+};
+
+const USER_POSITIONS = Object.keys(USER_POSITION_LABELS) as UserPosition[];
 
 export const ReviewWriteContent = () => {
   const router = useRouter();
@@ -40,7 +54,6 @@ export const ReviewWriteContent = () => {
   const { data: formData, isPending, isError, refetch } = useReviewFormData();
   const { mutateAsync: submitReview, isPending: isSubmitting } = useCreateReview();
 
-  // 같은 프로젝트에서 이미 한 명에게 후기를 제출했으면 스펙트럼은 서버에 저장된 상태 → 빈 배열로 전송
   const hasSubmittedAnyReview = useMemo(() => {
     if (!projectData || !profile) {
       return false;
@@ -50,8 +63,9 @@ export const ReviewWriteContent = () => {
 
   const [selectedTagIds, setSelectedTagIds] = useState<Set<number>>(() => new Set());
   const [spectrumSteps, setSpectrumSteps] = useState<Record<number, number>>({});
-  const [praise, setPraise] = useState('');
-  const [improvement, setImprovement] = useState('');
+  const [feedback, setFeedback] = useState('');
+  const [projectPosition, setProjectPosition] = useState<UserPosition | null>(null);
+  const [projectDetailPosition, setProjectDetailPosition] = useState('');
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -74,16 +88,15 @@ export const ReviewWriteContent = () => {
     setSpectrumSteps((prev) => ({ ...prev, [spectrumId]: step }));
   }, []);
 
-  const praiseTrimmed = praise.trim();
-  const improvementTrimmed = improvement.trim();
-  const praiseOk = praiseTrimmed.length >= PRAISE_MIN_LENGTH;
-  const improvementOk = improvementTrimmed.length === 0 || improvementTrimmed.length >= PRAISE_MIN_LENGTH;
+  const feedbackTrimmed = feedback.trim();
+  const feedbackOk = feedbackTrimmed.length >= FEEDBACK_MIN_LENGTH;
+  const positionOk = projectPosition != null && (projectPosition !== 'ETC' || projectDetailPosition.trim().length > 0);
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
   const spectrumsOk = !!formData?.spectrums?.length;
-  const canSubmit = praiseOk && tagsOk && spectrumsOk && !isSubmitting;
+  const canSubmit = feedbackOk && positionOk && tagsOk && spectrumsOk && !isSubmitting;
 
   const handleSubmitFromDialog = useCallback(async () => {
-    if (!formData || !canSubmit || projectId == null || revieweeId == null) {
+    if (!formData || !canSubmit || projectId == null || revieweeId == null || projectPosition == null) {
       return;
     }
     setSubmitError(null);
@@ -98,8 +111,9 @@ export const ReviewWriteContent = () => {
       await submitReview({
         projectId,
         revieweeId,
-        praise: praise.trim(),
-        improvement: improvement.trim(),
+        feedback: feedbackTrimmed,
+        projectPosition,
+        projectDetailPosition: projectPosition === 'ETC' ? projectDetailPosition.trim() : undefined,
         tagIds,
         spectrums,
       });
@@ -116,8 +130,9 @@ export const ReviewWriteContent = () => {
     spectrumSteps,
     projectId,
     revieweeId,
-    praise,
-    improvement,
+    feedbackTrimmed,
+    projectPosition,
+    projectDetailPosition,
     submitReview,
     router,
   ]);
@@ -228,49 +243,65 @@ export const ReviewWriteContent = () => {
               ))}
             </div>
           </section>
+
+          <section className="flex flex-col gap-4" aria-labelledby="review-position-heading">
+            <h2 id="review-position-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
+              프로젝트에서의 직군
+            </h2>
+            <p className="text-body-sm text-text-subtle -mt-2">(필수) 이 프로젝트에서 맡은 역할을 선택해주세요.</p>
+            <div className="flex max-w-[781px] flex-wrap gap-x-2 gap-y-2">
+              {USER_POSITIONS.map((pos) => (
+                <button
+                  key={pos}
+                  type="button"
+                  aria-pressed={projectPosition === pos}
+                  className={cn(
+                    'text-body-sm inline-flex h-[33px] shrink-0 items-center justify-center rounded-full border px-3 font-normal transition-colors outline-none focus-visible:ring-2 focus-visible:ring-(--color-border-primary) focus-visible:ring-offset-1',
+                    projectPosition === pos
+                      ? 'border-border-gray-light bg-action-secondary-pressed text-text-basic'
+                      : 'border-border-gray-light bg-action-gray-light text-text-basic hover:border-action-secondary-hover hover:bg-action-secondary-hover',
+                  )}
+                  onClick={() => {
+                    setProjectPosition(pos);
+                    if (pos !== 'ETC') {
+                      setProjectDetailPosition('');
+                    }
+                  }}
+                >
+                  {USER_POSITION_LABELS[pos]}
+                </button>
+              ))}
+            </div>
+            {projectPosition === 'ETC' && (
+              <input
+                type="text"
+                placeholder="직군을 직접 입력해주세요"
+                value={projectDetailPosition}
+                onChange={(e) => setProjectDetailPosition(e.target.value)}
+                className="border-border-gray-light text-body-sm text-text-basic placeholder:text-text-disabled mt-1 max-w-[400px] rounded-md border px-3 py-2 outline-none focus:ring-2 focus:ring-(--color-border-primary)"
+              />
+            )}
+          </section>
         </div>
 
         <div className="mt-8 flex flex-col gap-8">
-          <section className="flex flex-col gap-2" aria-labelledby="review-praise-heading">
-            <h2 id="review-praise-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
-              칭찬해요
+          <section className="flex flex-col gap-2" aria-labelledby="review-feedback-heading">
+            <h2 id="review-feedback-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
+              후기
             </h2>
-            <p className="text-body-sm text-text-subtle">(필수) 최소 {PRAISE_MIN_LENGTH}자 이상 작성해주세요.</p>
+            <p className="text-body-sm text-text-subtle">(필수) 최소 {FEEDBACK_MIN_LENGTH}자 이상 작성해주세요.</p>
             <Textarea
-              name="praise"
+              name="feedback"
               className="text-body-sm min-h-[144px] rounded-md"
-              placeholder="ex) 적극적이고 배려심이 깊다."
-              value={praise}
-              maxLength={TEXT_MAX_LENGTH}
-              error={praise.length > 0 && !praiseOk}
+              placeholder="ex) 적극적이고 배려심이 깊어 협업이 수월했습니다."
+              value={feedback}
+              maxLength={FEEDBACK_MAX_LENGTH}
+              error={feedback.length > 0 && !feedbackOk}
               helperText={
-                praise.length > 0 && !praiseOk ? `칭찬은 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.` : undefined
+                feedback.length > 0 && !feedbackOk ? `후기는 ${FEEDBACK_MIN_LENGTH}자 이상 입력해 주세요.` : undefined
               }
               onChange={(e) => {
-                setPraise(e.target.value);
-              }}
-            />
-          </section>
-
-          <section className="flex flex-col gap-2" aria-labelledby="review-improve-heading">
-            <h2 id="review-improve-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
-              아쉬워요
-            </h2>
-            <p className="text-body-sm text-text-subtle">이 팀원과 협업하며 아쉬웠던 점을 작성해주세요.</p>
-            <Textarea
-              name="improvement"
-              className="text-body-sm min-h-[144px] rounded-md"
-              placeholder="ex) 소통이 조금 더 적극적이었으면 좋았을 것 같다."
-              value={improvement}
-              maxLength={TEXT_MAX_LENGTH}
-              error={improvement.length > 0 && !improvementOk}
-              helperText={
-                improvement.length > 0 && !improvementOk
-                  ? `아쉬워요는 ${PRAISE_MIN_LENGTH}자 이상 입력해 주세요.`
-                  : undefined
-              }
-              onChange={(e) => {
-                setImprovement(e.target.value);
+                setFeedback(e.target.value);
               }}
             />
           </section>

@@ -6,24 +6,20 @@ import type { CreateReviewRequest, Review, ReviewFormData, ReviewValidation } fr
 import { mapReviewFormDataFromApi, type ReviewFormDataApiResponse } from './map-form-data';
 import { mapUserReviewsFromApi, type ReviewApiRaw, type UserReviewsApiResponse } from './map-user-reviews';
 
-const toCreateReviewBody = (data: CreateReviewRequest) => {
-  const praise = data.praise.trim();
-  const improvement = data.improvement.trim();
-
-  return {
-    reviewReqDto: {
-      projectId: data.projectId,
-      revieweeId: data.revieweeId,
-      ...(praise.length > 0 ? { positiveFeedback: praise } : {}),
-      ...(improvement.length > 0 ? { negativeFeedback: improvement } : {}),
-      tagIds: data.tagIds,
-    },
-    spectrumReqDtos: data.spectrums.map((spectrum) => ({
-      spectrumAxisId: spectrum.spectrumId,
-      spectrumStrength: spectrum.value,
-    })),
-  };
-};
+const toCreateReviewBody = (data: CreateReviewRequest) => ({
+  reviewReqDto: {
+    projectId: data.projectId,
+    revieweeId: data.revieweeId,
+    feedback: data.feedback.trim(),
+    projectPosition: data.projectPosition,
+    ...(data.projectDetailPosition ? { projectDetailPosition: data.projectDetailPosition } : {}),
+    tagIds: data.tagIds,
+  },
+  spectrumReqDtos: data.spectrums.map((spectrum) => ({
+    spectrumAxisId: spectrum.spectrumId,
+    spectrumStrength: spectrum.value,
+  })),
+});
 
 export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
   const raw = await apiRequest<ReviewFormDataApiResponse>('/form-data');
@@ -31,14 +27,12 @@ export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
 };
 
 export const fetchReviews = async (userId: number): Promise<Review[]> => {
-  const raw = await apiRequest<UserReviewsApiResponse | Review[]>(`/users/${userId}/reviews`);
+  const raw = await apiRequest<UserReviewsApiResponse>(`/users/${userId}/reviews`);
   return mapUserReviewsFromApi(raw);
 };
 
 export const fetchProjectReviews = async (userId: number, projectId: number): Promise<Review[]> => {
-  const raw = await apiRequest<UserReviewsApiResponse | ReviewApiRaw[]>(
-    `/users/${userId}/projects/${projectId}/reviews`,
-  );
+  const raw = await apiRequest<ReviewApiRaw[]>(`/users/${userId}/projects/${projectId}/reviews`);
   return mapUserReviewsFromApi(raw);
 };
 

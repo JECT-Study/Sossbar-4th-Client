@@ -1,4 +1,4 @@
-import type { Review } from '../types/review';
+import type { Review, UserPosition } from '../types/review';
 
 /** GET /api/v1/users/:userId/reviews — 백엔드 ReviewCursorResDto */
 export interface UserReviewsApiResponse {
@@ -14,9 +14,10 @@ export interface ReviewApiRaw {
   host?: string;
   projectImage?: string | null;
   createdAt: string;
-  positiveFeedback?: string;
-  negativeFeedback?: string;
+  feedback?: string;
   reviewerNickname?: string;
+  projectPosition?: UserPosition;
+  projectDetailPosition?: string;
   projectStatus?: Review['projectStatus'];
 }
 
@@ -29,27 +30,22 @@ const normalizeCreatedAt = (value: string): string => {
   return `${value}T00:00:00`;
 };
 
-export const mapReviewFromApi = (raw: ReviewApiRaw): Review => {
-  const positiveFeedback = normalizeText(raw.positiveFeedback);
-  const negativeFeedbackRaw = normalizeText(raw.negativeFeedback);
+export const mapReviewFromApi = (raw: ReviewApiRaw): Review => ({
+  reviewId: raw.reviewId,
+  projectName: raw.projectName ?? '',
+  host: raw.host ?? '',
+  projectImage: raw.projectImage ?? null,
+  createdAt: normalizeCreatedAt(raw.createdAt),
+  feedback: normalizeText(raw.feedback),
+  reviewerNickname: normalizeText(raw.reviewerNickname) || '익명의 동료',
+  projectPosition: raw.projectPosition,
+  projectDetailPosition: raw.projectDetailPosition,
+  projectStatus: raw.projectStatus,
+});
 
-  return {
-    reviewId: raw.reviewId,
-    projectName: raw.projectName ?? '',
-    host: raw.host ?? '',
-    projectImage: raw.projectImage ?? null,
-    createdAt: normalizeCreatedAt(raw.createdAt),
-    positiveFeedback,
-    negativeFeedback: negativeFeedbackRaw.length > 0 ? negativeFeedbackRaw : undefined,
-    reviewerNickname: normalizeText(raw.reviewerNickname) || '익명의 동료',
-    projectStatus: raw.projectStatus,
-  };
-};
-
-export const mapUserReviewsFromApi = (raw: UserReviewsApiResponse | ReviewApiRaw[] | Review[]): Review[] => {
+export const mapUserReviewsFromApi = (raw: UserReviewsApiResponse | ReviewApiRaw[]): Review[] => {
   if (Array.isArray(raw)) {
-    return raw.map((item) => mapReviewFromApi(item as ReviewApiRaw));
+    return raw.map(mapReviewFromApi);
   }
-
   return (raw.reviews ?? []).map(mapReviewFromApi);
 };

@@ -15,10 +15,9 @@ const DEFAULT_PROJECT_IMAGE = '/default.png';
 type ProjectPageContentProps = {
   userId: number;
   projectId: number;
-  isMyProfile: boolean;
 };
 
-export const ProjectPageContent = ({ userId, projectId, isMyProfile }: ProjectPageContentProps) => {
+export const ProjectPageContent = ({ userId, projectId }: ProjectPageContentProps) => {
   const { data: project, isPending, isError } = useProject(projectId);
 
   if (isPending) {
@@ -65,7 +64,7 @@ export const ProjectPageContent = ({ userId, projectId, isMyProfile }: ProjectPa
           <TagCardBoundary userId={userId} projectId={projectId} collapsible />
           <SoftSkillsCardBoundary userId={userId} projectId={projectId} showDistribution={false} />
         </div>
-        <ProjectReviewContainer userId={userId} projectId={projectId} isMyProfile={isMyProfile} />
+        <ProjectReviewContainer userId={userId} projectId={projectId} />
       </div>
     </PageContainer>
   );
