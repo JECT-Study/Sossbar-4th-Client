@@ -134,9 +134,10 @@ interface MultiSelectItemProps {
   value: string;
   children: ReactNode;
   className?: string;
+  disabled?: boolean;
 }
 
-const MultiSelectItem = ({ value, children, className }: MultiSelectItemProps) => {
+const MultiSelectItem = ({ value, children, className, disabled = false }: MultiSelectItemProps) => {
   const { value: selectedValue, toggle } = useMultiSelectContext();
   const isChecked = selectedValue.includes(value);
 
@@ -145,9 +146,11 @@ const MultiSelectItem = ({ value, children, className }: MultiSelectItemProps) =
       type="button"
       role="checkbox"
       aria-checked={isChecked}
+      disabled={disabled}
       onClick={() => toggle(value)}
       className={cn(
         'text-body-sm text-text-basic hover:bg-action-gray-light data-[state=checked]:bg-action-secondary-selected flex h-12 cursor-pointer items-center gap-3 px-4 text-left font-medium outline-none',
+        'disabled:text-text-disabled disabled:cursor-not-allowed disabled:hover:bg-transparent',
         className,
       )}
       data-state={isChecked ? 'checked' : 'unchecked'}
@@ -157,6 +160,7 @@ const MultiSelectItem = ({ value, children, className }: MultiSelectItemProps) =
         className={cn(
           'relative flex size-5 shrink-0 items-center justify-center rounded border transition-colors',
           isChecked ? 'border-button-primary-fill bg-button-primary-fill' : 'border-divider-gray bg-white',
+          disabled && !isChecked && 'border-element-disabled-light bg-bg-gray-subtler',
         )}
       >
         {isChecked ? (

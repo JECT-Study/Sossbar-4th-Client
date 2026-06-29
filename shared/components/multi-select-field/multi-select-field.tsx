@@ -11,6 +11,7 @@ import { Label } from '../label';
 export type MultiSelectFieldOption = {
   value: string;
   label: ReactNode;
+  disabled?: boolean;
 };
 
 interface Props {
@@ -70,7 +71,7 @@ export const MultiSelectField = ({
 
         <MultiSelect.Content className={cn('w-(--radix-popover-trigger-width)', contentClassName)}>
           {options.map((option) => (
-            <MultiSelect.Item key={option.value} value={option.value}>
+            <MultiSelect.Item key={option.value} value={option.value} disabled={option.disabled}>
               {option.label}
             </MultiSelect.Item>
           ))}
