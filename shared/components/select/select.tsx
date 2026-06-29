@@ -46,10 +46,10 @@ const SelectContent = ({
       <SelectPrimitive.Content
         position="popper"
         sideOffset={4}
-        className={cn('bg-input-surface z-50 rounded-md p-3 shadow-lg', className)}
+        className={cn('bg-input-surface z-50 flex flex-col overflow-hidden rounded-md shadow-lg', className)}
         {...restProps}
       >
-        <SelectPrimitive.Viewport>{children}</SelectPrimitive.Viewport>
+        <SelectPrimitive.Viewport className="flex flex-col">{children}</SelectPrimitive.Viewport>
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   );
@@ -59,7 +59,8 @@ const SelectItem = ({ children, className, ...restProps }: ComponentPropsWithRef
   return (
     <SelectPrimitive.Item
       className={cn(
-        'text-body-sm text-text-basic hover:bg-action-gray-light data-[state=checked]:bg-action-secondary-selected data-[state=checked]:border-action-tag-primary cursor-pointer rounded-lg border-2 border-transparent px-4 py-3 font-medium outline-none',
+        'text-body-sm text-text-basic hover:bg-action-gray-light data-[state=checked]:bg-action-secondary-selected flex h-12 cursor-pointer items-center px-4 text-left font-medium outline-none',
+        'data-disabled:text-text-disabled data-disabled:cursor-not-allowed data-disabled:hover:bg-transparent',
         className,
       )}
       {...restProps}
