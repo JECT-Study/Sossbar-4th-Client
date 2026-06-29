@@ -1,10 +1,24 @@
 import { z } from 'zod';
 
-import { BIO_MAX_LENGTH, NAME_MAX_LENGTH, PROFILE_IMAGE_ACCEPT, PROFILE_IMAGE_MAX_SIZE } from './signup-constants';
+import {
+  BIO_MAX_LENGTH,
+  FIELDS_MAX_SELECT,
+  FIELD_VALUES,
+  NAME_MAX_LENGTH,
+  PROFILE_IMAGE_ACCEPT,
+  PROFILE_IMAGE_MAX_SIZE,
+  USER_LINKS_MAX,
+  USER_LINK_TYPE_VALUES,
+} from './signup-constants';
 
 const imageMimeTypes = PROFILE_IMAGE_ACCEPT.split(',');
 
 const isFile = (value: unknown): value is File => typeof File !== 'undefined' && value instanceof File;
+
+const UserLinkSchema = z.object({
+  userLinkType: z.enum(USER_LINK_TYPE_VALUES),
+  userLink: z.union([z.literal(''), z.url({ message: '올바른 URL 형식이 아닙니다.' })]),
+});
 
 export const SignupFormSchema = z.object({
   name: z
@@ -24,9 +38,15 @@ export const SignupFormSchema = z.object({
       age: z.boolean(),
       terms: z.boolean(),
       privacy: z.boolean(),
-      marketing: z.boolean(),
     })
     .refine((value) => value.age && value.terms && value.privacy, {
       message: '필수 약관에 모두 동의해 주세요.',
     }),
+  fields: z
+    .array(z.enum(FIELD_VALUES))
+    .min(1, { message: '분야를 1개 이상 선택해 주세요.' })
+    .max(FIELDS_MAX_SELECT, { message: `분야는 최대 ${FIELDS_MAX_SELECT}개까지 선택할 수 있어요.` }),
+  links: z
+    .array(UserLinkSchema)
+    .max(USER_LINKS_MAX, { message: `링크는 최대 ${USER_LINKS_MAX}개까지 등록할 수 있어요.` }),
 });

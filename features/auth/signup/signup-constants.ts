@@ -18,22 +18,26 @@ export const SIGNUP_STEP_DESCRIPTIONS: Record<SignupStepId, string> = {
   complete: '프로젝트를 생성하고 동료에게 후기를 요청해 프로필을 완성해 보세요!',
 };
 
+export const FIELD_VALUES = ['FE', 'BE', 'PM', 'PD'] as const;
+
 export const FIELD_OPTIONS = [
   { value: 'FE', label: '💻 프론트엔드' },
   { value: 'BE', label: '🗄️ 백엔드' },
   { value: 'PM', label: '📋 프로덕트 매니저' },
   { value: 'PD', label: '🎨 프로덕트 디자이너' },
-] as const satisfies readonly { value: string; label: string }[];
+] as const satisfies readonly { value: (typeof FIELD_VALUES)[number]; label: string }[];
 
 export const FIELDS_MAX_SELECT = 2;
 
+export const USER_LINK_TYPE_VALUES = ['LINK', 'GITHUB', 'INSTAGRAM', 'BEHANCE', 'BRUNCH'] as const;
+
 export const USER_LINK_TYPE_OPTIONS = [
-  { label: 'Link', value: 'LINK' },
-  { label: 'GitHub', value: 'GITHUB' },
-  { label: 'Instagram', value: 'INSTAGRAM' },
-  { label: 'Behance', value: 'BEHANCE' },
-  { label: 'Brunch', value: 'BRUNCH' },
-] as const;
+  { value: 'LINK', label: 'Link' },
+  { value: 'GITHUB', label: 'GitHub' },
+  { value: 'INSTAGRAM', label: 'Instagram' },
+  { value: 'BEHANCE', label: 'Behance' },
+  { value: 'BRUNCH', label: 'Brunch' },
+] as const satisfies readonly { value: (typeof USER_LINK_TYPE_VALUES)[number]; label: string }[];
 
 export const USER_LINKS_MAX = 3;
 
@@ -56,10 +60,5 @@ export const AGREEMENTS = [
     suffix: '에 동의합니다.',
     required: true,
     url: '/policies/privacy-policy',
-  },
-  {
-    key: 'marketing',
-    label: '마케팅 수신・홍보 목적의 개인정보 수집 및 이용에 동의합니다.',
-    required: false,
   },
 ] as const;
