@@ -2,13 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
+
 import { HeaderAuthArea } from './header-auth-area';
 import { HeaderMainNav } from './header-main-nav';
 
-/**
- * 헤더 (Server Component).
- * myProfile prefetch는 MainLayout 전역 HydrationBoundary에서 처리한다.
- */
 export const Header = () => {
   return (
     <header className="border-divider-1 px-padding-l py-padding-m sticky top-0 z-50 border-b bg-white/45 backdrop-blur-[10px]">
@@ -28,7 +26,9 @@ export const Header = () => {
             <HeaderMainNav />
           </Suspense>
         </div>
-        <HeaderAuthArea />
+        <Suspense fallback={<KakaoLoginButton />}>
+          <HeaderAuthArea />
+        </Suspense>
       </div>
     </header>
   );

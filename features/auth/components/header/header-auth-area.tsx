@@ -6,31 +6,32 @@ import { useRouter } from 'next/navigation';
 import { Avatar } from 'radix-ui';
 import { useState } from 'react';
 
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
 import { Dropdown } from '@/shared/components/dropdown';
 import { NotificationBell } from '@/shared/components/notification';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
+import { useMe } from '../../hooks/use-me.query';
+
 const DEFAULT_AVATAR_SRC = '/sample_user.svg';
 
 const dropdownItemClassName =
   'text-body-sm text-text-basic !h-[44px] min-h-0 shrink-0 justify-start rounded-md px-2 py-0 font-normal';
 
-export const HeaderAuthAreaClient = () => {
+export const HeaderAuthArea = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: profileFromQuery } = useMyProfile();
+  const { data: meFromQuery } = useMe();
   const [hasLoggedOut, setHasLoggedOut] = useState(false);
-  const profile = hasLoggedOut ? null : profileFromQuery;
+  const me = hasLoggedOut ? null : meFromQuery;
 
-  if (!profile) {
+  if (!me) {
     return <KakaoLoginButton />;
   }
 
-  const avatarSrc = profile.profileImageUrl || DEFAULT_AVATAR_SRC;
-  const name = profile.username ?? profile.email;
+  const avatarSrc = me.profileImageUrl || DEFAULT_AVATAR_SRC;
+  const name = me.username ?? me.email;
 
   return (
     <div className="flex h-10 items-center gap-4">
