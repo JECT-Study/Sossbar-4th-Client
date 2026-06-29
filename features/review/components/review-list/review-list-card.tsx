@@ -6,6 +6,7 @@ import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { EmptyState } from '@/shared/components/empty-state';
 import { ProfileStatCard } from '@/shared/components/profile-stat-card';
+import { SortDropdown, type SortOrder } from '@/shared/components/sort-dropdown';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -19,49 +20,24 @@ interface ReviewListCardProps {
   reviews: Review[];
   /** 메타 줄에 프로젝트명 노출 여부 (프로젝트 상세에서는 false) */
   showProjectName: boolean;
-  /** 정렬 컨트롤 표시 여부 (전체 탭에서 true) */
+  /** 정렬 컨트롤 표시 여부 */
   showSort?: boolean;
+  /** 프로젝트별 상세 — 후기 신고 메뉴 노출 */
+  showReportMenu?: boolean;
 }
-
-const reviewSortOptions = [
-  { value: 'latest', label: '최신순' },
-  { value: 'oldest', label: '오래된순' },
-] as const;
-
-type ReviewSort = (typeof reviewSortOptions)[number]['value'];
 
 const buildMetaLine = (review: Review, showProjectName: boolean) =>
   [showProjectName ? review.projectName : null, formatIsoDateToDots(review.createdAt), review.host]
     .filter(Boolean)
     .join(' · ');
 
-const ReviewSortToggle = ({
-  value,
-  onValueChange,
-}: {
-  value: ReviewSort;
-  onValueChange: (value: ReviewSort) => void;
-}) => (
-  <div className="flex items-center gap-2">
-    {reviewSortOptions.map((option) => (
-      <button
-        key={option.value}
-        type="button"
-        className={cn(
-          'text-heading-xs cursor-pointer font-medium',
-          value === option.value ? 'text-text-subtler' : 'text-text-disabled',
-        )}
-        aria-pressed={value === option.value}
-        onClick={() => onValueChange(option.value)}
-      >
-        {option.label}
-      </button>
-    ))}
-  </div>
-);
-
-export const ReviewListCard = ({ reviews, showProjectName, showSort = false }: ReviewListCardProps) => {
-  const [selectedSort, setSelectedSort] = useState<ReviewSort>('latest');
+export const ReviewListCard = ({
+  reviews,
+  showProjectName,
+  showSort = false,
+  showReportMenu = false,
+}: ReviewListCardProps) => {
+  const [selectedSort, setSelectedSort] = useState<SortOrder>('latest');
   const [isExpanded, setIsExpanded] = useState(false);
 
   const sortedReviews = showSort
@@ -74,7 +50,14 @@ export const ReviewListCard = ({ reviews, showProjectName, showSort = false }: R
   const showMoreButton = sortedReviews.length > INITIAL_VISIBLE_REVIEW_COUNT && !isExpanded;
 
   const headerAction =
-    showSort && reviews.length > 0 ? <ReviewSortToggle value={selectedSort} onValueChange={setSelectedSort} /> : null;
+    showSort && reviews.length > 0 ? (
+      <SortDropdown
+        value={selectedSort}
+        onValueChange={setSelectedSort}
+        ariaLabel="후기 정렬"
+        triggerClassName="h-10"
+      />
+    ) : null;
 
   return (
     <ProfileStatCard
@@ -91,12 +74,31 @@ export const ReviewListCard = ({ reviews, showProjectName, showSort = false }: R
         <>
           <ul className="flex w-full flex-col">
             {visibleReviews.map((review) => (
-              <ReviewListItem.Root key={review.reviewId}>
-                <ReviewListItem.Heading>
+              <ReviewListItem.Root
+                key={review.reviewId}
+                action={
+                  showReportMenu ? <ReviewListItem.ActionMenu reviewerName={review.reviewerNickname} /> : undefined
+                }
+              >
+                <ReviewListItem.Heading compact={showReportMenu}>
                   <ReviewListItem.Avatar name={review.reviewerNickname} />
                   <ReviewListItem.HeadingText>
-                    <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
-                    <ReviewListItem.Meta>{buildMetaLine(review, showProjectName)}</ReviewListItem.Meta>
+                    {showReportMenu ? (
+                      <ReviewListItem.NameRow>
+                        <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
+                        {review.projectPosition ? (
+                          <ReviewListItem.PositionBadge
+                            position={review.projectPosition}
+                            detailPosition={review.projectDetailPosition}
+                          />
+                        ) : null}
+                      </ReviewListItem.NameRow>
+                    ) : (
+                      <>
+                        <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
+                        <ReviewListItem.Meta>{buildMetaLine(review, showProjectName)}</ReviewListItem.Meta>
+                      </>
+                    )}
                   </ReviewListItem.HeadingText>
                 </ReviewListItem.Heading>
                 {review.feedback.trim().length > 0 ? (
@@ -112,7 +114,7 @@ export const ReviewListCard = ({ reviews, showProjectName, showSort = false }: R
               variant="tertiary"
               size="large"
               rightIcon={<DownIcon className="size-6" aria-hidden />}
-              className="mx-auto w-full"
+              className="text-body-xl h-[58px] w-full rounded-lg px-7"
               onClick={() => setIsExpanded(true)}
             >
               후기 더보기

@@ -42,30 +42,29 @@ export const ProjectPageContent = ({ userId, projectId }: ProjectPageContentProp
   const subtitle = subtitleParts.join(' · ');
 
   return (
-    <PageContainer className="mb-20">
-      <section className="border-border-gray-light mt-15.5 mb-8.5 flex w-full flex-row gap-6 border-b-8 pb-8">
-        <div className="h-[106px] w-[142px] shrink-0 overflow-hidden rounded-2xl">
+    <PageContainer className="mb-20 flex flex-col gap-[30px] pt-8">
+      <section className="border-border-gray-light flex w-full gap-6 border-b-[3px] pb-8">
+        <div className="border-border-gray-light relative h-[106px] w-[142px] shrink-0 overflow-hidden rounded-2xl border">
           <Image
             src={project.projectImage ?? DEFAULT_PROJECT_IMAGE}
             alt={`${project.projectName} 이미지`}
-            width={142}
-            height={106}
-            className="h-full w-full object-cover"
+            fill
+            sizes="142px"
+            className="object-cover"
           />
         </div>
-        <div>
-          <h1 className="text-heading-lg text-text-basic mb-2 font-bold">{project.projectName}</h1>
-          <p className="text-body-base text-text-subtle font-normal">{subtitle}</p>
+        <div className="flex flex-col gap-2">
+          <h1 className="text-heading-lg text-text-basic font-bold">{project.projectName}</h1>
+          {subtitle ? <p className="text-body-base text-text-subtle font-normal">{subtitle}</p> : null}
         </div>
       </section>
 
-      <div className="flex flex-col gap-6">
-        <div className="flex gap-6">
-          <TagCardBoundary userId={userId} projectId={projectId} collapsible />
-          <SoftSkillsCardBoundary userId={userId} projectId={projectId} showDistribution={false} />
-        </div>
-        <ProjectReviewContainer userId={userId} projectId={projectId} />
+      <div className="flex gap-[30px]">
+        <TagCardBoundary userId={userId} projectId={projectId} collapsible />
+        <SoftSkillsCardBoundary userId={userId} projectId={projectId} showDistribution={false} />
       </div>
+
+      <ProjectReviewContainer userId={userId} projectId={projectId} />
     </PageContainer>
   );
 };

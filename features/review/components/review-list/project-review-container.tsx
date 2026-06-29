@@ -15,5 +15,5 @@ export const ProjectReviewContainer = ({ userId, projectId }: Props) => {
     return <p className="text-body-base text-text-subtle">후기를 불러오지 못했습니다.</p>;
   }
 
-  return <ReviewListCard reviews={reviews} showProjectName={false} />;
+  return <ReviewListCard reviews={reviews} showProjectName={false} showSort showReportMenu />;
 };

@@ -37,7 +37,7 @@ export const ProfileDetailView = ({ userId, allTabContent, projectsTabContent }:
     <Tab.Content value="all" className="mt-[30px] flex flex-col gap-[30px]">
       {allTabContent ?? <DefaultAllTabContent userId={userId} />}
     </Tab.Content>
-    <Tab.Content value="projects" className="mt-10">
+    <Tab.Content value="projects" className="mt-[30px]">
       {projectsTabContent ?? <ProjectSection userId={userId} />}
     </Tab.Content>
   </Tab.Root>
