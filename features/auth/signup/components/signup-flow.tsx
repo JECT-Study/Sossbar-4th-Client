@@ -9,11 +9,11 @@ import { StepIndicator } from '@/shared/components/step-indicator';
 import type { SignupStepId } from '../signup.constants';
 import type { SignupFormData } from '../types';
 
+import { SignupStepBasic } from './signup-step-basic';
 import { SignupStepCareer } from './signup-step-career';
 import { SignupStepComplete } from './signup-step-complete';
-import { SIGNUP_STEPS, SIGNUP_STEP_DESCRIPTIONS } from '../signup.constants';
-import { SignupStepBasic } from './signup-step-basic';
 import { useSignupForm } from '../hooks/use-signup-form';
+import { SIGNUP_STEPS, SIGNUP_STEP_DESCRIPTIONS } from '../signup.constants';
 
 const STEP_BASIC_FIELDS = [
   'name',

@@ -1,10 +1,10 @@
-import type { FIELD_VALUES, USER_LINK_TYPE_VALUES } from './signup.constants';
+import type { POSITION_VALUES, USER_LINK_TYPE_VALUES } from './signup.constants';
 import type { SignupFormSchema } from './signup.schemas';
 import type { z } from 'zod';
 
 export type SignupFormData = z.infer<typeof SignupFormSchema>;
 
-export type FieldValue = (typeof FIELD_VALUES)[number];
+export type PositionValue = (typeof POSITION_VALUES)[number];
 
 export type UserLinkType = (typeof USER_LINK_TYPE_VALUES)[number];
 
@@ -13,21 +13,27 @@ export interface SignupUserLink {
   userLink: string;
 }
 
+export interface SignupResponseLink extends SignupUserLink {
+  linkId: number;
+}
+
 export type SignupPayload = {
   name: string;
   bio: string;
   requiredAgree: boolean;
   profileImage: File | null;
-  fields: FieldValue[];
+  positions: PositionValue[];
   links: SignupUserLink[];
 };
 
 export interface SignupResponse {
   userId: number;
   username: string;
-  nickname?: string;
   email: string;
   bio: string;
   profileImageUrl: string | null;
   userType: string;
+  defaultPositions: string[];
+  links: SignupResponseLink[];
+  marketingAgree: boolean;
 }

@@ -11,7 +11,7 @@ import { Select } from '@/shared/components/select';
 
 import type { SignupFormData, UserLinkType } from '../types';
 
-import { FIELDS_MAX_SELECT, FIELD_OPTIONS, USER_LINKS_MAX, USER_LINK_TYPE_OPTIONS } from '../signup.constants';
+import { POSITIONS_MAX_SELECT, POSITION_OPTIONS, USER_LINKS_MAX, USER_LINK_TYPE_OPTIONS } from '../signup.constants';
 import { SignupCareerStepSchema } from '../signup.schemas';
 
 interface Props {
@@ -23,33 +23,33 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
   const { control, register, formState } = useFormContext<SignupFormData>();
   const { errors } = formState;
   const { fields: linkRows, append, remove } = useFieldArray({ control, name: 'links' });
-  const [selectedFields, watchedLinks] = useWatch({ control, name: ['fields', 'links'] });
+  const [selectedPositions, watchedLinks] = useWatch({ control, name: ['positions', 'links'] });
 
-  const canSubmit = SignupCareerStepSchema.safeParse({ fields: selectedFields, links: watchedLinks }).success;
+  const canSubmit = SignupCareerStepSchema.safeParse({ positions: selectedPositions, links: watchedLinks }).success;
 
   return (
     <div className="mt-8 flex w-full max-w-[480px] flex-col">
       <Controller
         control={control}
-        name="fields"
+        name="positions"
         render={({ field }) => (
           <MultiSelectField
-            name="fields"
+            name="positions"
             label="분야"
             required
-            options={FIELD_OPTIONS}
+            options={POSITION_OPTIONS}
             value={field.value}
             onValueChange={field.onChange}
-            max={FIELDS_MAX_SELECT}
+            max={POSITIONS_MAX_SELECT}
             placeholder="분야를 최대 2개까지 선택해 주세요."
           />
         )}
       />
 
-      {errors.fields?.message ? (
-        <p className="text-body-sm text-text-error mt-2">{errors.fields.message}</p>
+      {errors.positions?.message ? (
+        <p className="text-body-sm text-text-error mt-2">{errors.positions.message}</p>
       ) : (
-        <p className="text-body-sm text-text-subtle mt-2">최대 {FIELDS_MAX_SELECT}개까지 선택할 수 있어요.</p>
+        <p className="text-body-sm text-text-subtle mt-2">최대 {POSITIONS_MAX_SELECT}개까지 선택할 수 있어요.</p>
       )}
 
       <div className="mt-8 flex flex-col gap-2">

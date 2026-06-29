@@ -2,12 +2,25 @@ import { apiRequest } from '@/shared/lib/api';
 
 import type { SignupPayload, SignupResponse } from '../types';
 
-const createSignupFormData = ({ name, bio, requiredAgree, profileImage, fields, links }: SignupPayload) => {
+const createSignupFormData = ({ name, bio, requiredAgree, profileImage, positions, links }: SignupPayload) => {
   const formData = new FormData();
 
   formData.append(
     'onboarding',
-    new Blob([JSON.stringify({ username: name, bio, requiredAgree, fields, links })], { type: 'application/json' }),
+    new Blob(
+      [
+        JSON.stringify({
+          username: name,
+          bio,
+          defaultPositions: positions,
+          links,
+          requiredAgree,
+          // marketingAgree는 별도 수집 없이 전송 시점에만 true로 고정
+          marketingAgree: true,
+        }),
+      ],
+      { type: 'application/json' },
+    ),
   );
 
   if (profileImage) {

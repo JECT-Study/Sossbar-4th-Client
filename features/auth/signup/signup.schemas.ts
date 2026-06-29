@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 import {
   BIO_MAX_LENGTH,
-  FIELDS_MAX_SELECT,
-  FIELD_VALUES,
   NAME_MAX_LENGTH,
+  POSITIONS_MAX_SELECT,
+  POSITION_VALUES,
   PROFILE_IMAGE_ACCEPT,
   PROFILE_IMAGE_MAX_SIZE,
   USER_LINKS_MAX,
@@ -45,10 +45,10 @@ export const SignupFormSchema = z.object({
     .refine((value) => value.age && value.terms && value.privacy, {
       message: '필수 약관에 모두 동의해 주세요.',
     }),
-  fields: z
-    .array(z.enum(FIELD_VALUES))
+  positions: z
+    .array(z.enum(POSITION_VALUES))
     .min(1, { message: '분야를 1개 이상 선택해 주세요.' })
-    .max(FIELDS_MAX_SELECT, { message: `분야는 최대 ${FIELDS_MAX_SELECT}개까지 선택할 수 있어요.` }),
+    .max(POSITIONS_MAX_SELECT, { message: `분야는 최대 ${POSITIONS_MAX_SELECT}개까지 선택할 수 있어요.` }),
   links: z
     .array(UserLinkSchema)
     .max(USER_LINKS_MAX, { message: `링크는 최대 ${USER_LINKS_MAX}개까지 등록할 수 있어요.` }),
@@ -62,6 +62,6 @@ export const SignupBasicStepSchema = SignupFormSchema.pick({
 });
 
 export const SignupCareerStepSchema = SignupFormSchema.pick({
-  fields: true,
+  positions: true,
   links: true,
 });

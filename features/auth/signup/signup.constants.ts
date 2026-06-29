@@ -18,16 +18,16 @@ export const SIGNUP_STEP_DESCRIPTIONS: Record<SignupStepId, string> = {
   complete: '프로젝트를 생성하고 동료에게 후기를 요청해 프로필을 완성해 보세요!',
 };
 
-export const FIELD_VALUES = ['FE', 'BE', 'PM', 'PD'] as const;
+export const POSITION_VALUES = ['FE', 'BE', 'PM', 'PD'] as const;
 
-export const FIELD_OPTIONS = [
+export const POSITION_OPTIONS = [
   { value: 'FE', label: '💻 프론트엔드' },
   { value: 'BE', label: '🗄️ 백엔드' },
   { value: 'PM', label: '📋 프로덕트 매니저' },
   { value: 'PD', label: '🎨 프로덕트 디자이너' },
-] as const satisfies readonly { value: (typeof FIELD_VALUES)[number]; label: string }[];
+] as const satisfies readonly { value: (typeof POSITION_VALUES)[number]; label: string }[];
 
-export const FIELDS_MAX_SELECT = 2;
+export const POSITIONS_MAX_SELECT = 2;
 
 export const USER_LINK_TYPE_VALUES = ['LINK', 'GITHUB', 'INSTAGRAM', 'BEHANCE', 'BRUNCH'] as const;
 

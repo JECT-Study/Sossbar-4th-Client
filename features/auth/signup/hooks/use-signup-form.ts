@@ -17,7 +17,7 @@ const defaultValues: SignupFormData = {
     terms: false,
     privacy: false,
   },
-  fields: [],
+  positions: [],
   links: [{ userLinkType: 'LINK', userLink: '' }],
 };
 
@@ -42,7 +42,7 @@ export const useSignupForm = () => {
         bio: data.bio,
         requiredAgree: data.agreements.age && data.agreements.terms && data.agreements.privacy,
         profileImage: data.profileImage ?? null,
-        fields: data.fields,
+        positions: data.positions,
         links: sanitizedLinks,
       });
     } catch (error) {
