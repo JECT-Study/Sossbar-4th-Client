@@ -1,6 +1,6 @@
 'use client';
 
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import { Controller, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 
 import { PlusIcon, TrashIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
@@ -12,6 +12,7 @@ import { Select } from '@/shared/components/select';
 import type { SignupFormData, UserLinkType } from '../types';
 
 import { FIELDS_MAX_SELECT, FIELD_OPTIONS, USER_LINKS_MAX, USER_LINK_TYPE_OPTIONS } from '../signup-constants';
+import { SignupCareerStepSchema } from '../signup-form.schema';
 
 interface Props {
   onPrev: () => void;
@@ -21,7 +22,10 @@ interface Props {
 export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
   const { control, register, formState } = useFormContext<SignupFormData>();
   const { errors } = formState;
-  const { fields, append, remove } = useFieldArray({ control, name: 'links' });
+  const { fields: linkRows, append, remove } = useFieldArray({ control, name: 'links' });
+  const [selectedFields, watchedLinks] = useWatch({ control, name: ['fields', 'links'] });
+
+  const canSubmit = SignupCareerStepSchema.safeParse({ fields: selectedFields, links: watchedLinks }).success;
 
   return (
     <div className="mt-8 flex w-full max-w-[460px] flex-col">
@@ -50,7 +54,7 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
 
       <div className="mt-8 flex flex-col gap-2">
         <Label htmlFor="url-0">URL</Label>
-        {fields.map((row, index) => (
+        {linkRows.map((row, index) => (
           <div key={row.id} className="flex flex-col gap-1">
             <div className="group grid grid-cols-[1fr_120px_auto] gap-2">
               <Input
@@ -83,7 +87,7 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
                 type="button"
                 className="hover:text-icon-error px-2.5 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 disabled:hover:cursor-default"
                 aria-label="링크 제거"
-                disabled={fields.length <= 1}
+                disabled={linkRows.length <= 1}
                 onClick={() => remove(index)}
               />
             </div>
@@ -92,7 +96,7 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
             ) : null}
           </div>
         ))}
-        {fields.length < USER_LINKS_MAX ? (
+        {linkRows.length < USER_LINKS_MAX ? (
           <button
             type="button"
             onClick={() => append({ userLinkType: 'LINK', userLink: '' })}
@@ -118,7 +122,7 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
         >
           이전
         </Button>
-        <Button type="submit" size="medium" disabled={isSubmitting} className="w-full">
+        <Button type="submit" size="medium" disabled={!canSubmit || isSubmitting} className="w-full">
           가입완료
         </Button>
       </div>

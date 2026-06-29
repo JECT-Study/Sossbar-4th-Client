@@ -12,6 +12,7 @@ import { TextareaField } from '@/shared/components/textarea-field';
 import type { SignupFormData } from '../types';
 
 import { BIO_MAX_LENGTH, NAME_MAX_LENGTH, PROFILE_IMAGE_ACCEPT } from '../signup-constants';
+import { SignupBasicStepSchema } from '../signup-form.schema';
 import { SignupAgreement } from './signup-agreement';
 
 interface Props {
@@ -21,12 +22,17 @@ interface Props {
 export const SignupStepBasic = ({ onNext }: Props) => {
   const { control, setValue, formState } = useFormContext<SignupFormData>();
   const { errors } = formState;
-  const profileImage = useWatch({ control, name: 'profileImage' });
+  const [name, bio, profileImage, agreements] = useWatch({
+    control,
+    name: ['name', 'bio', 'profileImage', 'agreements'],
+  });
   const { previewUrl, onChange: syncPreview } = useImagePreview();
 
   useEffect(() => {
     syncPreview(profileImage ?? null);
   }, [profileImage, syncPreview]);
+
+  const canGoNext = SignupBasicStepSchema.safeParse({ name, bio, profileImage, agreements }).success;
 
   const { inputRef, openPicker, handleFileChange } = useFileInput({
     onChange: (file) => {
@@ -111,7 +117,7 @@ export const SignupStepBasic = ({ onNext }: Props) => {
         <p className="text-body-sm text-text-error mt-3">{errors.agreements.message}</p>
       ) : null}
 
-      <Button type="button" size="medium" onClick={onNext} className="mt-12 w-full">
+      <Button type="button" size="medium" onClick={onNext} disabled={!canGoNext} className="mt-12 w-full">
         다음
       </Button>
     </div>

@@ -53,3 +53,15 @@ export const SignupFormSchema = z.object({
     .array(UserLinkSchema)
     .max(USER_LINKS_MAX, { message: `링크는 최대 ${USER_LINKS_MAX}개까지 등록할 수 있어요.` }),
 });
+
+export const SignupBasicStepSchema = SignupFormSchema.pick({
+  name: true,
+  bio: true,
+  profileImage: true,
+  agreements: true,
+});
+
+export const SignupCareerStepSchema = SignupFormSchema.pick({
+  fields: true,
+  links: true,
+});
