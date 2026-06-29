@@ -17,7 +17,10 @@ const isFile = (value: unknown): value is File => typeof File !== 'undefined' &&
 
 const UserLinkSchema = z.object({
   userLinkType: z.enum(USER_LINK_TYPE_VALUES),
-  userLink: z.union([z.literal(''), z.url({ message: '올바른 URL 형식이 아닙니다.' })]),
+  userLink: z.preprocess(
+    (v) => (typeof v === 'string' ? v.trim() : v),
+    z.union([z.literal(''), z.url({ message: '올바른 URL 형식이 아닙니다.' })]),
+  ),
 });
 
 export const SignupFormSchema = z.object({
