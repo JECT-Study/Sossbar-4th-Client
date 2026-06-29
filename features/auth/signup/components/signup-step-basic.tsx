@@ -11,8 +11,8 @@ import { TextareaField } from '@/shared/components/textarea-field';
 
 import type { SignupFormData } from '../types';
 
-import { BIO_MAX_LENGTH, NAME_MAX_LENGTH, PROFILE_IMAGE_ACCEPT } from '../signup-constants';
-import { SignupBasicStepSchema } from '../signup-form.schema';
+import { BIO_MAX_LENGTH, NAME_MAX_LENGTH, PROFILE_IMAGE_ACCEPT } from '../signup.constants';
+import { SignupBasicStepSchema } from '../signup.schemas';
 import { SignupAgreement } from './signup-agreement';
 
 interface Props {

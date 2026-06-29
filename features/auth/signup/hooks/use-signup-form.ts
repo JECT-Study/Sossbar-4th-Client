@@ -6,7 +6,7 @@ import { ApiError } from '@/shared/lib/api';
 import type { SignupFormData } from '../types';
 
 import { useSignup } from './use-signup.mutation';
-import { SignupFormSchema } from '../signup-form.schema';
+import { SignupFormSchema } from '../signup.schemas';
 
 const defaultValues: SignupFormData = {
   name: '',

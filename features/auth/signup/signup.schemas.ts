@@ -9,7 +9,7 @@ import {
   PROFILE_IMAGE_MAX_SIZE,
   USER_LINKS_MAX,
   USER_LINK_TYPE_VALUES,
-} from './signup-constants';
+} from './signup.constants';
 
 const imageMimeTypes = PROFILE_IMAGE_ACCEPT.split(',');
 

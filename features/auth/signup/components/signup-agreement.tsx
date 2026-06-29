@@ -7,7 +7,7 @@ import type { Control, UseFormSetValue } from 'react-hook-form';
 
 import { AgreementItem } from './agreement-item';
 import { useAgreements } from '../hooks/use-agreements';
-import { AGREEMENTS } from '../signup-constants';
+import { AGREEMENTS } from '../signup.constants';
 
 interface Props {
   control: Control<SignupFormData>;

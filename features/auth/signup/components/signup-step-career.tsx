@@ -11,8 +11,8 @@ import { Select } from '@/shared/components/select';
 
 import type { SignupFormData, UserLinkType } from '../types';
 
-import { FIELDS_MAX_SELECT, FIELD_OPTIONS, USER_LINKS_MAX, USER_LINK_TYPE_OPTIONS } from '../signup-constants';
-import { SignupCareerStepSchema } from '../signup-form.schema';
+import { FIELDS_MAX_SELECT, FIELD_OPTIONS, USER_LINKS_MAX, USER_LINK_TYPE_OPTIONS } from '../signup.constants';
+import { SignupCareerStepSchema } from '../signup.schemas';
 
 interface Props {
   onPrev: () => void;
