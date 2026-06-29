@@ -36,7 +36,7 @@ export const MultiSelectField = ({
   defaultValue,
   onValueChange,
   required,
-  placeholder,
+  placeholder = '항목을 선택해주세요',
   ref,
   className,
   triggerClassName,
@@ -76,6 +76,10 @@ export const MultiSelectField = ({
           ))}
         </MultiSelect.Content>
       </MultiSelect.Root>
+
+      {selectedValue.map((itemValue) => (
+        <input key={itemValue} type="hidden" name={name} value={itemValue} />
+      ))}
     </div>
   );
 };
