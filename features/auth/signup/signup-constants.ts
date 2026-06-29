@@ -1,6 +1,38 @@
+import type { StepIndicatorStep } from '@/shared/components/step-indicator';
+
 export const BIO_MAX_LENGTH = 50;
 
 export const NAME_MAX_LENGTH = 20;
+
+export const SIGNUP_STEPS = [
+  { id: 'basic', label: '기본 정보' },
+  { id: 'fields', label: '분야 선택' },
+  { id: 'complete', label: '가입 완료' },
+] as const satisfies readonly StepIndicatorStep[];
+
+export type SignupStepId = (typeof SIGNUP_STEPS)[number]['id'];
+
+export const FIELD_OPTIONS = [
+  { value: 'PLANNING', label: '기획/PM' },
+  { value: 'DESIGN', label: '디자인' },
+  { value: 'FRONTEND', label: '프론트엔드' },
+  { value: 'BACKEND', label: '백엔드' },
+  { value: 'AI', label: 'AI' },
+  { value: 'QA', label: 'QA' },
+  { value: 'ETC', label: '기타' },
+] as const satisfies readonly { value: string; label: string }[];
+
+export const FIELDS_MAX_SELECT = 2;
+
+export const USER_LINK_TYPE_OPTIONS = [
+  { label: 'Link', value: 'LINK' },
+  { label: 'GitHub', value: 'GITHUB' },
+  { label: 'Instagram', value: 'INSTAGRAM' },
+  { label: 'Behance', value: 'BEHANCE' },
+  { label: 'Brunch', value: 'BRUNCH' },
+] as const;
+
+export const USER_LINKS_MAX = 3;
 
 export const PROFILE_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
