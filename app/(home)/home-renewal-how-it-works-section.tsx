@@ -33,10 +33,10 @@ export const HomeRenewalHowItWorksSection = () => {
       <PageContainer className="gap-margin-xl flex w-full max-w-[1200px] flex-col items-center">
         <HomeSectionHeader badge="사용법" heading="Sossbar 이용 방법" />
 
-        <div className="flex w-full max-w-[1200px] flex-col gap-10">
+        <div className="flex w-full max-w-[1200px] flex-col gap-20">
           {STEPS.map((step) => (
             <div key={step.step} className="flex w-full flex-col items-center gap-6 lg:flex-row">
-              <div className="gap-margin-m py-padding-m relative flex h-[300px] w-full flex-col lg:w-[622px]">
+              <div className="gap-margin-m py-padding-m relative flex h-[260px] w-full flex-col lg:flex-1">
                 <div
                   aria-hidden
                   className="bg-divider-1 pointer-events-none absolute top-11 right-0 left-[7.09%] h-px"
