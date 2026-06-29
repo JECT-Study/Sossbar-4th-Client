@@ -130,3 +130,4 @@ Configured in `shared/lib/get-query-client.ts`: staleTime 1 min, gcTime 5 min, n
 | 날짜 | 변경 내용 | 대상 | 사유 |
 |------|----------|------|------|
 | 2026-06-27 | 초기 구성 | 전체 | harness@harness-marketplace 설치 후 신규 구축 |
+| 2026-06-29 | gitflow 스킬 추가 | skills/gitflow | docs/workflow-and-gitflow.md 기반 이슈→브랜치→PR 워크플로우 자동화 |

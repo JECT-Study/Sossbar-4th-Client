@@ -4,13 +4,13 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
-import { fetchMyProfileOptional } from '@/features/profile/api/fetch-my-profile-optional';
-import { profileKeys } from '@/features/profile/profile.query-keys';
+import { authKeys } from '@/features/auth/api/auth.query-keys';
+import { fetchMeOptional } from '@/features/auth/api/fetch-me-optional';
+import { Header } from '@/features/auth/components/header/header';
 import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-page-view';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
-import { Header } from './header/header';
 import { MainLayoutClient } from './main-layout-client';
 
 interface Props {
@@ -26,8 +26,8 @@ export const MainLayout = async ({ children }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: profileKeys.my,
-    queryFn: () => fetchMyProfileOptional({ headers: { Cookie: cookieStore.toString() } }),
+    queryKey: authKeys.me,
+    queryFn: () => fetchMeOptional({ headers: { Cookie: cookieStore.toString() } }),
   });
 
   return (
@@ -44,3 +44,5 @@ export const MainLayout = async ({ children }: Props) => {
     </>
   );
 };
+
+// features/profile -> my-soss로 이동
