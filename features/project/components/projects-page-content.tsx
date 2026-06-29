@@ -7,9 +7,17 @@ import { CreateProjectModal } from '@/features/project/components/create-project
 import { ProjectCard } from '@/features/project/components/project-card';
 import { ProjectInviteHandler } from '@/features/project/components/project-invite-handler';
 import { useProjectCards } from '@/features/project/hooks/use-project-cards';
-import { SettingIcon } from '@/shared/assets/icons';
+import { DownIcon, SettingIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { PageContainer } from '@/shared/components/page-container';
+
+// TODO: 필터/정렬 기능은 외형만 구현된 상태 (전체/최신순 선택 동작 미연결)
+const ProjectListFilter = ({ label }: { label: string }) => (
+  <div className="flex items-center gap-1 px-4">
+    <span className="text-body-base text-text-subtle font-medium">{label}</span>
+    <DownIcon aria-hidden className="text-icon-gray-light size-4" />
+  </div>
+);
 
 export const ProjectsPageContent = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -85,7 +93,15 @@ export const ProjectsPageContent = () => {
         </Button>
       </div>
 
-      <div className="my-10.5">{renderProjectList()}</div>
+      <div className="border-border-gray my-10.5 w-full rounded-2xl border">
+        <div className="border-border-gray bg-surface-gray-subtler flex items-center justify-end rounded-t-2xl border-b px-8 py-5">
+          <div className="flex items-center gap-2">
+            <ProjectListFilter label="전체" />
+            <ProjectListFilter label="최신순" />
+          </div>
+        </div>
+        <div className="p-8">{renderProjectList()}</div>
+      </div>
 
       <CreateProjectModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
       <ProjectInviteHandler />
