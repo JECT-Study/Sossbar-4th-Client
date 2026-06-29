@@ -6,11 +6,17 @@ export const NAME_MAX_LENGTH = 20;
 
 export const SIGNUP_STEPS = [
   { id: 'basic', label: '기본 정보' },
-  { id: 'fields', label: '분야 선택' },
+  { id: 'career', label: '맞춤 설정' },
   { id: 'complete', label: '가입 완료' },
 ] as const satisfies readonly StepIndicatorStep[];
 
 export type SignupStepId = (typeof SIGNUP_STEPS)[number]['id'];
+
+export const SIGNUP_STEP_DESCRIPTIONS: Record<SignupStepId, string> = {
+  basic: '기본 정보를 입력해 주세요.',
+  career: '나를 잘 나타내는 분야와 링크를 등록해 주세요.',
+  complete: '프로젝트를 생성하고 동료에게 후기를 요청해 프로필을 완성해 보세요!',
+};
 
 export const FIELD_OPTIONS = [
   { value: 'FE', label: '💻 프론트엔드' },
