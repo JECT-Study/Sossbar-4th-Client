@@ -11,6 +11,7 @@ import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-pa
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import { Header } from './header/header';
+import { LandingHeader } from './header/landing-header';
 import { MainLayoutClient } from './main-layout-client';
 
 interface Props {
@@ -36,7 +37,9 @@ export const MainLayout = async ({ children }: Props) => {
         <GoogleAnalyticsPageView />
       </Suspense>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <MainLayoutClient header={<Header />}>{children}</MainLayoutClient>
+        <MainLayoutClient defaultHeader={<Header />} landingHeader={<LandingHeader />}>
+          {children}
+        </MainLayoutClient>
         <Suspense fallback={null}>
           <LoginModal />
         </Suspense>
