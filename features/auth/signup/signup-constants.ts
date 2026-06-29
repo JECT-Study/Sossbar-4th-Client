@@ -13,13 +13,10 @@ export const SIGNUP_STEPS = [
 export type SignupStepId = (typeof SIGNUP_STEPS)[number]['id'];
 
 export const FIELD_OPTIONS = [
-  { value: 'PLANNING', label: '기획/PM' },
-  { value: 'DESIGN', label: '디자인' },
-  { value: 'FRONTEND', label: '프론트엔드' },
-  { value: 'BACKEND', label: '백엔드' },
-  { value: 'AI', label: 'AI' },
-  { value: 'QA', label: 'QA' },
-  { value: 'ETC', label: '기타' },
+  { value: 'FE', label: '💻 프론트엔드' },
+  { value: 'BE', label: '🗄️ 백엔드' },
+  { value: 'PM', label: '📋 프로덕트 매니저' },
+  { value: 'PD', label: '🎨 프로덕트 디자이너' },
 ] as const satisfies readonly { value: string; label: string }[];
 
 export const FIELDS_MAX_SELECT = 2;
