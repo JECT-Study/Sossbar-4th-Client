@@ -1,8 +1,4 @@
-export interface UserInfoResDto {
+export interface LoginResponse {
+  accessToken: string;
   userId: number;
-  username: string | null;
-  email: string;
-  bio: string | null;
-  profileImageUrl: string | null;
-  userType: string;
 }
