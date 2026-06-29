@@ -131,3 +131,4 @@ Configured in `shared/lib/get-query-client.ts`: staleTime 1 min, gcTime 5 min, n
 |------|----------|------|------|
 | 2026-06-27 | 초기 구성 | 전체 | harness@harness-marketplace 설치 후 신규 구축 |
 | 2026-06-29 | gitflow 스킬 추가 | skills/gitflow | docs/workflow-and-gitflow.md 기반 이슈→브랜치→PR 워크플로우 자동화 |
+| 2026-06-29 | frontend-design-principles 스킬 추가 | skills/frontend-design-principles | 응집도·결합도·의존성·추상화·DRY·YAGNI 등 설계 원칙 판단 기준 |
