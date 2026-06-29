@@ -22,6 +22,8 @@ interface Props {
   defaultValue?: string[];
   onValueChange?: (value: string[]) => void;
   required?: boolean;
+  /** 최대 선택 가능 개수. 도달 시 미선택 항목들이 자동으로 disabled 처리됩니다. */
+  max?: number;
   placeholder?: string;
   ref?: Ref<HTMLButtonElement>;
   className?: string;
@@ -37,6 +39,7 @@ export const MultiSelectField = ({
   defaultValue,
   onValueChange,
   required,
+  max,
   placeholder = '항목을 선택해주세요',
   ref,
   className,
@@ -50,6 +53,7 @@ export const MultiSelectField = ({
   });
 
   const selectedOptions = options.filter((option) => selectedValue.includes(option.value));
+  const isMaxReached = max !== undefined && selectedValue.length >= max;
 
   return (
     <div className={cn('relative flex flex-col gap-2', className)}>
@@ -71,7 +75,11 @@ export const MultiSelectField = ({
 
         <MultiSelect.Content className={cn('w-(--radix-popover-trigger-width)', contentClassName)}>
           {options.map((option) => (
-            <MultiSelect.Item key={option.value} value={option.value} disabled={option.disabled}>
+            <MultiSelect.Item
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled || (isMaxReached && !selectedValue.includes(option.value))}
+            >
               {option.label}
             </MultiSelect.Item>
           ))}
