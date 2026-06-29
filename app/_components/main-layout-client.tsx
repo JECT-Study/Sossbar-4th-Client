@@ -18,12 +18,12 @@ interface Props {
  */
 export const MainLayoutClient = ({ children, header }: Props) => {
   const pathname = usePathname();
-  const hideChrome = pathname?.startsWith('/signup') ?? false;
+  // const hideChrome = pathname?.startsWith('/signup') ?? false;
   const footerVariant = pathname === '/' ? 'dark' : 'light';
 
-  if (hideChrome) {
-    return children;
-  }
+  // if (hideChrome) {
+  //   return children;
+  // }
 
   return (
     <>
