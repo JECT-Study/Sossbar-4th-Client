@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import { CameraIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
-import { useFileInput } from '@/shared/components/file-input';
+import { useFileInput, useImagePreview } from '@/shared/components/file-input';
 import { TextField } from '@/shared/components/text-field';
 import { TextareaField } from '@/shared/components/textarea-field';
 
@@ -22,17 +22,11 @@ export const SignupStepBasic = ({ onNext }: Props) => {
   const { control, setValue, formState } = useFormContext<SignupFormData>();
   const { errors } = formState;
   const profileImage = useWatch({ control, name: 'profileImage' });
+  const { previewUrl, onChange: syncPreview } = useImagePreview();
 
-  const previewUrl = useMemo(() => (profileImage ? URL.createObjectURL(profileImage) : null), [profileImage]);
-
-  useEffect(
-    () => () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    },
-    [previewUrl],
-  );
+  useEffect(() => {
+    syncPreview(profileImage ?? null);
+  }, [profileImage, syncPreview]);
 
   const { inputRef, openPicker, handleFileChange } = useFileInput({
     onChange: (file) => {
