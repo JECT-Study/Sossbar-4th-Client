@@ -5,8 +5,7 @@ import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
 import { Popover as PopoverPrimitive } from 'radix-ui';
 import { createContext, useCallback, useContext, useMemo } from 'react';
 
-import { DropdownIcon, XIcon } from '@/shared/assets/icons';
-import { Checkbox } from '@/shared/components/checkbox';
+import { CheckIcon, DropdownIcon, XIcon } from '@/shared/assets/icons';
 import { useControllableState } from '@/shared/hooks/use-controllable-state';
 import { cn } from '@/shared/lib/cn';
 
@@ -153,7 +152,17 @@ const MultiSelectItem = ({ value, children, className }: MultiSelectItemProps) =
       )}
       data-state={isChecked ? 'checked' : 'unchecked'}
     >
-      <Checkbox checked={isChecked} onCheckedChange={() => toggle(value)} className="pointer-events-none" />
+      <span
+        aria-hidden
+        className={cn(
+          'relative flex size-5 shrink-0 items-center justify-center rounded border transition-colors',
+          isChecked ? 'border-button-primary-fill bg-button-primary-fill' : 'border-divider-gray bg-white',
+        )}
+      >
+        {isChecked ? (
+          <CheckIcon className="text-text-basic-inverse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        ) : null}
+      </span>
       <span>{children}</span>
     </button>
   );
