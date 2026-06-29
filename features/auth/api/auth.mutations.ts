@@ -1,6 +1,6 @@
 import { apiRequest } from '@/shared/lib/api';
 
-import type { SignupPayload, SignupResponse } from './types';
+import type { SignupPayload, SignupResponse } from '../signup/types';
 
 const createSignupFormData = ({ name, bio, requiredAgree, marketingAgree, profileImage }: SignupPayload) => {
   const formData = new FormData();

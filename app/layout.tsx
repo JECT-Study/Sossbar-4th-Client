@@ -1,13 +1,23 @@
 import type { ReactNode } from 'react';
 
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import localFont from 'next/font/local';
+import { cookies } from 'next/headers';
+import { Suspense } from 'react';
 
+import { fetchMyProfileOptional } from '@/features/profile/api/fetch-my-profile-optional';
+import { HeaderAuthGate } from '@/features/profile/components/header-auth-gate';
+import { profileKeys } from '@/features/profile/profile.query-keys';
+import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { GoogleAnalytics } from '@/shared/components/google-analytics';
+import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-page-view';
+import { Header } from '@/shared/components/header/header';
+import { getQueryClient } from '@/shared/lib/get-query-client';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
 import type { Metadata } from 'next';
 
-import { MainLayout } from './_components/main-layout';
+import { LayoutClient } from './layout-client';
 
 import '@/styles/globals.css';
 
@@ -50,17 +60,29 @@ const pretendard = localFont({
   display: 'swap',
 });
 
-const RootLayout = ({
-  children,
-}: Readonly<{
-  children: ReactNode;
-}>) => {
+const RootLayout = async ({ children }: { children: ReactNode }) => {
+  const cookieStore = await cookies();
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: profileKeys.my,
+    queryFn: () => fetchMyProfileOptional({ headers: { Cookie: cookieStore.toString() } }),
+  });
+
   return (
     <html lang="ko" className={pretendard.variable}>
       <body className="bg-gray-0 flex min-h-screen flex-col text-gray-900 antialiased">
         <GoogleAnalytics />
         <QueryProvider>
-          <MainLayout>{children}</MainLayout>
+          <Suspense fallback={null}>
+            <GoogleAnalyticsPageView />
+          </Suspense>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <LayoutClient header={<Header avatarSlot={<HeaderAuthGate />} />}>{children}</LayoutClient>
+            <Suspense fallback={null}>
+              <LoginModal />
+            </Suspense>
+          </HydrationBoundary>
         </QueryProvider>
       </body>
     </html>
