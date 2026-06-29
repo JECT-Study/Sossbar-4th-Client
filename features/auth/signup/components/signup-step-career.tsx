@@ -28,7 +28,7 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
   const canSubmit = SignupCareerStepSchema.safeParse({ fields: selectedFields, links: watchedLinks }).success;
 
   return (
-    <div className="mt-8 flex w-full max-w-[460px] flex-col">
+    <div className="mt-8 flex w-full max-w-[480px] flex-col">
       <Controller
         control={control}
         name="fields"

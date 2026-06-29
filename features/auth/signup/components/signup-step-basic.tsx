@@ -41,7 +41,7 @@ export const SignupStepBasic = ({ onNext }: Props) => {
   });
 
   return (
-    <div className="mt-13 flex w-full max-w-[460px] flex-col">
+    <div className="mt-13 flex w-full max-w-[480px] flex-col">
       <div className="flex flex-col items-center">
         <div className="relative">
           <div className="bg-action-gray-light flex size-25 shrink-0 items-center justify-center overflow-hidden rounded-full">

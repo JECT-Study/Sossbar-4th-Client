@@ -10,7 +10,7 @@ interface Props {
 
 export const SignupStepComplete = ({ onConfirm }: Props) => {
   return (
-    <div className="mt-10 flex w-full max-w-[460px] flex-col items-center">
+    <div className="mt-10 flex w-full max-w-[480px] flex-col items-center">
       <Image src="/signup_image.svg" alt="" width={160} height={160} className="h-40 w-40" />
 
       <Button
