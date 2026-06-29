@@ -3,6 +3,9 @@ import Image from 'next/image';
 const PREVIEW_CARD_CLASS =
   'bg-element-gray-light relative h-[300px] w-full shrink-0 overflow-hidden rounded-md shadow-[0px_8px_24px_rgba(0,0,0,0.1)] lg:w-[554px]';
 
+const STEP3_PREVIEW_CARD_CLASS =
+  'relative h-[300px] w-full shrink-0 overflow-hidden rounded-md shadow-[0px_4px_16px_rgba(96,96,96,0.3)] lg:w-[554px]';
+
 type HowItWorksStepPreviewProps = {
   variant: 'step1' | 'step2' | 'step3';
   title: string;
@@ -56,26 +59,14 @@ export const HowItWorksStepPreview = ({ variant, title }: HowItWorksStepPreviewP
   }
 
   return (
-    <div className={PREVIEW_CARD_CLASS}>
-      <div className="absolute top-6 left-6 h-[307px] w-[506px] overflow-hidden">
-        <div
-          className="absolute"
-          style={{
-            width: '143.06%',
-            height: '265.38%',
-            left: '-23.89%',
-            top: '-7.42%',
-          }}
-        >
-          <Image
-            src="/home-renewal/how-it-works-step3-profile.png"
-            alt={`${title} 화면 예시`}
-            fill
-            className="object-cover object-top"
-            sizes="506px"
-          />
-        </div>
-      </div>
+    <div className={STEP3_PREVIEW_CARD_CLASS}>
+      <Image
+        src="/home-renewal/how-it-works-step3-profile.png"
+        alt={`${title} 화면 예시`}
+        fill
+        className="object-cover object-left-top"
+        sizes="554px"
+      />
     </div>
   );
 };
