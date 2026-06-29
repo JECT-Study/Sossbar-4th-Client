@@ -9,7 +9,6 @@ const defaultAgreements: SignupFormData['agreements'] = {
   age: false,
   terms: false,
   privacy: false,
-  marketing: false,
 };
 
 export const useAgreements = (control: Control<SignupFormData>, setValue: UseFormSetValue<SignupFormData>) => {

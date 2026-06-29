@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Button } from '@/shared/components/button';
 
 interface Props {
-  username?: string;
   onConfirm: () => void;
 }
 

@@ -8,12 +8,18 @@ export type FieldValue = (typeof FIELD_VALUES)[number];
 
 export type UserLinkType = (typeof USER_LINK_TYPE_VALUES)[number];
 
+export interface SignupUserLink {
+  userLinkType: UserLinkType;
+  userLink: string;
+}
+
 export type SignupPayload = {
   name: string;
   bio: string;
   requiredAgree: boolean;
-  marketingAgree: boolean;
   profileImage: File | null;
+  fields: FieldValue[];
+  links: SignupUserLink[];
 };
 
 export interface SignupResponse {

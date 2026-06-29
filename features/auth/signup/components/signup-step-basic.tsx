@@ -1,93 +1,123 @@
 'use client';
 
-import type { ChangeEvent } from 'react';
+import { useEffect, useMemo } from 'react';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
-import { useEffect, useRef, useState } from 'react';
-
-import { ProfileAvatar } from '@/features/profile';
 import { CameraIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { useFileInput } from '@/shared/components/file-input';
 import { TextField } from '@/shared/components/text-field';
 import { TextareaField } from '@/shared/components/textarea-field';
 
+import type { SignupFormData } from '../types';
+
 import { BIO_MAX_LENGTH, NAME_MAX_LENGTH, PROFILE_IMAGE_ACCEPT } from '../signup-constants';
+import { SignupAgreement } from './signup-agreement';
 
 interface Props {
   onNext: () => void;
 }
 
 export const SignupStepBasic = ({ onNext }: Props) => {
-  // Phase A: local state stub. Phase B에서 useFormContext()로 교체 예정.
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [name, setName] = useState('');
-  const [bio, setBio] = useState('');
-  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const { control, setValue, formState } = useFormContext<SignupFormData>();
+  const { errors } = formState;
+  const profileImage = useWatch({ control, name: 'profileImage' });
 
-  useEffect(() => {
-    return () => {
-      if (previewImageUrl) {
-        URL.revokeObjectURL(previewImageUrl);
+  const previewUrl = useMemo(() => (profileImage ? URL.createObjectURL(profileImage) : null), [profileImage]);
+
+  useEffect(
+    () => () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
       }
-    };
-  }, [previewImageUrl]);
+    },
+    [previewUrl],
+  );
 
-  const handleClickImageButton = () => fileInputRef.current?.click();
-
-  const handleChangeProfileImage = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] ?? null;
-    if (previewImageUrl) {
-      URL.revokeObjectURL(previewImageUrl);
-    }
-    setPreviewImageUrl(file ? URL.createObjectURL(file) : null);
-  };
+  const { inputRef, openPicker, handleFileChange } = useFileInput({
+    onChange: (file) => {
+      setValue('profileImage', file, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+    },
+  });
 
   return (
-    <div className="mt-8 flex w-full max-w-[460px] flex-col">
+    <div className="mt-13 flex w-full max-w-[460px] flex-col">
       <div className="flex flex-col items-center">
         <div className="relative">
-          <ProfileAvatar username={name.trim() || '이름'} profileImageUrl={previewImageUrl} />
+          <div className="bg-action-gray-light flex size-25 shrink-0 items-center justify-center overflow-hidden rounded-full">
+            <img
+              src={previewUrl ?? '/default-profile.png'}
+              alt="프로필 이미지 미리보기"
+              className="h-full w-full object-cover"
+            />
+          </div>
           <input
-            ref={fileInputRef}
+            ref={inputRef}
             type="file"
             accept={PROFILE_IMAGE_ACCEPT}
             className="sr-only"
-            onChange={handleChangeProfileImage}
+            onChange={handleFileChange}
           />
           <button
             type="button"
             className="border-icon-gray-fill absolute top-14.5 left-16.75 flex size-10.5 cursor-pointer items-center justify-center rounded-full border bg-white"
             aria-label="프로필 이미지 선택"
-            onClick={handleClickImageButton}
+            onClick={openPicker}
           >
             <CameraIcon className="text-icon-gray-fill size-6" />
           </button>
         </div>
+        {errors.profileImage ? (
+          <p className="text-body-sm text-text-error mt-2">{errors.profileImage.message}</p>
+        ) : null}
       </div>
 
-      <TextField
+      <Controller
+        control={control}
         name="name"
-        label="이름"
-        placeholder="실명을 입력해주세요"
-        required
-        clearable
-        maxLength={NAME_MAX_LENGTH}
-        className="mt-8"
-        value={name}
-        onChange={(event) => setName(event.target.value)}
+        render={({ field }) => (
+          <TextField
+            name={field.name}
+            label="이름"
+            placeholder="실명을 입력해주세요"
+            required
+            clearable
+            maxLength={NAME_MAX_LENGTH}
+            className="mt-8"
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            errorMessage={errors.name?.message}
+          />
+        )}
       />
 
-      <TextareaField
+      <Controller
+        control={control}
         name="bio"
-        label="한 줄 소개"
-        placeholder="본인을 간단히 소개해주세요"
-        maxLength={BIO_MAX_LENGTH}
-        required
-        className="mt-10"
-        value={bio}
-        onChange={(event) => setBio(event.target.value)}
+        render={({ field }) => (
+          <TextareaField
+            name="bio"
+            label="한 줄 소개"
+            placeholder="본인을 간단히 소개해주세요"
+            maxLength={BIO_MAX_LENGTH}
+            required
+            className="mt-10"
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            errorMessage={errors.bio?.message}
+          />
+        )}
       />
 
-      <Button type="button" size="medium" onClick={onNext} className="w-full">
+      <SignupAgreement control={control} setValue={setValue} />
+
+      {errors.agreements?.message ? (
+        <p className="text-body-sm text-text-error mt-3">{errors.agreements.message}</p>
+      ) : null}
+
+      <Button type="button" size="medium" onClick={onNext} className="mt-12 w-full">
         다음
       </Button>
     </div>
