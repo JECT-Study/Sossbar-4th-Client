@@ -104,14 +104,16 @@ features/project/
 ### 의존 방향 (단방향)
 
 ```
-Layer 0   auth                                             # 가장 기반 — 세션·유저 개념 제공
+Layer 0   auth                                          # 가장 기반 — 세션·유저 개념 제공
   ↓
-Layer 1   profile, project                                 # auth에 의존 가능
+Layer 1   profile, project                              # auth에 의존 가능
   ↓
-Layer 2   review, tag, soft-skills, notifications, reputation  # Layer 1 이하에 의존 가능
+Layer 2   review, spectrum, tag, notifications          # Layer 1 이하에 의존 가능
 ```
 
-`mypage`는 별도 feature로 두지 않는다. `app/(protected)/personal/page.tsx`에서 각 feature를 조합한다.
+- `mypage`는 별도 feature로 두지 않는다. `app/(protected)/personal/page.tsx`에서 각 feature를 조합한다.
+- `reputation`은 사용하지 않는다.
+- `spectrum` 폴더명은 현재 `soft-skills/`로 존재한다 (추후 rename 예정).
 
 #### 레이어 방향 결정 기준
 
