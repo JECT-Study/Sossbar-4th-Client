@@ -27,7 +27,7 @@ const FEATURES = [
   },
 ] as const;
 
-export const HomeRenewalFeaturesSection = () => {
+export const HomeFeaturesSection = () => {
   return (
     <section className="relative h-[800px] overflow-hidden bg-white">
       <div

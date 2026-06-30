@@ -1,6 +1,6 @@
 import { PageContainer } from '@/shared/components/page-container';
 
-import { HowItWorksStepPreview } from './home-renewal-how-it-works-step-preview';
+import { HomeHowItWorksStepPreview } from './home-how-it-works-step-preview';
 import { HomeSectionHeader } from './home-section-header';
 
 const STEPS = [
@@ -20,14 +20,14 @@ const STEPS = [
     step: 'STEP 3',
     title: '협업 프로필 확인',
     description: [
-      '동료에게 받은 후기가 ‘내 소스’ 페이지에 자동으로 반영됩니다.',
+      "동료에게 받은 후기가 '내 소스' 페이지에 자동으로 반영됩니다.",
       '해당 페이지에서 본인의 소프트 스킬을 확인 후 공유해보세요.',
     ],
     variant: 'step3',
   },
 ] as const;
 
-export const HomeRenewalHowItWorksSection = () => {
+export const HomeHowItWorksSection = () => {
   return (
     <section className="py-margin-xxl box-border flex flex-col items-center bg-white">
       <PageContainer className="gap-margin-xl flex w-full max-w-[1200px] flex-col items-center">
@@ -54,7 +54,7 @@ export const HomeRenewalHowItWorksSection = () => {
                 </div>
               </div>
 
-              <HowItWorksStepPreview variant={step.variant} title={step.title} />
+              <HomeHowItWorksStepPreview variant={step.variant} title={step.title} />
             </div>
           ))}
         </div>

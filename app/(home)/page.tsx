@@ -1,16 +1,18 @@
-import { HomeCtaSection } from './home-cta-section';
-import { HomeHeroSection } from './home-hero-section';
-import { HomeRenewalCareerSection } from './home-renewal-career-section';
-import { HomeRenewalFeaturesSection } from './home-renewal-features-section';
-import { HomeRenewalHowItWorksSection } from './home-renewal-how-it-works-section';
+import {
+  HomeCareerSection,
+  HomeCtaSection,
+  HomeFeaturesSection,
+  HomeHeroSection,
+  HomeHowItWorksSection,
+} from '@/features/landing';
+
 const Home = () => {
   return (
     <>
       <HomeHeroSection />
-      <HomeRenewalFeaturesSection />
-      <HomeRenewalHowItWorksSection />
-
-      <HomeRenewalCareerSection />
+      <HomeFeaturesSection />
+      <HomeHowItWorksSection />
+      <HomeCareerSection />
       <HomeCtaSection />
     </>
   );
