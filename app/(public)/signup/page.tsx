@@ -1,4 +1,4 @@
-import { SignupFlow } from '@/features/auth/signup/components/signup-flow';
+import { SignupFlow } from '@/features/auth';
 
 const SignupPage = () => {
   return (

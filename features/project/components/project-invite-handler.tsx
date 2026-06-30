@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { saveLoginReturnPath } from '@/features/auth/lib/login-return-path';
+import { saveLoginReturnPath, useLoginModal } from '@/features/auth';
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { useInviteProjectMember } from '@/features/project/api/mutations';
 import { useProject } from '@/features/project/api/queries';
@@ -11,7 +11,6 @@ import { ProjectInviteAcceptModal } from '@/features/project/components/project-
 import { parseProjectInviteId } from '@/features/project/lib/parse-project-invite-id';
 import { PROJECT_INVITE_QUERY_KEY } from '@/features/project/lib/project-invite-query';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
-import { useLoginModal } from '@/shared/hooks/use-login-modal';
 import { ApiError } from '@/shared/lib/api';
 
 const removeInviteParamFromUrl = (pathname: string, searchParams: URLSearchParams): string => {

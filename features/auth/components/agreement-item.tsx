@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { Checkbox } from '@/shared/components/checkbox';
 
-import type { AGREEMENTS } from '../signup.constants';
+import type { AGREEMENTS } from '../auth.constants';
 
 interface Props {
   agreement: (typeof AGREEMENTS)[number];

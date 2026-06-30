@@ -9,10 +9,10 @@ import { useFileInput, useImagePreview } from '@/shared/components/file-input';
 import { TextField } from '@/shared/components/text-field';
 import { TextareaField } from '@/shared/components/textarea-field';
 
-import type { SignupFormData } from '../types';
+import type { SignupFormData } from '../auth.types';
 
-import { BIO_MAX_LENGTH, NAME_MAX_LENGTH, PROFILE_IMAGE_ACCEPT } from '../signup.constants';
-import { SignupBasicStepSchema } from '../signup.schemas';
+import { BIO_MAX_LENGTH, NAME_MAX_LENGTH, PROFILE_IMAGE_ACCEPT } from '../auth.constants';
+import { SignupBasicStepSchema } from '../auth.schemas';
 import { SignupAgreement } from './signup-agreement';
 
 interface Props {

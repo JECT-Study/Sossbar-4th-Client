@@ -1,6 +1,11 @@
-import type { POSITION_VALUES, USER_LINK_TYPE_VALUES } from './signup.constants';
-import type { SignupFormSchema } from './signup.schemas';
+import type { POSITION_VALUES, USER_LINK_TYPE_VALUES } from './auth.constants';
+import type { SignupFormSchema } from './auth.schemas';
 import type { z } from 'zod';
+
+export interface LoginResponse {
+  accessToken: string;
+  userId: number;
+}
 
 export type SignupFormData = z.infer<typeof SignupFormSchema>;
 
@@ -36,4 +41,10 @@ export interface SignupResponse {
   defaultPositions: string[];
   links: SignupResponseLink[];
   marketingAgree: boolean;
+}
+
+export interface KakaoLoginResult {
+  ok: boolean;
+  setCookieHeaders: string[];
+  accessTokenCookie: string;
 }
