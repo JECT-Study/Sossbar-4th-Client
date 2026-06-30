@@ -1,6 +1,6 @@
 ---
 name: folder-architecture
-description: 파일 위치 결정, 새 기능 추가, 도메인 간 참조 방식을 검토할 때 사용. 새 페이지/컴포넌트/훅/API를 추가하기 전에 반드시 확인한다.
+description: "MUST READ before any file creation or feature work. 파일 위치·네이밍·도메인 레이어·import 방향 모든 규칙이 여기에 있다. 새 페이지·컴포넌트·훅·API를 추가하거나 도메인 간 참조를 결정할 때 이 파일을 읽지 않으면 규칙 위반이 발생한다."
 ---
 
 # Folder Architecture
@@ -36,6 +36,19 @@ export default function ProfilePage({ params }) {
 
 **`app/` 안에 컴포넌트 파일을 만들지 않는다.** `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `route.ts` 외의 파일은 `features/`로.
 
+### app/ 라우트 → feature 매핑
+
+| 라우트                  | 사용하는 feature                                           |
+| ----------------------- | ---------------------------------------------------------- |
+| `(public)/login`        | `features/auth`                                            |
+| `(public)/signup`       | `features/auth`                                            |
+| `(protected)/profile`   | `features/profile`                                         |
+| `(protected)/personal`  | `features/profile`, `features/tag`, `features/soft-skills`, `features/review`, `features/project` |
+| `(protected)/projects`  | `features/project`                                         |
+| `(protected)/reviews`   | `features/review`                                          |
+
+`(protected)/personal` (내 소스)은 여러 feature를 조합하는 페이지다. feature 간 조합 로직은 page.tsx에서 처리하며, 별도 `my-page` feature를 만들지 않는다.
+
 ---
 
 ## features/ — 도메인 구조
@@ -45,65 +58,44 @@ export default function ProfilePage({ params }) {
 ```
 features/[domain]/
   index.ts                    # 외부 공개 심볼만 re-export (필수)
-  api/
-    [domain].fetchers.ts      # raw fetch 함수
-    [domain].query-keys.ts    # query key factory
-    [domain].queries.ts       # queryOptions / prefetch helpers
-    [domain].mutations.ts     # mutation API 함수 (필요 시)
+  [domain].api.ts             # fetcher + query-key + queryOptions 통합
+  [domain].hooks.ts           # useQuery / useMutation 훅
+  [domain].types.ts           # TypeScript 타입 + Zod infer 타입
+  [domain].schemas.ts         # Zod 스키마
+  [domain].constants.ts       # 도메인 상수 (필요 시)
+  [domain].lib.ts             # 도메인 전용 순수 유틸 (필요 시)
   components/
     [component].tsx
-  hooks/
-    use-[name].query.ts       # TanStack Query 훅
-    use-[name].mutation.ts    # TanStack Mutation 훅
-    use-[name].ts             # 기타 UI 훅
-  types/
-    [domain].types.ts         # TypeScript 타입 + Zod infer 타입
-    [domain].schemas.ts       # Zod 스키마
-    [domain].constants.ts     # 도메인 상수
-  lib/                        # 도메인 전용 순수 유틸 함수
-    [util-name].ts
 ```
 
-### 실제 예시 (profile 도메인)
+### 실제 예시 (project 도메인)
 
 ```
-features/profile/
+features/project/
   index.ts
-  profile.query-keys.ts        # ← 루트에 있는 건 api/로 이동 대상
-  api/
-    fetch-profile-by-id.ts
-    fetch-my-profile.ts
-    update-profile.ts
+  project.api.ts              # GET /projects, GET /projects/:id, POST /projects — 다 여기
+  project.hooks.ts            # useProjects, useProject, useCreateProject — 다 여기
+  project.types.ts
+  project.schemas.ts
   components/
-    profile-section.tsx
-    profile-avatar.tsx
-  hooks/
-    use-profile-by-id.query.ts
-    use-my-profile.query.ts
-    use-update-profile.mutation.ts
-  types/
-    profile.types.ts
-    profile.schemas.ts
-  lib/
-    build-profile-share-url.ts
+    project-card.tsx
+    create-project-form.tsx
 ```
+
+도메인이 이미 경계다. 도메인 내에서 create/update 등으로 파일을 미리 나누지 않는다. 파일이 실제로 커졌을 때 나눈다.
 
 ### 파일 위치 결정표
 
-| 파일 유형                    | 위치                           |
-| ---------------------------- | ------------------------------ |
-| raw fetch 함수               | `api/[domain].fetchers.ts`     |
-| Query Key Factory            | `api/[domain].query-keys.ts`   |
-| queryOptions / prefetch      | `api/[domain].queries.ts`      |
-| useMutation API              | `api/[domain].mutations.ts`    |
-| useQuery/useSuspenseQuery 훅 | `hooks/use-[name].query.ts`    |
-| useMutation 훅               | `hooks/use-[name].mutation.ts` |
-| UI 상태 훅                   | `hooks/use-[name].ts`          |
-| React 컴포넌트               | `components/[name].tsx`        |
-| TypeScript 타입, Zod infer   | `types/[domain].types.ts`      |
-| Zod 스키마                   | `types/[domain].schemas.ts`    |
-| 상수                         | `types/[domain].constants.ts`  |
-| 순수 유틸 함수               | `lib/[util-name].ts`           |
+| 파일 유형                              | 위치                      |
+| -------------------------------------- | ------------------------- |
+| fetcher + query-key + queryOptions + mutation API | `[domain].api.ts` |
+| useQuery / useSuspenseQuery / useMutation 훅 | `[domain].hooks.ts`  |
+| UI 상태 훅                             | `[domain].hooks.ts`       |
+| React 컴포넌트                         | `components/[name].tsx`   |
+| TypeScript 타입, Zod infer             | `[domain].types.ts`       |
+| Zod 스키마                             | `[domain].schemas.ts`     |
+| 상수                                   | `[domain].constants.ts`   |
+| 순수 유틸 함수                         | `[domain].lib.ts`         |
 
 ---
 
@@ -112,16 +104,41 @@ features/profile/
 ### 의존 방향 (단방향)
 
 ```
-Layer 0   auth
+Layer 0   auth                                             # 가장 기반 — 세션·유저 개념 제공
   ↓
-Layer 1   profile, project
+Layer 1   profile, project                                 # auth에 의존 가능
   ↓
-Layer 2   review, tag, soft-skills, mypage, notifications, reputation
+Layer 2   review, tag, soft-skills, notifications, reputation  # Layer 1 이하에 의존 가능
 ```
+
+`mypage`는 별도 feature로 두지 않는다. `app/(protected)/personal/page.tsx`에서 각 feature를 조합한다.
+
+#### 레이어 방향 결정 기준
+
+"A 없이 B가 존재할 수 있는가?"로 판단한다.
+
+```
+auth 없이 profile이 존재할 수 있나? → NO  → profile이 auth에 의존
+profile 없이 auth가 존재할 수 있나? → YES → auth는 profile을 몰라도 됨
+```
+
+더 독립적인 쪽이 상위 레이어(낮은 번호)다.
 
 - **하위 레이어 → 상위 레이어 참조 금지** (auth가 review를 import하면 안 됨)
 - **같은 레이어끼리 cross-import 금지** (review가 tag를 import하면 안 됨)
 - cross-import가 필요해 보이면 **shared/로 올리거나 설계를 재검토**한다
+
+#### cross-feature import 방법
+
+하위 레이어가 상위 레이어를 참조할 때는 `index.ts`를 통해서만.
+
+```ts
+// features/profile에서 auth의 현재 유저 정보를 쓸 때
+import { useMe } from '@/features/auth';  // ✅ auth → profile 방향, index.ts 경유
+
+// auth가 profile을 참조하려 할 때
+import { useProfile } from '@/features/profile';  // ❌ 역방향 금지
+```
 
 ### 참조 방법
 
@@ -134,6 +151,29 @@ import { useProfile } from '@/features/profile/hooks/use-profile-by-id.query';
 // ✅ index.ts 경유
 import { useProfile } from '@/features/profile';
 ```
+
+### auth 도메인 범위
+
+`auth`는 인증 플로우 + 현재 유저 조회 + 헤더 컴포넌트를 소유한다.
+
+```
+features/auth/
+  components/
+    login-form.tsx
+    signup-form.tsx
+    header.tsx          # 모든 페이지 공통 헤더 (인증 상태에 따라 달라짐)
+    header-profile.tsx  # 헤더 내 미니 프로필 UI (compact)
+  hooks/
+    use-me.query.ts     # 현재 로그인 유저 조회 — 다른 feature가 import해서 씀
+    use-login.mutation.ts
+    use-signup.mutation.ts
+  api/
+    auth.fetchers.ts
+    auth.query-keys.ts
+```
+
+헤더 내 미니 프로필(HeaderProfile)과 내 소스 페이지의 풀 프로필(ProfileSection)은 UI가 다르다.
+`HeaderProfile`은 auth가 소유하고, `ProfileSection`은 `features/profile`이 소유한다. 둘 다 `useMe`를 `features/auth`에서 가져온다.
 
 ### index.ts 작성 원칙
 
@@ -180,27 +220,27 @@ export const Card = ({ title, children }: CardProps) => { ... };
 
 ## 네이밍 컨벤션
 
-| 대상           | 규칙                           | 예시                             |
-| -------------- | ------------------------------ | -------------------------------- |
-| 도메인 폴더    | kebab-case                     | `soft-skills/`                   |
-| 컴포넌트 파일  | kebab-case                     | `profile-card.tsx`               |
-| Query 훅       | `use-` + noun + `.query.ts`    | `use-profile.query.ts`           |
-| Mutation 훅    | `use-` + verb + `.mutation.ts` | `use-update-profile.mutation.ts` |
-| Fetcher 파일   | `fetch-` + resource            | `fetch-profile-by-id.ts`         |
-| Query Key 파일 | `[domain].query-keys.ts`       | `profile.query-keys.ts`          |
-| 타입 파일      | `[domain].types.ts`            | `profile.types.ts`               |
-| 스키마 파일    | `[domain].schemas.ts`          | `profile.schemas.ts`             |
-| 유틸 파일      | 동사-명사                      | `build-share-url.ts`             |
+| 대상              | 규칙                        | 예시                          |
+| ----------------- | --------------------------- | ----------------------------- |
+| 도메인 폴더    | kebab-case              | `soft-skills/`            |
+| API 파일       | `[domain].api.ts`       | `profile.api.ts`          |
+| 훅 파일        | `[domain].hooks.ts`     | `profile.hooks.ts`        |
+| 타입 파일      | `[domain].types.ts`     | `profile.types.ts`        |
+| 스키마 파일    | `[domain].schemas.ts`   | `profile.schemas.ts`      |
+| 상수 파일      | `[domain].constants.ts` | `project.constants.ts`    |
+| 유틸 파일      | `[domain].lib.ts`       | `profile.lib.ts`          |
+| 컴포넌트 파일  | kebab-case              | `profile-card.tsx`        |
 
 ---
 
 ## 안티패턴
 
-| 안티패턴                            | 문제                           | 해결                                   |
-| ----------------------------------- | ------------------------------ | -------------------------------------- |
-| `app/`에 컴포넌트 파일              | 라우팅과 UI 로직이 섞임        | `features/[domain]/components/`로 이동 |
-| 도메인 내부 직접 import             | 리팩토링 시 깨짐               | `index.ts` 경유                        |
-| 역방향 레이어 참조                  | 순환 의존성 위험               | 의존 방향 재검토, shared/ 승격         |
-| 예방적 shared/ 승격                 | 불필요한 추상화                | 2번째 실사용 시점에 올림               |
-| `export *` barrel                   | 불필요한 노출, 트리쉐이킹 방해 | 필요한 것만 명시 export                |
-| query-keys를 도메인 루트에 flat하게 | 위치 불일치                    | `api/[domain].query-keys.ts`로 통일    |
+| 안티패턴                              | 문제                           | 해결                                      |
+| ------------------------------------- | ------------------------------ | ----------------------------------------- |
+| `app/`에 컴포넌트 파일                | 라우팅과 UI 로직이 섞임        | `features/[domain]/components/`로 이동    |
+| 도메인 내부 직접 import               | 리팩토링 시 깨짐               | `index.ts` 경유                           |
+| 역방향 레이어 참조                    | 순환 의존성 위험               | 의존 방향 재검토, shared/ 승격            |
+| 예방적 shared/ 승격                   | 불필요한 추상화                | 2번째 실사용 시점에 올림                  |
+| `export *` barrel                     | 불필요한 노출, 트리쉐이킹 방해 | 필요한 것만 명시 export                   |
+| 도메인 내 create/update를 파일로 미리 분리 | YAGNI, 실제 크기 전에 복잡도 추가 | 파일이 실제로 커졌을 때 나눔       |
+| `my-page` feature 생성               | 단순 조합 페이지에 불필요한 도메인 | `app/personal/page.tsx`에서 직접 조합  |

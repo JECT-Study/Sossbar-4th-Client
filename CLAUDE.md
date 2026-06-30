@@ -38,10 +38,17 @@ No test suite is configured yet.
 
 ```
 app/          # Routing layer ONLY — pages delegate to features/
-features/     # One folder per domain (components, hooks, api, types, lib, index.ts)
+features/     # One folder per domain ([domain].api.ts, [domain].hooks.ts, [domain].types.ts, components/)
 shared/       # Cross-domain reusables — promote here only at 2nd actual reuse
 styles/       # Design system CSS
 ```
+
+> **REQUIRED — 코드 작업 전 반드시 읽어라:**
+>
+> - `.claude/references/folder-architecture.md` — 파일 위치·네이밍·도메인 레이어·import 방향 전체 규칙
+> - `.claude/skills/frontend-design-principles/SKILL.md` — 응집도·결합도·의존성·DRY·YAGNI·네이밍 등 모든 설계 판단 기준
+>
+> 이 두 파일을 읽지 않고 코드를 작성하면 규칙 위반이 발생한다.
 
 **Path alias**: `@/*` maps to the project root.
 
