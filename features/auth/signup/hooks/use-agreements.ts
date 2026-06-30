@@ -3,13 +3,12 @@ import { useWatch } from 'react-hook-form';
 import type { SignupFormData } from '../types';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 
-import { AGREEMENTS } from '../signup-constants';
+import { AGREEMENTS } from '../signup.constants';
 
 const defaultAgreements: SignupFormData['agreements'] = {
   age: false,
   terms: false,
   privacy: false,
-  marketing: false,
 };
 
 export const useAgreements = (control: Control<SignupFormData>, setValue: UseFormSetValue<SignupFormData>) => {

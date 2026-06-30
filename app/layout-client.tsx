@@ -20,14 +20,9 @@ interface Props {
  */
 export const LayoutClient = ({ children, defaultHeader, landingHeader }: Props) => {
   const pathname = usePathname();
-  const hideChrome = pathname?.startsWith('/signup') ?? false;
   const isLandingPage = pathname === '/';
   const footerVariant = isLandingPage ? 'dark' : 'light';
   const header = isLandingPage ? landingHeader : defaultHeader;
-
-  if (hideChrome) {
-    return children;
-  }
 
   return (
     <>
