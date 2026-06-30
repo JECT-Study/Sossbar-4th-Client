@@ -13,12 +13,7 @@ export const SignupStepComplete = ({ onConfirm }: Props) => {
     <div className="mt-10 flex w-full max-w-[480px] flex-col items-center">
       <Image src="/signup_image.svg" alt="" width={160} height={160} className="h-40 w-40" />
 
-      <Button
-        type="button"
-        size="large"
-        onClick={onConfirm}
-        className="mt-10 w-full rounded-xl py-4 text-[18px] font-semibold"
-      >
+      <Button type="button" size="medium" onClick={onConfirm} className="mt-12 w-full">
         프로필 공유하러 가기
       </Button>
     </div>
