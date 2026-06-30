@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Suspense } from 'react';
 
-import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
+import { KakaoLoginButton } from '@/features/auth';
 
 import { HeaderLogoLink } from './header-logo-link';
 import { HeaderMainNav } from './header-main-nav';

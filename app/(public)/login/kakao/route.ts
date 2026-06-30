@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server';
 
-import type { NextRequest } from 'next/server';
+import {
+  exchangeKakaoCode,
+  fetchNeedsOnboarding,
+  resolveKakaoLoginDestination,
+  LOGIN_RETURN_COOKIE_NAME,
+} from '@/features/auth';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://api.sossbar.com';
-const RETURN_PATH_COOKIE = 'sossbar-login-return';
+import type { NextRequest } from 'next/server';
 
 // Set-Cookie 헤더 문자열을 파싱해 response.cookies.set()으로 주입
 // - Domain= 은 의도적으로 무시 (백엔드 도메인 쿠키를 localhost에 그대로 쓰면 브라우저가 거부)
@@ -46,38 +50,19 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  const loginRes = await fetch(`${API_BASE}/api/v1/login/kakao?code=${encodeURIComponent(code)}`);
+  const login = await exchangeKakaoCode(code);
 
-  if (!loginRes.ok) {
+  if (!login.ok) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  const setCookieHeaders = loginRes.headers.getSetCookie();
-  const accessTokenCookie = setCookieHeaders.find((c) => c.startsWith('accessToken='))?.split(';')[0] ?? '';
-
-  const profileRes = await fetch(`${API_BASE}/api/v1/users/profile`, {
-    headers: { Cookie: accessTokenCookie },
-  });
-
-  let destination: string;
-
-  if (!profileRes.ok) {
-    destination = '/signup';
-  } else {
-    const body = (await profileRes.json()) as { data?: { username?: string | null } };
-    const needsOnboarding = !body.data?.username?.trim();
-
-    if (needsOnboarding) {
-      destination = '/signup';
-    } else {
-      const returnPath = request.cookies.get(RETURN_PATH_COOKIE)?.value;
-      destination = returnPath ? decodeURIComponent(returnPath) : '/';
-    }
-  }
+  const needsOnboarding = await fetchNeedsOnboarding(login.accessTokenCookie);
+  const returnPath = request.cookies.get(LOGIN_RETURN_COOKIE_NAME)?.value;
+  const destination = resolveKakaoLoginDestination({ needsOnboarding, returnPath });
 
   const response = NextResponse.redirect(new URL(destination, request.url));
-  setCookieHeaders.forEach((cookie) => forwardCookie(response, cookie));
-  response.cookies.delete(RETURN_PATH_COOKIE);
+  login.setCookieHeaders.forEach((cookie) => forwardCookie(response, cookie));
+  response.cookies.delete(LOGIN_RETURN_COOKIE_NAME);
 
   return response;
 };

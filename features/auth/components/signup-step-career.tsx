@@ -9,10 +9,10 @@ import { Label } from '@/shared/components/label';
 import { MultiSelectField } from '@/shared/components/multi-select-field';
 import { Select } from '@/shared/components/select';
 
-import type { SignupFormData, UserLinkType } from '../types';
+import type { SignupFormData, UserLinkType } from '../auth.types';
 
-import { POSITIONS_MAX_SELECT, POSITION_OPTIONS, USER_LINKS_MAX, USER_LINK_TYPE_OPTIONS } from '../signup.constants';
-import { SignupCareerStepSchema } from '../signup.schemas';
+import { POSITIONS_MAX_SELECT, POSITION_OPTIONS, USER_LINKS_MAX, USER_LINK_TYPE_OPTIONS } from '../auth.constants';
+import { SignupCareerStepSchema } from '../auth.schemas';
 
 interface Props {
   onPrev: () => void;

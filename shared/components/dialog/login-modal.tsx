@@ -3,10 +3,9 @@
 import Image from 'next/image';
 import { Dialog } from 'radix-ui';
 
-import { saveLoginReturnPath } from '@/features/auth/lib/login-return-path';
+import { saveLoginReturnPath, useLoginModal } from '@/features/auth';
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons';
-import { useLoginModal } from '@/shared/hooks/use-login-modal';
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
 

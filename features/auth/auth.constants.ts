@@ -62,3 +62,9 @@ export const AGREEMENTS = [
     url: '/policies/privacy-policy',
   },
 ] as const;
+
+export const LOGIN_MODAL_QUERY_KEY = 'modal';
+
+export const LOGIN_MODAL_QUERY_VALUE = 'login';
+
+export const LOGIN_RETURN_COOKIE_NAME = 'sossbar-login-return';

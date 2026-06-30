@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Suspense, useState } from 'react';
 
+import { KakaoLoginButton } from '@/features/auth';
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { Button } from '@/shared/components/button/button';
-import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 

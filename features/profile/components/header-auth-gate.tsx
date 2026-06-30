@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
+import { KakaoLoginButton } from '@/features/auth';
 import { ROUTES } from '@/shared/constants/routes';
 
 import { HeaderMyProfile } from './header-my-profile';

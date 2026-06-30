@@ -2,12 +2,12 @@ import { Controller } from 'react-hook-form';
 
 import { Checkbox } from '@/shared/components/checkbox';
 
-import type { SignupFormData } from '../types';
+import type { SignupFormData } from '../auth.types';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 
 import { AgreementItem } from './agreement-item';
-import { useAgreements } from '../hooks/use-agreements';
-import { AGREEMENTS } from '../signup.constants';
+import { AGREEMENTS } from '../auth.constants';
+import { useAgreements } from '../auth.hooks';
 
 interface Props {
   control: Control<SignupFormData>;

@@ -1,8 +1,8 @@
 'use client';
 
-import { useLoginModal } from '@/shared/hooks/use-login-modal';
+import { Button } from '@/shared/components/button';
 
-import { Button } from './button';
+import { useLoginModal } from '../auth.hooks';
 
 export const KakaoLoginButton = () => {
   const { openLoginModal } = useLoginModal();

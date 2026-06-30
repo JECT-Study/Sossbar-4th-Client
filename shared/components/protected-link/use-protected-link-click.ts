@@ -2,8 +2,8 @@
 
 import type { ComponentProps, MouseEventHandler } from 'react';
 
+import { openLoginModalOnPage } from '@/features/auth';
 import { useMyProfile } from '@/features/profile';
-import { openLoginModalOnPage } from '@/shared/lib/login-modal/open-login-modal-on-page';
 
 import type Link from 'next/link';
 
