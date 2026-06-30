@@ -26,7 +26,7 @@ const UserLinkSchema = z.object({
 export const SignupFormSchema = z.object({
   name: z
     .string()
-    .min(2, { message: '이름은 2자 이상 20자 이하로 입력해 주세요.' })
+    .min(1, { message: '이름을 입력해 주세요.' })
     .max(NAME_MAX_LENGTH, `이름은 ${NAME_MAX_LENGTH}자 이하로 입력해 주세요.`),
   bio: z
     .string()
