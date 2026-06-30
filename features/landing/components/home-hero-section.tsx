@@ -12,13 +12,13 @@ export const HomeHeroSection = () => {
     <PageContainer className="py-margin-xxl flex items-center gap-6">
       <div className="flex flex-1 flex-col gap-10 pr-6">
         <div className="flex max-w-[544px] flex-col gap-4">
-          <h1 className="text-display-base text-text-basic leading-[1.5] font-bold">
+          <h1 className="text-display-base text-text-basic leading-normal font-bold">
             당신의 소프트스킬,
             <br />
             <span className="text-primary-500">&apos;데이터&apos;</span>로 본 적 있나요?
           </h1>
 
-          <p className="text-body-base text-text-subtle leading-[1.5] font-normal">
+          <p className="text-body-base text-text-subtle leading-normal font-normal">
             텍스트로 나열된 스펙으로만 당신이 얼마나 훌륭한 동료인지 보여줄 수 없습니다.
             <br />
             소프트스킬을 증명하고 원하는 팀에 합류하세요.

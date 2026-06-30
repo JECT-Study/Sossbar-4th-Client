@@ -102,7 +102,7 @@ const CareerPillarCard = ({ pillar }: CareerPillarCardProps) => {
   );
 };
 
-export const HomeRenewalCareerSection = () => {
+export const HomeCareerSection = () => {
   return (
     <section className="h-[800px] bg-white">
       <PageContainer className="flex h-full flex-col items-center justify-center">

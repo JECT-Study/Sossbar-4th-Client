@@ -9,12 +9,12 @@ const STEP_PREVIEW_CONFIG = {
   step3: { src: '/step3.png', scale: 1.3 },
 } as const;
 
-type HowItWorksStepPreviewProps = {
+type HomeHowItWorksStepPreviewProps = {
   variant: keyof typeof STEP_PREVIEW_CONFIG;
   title: string;
 };
 
-export const HowItWorksStepPreview = ({ variant, title }: HowItWorksStepPreviewProps) => {
+export const HomeHowItWorksStepPreview = ({ variant, title }: HomeHowItWorksStepPreviewProps) => {
   const { src, scale } = STEP_PREVIEW_CONFIG[variant];
 
   return (

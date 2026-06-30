@@ -1,6 +1,6 @@
 'use client';
 
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { useMyProfile } from '@/features/profile';
 import { Button } from '@/shared/components/button/button';
 import { ProtectedLink } from '@/shared/components/protected-link';
 import { ROUTES } from '@/shared/constants/routes';
