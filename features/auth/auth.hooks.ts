@@ -15,7 +15,7 @@ import { createSignup } from './auth.api';
 import { AGREEMENTS } from './auth.constants';
 import { SignupFormSchema } from './auth.schemas';
 
-export const useSignup = () => {
+export const useSignupMutation = () => {
   return useMutation({
     mutationFn: createSignup,
   });
@@ -35,7 +35,7 @@ const defaultValues: SignupFormData = {
 };
 
 export const useSignupForm = () => {
-  const { mutateAsync: signup, isPending } = useSignup();
+  const { mutateAsync: signup, isPending } = useSignupMutation();
 
   const form = useForm({
     defaultValues,

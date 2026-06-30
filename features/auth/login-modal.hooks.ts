@@ -6,11 +6,11 @@ import { useQueryParam } from '@/shared/hooks/use-query-param';
 
 import { LOGIN_MODAL_QUERY_KEY, LOGIN_MODAL_QUERY_VALUE } from './auth.constants';
 
-interface UseLoginModalParams {
+interface UseLoginGateParams {
   isAuthenticated?: boolean;
 }
 
-export const useLoginModal = ({ isAuthenticated = false }: UseLoginModalParams = {}) => {
+export const useLoginGate = ({ isAuthenticated = false }: UseLoginGateParams = {}) => {
   const { queryParamValue, updateQueryParam, removeQueryParam } = useQueryParam(LOGIN_MODAL_QUERY_KEY);
 
   const hasLoginParam = queryParamValue === LOGIN_MODAL_QUERY_VALUE;
@@ -33,11 +33,11 @@ export const useLoginModal = ({ isAuthenticated = false }: UseLoginModalParams =
     [removeQueryParam, updateQueryParam],
   );
 
-  const openLoginModal = useCallback(() => {
+  const openLogin = useCallback(() => {
     if (!isAuthenticated) {
       updateQueryParam(LOGIN_MODAL_QUERY_VALUE);
     }
   }, [isAuthenticated, updateQueryParam]);
 
-  return { isOpen, onOpenChange, openLoginModal };
+  return { isOpen, onOpenChange, openLogin };
 };
