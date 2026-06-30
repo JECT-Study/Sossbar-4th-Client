@@ -18,7 +18,7 @@ export const ProfileDetailStreams = ({ userId }: Props) => (
     userId={userId}
     allTabContent={
       <>
-        <div className="flex gap-6">
+        <div className="flex gap-[30px]">
           <Suspense fallback={<TagCardSkeleton />}>
             <TagCardStream userId={userId} />
           </Suspense>

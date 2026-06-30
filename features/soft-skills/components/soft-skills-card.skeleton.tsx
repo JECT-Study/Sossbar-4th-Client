@@ -64,11 +64,15 @@ const DistributionSkeleton = () => (
 export const SoftSkillsCardSkeleton = () => (
   <section
     aria-hidden
-    className="border-border-gray flex h-[652px] w-[588px] flex-col overflow-hidden rounded-2xl border bg-white p-6"
+    className="border-border-gray flex h-[652px] w-[585px] flex-col overflow-hidden rounded-2xl border bg-white"
   >
-    <div className={`${pulse} h-6 w-40`} />
-    <SpectrumSkeleton />
-    <DistributionSkeleton />
-    <div className={`${pulse} mt-7 h-4 w-64`} />
+    <div className="bg-surface-gray-subtler flex items-center px-6 py-5">
+      <div className={`${pulse} h-5 w-44`} />
+    </div>
+    <div className="flex min-h-0 flex-1 flex-col px-6 py-6">
+      <SpectrumSkeleton />
+      <DistributionSkeleton />
+      <div className={`${pulse} mt-auto h-12 w-full rounded-lg`} />
+    </div>
   </section>
 );

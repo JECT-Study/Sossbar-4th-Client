@@ -2,15 +2,18 @@ import type { Tag } from '@/features/tag';
 
 import type { Spectrum, SpectrumWithValue } from './spectrum';
 
+export type UserPosition = 'FRONTEND' | 'BACKEND' | 'PM' | 'PD' | 'AI' | 'QA' | 'ETC';
+
 export interface Review {
   reviewId: number;
   projectName: string;
   host: string;
   projectImage: string | null;
   createdAt: string;
-  positiveFeedback: string;
-  negativeFeedback?: string; // 본인 후기 조회 시에만 포함. 타인 조회 시 응답에서 제외.
+  feedback: string;
   reviewerNickname: string;
+  projectPosition?: UserPosition;
+  projectDetailPosition?: string;
   projectStatus?: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED'; // 팀 확정 여부 필터링용
 }
 
@@ -22,8 +25,9 @@ export interface ReviewFormData {
 export interface CreateReviewRequest {
   projectId: number;
   revieweeId: number;
-  praise: string;
-  improvement: string;
+  feedback: string;
+  projectPosition: UserPosition;
+  projectDetailPosition?: string;
   tagIds: number[];
   spectrums: SpectrumWithValue[];
 }
@@ -31,8 +35,9 @@ export interface CreateReviewRequest {
 export interface CreateReviewReviewReqDto {
   projectId: number;
   revieweeId: number;
-  positiveFeedback: string;
-  negativeFeedback?: string;
+  feedback: string;
+  projectPosition: UserPosition;
+  projectDetailPosition?: string;
   tagIds: number[];
 }
 

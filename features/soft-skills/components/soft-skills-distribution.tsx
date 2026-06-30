@@ -1,9 +1,8 @@
 import { cn } from '@/shared/lib/cn';
 
-import type { DistributionBarTone } from '../types/distribution-bar.types';
 import type { SpectrumInfo } from '../types/soft-skills.types';
 
-import { assignBarTones } from '../utils/assign-bar-tones';
+import { DISTRIBUTION_LEFT_BAR_CLASS, DISTRIBUTION_RIGHT_BAR_CLASS } from '../constants/spectrum-visual.constants';
 import { scaleBarHeight } from '../utils/scale-bar-height';
 import { toDistributionBars } from '../utils/to-distribution-bars';
 
@@ -19,44 +18,41 @@ const LABEL_HEIGHT_PX = 36;
 /** 분포 차트 전체 높이: 스택 + 라벨 간격 + 라벨 */
 const CHART_TOTAL_HEIGHT_PX = BAR_STACK_HEIGHT_PX + LABEL_GAP_PX + LABEL_HEIGHT_PX;
 
-/** DistributionBarTone 순위별 Tailwind 배경 클래스 */
-const barToneBgClasses: Record<DistributionBarTone, string> = {
-  first: 'bg-graphic-yellow',
-  second: 'bg-graphic-yellow-subtle',
-  third: 'bg-graphic-yellow-subtler',
-  none: 'bg-gray-300',
-};
-
 interface Props {
   spectrumInfo: SpectrumInfo;
 }
 
 export const SoftSkillsDistribution = ({ spectrumInfo }: Props) => {
   const bars = toDistributionBars(spectrumInfo.spectrumInfoResDtos);
-  const tones = assignBarTones(bars);
   const maxCount = Math.max(...bars.map((bar) => bar.count), 0);
 
   return (
-    <div className="mt-[41px] w-[540px]">
-      <h3 className="text-heading-xs text-text-subtle h-6 font-bold">
-        받은 평가 분포({spectrumInfo.totalCount}명 응답)
-      </h3>
+    <div className="mt-6 w-full">
+      <h3 className="text-heading-xs text-text-subtle pb-2 font-bold">평가 분포</h3>
 
-      <div className="mx-auto mt-4 flex w-[513px] items-end justify-between" style={{ height: CHART_TOTAL_HEIGHT_PX }}>
-        {bars.map((bar, index) => (
-          <div key={bar.label} className="flex w-[61px] flex-col items-center">
-            <span className="text-body-xs text-text-subtle flex h-[18px] shrink-0 items-center justify-center text-center font-medium">
-              {bar.count}명
-            </span>
-            <div
-              className={cn('w-[50px] shrink-0 rounded-t', barToneBgClasses[tones[index] as DistributionBarTone])}
-              style={{ height: `${scaleBarHeight(bar.count, maxCount)}px` }}
-            />
-            <div className="text-body-xs text-text-subtle mt-2 flex h-9 shrink-0 items-start justify-center text-center font-medium break-keep whitespace-pre-line">
-              {bar.label}
+      <div className="flex w-full items-end justify-center gap-2" style={{ height: CHART_TOTAL_HEIGHT_PX }}>
+        {bars.map((bar, index) => {
+          const isLeftTrait = index % 2 === 0;
+          const barHeightPx = bar.count === 0 ? 1 : scaleBarHeight(bar.count, maxCount);
+
+          return (
+            <div key={bar.label} className="flex w-[58.625px] flex-col items-center">
+              <span className="text-detail-xs text-text-subtle flex h-[18px] shrink-0 items-center justify-center text-center font-medium">
+                {bar.count}명
+              </span>
+              <div
+                className={cn(
+                  'w-10 shrink-0 rounded-tl-[12px] rounded-tr-[12px] rounded-br rounded-bl-[4px]',
+                  isLeftTrait ? DISTRIBUTION_LEFT_BAR_CLASS : DISTRIBUTION_RIGHT_BAR_CLASS,
+                )}
+                style={{ height: `${barHeightPx}px` }}
+              />
+              <div className="text-detail-xs text-text-subtle mt-2 flex h-9 shrink-0 items-start justify-center text-center font-medium break-keep whitespace-pre-line">
+                {bar.label}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

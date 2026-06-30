@@ -1,16 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-import { profileKeys } from '@/features/profile/profile.query-keys';
+import { useMutation } from '@tanstack/react-query';
 
 import { createSignup } from '../api/create-signup.api';
 
 export const useSignup = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: createSignup,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: profileKeys.my });
-    },
   });
 };
