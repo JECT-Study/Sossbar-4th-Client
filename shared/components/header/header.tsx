@@ -1,14 +1,17 @@
+import type { ReactNode } from 'react';
+
 import { Suspense } from 'react';
 
-import { HeaderAuthArea } from './header-auth-area';
+import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
+
 import { HeaderLogoLink } from './header-logo-link';
 import { HeaderMainNav } from './header-main-nav';
 
-/**
- * 헤더 (Server Component).
- * myProfile prefetch는 MainLayout 전역 HydrationBoundary에서 처리한다.
- */
-export const Header = () => {
+interface HeaderProps {
+  avatarSlot: ReactNode;
+}
+
+export const Header = ({ avatarSlot }: HeaderProps) => {
   return (
     <header className="border-divider-1 px-padding-l py-padding-m sticky top-0 z-50 border-b bg-white/45 backdrop-blur-[10px]">
       <div className="mx-auto flex h-10 w-full max-w-[1200px] items-center justify-between">
@@ -18,7 +21,7 @@ export const Header = () => {
             <HeaderMainNav />
           </Suspense>
         </div>
-        <HeaderAuthArea />
+        <Suspense fallback={<KakaoLoginButton />}>{avatarSlot}</Suspense>
       </div>
     </header>
   );

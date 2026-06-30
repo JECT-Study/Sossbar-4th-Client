@@ -18,7 +18,7 @@ interface Props {
  * - /: 홈 푸터 dark, 랜딩 전용 헤더
  * - 그 외: 기본 헤더, light 푸터
  */
-export const MainLayoutClient = ({ children, defaultHeader, landingHeader }: Props) => {
+export const LayoutClient = ({ children, defaultHeader, landingHeader }: Props) => {
   const pathname = usePathname();
   const hideChrome = pathname?.startsWith('/signup') ?? false;
   const isLandingPage = pathname === '/';

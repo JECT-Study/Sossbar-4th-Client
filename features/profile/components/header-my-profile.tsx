@@ -1,36 +1,28 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Avatar } from 'radix-ui';
-import { useState } from 'react';
 
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
-import { KakaoLoginButton } from '@/shared/components/button/kakao-login-button';
 import { Dropdown } from '@/shared/components/dropdown';
 import { NotificationBell } from '@/shared/components/notification';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
+
+import type { Profile } from '../profile.types';
 
 const DEFAULT_AVATAR_SRC = '/sample_user.svg';
 
 const dropdownItemClassName =
   'text-body-sm text-text-basic !h-[44px] min-h-0 shrink-0 justify-start rounded-md px-2 py-0 font-normal';
 
-export const HeaderAuthAreaClient = () => {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const { data: profileFromQuery } = useMyProfile();
-  const [hasLoggedOut, setHasLoggedOut] = useState(false);
-  const profile = hasLoggedOut ? null : profileFromQuery;
+interface Props {
+  myProfile: Profile;
+  onLogout: () => void;
+}
 
-  if (!profile) {
-    return <KakaoLoginButton />;
-  }
-
-  const avatarSrc = profile.profileImageUrl || DEFAULT_AVATAR_SRC;
-  const name = profile.username ?? profile.email;
+export const HeaderMyProfile = ({ myProfile, onLogout }: Props) => {
+  const avatarSrc = myProfile.profileImageUrl || DEFAULT_AVATAR_SRC;
+  const name = myProfile.username ?? myProfile.email;
 
   return (
     <div className="flex h-10 items-center gap-2">
@@ -61,15 +53,7 @@ export const HeaderAuthAreaClient = () => {
               마이페이지
             </Link>
           </Dropdown.Item>
-          <Dropdown.Item
-            className={dropdownItemClassName}
-            onSelect={async () => {
-              setHasLoggedOut(true);
-              await fetch('/api/logout', { method: 'POST' });
-              queryClient.clear();
-              router.push(ROUTES.HOME);
-            }}
-          >
+          <Dropdown.Item className={dropdownItemClassName} onSelect={onLogout}>
             로그아웃
           </Dropdown.Item>
         </Dropdown.Content>
