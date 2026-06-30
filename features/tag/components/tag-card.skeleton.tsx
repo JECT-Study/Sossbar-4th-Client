@@ -9,7 +9,7 @@ const SkeletonLine = ({ className }: Props) => (
 );
 
 const SkeletonBadge = ({ className }: Props) => (
-  <div className={cn('bg-action-gray-light h-9 shrink-0 animate-pulse rounded-full', className)} />
+  <div className={cn('bg-action-gray-light h-10 shrink-0 animate-pulse rounded-full', className)} />
 );
 
 const TOP3_BADGE_WIDTHS = ['w-52', 'w-44', 'w-40'] as const;
@@ -31,23 +31,25 @@ export const TagCardSkeleton = () => (
   <section
     aria-busy="true"
     aria-label="받은 태그를 불러오는 중"
-    className="border-border-gray flex h-[652px] w-[588px] flex-col overflow-hidden rounded-2xl border bg-white p-6"
+    className="border-border-gray flex h-[652px] w-[585px] flex-col overflow-hidden rounded-2xl border bg-white"
   >
-    <SkeletonLine className="h-6 w-24" />
+    <div className="bg-surface-gray-subtler flex items-center px-6 py-5">
+      <SkeletonLine className="h-5 w-24" />
+    </div>
 
-    <div className="mt-6 flex min-h-0 flex-1 flex-col gap-6">
-      <div>
-        <SkeletonLine className="h-5 w-32" />
-        <div className="mt-4 flex flex-col items-start gap-2">
+    <div className="flex min-h-0 flex-1 flex-col gap-8 px-6 py-6">
+      <div className="flex flex-col gap-4">
+        <SkeletonLine className="h-5 w-44" />
+        <div className="flex flex-col items-start gap-2">
           {TOP3_BADGE_WIDTHS.map((width) => (
             <SkeletonBadge key={width} className={width} />
           ))}
         </div>
       </div>
 
-      <div>
-        <SkeletonLine className="h-5 w-44" />
-        <div className="mt-4 flex flex-wrap gap-2">
+      <div className="flex flex-col gap-4">
+        <SkeletonLine className="h-5 w-24" />
+        <div className="flex flex-wrap gap-x-1 gap-y-2">
           {ALL_TAG_BADGE_SKELETONS.map(({ id, width }) => (
             <SkeletonBadge key={id} className={width} />
           ))}

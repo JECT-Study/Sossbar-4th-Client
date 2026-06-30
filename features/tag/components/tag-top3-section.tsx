@@ -2,21 +2,26 @@ import { TagBadge } from '@/shared/components/tag-badge';
 
 import type { ReceivedTagCount } from '../tag.types';
 
-const topTagPriorities = ['first', 'second', 'third'] as const;
-
 interface Props {
   tags: readonly ReceivedTagCount[];
 }
 
 export const TagTop3Section = ({ tags }: Props) => (
-  <div>
-    <h3 className="text-heading-xs text-text-subtle leading-[150%] font-bold">동료가 뽑은 TOP3</h3>
-    <div className="mt-4 flex flex-col items-start gap-2">
-      {tags.map((tag, index) => (
-        <TagBadge key={tag.tagId} count={tag.count} priority={topTagPriorities[index]}>
-          {tag.tagName}
-        </TagBadge>
-      ))}
+  <section className="flex flex-col gap-4">
+    <div className="flex items-start gap-1 pb-2">
+      <h3 className="text-heading-xs text-text-subtle font-bold">이런 리뷰가 많았어요</h3>
+      <span aria-hidden className="text-heading-xs leading-none">
+        🧐
+      </span>
     </div>
-  </div>
+    <ol className="flex flex-col items-start gap-2">
+      {tags.map((tag, index) => (
+        <li key={tag.tagId}>
+          <TagBadge count={tag.count} rank={index + 1}>
+            {tag.tagName}
+          </TagBadge>
+        </li>
+      ))}
+    </ol>
+  </section>
 );

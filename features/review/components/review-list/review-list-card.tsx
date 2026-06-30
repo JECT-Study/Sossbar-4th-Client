@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { EmptyState } from '@/shared/components/empty-state';
-import { SegmentedControl } from '@/shared/components/segmented-control';
+import { ProfileStatCard } from '@/shared/components/profile-stat-card';
+import { SortDropdown, type SortOrder } from '@/shared/components/sort-dropdown';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -16,77 +17,93 @@ import { ReviewListItem } from './review-list-item';
 const INITIAL_VISIBLE_REVIEW_COUNT = 5;
 
 interface ReviewListCardProps {
-  isMyProfile: boolean;
   reviews: Review[];
-  showThumbnail: boolean;
-  showTitle: boolean;
+  /** 메타 줄에 프로젝트명 노출 여부 (프로젝트 상세에서는 false) */
+  showProjectName: boolean;
+  /** 정렬 컨트롤 표시 여부 */
+  showSort?: boolean;
+  /** 프로젝트별 상세 — 후기 신고 메뉴 노출 */
+  showReportMenu?: boolean;
 }
 
-const reviewToneOptions = [
-  { value: 'positive', label: '칭찬해요' },
-  { value: 'negative', label: '아쉬워요' },
-] as const;
+const buildMetaLine = (review: Review, showProjectName: boolean) =>
+  [showProjectName ? review.projectName : null, formatIsoDateToDots(review.createdAt), review.host]
+    .filter(Boolean)
+    .join(' · ');
 
-type ReviewTone = (typeof reviewToneOptions)[number]['value'];
-
-type ViewState = 'empty' | 'restricted' | 'list';
-
-export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail, showTitle }: ReviewListCardProps) => {
-  const [selectedTone, setSelectedTone] = useState<ReviewTone>('positive');
+export const ReviewListCard = ({
+  reviews,
+  showProjectName,
+  showSort = false,
+  showReportMenu = false,
+}: ReviewListCardProps) => {
+  const [selectedSort, setSelectedSort] = useState<SortOrder>('latest');
   const [isExpanded, setIsExpanded] = useState(false);
-  const isNegativeTone = selectedTone === 'negative';
-  const filteredReviews = isNegativeTone
-    ? reviews.filter((review) => review.negativeFeedback != null && review.negativeFeedback.trim() !== '')
+
+  const sortedReviews = showSort
+    ? reviews.toSorted((a, b) =>
+        selectedSort === 'latest' ? b.createdAt.localeCompare(a.createdAt) : a.createdAt.localeCompare(b.createdAt),
+      )
     : reviews;
-  const viewState: ViewState =
-    reviews.length === 0
-      ? 'empty'
-      : !isMyProfile && isNegativeTone
-        ? 'restricted'
-        : filteredReviews.length === 0
-          ? 'empty'
-          : 'list';
-  const visibleReviews = isExpanded ? filteredReviews : filteredReviews.slice(0, INITIAL_VISIBLE_REVIEW_COUNT);
-  const showMoreButton = filteredReviews.length > INITIAL_VISIBLE_REVIEW_COUNT && !isExpanded;
+
+  const visibleReviews = isExpanded ? sortedReviews : sortedReviews.slice(0, INITIAL_VISIBLE_REVIEW_COUNT);
+  const showMoreButton = sortedReviews.length > INITIAL_VISIBLE_REVIEW_COUNT && !isExpanded;
+
+  const headerAction =
+    showSort && reviews.length > 0 ? (
+      <SortDropdown
+        value={selectedSort}
+        onValueChange={setSelectedSort}
+        ariaLabel="후기 정렬"
+        triggerClassName="h-10"
+      />
+    ) : null;
 
   return (
-    <section
-      className={cn(
-        'border-border-gray flex w-full flex-col rounded-2xl border bg-white p-6',
-        viewState !== 'list' && 'h-136',
-      )}
+    <ProfileStatCard
+      title="받은 후기"
+      info
+      infoLabel="동료들이 남긴 후기 내용이에요"
+      headerAction={headerAction}
+      className={cn('w-full', reviews.length === 0 && 'min-h-136')}
+      bodyClassName="gap-[30px] px-8 py-8"
     >
-      <div className="flex items-center justify-between">
-        <h2 className="text-heading-base text-text-basic font-bold">받은 후기</h2>
-        {reviews.length > 0 ? (
-          <SegmentedControl options={reviewToneOptions} value={selectedTone} onValueChange={setSelectedTone} />
-        ) : null}
-      </div>
+      {reviews.length === 0 && <EmptyState title="아직 도착한 후기가 없어요" />}
 
-      {viewState === 'empty' && <EmptyState title="아직 도착한 후기가 없어요" />}
-
-      {viewState === 'restricted' && <EmptyState title="'아쉬워요' 후기는 본인만 확인 가능해요" />}
-
-      {viewState === 'list' && (
+      {reviews.length > 0 && (
         <>
-          <ul>
+          <ul className="flex w-full flex-col">
             {visibleReviews.map((review) => (
-              <ReviewListItem.Root key={review.reviewId}>
-                <ReviewListItem.Heading>
-                  {showThumbnail ? (
-                    <ReviewListItem.Image src={review.projectImage} alt={`${review.projectName} 썸네일`} />
-                  ) : null}
+              <ReviewListItem.Root
+                key={review.reviewId}
+                action={
+                  showReportMenu ? <ReviewListItem.ActionMenu reviewerName={review.reviewerNickname} /> : undefined
+                }
+              >
+                <ReviewListItem.Heading compact={showReportMenu}>
+                  <ReviewListItem.Avatar name={review.reviewerNickname} />
                   <ReviewListItem.HeadingText>
-                    {showTitle ? <ReviewListItem.Title>{review.projectName}</ReviewListItem.Title> : null}
-                    <ReviewListItem.Description>
-                      {`${review.reviewerNickname} · ${review.host} · ${formatIsoDateToDots(review.createdAt)}`}
-                    </ReviewListItem.Description>
+                    {showReportMenu ? (
+                      <ReviewListItem.NameRow>
+                        <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
+                        {review.projectPosition ? (
+                          <ReviewListItem.PositionBadge
+                            position={review.projectPosition}
+                            detailPosition={review.projectDetailPosition}
+                          />
+                        ) : null}
+                      </ReviewListItem.NameRow>
+                    ) : (
+                      <>
+                        <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
+                        <ReviewListItem.Meta>{buildMetaLine(review, showProjectName)}</ReviewListItem.Meta>
+                      </>
+                    )}
                   </ReviewListItem.HeadingText>
                 </ReviewListItem.Heading>
-                <ReviewListItem.Content>
-                  {selectedTone === 'positive' ? review.positiveFeedback : (review.negativeFeedback ?? '')}
-                </ReviewListItem.Content>
-                {isMyProfile && isNegativeTone ? <ReviewListItem.ActionMenu projectName={review.projectName} /> : null}
+                {review.feedback.trim().length > 0 ? (
+                  <ReviewListItem.Content>{review.feedback}</ReviewListItem.Content>
+                ) : null}
               </ReviewListItem.Root>
             ))}
           </ul>
@@ -97,16 +114,18 @@ export const ReviewListCard = ({ isMyProfile, reviews, showThumbnail, showTitle 
               variant="tertiary"
               size="large"
               rightIcon={<DownIcon className="size-6" aria-hidden />}
-              className="mx-auto mt-9"
+              className="text-body-xl h-[58px] w-full rounded-lg px-7"
               onClick={() => setIsExpanded(true)}
             >
               후기 더보기
             </Button>
           ) : null}
 
-          <p className="text-detail-base text-text-disabled mt-9 font-normal">* 받은 후기는 수정/삭제 불가합니다.</p>
+          <p className="bg-surface-gray-subtler text-detail-sm text-text-subtle rounded-lg p-2 font-normal">
+            * 받은 후기는 수정/삭제 불가합니다.
+          </p>
         </>
       )}
-    </section>
+    </ProfileStatCard>
   );
 };

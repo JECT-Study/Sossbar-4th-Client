@@ -25,7 +25,7 @@ export const HeaderMyProfile = ({ myProfile, onLogout }: Props) => {
   const name = myProfile.username ?? myProfile.email;
 
   return (
-    <div className="flex h-10 items-center gap-4">
+    <div className="flex h-10 items-center gap-2">
       <NotificationBell />
       <Dropdown.Root>
         <Dropdown.Trigger

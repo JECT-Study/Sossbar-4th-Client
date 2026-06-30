@@ -12,6 +12,7 @@ import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { GoogleAnalytics } from '@/shared/components/google-analytics';
 import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-page-view';
 import { Header } from '@/shared/components/header/header';
+import { LandingHeader } from '@/shared/components/header/landing-header';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
@@ -78,7 +79,9 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
             <GoogleAnalyticsPageView />
           </Suspense>
           <HydrationBoundary state={dehydrate(queryClient)}>
-            <LayoutClient header={<Header avatarSlot={<HeaderAuthGate />} />}>{children}</LayoutClient>
+            <LayoutClient defaultHeader={<Header avatarSlot={<HeaderAuthGate />} />} landingHeader={<LandingHeader />}>
+              {children}
+            </LayoutClient>
             <Suspense fallback={null}>
               <LoginModal />
             </Suspense>

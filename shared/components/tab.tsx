@@ -24,30 +24,45 @@ const TabList = ({ className, children, ...restProps }: ComponentPropsWithRef<ty
 
     const update = () => {
       const el = list.querySelector<HTMLElement>('[role="tab"][data-state="active"]');
-      if (el) {
-        setIndicator({ left: el.offsetLeft, width: el.offsetWidth });
+      if (!el) {
+        return;
       }
+
+      const left = el.offsetLeft;
+      const width = el.offsetWidth;
+      const maxWidth = list.clientWidth - left;
+
+      setIndicator({ left, width: Math.min(width, maxWidth) });
     };
 
     update();
 
-    const observer = new MutationObserver(update);
-    observer.observe(list, { attributes: true, attributeFilter: ['data-state'], subtree: true });
-    return () => observer.disconnect();
+    const mutationObserver = new MutationObserver(update);
+    mutationObserver.observe(list, { attributes: true, attributeFilter: ['data-state'], subtree: true });
+
+    const resizeObserver = new ResizeObserver(update);
+    resizeObserver.observe(list);
+    list.querySelectorAll('[role="tab"]').forEach((tab) => resizeObserver.observe(tab));
+
+    return () => {
+      mutationObserver.disconnect();
+      resizeObserver.disconnect();
+    };
   }, []);
 
   return (
-    <Tabs.List ref={listRef} className={cn('relative flex gap-2', className)} {...restProps}>
+    <Tabs.List ref={listRef} className={cn('relative flex gap-2 overflow-hidden', className)} {...restProps}>
       {children}
-      <span className="bg-border-gray-light absolute right-0 bottom-0 left-0 h-0.75" />
-      {indicator !== null && (
+      <span className="bg-border-gray-light absolute right-0 bottom-0 left-0 h-0.75" aria-hidden />
+      {indicator !== null ? (
         <motion.span
-          className="bg-border-secondary absolute bottom-0 h-0.75 w-px origin-left"
+          className="bg-border-secondary absolute bottom-0 left-0 h-0.75"
           initial={false}
-          animate={{ x: indicator.left, scaleX: indicator.width }}
+          animate={{ left: indicator.left, width: indicator.width }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
+          aria-hidden
         />
-      )}
+      ) : null}
     </Tabs.List>
   );
 };

@@ -26,7 +26,7 @@ const DropdownContent = ({
       <DropdownMenu.Content
         side="bottom"
         align={align}
-        sideOffset={sideOffset}
+        sideOffset={sideOffset ?? 8}
         className={cn(
           'border-border-gray-light bg-surface-white z-50 box-border flex w-44 flex-col rounded-lg border p-2 shadow-sm',
           className,
