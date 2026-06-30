@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Suspense, useState } from 'react';
 
-import { KakaoLoginButton } from '@/features/auth';
+import { LoginButton } from '@/features/auth';
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { Button } from '@/shared/components/button/button';
 import { ROUTES } from '@/shared/constants/routes';
@@ -20,7 +20,7 @@ const LandingHeaderFallback = () => {
     <header className="border-divider-gray-light px-padding-l py-padding-m sticky top-0 z-50 border-b bg-white/50 backdrop-blur-[5px]">
       <div className="mx-auto flex h-10 w-full max-w-[1200px] items-center justify-between">
         <HeaderLogoLink />
-        <KakaoLoginButton />
+        <LoginButton />
       </div>
     </header>
   );
@@ -68,7 +68,7 @@ const LandingHeaderInner = () => {
             </Button>
           </div>
         ) : (
-          <KakaoLoginButton />
+          <LoginButton />
         )}
       </div>
     </header>

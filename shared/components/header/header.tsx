@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { Suspense } from 'react';
 
-import { KakaoLoginButton } from '@/features/auth';
+import { LoginButton } from '@/features/auth';
 
 import { HeaderLogoLink } from './header-logo-link';
 import { HeaderMainNav } from './header-main-nav';
@@ -21,7 +21,7 @@ export const Header = ({ avatarSlot }: HeaderProps) => {
             <HeaderMainNav />
           </Suspense>
         </div>
-        <Suspense fallback={<KakaoLoginButton />}>{avatarSlot}</Suspense>
+        <Suspense fallback={<LoginButton />}>{avatarSlot}</Suspense>
       </div>
     </header>
   );
