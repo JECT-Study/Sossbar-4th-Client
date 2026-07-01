@@ -56,11 +56,11 @@ export const buildReviewWriteUrl = ({ projectId, revieweeId, revieweeName }: Bui
 };
 
 /** 프로젝트 목록·프로필 탭 등 목록성 쿼리 갱신 */
-export const invalidateProjectListQueries = (queryClient: QueryClient, userId?: number) => {
+export const invalidateProjectListQueries = (queryClient: QueryClient, userLink?: string) => {
   void queryClient.invalidateQueries({ queryKey: projectKeys.list() });
 
-  if (userId != null && userId > 0) {
-    void queryClient.invalidateQueries({ queryKey: projectKeys.byUser(userId) });
+  if (userLink) {
+    void queryClient.invalidateQueries({ queryKey: projectKeys.byUser(userLink) });
   }
 };
 
@@ -98,6 +98,7 @@ export const mapMyProjectToCardItem = (project: MyProjectResponse, sessionUser: 
           username: nickname,
           profileImageUrl: null,
           memberStatus: project.myMemberStatus,
+          projectPositions: [],
         } satisfies ProjectMemberResponse,
       ];
 
@@ -112,6 +113,8 @@ export const mapMyProjectToCardItem = (project: MyProjectResponse, sessionUser: 
     projectStatus: project.projectStatus,
     myMemberStatus: project.myMemberStatus,
     members: members.map((member) => toCardMember(member, sessionUserId)),
+    reviewedCount: project.reviewedCount ?? 0,
+    totalReviewTargetCount: project.totalReviewTargetCount ?? 0,
   };
 };
 

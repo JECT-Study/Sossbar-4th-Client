@@ -1,11 +1,11 @@
 export { CreateProjectModal } from './components/create-project-modal';
 export { EditProjectModal } from './components/edit-project-modal';
 export { ProjectsPageContent } from './components/projects-page-content';
-export { ProjectPageContent } from './components/project-page-content';
+export { ProjectFeedbackPageContent } from './components/project-feedback-page-content';
 export { ProjectSection } from './components/project-section';
 export { ProjectStatusAlert } from './components/project-status-alert';
 export { ProjectDetailPageContent } from './components/project-detail';
-export { ProjectDetailStream } from './components/project-detail-stream';
+export { ProjectFeedbackStream } from './components/project-feedback-stream';
 export { ProjectsStream } from './components/projects-stream';
 export { ProjectSectionStream } from './components/project-section-stream';
 export { ProjectSectionSkeleton } from './components/project-section.skeleton';
@@ -40,8 +40,10 @@ export type {
   ProjectMemberResponse,
   ProjectMemberReviewStatus,
   ProjectPayload,
+  ProjectPositionValue,
   ProjectRequest,
   ProjectResponse,
   ProjectStatus,
+  ProjectUrlType,
   UserProjectResponse,
 } from './project.types';

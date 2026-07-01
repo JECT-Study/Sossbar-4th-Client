@@ -88,6 +88,9 @@ export const dummyProjects: UserProjectResponse[] = [
     startDate: '2026-03-01',
     endDate: '2026-06-01',
     projectImage: null,
+    projectPositions: ['FE'],
+    projectUrl: '',
+    projectUrlType: 'LINK',
   },
   {
     projectId: 102,
@@ -96,6 +99,9 @@ export const dummyProjects: UserProjectResponse[] = [
     startDate: '2026-01-15',
     endDate: '2026-05-14',
     projectImage: null,
+    projectPositions: ['FE'],
+    projectUrl: '',
+    projectUrlType: 'LINK',
   },
   {
     projectId: 103,
@@ -104,5 +110,8 @@ export const dummyProjects: UserProjectResponse[] = [
     startDate: '2026-04-01',
     endDate: '2026-04-02',
     projectImage: null,
+    projectPositions: ['FE'],
+    projectUrl: '',
+    projectUrlType: 'LINK',
   },
 ];

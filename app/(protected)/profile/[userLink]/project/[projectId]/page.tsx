@@ -2,7 +2,7 @@ import { dehydrate } from '@tanstack/react-query';
 
 import { fetchMyProfile, fetchProfileById } from '@/features/profile';
 import { profileKeys } from '@/features/profile/profile.query-keys';
-import { fetchProject, ProjectDetailStream, projectKeys } from '@/features/project';
+import { fetchProject, ProjectFeedbackStream, projectKeys } from '@/features/project';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 interface Props {
@@ -30,7 +30,7 @@ const ProjectPage = async ({ params }: Props) => {
     }),
   ]);
 
-  return <ProjectDetailStream userLink={profile.userLink} projectId={projectIdNum} state={dehydrate(queryClient)} />;
+  return <ProjectFeedbackStream userLink={profile.userLink} projectId={projectIdNum} state={dehydrate(queryClient)} />;
 };
 
 export default ProjectPage;

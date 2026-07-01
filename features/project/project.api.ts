@@ -13,7 +13,7 @@ export const projectKeys = {
   all: ['project'] as const,
   list: () => [...projectKeys.all, 'list'] as const,
   detail: (projectId: number) => [...projectKeys.all, 'detail', projectId] as const,
-  byUser: (userId: number) => [...projectKeys.all, 'byUser', userId] as const,
+  byUser: (userLink: string) => [...projectKeys.all, 'byUser', userLink] as const,
 };
 
 const createProjectFormData = (request: ProjectRequest, image?: File | null): FormData => {
@@ -35,9 +35,9 @@ export const fetchProjects = (init?: ApiRequestOptions): Promise<MyProjectRespon
 export const fetchProject = (projectId: number): Promise<ProjectResponse> =>
   apiRequest<ProjectResponse>(`/projects/${projectId}`);
 
-/** GET /api/v1/projects/users/{userId} 유저별 프로젝트 목록 조회 */
-export const fetchUserProjects = (userId: number): Promise<UserProjectResponse[]> =>
-  apiRequest<UserProjectResponse[]>(`/projects/users/${userId}`);
+/** GET /api/v1/projects/users/{userLink} 유저별 프로젝트 목록 조회 */
+export const fetchUserProjects = (userLink: string): Promise<UserProjectResponse[]> =>
+  apiRequest<UserProjectResponse[]>(`/projects/users/${userLink}`);
 
 /** DELETE /api/v1/projects/{projectId} 프로젝트 삭제 */
 export const deleteProject = (projectId: number): Promise<void> =>

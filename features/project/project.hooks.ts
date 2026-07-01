@@ -41,11 +41,11 @@ export const useProject = (projectId: number, enabled = true, options?: { throwO
     ...options,
   });
 
-export const useUserProjects = (userId: number) =>
+export const useUserProjects = (userLink: string) =>
   useQuery({
-    queryKey: projectKeys.byUser(userId),
-    queryFn: () => fetchUserProjects(userId),
-    enabled: userId > 0,
+    queryKey: projectKeys.byUser(userLink),
+    queryFn: () => fetchUserProjects(userLink),
+    enabled: userLink.length > 0,
   });
 
 export const useDeleteProject = () => {
@@ -56,7 +56,7 @@ export const useDeleteProject = () => {
     mutationFn: (projectId: number) => deleteProject(projectId),
     onSuccess: (_data, projectId) => {
       queryClient.removeQueries({ queryKey: projectKeys.detail(projectId) });
-      invalidateProjectListQueries(queryClient, profile?.userId);
+      invalidateProjectListQueries(queryClient, profile?.userLink);
     },
   });
 };
@@ -69,7 +69,7 @@ export const useInviteProjectMember = (projectId: number) => {
     mutationFn: () => inviteProjectMember(projectId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
-      invalidateProjectListQueries(queryClient, profile?.userId);
+      invalidateProjectListQueries(queryClient, profile?.userLink);
     },
   });
 };
@@ -80,12 +80,11 @@ export const useDeleteProjectMember = (projectId: number) => {
 
   return useMutation({
     mutationFn: (userId: number) => deleteProjectMember(projectId, userId),
-    onSuccess: (_data, removedUserId) => {
+    onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
-      invalidateProjectListQueries(queryClient, profile?.userId);
-      if (removedUserId > 0) {
-        void queryClient.invalidateQueries({ queryKey: projectKeys.byUser(removedUserId) });
-      }
+      invalidateProjectListQueries(queryClient, profile?.userLink);
+      // 삭제된 팀원의 userLink를 이 시점에 알 수 없어 그 사람의 byUser 캐시는
+      // staleTime(1분) 경과 후 자연스럽게 갱신된다.
     },
   });
 };
@@ -98,7 +97,7 @@ export const useConfirmProjectMembers = (projectId: number) => {
     mutationFn: () => confirmProjectMembers(projectId),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
-      invalidateProjectListQueries(queryClient, profile?.userId);
+      invalidateProjectListQueries(queryClient, profile?.userLink);
     },
   });
 };
@@ -111,7 +110,7 @@ export const useCreateProject = () => {
     mutationFn: (payload: ProjectPayload) => createProject(payload),
     onSuccess: (data) => {
       queryClient.setQueryData(projectKeys.detail(data.projectId), data);
-      invalidateProjectListQueries(queryClient, profile?.userId);
+      invalidateProjectListQueries(queryClient, profile?.userLink);
     },
   });
 };
@@ -124,7 +123,7 @@ export const useUpdateProject = (projectId: number) => {
     mutationFn: (payload: ProjectPayload) => updateProject(projectId, payload),
     onSuccess: (data) => {
       queryClient.setQueryData(projectKeys.detail(data.projectId), data);
-      invalidateProjectListQueries(queryClient, profile?.userId);
+      invalidateProjectListQueries(queryClient, profile?.userLink);
     },
   });
 };

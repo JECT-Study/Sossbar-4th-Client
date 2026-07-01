@@ -12,30 +12,12 @@ import { Dropdown } from '@/shared/components/dropdown';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
+import type { ProjectCardItem, ProjectCardMember } from '../project.types';
+
 import { useDeleteProject } from '../project.hooks';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
-const PROJECT_REVIEW_TOTAL_FALLBACK = 10;
 const PLACEHOLDER_MEMBER_NAMES = ['양현준', '양현준', '양현준', '양현준', '양현준'];
-
-interface ProjectCardMember {
-  memberId: number;
-  name: string;
-  reviewStatus: 'writable' | 'completed' | 'self';
-}
-
-interface ProjectCardItem {
-  projectId: number;
-  projectName: string;
-  host: string;
-  startDate: string;
-  endDate: string;
-  projectLink: string;
-  projectImage: string | null;
-  projectStatus: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
-  myMemberStatus: 'LEADER' | 'MEMBER';
-  members: readonly ProjectCardMember[];
-}
 
 interface ProjectCardProps {
   project: ProjectCardItem;
@@ -66,6 +48,8 @@ interface ProjectMemberListProps {
   members: readonly ProjectCardMember[];
   isLeader: boolean;
   projectStatus: ProjectCardItem['projectStatus'];
+  reviewedCount: number;
+  totalReviewTargetCount: number;
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
@@ -105,7 +89,13 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           endDate={project.endDate}
         />
         <ProjectCardNotice projectStatus={project.projectStatus} />
-        <ProjectMemberList members={project.members} isLeader={isLeader} projectStatus={project.projectStatus} />
+        <ProjectMemberList
+          members={project.members}
+          isLeader={isLeader}
+          projectStatus={project.projectStatus}
+          reviewedCount={project.reviewedCount}
+          totalReviewTargetCount={project.totalReviewTargetCount}
+        />
       </div>
 
       {isLeader ? (
@@ -222,11 +212,13 @@ const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['
   );
 };
 
-const ProjectMemberList = ({ members, isLeader, projectStatus }: ProjectMemberListProps) => {
-  const completedCount = members.filter((member) => member.reviewStatus === 'completed').length;
-  const fallbackTotal =
-    projectStatus === 'COMPLETED' ? Math.max(members.length, completedCount, 3) : PROJECT_REVIEW_TOTAL_FALLBACK;
-  const displayCompleted = projectStatus === 'COMPLETED' ? fallbackTotal : Math.max(completedCount, 1);
+const ProjectMemberList = ({
+  members,
+  isLeader,
+  projectStatus,
+  reviewedCount,
+  totalReviewTargetCount,
+}: ProjectMemberListProps) => {
   const label = isLeader ? '후기 작성' : '내가 작성한 후기';
   const placeholderMembers =
     projectStatus === 'IN_PROGRESS'
@@ -244,7 +236,7 @@ const ProjectMemberList = ({ members, isLeader, projectStatus }: ProjectMemberLi
       <p className="text-body-base text-text-subtle font-normal">
         {label}{' '}
         <span>
-          {displayCompleted}/{fallbackTotal}
+          {reviewedCount}/{totalReviewTargetCount}
         </span>
       </p>
       <div className="relative min-w-0 overflow-hidden">
