@@ -8,7 +8,7 @@ import { TagCardBoundary } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
-import { useProject } from '../api/queries';
+import { useProject } from '../project.hooks';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
 

@@ -3,7 +3,6 @@
 import { Dialog } from 'radix-ui';
 import { Controller } from 'react-hook-form';
 
-import { useCreateProjectModal } from '@/features/project/hooks/use-create-project-modal';
 import { PROJECT_FIELD_MAX_LENGTH, PROJECT_IMAGE_ACCEPT } from '@/features/project/project.constants';
 import { Button } from '@/shared/components/button';
 import { ErrorMessage } from '@/shared/components/error-message';
@@ -11,6 +10,8 @@ import { ImageFileInput } from '@/shared/components/file-input';
 import { Label } from '@/shared/components/label';
 import { TextField } from '@/shared/components/text-field';
 import { cn } from '@/shared/lib/cn';
+
+import { useCreateProjectModal } from '../project.hooks';
 
 interface Props {
   open: boolean;

@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { parseProjectInviteId } from '@/features/project/lib/parse-project-invite-id';
-import { PROJECT_INVITE_QUERY_KEY } from '@/features/project/lib/project-invite-query';
+import { parseProjectInviteId, PROJECT_INVITE_QUERY_KEY } from '@/features/project';
 
 import type { Metadata } from 'next';
 
