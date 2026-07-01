@@ -1,6 +1,6 @@
 'use client';
 
-import { ProfileDetailView, ProfileSectionBoundary } from '@/features/profile';
+import { ProfileByIdSectionGate, ProfileDetailView } from '@/features/profile';
 import { ProjectSection } from '@/features/project';
 import { UserReviewContainerBoundary } from '@/features/review';
 import { SoftSkillsCardBoundary } from '@/features/soft-skills';
@@ -13,7 +13,7 @@ interface Props {
 export const ProfileExamplesClient = ({ userId }: Props) => {
   return (
     <>
-      <ProfileSectionBoundary userId={userId} />
+      <ProfileByIdSectionGate userId={userId} />
       <ProfileDetailView
         userId={userId}
         allTabContent={
