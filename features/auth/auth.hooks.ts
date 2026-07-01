@@ -134,11 +134,11 @@ export const useSignupFlow = () => {
 };
 
 const toDeleteAccountPayload = (data: AccountDeletionFormData): DeleteAccountPayload => {
-  const detail = data.reason === 'other' ? data.detail?.trim() : undefined;
+  const detail = data.reason === 'other' ? (data.detail?.trim() ?? null) : null;
 
   return {
     userDeleteReasonEnum: WITHDRAW_REASON_ENUM_MAP[data.reason],
-    ...(detail ? { detail } : {}),
+    detail,
   };
 };
 

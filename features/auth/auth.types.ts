@@ -13,7 +13,7 @@ export type AccountDeletionFormData = z.infer<typeof AccountDeletionFormSchema>;
 
 export interface DeleteAccountPayload {
   userDeleteReasonEnum: string;
-  detail?: string;
+  detail: string | null;
 }
 
 export type PositionValue = (typeof POSITION_VALUES)[number];
@@ -48,6 +48,7 @@ export interface SignupResponse {
   defaultPositions: string[];
   links: SignupResponseLink[];
   marketingAgree: boolean;
+  userLink: string;
 }
 
 export interface KakaoLoginResult {
