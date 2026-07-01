@@ -135,7 +135,23 @@ export type CreateProjectFormValues = z.output<typeof CreateProjectFormSchema>;
 const CREATE_PROJECT_DEFAULT_VALUES: CreateProjectFormInput = {
   projectName: '',
   host: '',
+  startDate: null,
+  endDate: null,
   image: null,
+  projectUrl: '',
+  projectUrlType: 'LINK',
+};
+
+const formatDateTimeForRequest = (date: Date | null, time: '00:00:00' | '23:59:59'): string => {
+  if (date === null) {
+    return '';
+  }
+
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+
+  return `${year}-${month}-${day}T${time}`;
 };
 
 export const useCreateProjectForm = () => {
@@ -251,6 +267,10 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
         request: {
           projectName: data.projectName.trim(),
           host: data.host.trim(),
+          startDate: formatDateTimeForRequest(data.startDate, '00:00:00'),
+          endDate: formatDateTimeForRequest(data.endDate, '23:59:59'),
+          projectUrl: data.projectUrl.trim(),
+          projectUrlType: data.projectUrlType,
         },
         image: data.image,
       });
