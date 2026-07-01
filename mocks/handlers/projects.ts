@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { MyProjectResponse, ProjectMemberResponse, ProjectResponse } from '@/features/project/types';
+import type { MyProjectResponse, ProjectMemberResponse, ProjectResponse } from '@/features/project';
 
 import { isMockReviewSubmitted } from '../lib/submitted-reviews';
 

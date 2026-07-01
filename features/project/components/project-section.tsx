@@ -12,9 +12,9 @@ import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
-import type { UserProjectResponse } from '../types';
+import type { UserProjectResponse } from '../project.types';
 
-import { useUserProjects } from '../api/queries';
+import { useUserProjects } from '../project.hooks';
 
 const INITIAL_COUNT = 8;
 

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { projectKeys } from '@/features/project/api/query-keys';
+import { projectKeys } from '@/features/project';
 
 import { createReview } from './fetchers';
 import { reviewKeys } from './query-keys';

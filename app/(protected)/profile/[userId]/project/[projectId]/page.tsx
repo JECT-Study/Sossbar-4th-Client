@@ -1,9 +1,8 @@
 import { dehydrate } from '@tanstack/react-query';
 
-import { fetchMyProfile, profileKeys } from '@/features/profile';
-import { fetchProject } from '@/features/project/api/fetchers';
-import { projectKeys } from '@/features/project/api/query-keys';
-import { ProjectDetailStream } from '@/features/project/components/project-detail-stream';
+import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
+import { profileKeys } from '@/features/profile/profile.query-keys';
+import { fetchProject, ProjectDetailStream, projectKeys } from '@/features/project';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 interface Props {

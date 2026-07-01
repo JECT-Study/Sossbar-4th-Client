@@ -2,12 +2,16 @@ import { dehydrate } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
-import { buildReviewRequestDescription, fetchMyProfileOptional, profileKeys } from '@/features/profile';
-import { fetchProjects } from '@/features/project/api/fetchers';
-import { projectKeys } from '@/features/project/api/query-keys';
-import { ProjectsStream } from '@/features/project/components/projects-stream';
-import { parseProjectInviteId } from '@/features/project/lib/parse-project-invite-id';
-import { PROJECT_INVITE_QUERY_KEY } from '@/features/project/lib/project-invite-query';
+import { fetchMyProfileOptional } from '@/features/profile/api/fetch-my-profile-optional';
+import { buildReviewRequestDescription } from '@/features/profile/lib/profile-share-content';
+import { profileKeys } from '@/features/profile/profile.query-keys';
+import {
+  fetchProjects,
+  parseProjectInviteId,
+  PROJECT_INVITE_QUERY_KEY,
+  projectKeys,
+  ProjectsStream,
+} from '@/features/project';
 import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
 import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
 import { getQueryClient } from '@/shared/lib/get-query-client';
