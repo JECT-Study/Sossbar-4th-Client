@@ -42,7 +42,8 @@ export const ProjectDetailInfoFormSchema = z
       .max(PROJECT_FIELD_MAX_LENGTH, { message: '텍스트가 초과했습니다.' }),
     startDate: z.string().nullable(),
     endDate: z.string().nullable(),
-    projectLink: z.union([z.literal(''), z.string().url({ message: '올바른 URL을 입력해 주세요.' })]),
+    projectUrl: z.union([z.literal(''), z.string().url({ message: '올바른 URL을 입력해 주세요.' })]),
+    projectUrlType: z.enum(['LINK']),
     image: z.union([
       z.custom<File>((value) => isFile(value), { message: '이미지 파일을 선택해 주세요.' }),
       z.string(),

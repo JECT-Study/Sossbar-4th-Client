@@ -1,5 +1,7 @@
 export type ProjectStatus = 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
 export type MemberStatus = 'LEADER' | 'MEMBER';
+export type ProjectPosition = string;
+export type ProjectUrlType = 'LINK';
 
 export interface ProjectMemberResponse {
   projectMemberId: number;
@@ -8,6 +10,7 @@ export interface ProjectMemberResponse {
   profileImageUrl: string | null;
   memberStatus: MemberStatus;
   reviewWritten?: boolean;
+  projectPositions?: ProjectPosition[];
 }
 
 export interface ProjectResponse {
@@ -20,6 +23,10 @@ export interface ProjectResponse {
   projectImage: string | null;
   projectStatus: ProjectStatus;
   members: ProjectMemberResponse[];
+  memberCount: number;
+  projectPositions: ProjectPosition[];
+  projectUrl: string;
+  projectUrlType: ProjectUrlType;
 }
 
 /** GET /api/v1/projects — 내 프로젝트 목록 */

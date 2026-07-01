@@ -22,7 +22,8 @@ const mapProjectToFormDefaults = (project: ProjectResponse): ProjectDetailInfoFo
   host: project.host,
   startDate: project.startDate,
   endDate: project.endDate,
-  projectLink: project.projectLink ?? '',
+  projectUrl: project.projectUrl ?? '',
+  projectUrlType: project.projectUrlType ?? 'LINK',
   image: project.projectImage,
 });
 

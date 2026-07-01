@@ -44,14 +44,14 @@ export const ProjectInfoView = ({ project }: Props) => {
         </div>
       </SectionInfoRow>
       <SectionInfoRow label="URL">
-        {project.projectLink ? (
+        {project.projectUrl ? (
           <a
-            href={project.projectLink}
+            href={project.projectUrl}
             target="_blank"
             rel="noreferrer noopener"
             className="text-text-primary text-body-base underline"
           >
-            {project.projectLink}
+            {project.projectUrl}
           </a>
         ) : (
           <span className="text-text-subtle text-body-base">-</span>

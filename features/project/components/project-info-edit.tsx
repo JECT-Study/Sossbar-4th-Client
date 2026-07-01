@@ -148,28 +148,34 @@ export const ProjectInfoEdit = ({ form }: Props) => {
         <div className="grid grid-cols-[1fr_120px] items-start gap-2">
           <Controller
             control={control}
-            name="projectLink"
+            name="projectUrl"
             render={({ field }) => (
               <TextField
                 label="URL"
                 placeholder="https://"
-                errorMessage={errors.projectLink?.message}
+                errorMessage={errors.projectUrl?.message}
                 className="[&>label]:sr-only"
                 {...field}
               />
             )}
           />
-          <div className="flex flex-col gap-2">
-            <Label className="sr-only">URL 유형</Label>
-            <Select.Root value="link" onValueChange={() => undefined}>
-              <Select.Trigger aria-label="URL 유형">
-                <Select.Value />
-              </Select.Trigger>
-              <Select.Content className="w-(--radix-select-trigger-width)">
-                <Select.Item value="link">Link</Select.Item>
-              </Select.Content>
-            </Select.Root>
-          </div>
+          <Controller
+            control={control}
+            name="projectUrlType"
+            render={({ field }) => (
+              <div className="flex flex-col gap-2">
+                <Label className="sr-only">URL 유형</Label>
+                <Select.Root value={field.value} onValueChange={field.onChange}>
+                  <Select.Trigger aria-label="URL 유형">
+                    <Select.Value />
+                  </Select.Trigger>
+                  <Select.Content className="w-(--radix-select-trigger-width)">
+                    <Select.Item value="LINK">Link</Select.Item>
+                  </Select.Content>
+                </Select.Root>
+              </div>
+            )}
+          />
         </div>
       </SectionInfoRow>
 
