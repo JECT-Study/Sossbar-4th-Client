@@ -255,13 +255,6 @@ const ProjectMemberList = ({ members, isLeader, projectStatus }: ProjectMemberLi
             </li>
           ))}
         </ul>
-        {projectStatus === 'IN_PROGRESS' ? (
-          <div className="pointer-events-none absolute top-0 right-0 flex h-full w-12 items-center justify-end bg-gradient-to-r from-white/0 to-white">
-            <span className="border-border-gray bg-surface-white text-text-subtle flex size-8 items-center justify-center rounded-full border text-xl leading-none">
-              ›
-            </span>
-          </div>
-        ) : null}
       </div>
     </div>
   );
