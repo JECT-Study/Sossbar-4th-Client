@@ -29,7 +29,7 @@ import { CreateProjectFormSchema, UpdateProjectFormSchema } from './project.sche
 export const useProjects = (enabled = true) =>
   useQuery({
     queryKey: projectKeys.list(),
-    queryFn: fetchProjects,
+    queryFn: () => fetchProjects(),
     enabled,
   });
 
