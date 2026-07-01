@@ -1,4 +1,4 @@
-export const UserReviewContainerSkeleton = () => (
+export const UserReviewCardLoading = () => (
   <section aria-hidden className="border-border-gray flex h-136 w-full flex-col rounded-2xl border bg-white p-6">
     <div className="flex items-center justify-between">
       <div className="bg-action-gray-light h-6 w-24 animate-pulse rounded-sm" />

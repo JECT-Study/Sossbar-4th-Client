@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import { ProjectReviewContainer } from '@/features/review';
+import { ProjectReviewCard } from '@/features/review';
 import { SpectrumCardGate } from '@/features/spectrum';
 import { TagCardGate } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
@@ -65,7 +65,7 @@ export const ProjectPageContent = ({ userId, userLink, projectId }: ProjectPageC
         <SpectrumCardGate userLink={userLink} projectId={projectId} showDistribution={false} />
       </div>
 
-      <ProjectReviewContainer userId={userId} projectId={projectId} />
+      <ProjectReviewCard userId={userId} projectId={projectId} />
     </PageContainer>
   );
 };

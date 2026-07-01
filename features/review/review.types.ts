@@ -1,8 +1,13 @@
 import type { Tag } from '@/features/tag';
 
-import type { Spectrum, SpectrumWithValue } from './spectrum';
-
+/**
+ * 후기에 표시되는 직군. 백엔드가 과거에 이 값으로 저장한 후기를 여전히 내려줄 수 있어
+ * POST /reviews 요청용 {@link ReviewPosition}과 별도로 유지한다.
+ */
 export type UserPosition = 'FRONTEND' | 'BACKEND' | 'PM' | 'PD' | 'AI' | 'QA' | 'ETC';
+
+/** POST /api/v1/reviews reviewReqDto.projectPositions 아이템 enum */
+export type ReviewPosition = 'FE' | 'BE' | 'PM' | 'PD' | 'AI';
 
 export interface Review {
   reviewId: number;
@@ -17,6 +22,17 @@ export interface Review {
   projectStatus?: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED'; // 팀 확정 여부 필터링용
 }
 
+export interface Spectrum {
+  spectrumId: number;
+  leftLabel: string;
+  rightLabel: string;
+}
+
+export interface SpectrumWithValue {
+  spectrumId: number;
+  value: number;
+}
+
 export interface ReviewFormData {
   tags: Tag[];
   spectrums: Spectrum[];
@@ -26,30 +42,10 @@ export interface CreateReviewRequest {
   projectId: number;
   revieweeId: number;
   feedback: string;
-  projectPosition: UserPosition;
-  projectDetailPosition?: string;
+  /** 1~2개 선택 */
+  projectPositions: ReviewPosition[];
   tagIds: number[];
   spectrums: SpectrumWithValue[];
-}
-
-export interface CreateReviewReviewReqDto {
-  projectId: number;
-  revieweeId: number;
-  feedback: string;
-  projectPosition: UserPosition;
-  projectDetailPosition?: string;
-  tagIds: number[];
-}
-
-export interface CreateReviewSpectrumReqDto {
-  spectrumAxisId: number;
-  spectrumStrength: number;
-}
-
-/** POST /api/v1/reviews 요청 본문 (백엔드 ReviewCreateReqDto) */
-export interface CreateReviewApiBody {
-  reviewReqDto: CreateReviewReviewReqDto;
-  spectrumReqDtos: CreateReviewSpectrumReqDto[];
 }
 
 export type ReviewValidReason =
