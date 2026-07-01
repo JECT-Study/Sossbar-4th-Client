@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'sossbar-bucket.s3.ap-northeast-2.amazonaws.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'sossbar-bucket2.s3.ap-northeast-2.amazonaws.com',
+      },
     ],
   },
   async rewrites() {
