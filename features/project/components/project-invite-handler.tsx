@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { saveLoginReturnPath, useLoginModal } from '@/features/auth';
+import { saveLoginReturnPath, useLoginGate } from '@/features/auth';
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { useInviteProjectMember } from '@/features/project/api/mutations';
 import { useProject } from '@/features/project/api/queries';
@@ -25,7 +25,7 @@ export const ProjectInviteHandler = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: profile } = useMyProfile();
-  const { openLoginModal } = useLoginModal();
+  const { openLogin } = useLoginGate();
 
   const projectId = useMemo(() => parseProjectInviteId(searchParams.get(PROJECT_INVITE_QUERY_KEY)), [searchParams]);
 
@@ -63,8 +63,8 @@ export const ProjectInviteHandler = () => {
       return;
     }
     saveLoginReturnPath();
-    openLoginModal();
-  }, [hasSession, openLoginModal, projectId]);
+    openLogin();
+  }, [hasSession, openLogin, projectId]);
 
   useEffect(() => {
     if (!shouldFetchProject || isPending || !project) {

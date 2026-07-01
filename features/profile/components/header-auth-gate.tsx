@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { KakaoLoginButton } from '@/features/auth';
+import { LoginButton } from '@/features/auth';
 import { ROUTES } from '@/shared/constants/routes';
 
 import { HeaderMyProfile } from './header-my-profile';
@@ -26,7 +26,7 @@ export const HeaderAuthGate = () => {
   };
 
   if (!myProfile) {
-    return <KakaoLoginButton />;
+    return <LoginButton />;
   }
   return <HeaderMyProfile myProfile={myProfile} onLogout={handleLogout} />;
 };

@@ -1,54 +1,19 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 
 import { StepIndicator } from '@/shared/components/step-indicator';
-
-import type { SignupStepId } from '../auth.constants';
-import type { SignupFormData } from '../auth.types';
 
 import { SignupStepBasic } from './signup-step-basic';
 import { SignupStepCareer } from './signup-step-career';
 import { SignupStepComplete } from './signup-step-complete';
 import { SIGNUP_STEPS, SIGNUP_STEP_DESCRIPTIONS } from '../auth.constants';
-import { useSignupForm } from '../auth.hooks';
-
-const STEP_BASIC_FIELDS = [
-  'name',
-  'bio',
-  'profileImage',
-  'agreements',
-] as const satisfies readonly (keyof SignupFormData)[];
+import { useSignupFlow } from '../auth.hooks';
 
 export const SignupFlow = () => {
   const router = useRouter();
-  const { form, onSubmit, isPending } = useSignupForm();
-  const [currentStep, setCurrentStep] = useState<SignupStepId>('basic');
-
-  const goNext = async () => {
-    if (currentStep === 'basic') {
-      if (await form.trigger([...STEP_BASIC_FIELDS])) {
-        setCurrentStep('career');
-      }
-      return;
-    }
-    if (currentStep === 'career') {
-      await form.handleSubmit(async (data) => {
-        try {
-          await onSubmit(data);
-          setCurrentStep('complete');
-        } catch {}
-      })();
-    }
-  };
-
-  const goPrev = () => {
-    if (currentStep === 'career') {
-      setCurrentStep('basic');
-    }
-  };
+  const { form, currentStep, goNext, goPrev, isPending } = useSignupFlow();
 
   return (
     <div className="flex w-full max-w-[480px] flex-col items-center">

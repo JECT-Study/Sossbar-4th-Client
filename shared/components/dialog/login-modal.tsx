@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Dialog } from 'radix-ui';
 
-import { saveLoginReturnPath, useLoginModal } from '@/features/auth';
+import { saveLoginReturnPath, useLoginGate } from '@/features/auth';
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
 import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons';
 
@@ -11,7 +11,7 @@ const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${proc
 
 export const LoginModal = () => {
   const { data: profile } = useMyProfile();
-  const { isOpen, onOpenChange } = useLoginModal({ isAuthenticated: profile != null });
+  const { isOpen, onOpenChange } = useLoginGate({ isAuthenticated: profile != null });
 
   const handleKakaoLogin = () => {
     saveLoginReturnPath();

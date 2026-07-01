@@ -2,20 +2,20 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useCallback, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
-import { useQueryParam } from '@/shared/hooks/use-query-param';
 import { ApiError } from '@/shared/lib/api';
 
+import type { SignupStepId } from './auth.constants';
 import type { SignupFormData } from './auth.types';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 
 import { createSignup } from './auth.api';
-import { AGREEMENTS, LOGIN_MODAL_QUERY_KEY, LOGIN_MODAL_QUERY_VALUE } from './auth.constants';
+import { AGREEMENTS } from './auth.constants';
 import { SignupFormSchema } from './auth.schemas';
 
-export const useSignup = () => {
+export const useSignupMutation = () => {
   return useMutation({
     mutationFn: createSignup,
   });
@@ -35,7 +35,7 @@ const defaultValues: SignupFormData = {
 };
 
 export const useSignupForm = () => {
-  const { mutateAsync: signup, isPending } = useSignup();
+  const { mutateAsync: signup, isPending } = useSignupMutation();
 
   const form = useForm({
     defaultValues,
@@ -71,11 +71,7 @@ export const useSignupForm = () => {
     }
   };
 
-  return {
-    form,
-    onSubmit,
-    isPending,
-  };
+  return { form, onSubmit, isPending };
 };
 
 const defaultAgreements: SignupFormData['agreements'] = {
@@ -100,38 +96,39 @@ export const useAgreements = (control: Control<SignupFormData>, setValue: UseFor
   return { agreeAll, handleAgreeAll };
 };
 
-interface UseLoginModalParams {
-  isAuthenticated?: boolean;
-}
+const STEP_BASIC_FIELDS = [
+  'name',
+  'bio',
+  'profileImage',
+  'agreements',
+] as const satisfies readonly (keyof SignupFormData)[];
 
-export const useLoginModal = ({ isAuthenticated = false }: UseLoginModalParams = {}) => {
-  const { queryParamValue, updateQueryParam, removeQueryParam } = useQueryParam(LOGIN_MODAL_QUERY_KEY);
+export const useSignupFlow = () => {
+  const { form, onSubmit, isPending } = useSignupForm();
+  const [currentStep, setCurrentStep] = useState<SignupStepId>('basic');
 
-  const hasLoginParam = queryParamValue === LOGIN_MODAL_QUERY_VALUE;
-  const isOpen = hasLoginParam && !isAuthenticated;
-
-  useEffect(() => {
-    if (hasLoginParam && isAuthenticated) {
-      removeQueryParam();
-    }
-  }, [hasLoginParam, isAuthenticated, removeQueryParam]);
-
-  const onOpenChange = useCallback(
-    (nextOpen: boolean) => {
-      if (nextOpen) {
-        updateQueryParam(LOGIN_MODAL_QUERY_VALUE);
-      } else {
-        removeQueryParam();
+  const goNext = async () => {
+    if (currentStep === 'basic') {
+      if (await form.trigger([...STEP_BASIC_FIELDS])) {
+        setCurrentStep('career');
       }
-    },
-    [removeQueryParam, updateQueryParam],
-  );
-
-  const openLoginModal = useCallback(() => {
-    if (!isAuthenticated) {
-      updateQueryParam(LOGIN_MODAL_QUERY_VALUE);
+      return;
     }
-  }, [isAuthenticated, updateQueryParam]);
+    if (currentStep === 'career') {
+      await form.handleSubmit(async (data) => {
+        try {
+          await onSubmit(data);
+          setCurrentStep('complete');
+        } catch {}
+      })();
+    }
+  };
 
-  return { isOpen, onOpenChange, openLoginModal };
+  const goPrev = () => {
+    if (currentStep === 'career') {
+      setCurrentStep('basic');
+    }
+  };
+
+  return { form, currentStep, goNext, goPrev, isPending };
 };
