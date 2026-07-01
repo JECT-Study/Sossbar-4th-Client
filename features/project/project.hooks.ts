@@ -368,6 +368,10 @@ export const useProjectDetailInfoForm = ({ projectId, defaultValues }: UseProjec
           request: {
             projectName: values.projectName.trim(),
             host: values.host.trim(),
+            startDate: values.startDate,
+            endDate: values.endDate,
+            projectUrl: values.projectUrl,
+            projectUrlType: values.projectUrlType,
           },
           image: values.image instanceof File ? values.image : null,
         });
