@@ -70,6 +70,10 @@ export interface UserProjectResponse {
 export interface ProjectRequest {
   projectName: string;
   host: string;
+  startDate?: string;
+  endDate?: string;
+  projectUrl?: string;
+  projectUrlType?: 'LINK';
 }
 
 export type ProjectPayload = {
