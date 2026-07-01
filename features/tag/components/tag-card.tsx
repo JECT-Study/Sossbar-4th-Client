@@ -2,22 +2,19 @@
 
 import { EmptyState } from '@/shared/components/empty-state';
 import { ProfileStatCard } from '@/shared/components/profile-stat-card';
-import { cn } from '@/shared/lib/cn';
 
-import { TagCollapseButton } from './tag-collapse-button';
-import { TagCollapsibleContent } from './tag-collapsible-content';
-import { useReceivedTags, useTagCollapsible } from '../tag.hooks';
+import { TagAllSection } from './tag-all-section';
+import { TagTop3Section } from './tag-top3-section';
+import { useReceivedTags } from '../tag.hooks';
 
 const EMPTY_TAGS = [] as const;
 
 interface Props {
   userLink: string;
   projectId?: number;
-  collapsible?: boolean;
 }
 
-export const TagCard = ({ userLink, projectId, collapsible }: Props) => {
-  const { isCollapsed, contentId, toggle } = useTagCollapsible(Boolean(collapsible));
+export const TagCard = ({ userLink, projectId }: Props) => {
   const { data: { top3Tags = EMPTY_TAGS, allTags = EMPTY_TAGS } = {} } = useReceivedTags({ userLink, projectId });
   const hasTags = top3Tags.length > 0 || allTags.length > 0;
 
@@ -26,20 +23,15 @@ export const TagCard = ({ userLink, projectId, collapsible }: Props) => {
       title="받은 태그"
       info
       infoLabel="동료들이 남긴 후기에서 많이 선택된 태그예요"
-      className={cn('w-[585px]', collapsible ? (isCollapsed ? 'h-[462px]' : 'h-[716px]') : 'h-[652px]')}
+      className="h-[652px] w-[585px]"
       bodyClassName="gap-8"
     >
       {!hasTags ? (
         <EmptyState title="받은 태그가 없어요" />
       ) : (
         <>
-          <TagCollapsibleContent
-            contentId={contentId}
-            isCollapsed={isCollapsed}
-            top3Tags={top3Tags}
-            allTags={allTags}
-          />
-          {collapsible ? <TagCollapseButton isCollapsed={isCollapsed} contentId={contentId} onToggle={toggle} /> : null}
+          <TagTop3Section tags={top3Tags} />
+          <TagAllSection tags={allTags} />
         </>
       )}
     </ProfileStatCard>

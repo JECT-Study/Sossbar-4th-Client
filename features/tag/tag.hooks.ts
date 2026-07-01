@@ -1,10 +1,8 @@
 'use client';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useId, useState } from 'react';
 
-import { fetchReceivedTags, fetchReceivedTagsByProject } from './tag.api';
-import { tagKeys } from './tag.query-keys';
+import { fetchReceivedTags, fetchReceivedTagsByProject, tagKeys } from './tag.api';
 
 interface UseReceivedTagsParams {
   userLink: string;
@@ -17,13 +15,3 @@ export const useReceivedTags = ({ userLink, projectId }: UseReceivedTagsParams) 
     queryFn: () =>
       projectId === undefined ? fetchReceivedTags(userLink) : fetchReceivedTagsByProject(userLink, projectId),
   });
-
-export const useTagCollapsible = (defaultCollapsed = false) => {
-  const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
-  const contentId = useId();
-  return {
-    isCollapsed,
-    contentId,
-    toggle: () => setIsCollapsed((prev) => !prev),
-  };
-};

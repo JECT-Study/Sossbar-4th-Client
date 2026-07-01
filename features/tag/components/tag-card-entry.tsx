@@ -3,16 +3,14 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import { TagCardGate } from './tag-card-gate';
-import { fetchReceivedTags, fetchReceivedTagsByProject } from '../tag.api';
-import { tagKeys } from '../tag.query-keys';
+import { fetchReceivedTags, fetchReceivedTagsByProject, tagKeys } from '../tag.api';
 
 interface Props {
   userLink: string;
   projectId?: number;
-  collapsible?: boolean;
 }
 
-export const TagCardEntry = async ({ userLink, projectId, collapsible }: Props) => {
+export const TagCardEntry = async ({ userLink, projectId }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
@@ -23,7 +21,7 @@ export const TagCardEntry = async ({ userLink, projectId, collapsible }: Props) 
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TagCardGate userLink={userLink} projectId={projectId} collapsible={collapsible} />
+      <TagCardGate userLink={userLink} projectId={projectId} />
     </HydrationBoundary>
   );
 };
