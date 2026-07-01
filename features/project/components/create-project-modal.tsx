@@ -31,7 +31,9 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
     control,
     formState: { errors, isValid },
     handleSubmit,
+    trigger,
   } = form;
+  const dateErrorMessage = errors.startDate?.message ?? errors.endDate?.message;
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
@@ -124,7 +126,10 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                         render={({ field }) => (
                           <DatePicker
                             value={field.value}
-                            onChange={field.onChange}
+                            onChange={(date) => {
+                              field.onChange(date);
+                              void trigger(['startDate', 'endDate']);
+                            }}
                             placeholder="시작일을 선택해주세요"
                             disabled={isSubmitting}
                             className={cn(errors.startDate && 'border-border-error border-2')}
@@ -137,7 +142,10 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                         render={({ field }) => (
                           <DatePicker
                             value={field.value}
-                            onChange={field.onChange}
+                            onChange={(date) => {
+                              field.onChange(date);
+                              void trigger(['startDate', 'endDate']);
+                            }}
                             placeholder="완료일을 선택해주세요"
                             disabled={isSubmitting}
                             className={cn(errors.endDate && 'border-border-error border-2')}
@@ -145,8 +153,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                         )}
                       />
                     </div>
-                    {errors.startDate?.message ? <ErrorMessage>{errors.startDate.message}</ErrorMessage> : null}
-                    {errors.endDate?.message ? <ErrorMessage>{errors.endDate.message}</ErrorMessage> : null}
+                    {dateErrorMessage ? <ErrorMessage className="static">{dateErrorMessage}</ErrorMessage> : null}
                   </div>
 
                   <div className="flex flex-col gap-1">
