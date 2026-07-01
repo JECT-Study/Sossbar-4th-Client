@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 
+import { SectionInfoRow } from '@/shared/components/section-card';
 import { Toggle } from '@/shared/components/toggle';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
 import { MypageCard } from './mypage-card';
-import { MypageInfoRow } from './mypage-info-row';
 
 export const MypageAlertSection = () => {
   const [isEditing, startEditing, stopEditing] = useBooleanState(false);
@@ -31,13 +31,13 @@ export const MypageAlertSection = () => {
 
   return (
     <MypageCard title="알림 설정" isEditing={isEditing} onEdit={handleEdit} onCancel={handleCancel} onSave={handleSave}>
-      <MypageInfoRow label="알림 수신">
+      <SectionInfoRow label="알림 수신">
         {isEditing ? (
           <Toggle checked={alertOn} onCheckedChange={setAlertOn} aria-label="알림 수신" />
         ) : (
           <span className="text-text-basic text-body-base">{committedAlertOn ? 'ON' : 'OFF'}</span>
         )}
-      </MypageInfoRow>
+      </SectionInfoRow>
     </MypageCard>
   );
 };
