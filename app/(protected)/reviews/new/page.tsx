@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { buildReviewRequestDescription } from '@/features/profile/lib/profile-share-content';
+import { buildReviewRequestDescription } from '@/features/profile';
 import { fetchReviewFormData, ReviewWriteContent, reviewKeys } from '@/features/review';
 import { fetchReviewValidation } from '@/features/review/api/fetchers';
 import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
