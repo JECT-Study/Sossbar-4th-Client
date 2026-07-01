@@ -11,6 +11,7 @@ import { HeaderLogoLink } from '@/shared/components/header/header-logo-link';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
+import { logout } from '../auth.api';
 import { LoginButton } from './login-button';
 
 const actionButtonClassName = 'h-10 min-w-[68px] shrink-0 rounded-md px-5 py-0';
@@ -36,6 +37,8 @@ const LandingHeaderInner = () => {
 
   const handleLogout = async () => {
     setHasLoggedOut(true);
+    // 백엔드 refreshToken 무효화(실패해도 로컬 로그아웃은 계속 진행)
+    await logout();
     await fetch('/api/logout', { method: 'POST' });
     queryClient.clear();
     router.push(ROUTES.HOME);

@@ -1,4 +1,4 @@
-export { exchangeKakaoCode, fetchNeedsOnboarding } from './auth.api';
+export { exchangeKakaoCode, fetchNeedsOnboarding, logout } from './auth.api';
 export { LOGIN_RETURN_COOKIE_NAME, USER_LINK_TYPE_OPTIONS, USER_LINKS_MAX } from './auth.constants';
 export type { PositionValue, UserLinkType } from './auth.types';
 export { useLoginGate } from './login-modal.hooks';

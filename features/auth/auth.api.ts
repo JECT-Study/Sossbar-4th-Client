@@ -51,6 +51,20 @@ export const deleteAccount = async (payload: DeleteAccountPayload): Promise<void
   await apiRequest('/users', { method: 'DELETE', body: payload });
 };
 
+// 백엔드 로그아웃(서버측 refreshToken 무효화). 실패해도 로컬 로그아웃은 진행되어야 하므로 throw하지 않고 ok 반환.
+// landing-header(클라이언트)에서만 호출되므로 Next 프록시 rewrite를 타는 상대경로 + same-origin으로 refreshToken 쿠키를 전달한다.
+export const logout = async (): Promise<boolean> => {
+  try {
+    const res = await fetch('/api/v1/login/logout', {
+      method: 'POST',
+      credentials: 'same-origin',
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+};
+
 // 인가코드 → 세션 쿠키 교환. 실패 시 ok:false (route가 '/'로 리다이렉트)
 export const exchangeKakaoCode = async (code: string): Promise<KakaoLoginResult> => {
   const res = await fetch(`${KAKAO_API_BASE}/api/v1/login/kakao?code=${encodeURIComponent(code)}`);
