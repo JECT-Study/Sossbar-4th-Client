@@ -1,17 +1,9 @@
 import type { Tag } from '@/features/tag';
 
-import type { Review, ReviewFormData, ReviewPosition, Spectrum, UserPosition } from './review.types';
+import type { Review, ReviewFormData, Spectrum, UserPosition } from './review.types';
 
-/** POST /api/v1/reviews 작성 폼에서 선택 가능한 직군 (최대 2개) */
-export const REVIEW_POSITION_LABELS: Record<ReviewPosition, string> = {
-  FE: '프론트엔드',
-  BE: '백엔드',
-  PM: 'PM',
-  PD: 'PD',
-  AI: 'AI',
-};
-
-export const REVIEW_POSITIONS = Object.keys(REVIEW_POSITION_LABELS) as ReviewPosition[];
+/** 스펙트럼 슬라이더 step(0~5) → 백엔드 강도(1~6) */
+export const spectrumStepToValue = (step: number): number => step + 1;
 
 /** 과거 스키마(UserPosition)로 저장된 후기의 직군 표시 라벨 */
 const USER_POSITION_LABELS: Record<UserPosition, string> = {

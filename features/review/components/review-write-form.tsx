@@ -9,17 +9,14 @@ import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';
 import { cn } from '@/shared/lib/cn';
 
-import type { ReviewPosition } from '../review.types';
-
-import { ReviewSpectrumRow, spectrumStepToValue } from './review-spectrum-row';
+import { ReviewSpectrumRow } from './review-spectrum-row';
 import { ReviewSubmitDialog } from './review-submit-dialog';
 import { useCreateReview, useReviewFormData } from '../review.hooks';
-import { REVIEW_POSITIONS, REVIEW_POSITION_LABELS } from '../review.lib';
+import { spectrumStepToValue } from '../review.lib';
 
 const FEEDBACK_MIN_LENGTH = 10;
 const FEEDBACK_MAX_LENGTH = 1000;
 const MAX_TAGS = 3;
-const MAX_POSITIONS = 2;
 const DEFAULT_SPECTRUM_STEP = 2;
 
 export const ReviewWriteForm = () => {
@@ -53,7 +50,6 @@ export const ReviewWriteForm = () => {
   const [selectedTagIds, setSelectedTagIds] = useState<Set<number>>(() => new Set());
   const [spectrumSteps, setSpectrumSteps] = useState<Record<number, number>>({});
   const [feedback, setFeedback] = useState('');
-  const [selectedPositions, setSelectedPositions] = useState<Set<ReviewPosition>>(() => new Set());
   const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -72,31 +68,15 @@ export const ReviewWriteForm = () => {
     });
   }, []);
 
-  const togglePosition = useCallback((position: ReviewPosition) => {
-    setSelectedPositions((prev) => {
-      const next = new Set(prev);
-      if (next.has(position)) {
-        next.delete(position);
-        return next;
-      }
-      if (next.size >= MAX_POSITIONS) {
-        return prev;
-      }
-      next.add(position);
-      return next;
-    });
-  }, []);
-
   const onSpectrumChange = useCallback((spectrumId: number, step: number) => {
     setSpectrumSteps((prev) => ({ ...prev, [spectrumId]: step }));
   }, []);
 
   const feedbackTrimmed = feedback.trim();
   const feedbackOk = feedbackTrimmed.length >= FEEDBACK_MIN_LENGTH;
-  const positionOk = selectedPositions.size > 0 && selectedPositions.size <= MAX_POSITIONS;
   const tagsOk = selectedTagIds.size > 0 && selectedTagIds.size <= MAX_TAGS;
   const spectrumsOk = !!formData?.spectrums?.length;
-  const canSubmit = feedbackOk && positionOk && tagsOk && spectrumsOk && !isSubmitting;
+  const canSubmit = feedbackOk && tagsOk && spectrumsOk && !isSubmitting;
 
   const handleSubmitFromDialog = useCallback(async () => {
     if (!formData || !canSubmit || projectId == null || revieweeId == null) {
@@ -104,7 +84,6 @@ export const ReviewWriteForm = () => {
     }
     setSubmitError(null);
     const tagIds = [...selectedTagIds];
-    const projectPositions = [...selectedPositions];
     const spectrums = hasSubmittedAnyReview
       ? []
       : formData.spectrums.map((s) => ({
@@ -116,12 +95,11 @@ export const ReviewWriteForm = () => {
         projectId,
         revieweeId,
         feedback: feedbackTrimmed,
-        projectPositions,
         tagIds,
         spectrums,
       });
       setSubmitDialogOpen(false);
-      router.push('/projects');
+      router.push(`/projects/${projectId}`);
     } catch {
       setSubmitError('제출에 실패했습니다. 다시 시도해주세요.');
     }
@@ -130,7 +108,6 @@ export const ReviewWriteForm = () => {
     canSubmit,
     hasSubmittedAnyReview,
     selectedTagIds,
-    selectedPositions,
     spectrumSteps,
     projectId,
     revieweeId,
@@ -243,40 +220,6 @@ export const ReviewWriteForm = () => {
                   onChange={onSpectrumChange}
                 />
               ))}
-            </div>
-          </section>
-
-          <section className="flex flex-col gap-4" aria-labelledby="review-position-heading">
-            <h2 id="review-position-heading" className="text-heading-sm text-text-basic leading-normal font-bold">
-              프로젝트에서의 직군(최대 {MAX_POSITIONS}개)
-            </h2>
-            <p className="text-body-sm text-text-subtle -mt-2">(필수) 이 프로젝트에서 맡은 역할을 선택해주세요.</p>
-            <div className="flex max-w-[781px] flex-wrap gap-x-2 gap-y-2">
-              {REVIEW_POSITIONS.map((pos) => {
-                const selected = selectedPositions.has(pos);
-                return (
-                  <button
-                    key={pos}
-                    type="button"
-                    aria-pressed={selected}
-                    disabled={!selected && selectedPositions.size >= MAX_POSITIONS}
-                    className={cn(
-                      'text-body-sm inline-flex h-[33px] shrink-0 items-center justify-center rounded-full border px-3 font-normal transition-colors outline-none focus-visible:ring-2 focus-visible:ring-(--color-border-primary) focus-visible:ring-offset-1',
-                      selected
-                        ? 'border-border-gray-light bg-action-secondary-pressed text-text-basic'
-                        : 'border-border-gray-light bg-action-gray-light text-text-basic hover:border-action-secondary-hover hover:bg-action-secondary-hover',
-                      !selected &&
-                        selectedPositions.size >= MAX_POSITIONS &&
-                        'hover:border-border-gray-light hover:bg-action-gray-light cursor-not-allowed opacity-30',
-                    )}
-                    onClick={() => {
-                      togglePosition(pos);
-                    }}
-                  >
-                    {REVIEW_POSITION_LABELS[pos]}
-                  </button>
-                );
-              })}
             </div>
           </section>
         </div>

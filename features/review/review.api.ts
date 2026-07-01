@@ -2,7 +2,7 @@ import { apiRequest } from '@/shared/lib/api';
 import type { ApiRequestOptions } from '@/shared/lib/api';
 
 import type { ReviewApiRaw, ReviewFormDataApiResponse, UserReviewsApiResponse } from './review.lib';
-import type { CreateReviewRequest, Review, ReviewFormData, ReviewPosition, ReviewValidation } from './review.types';
+import type { CreateReviewRequest, Review, ReviewFormData, ReviewValidation } from './review.types';
 
 import { mapReviewFormDataFromApi, mapUserReviewsFromApi } from './review.lib';
 
@@ -18,7 +18,6 @@ interface CreateReviewReviewReqDto {
   projectId: number;
   revieweeId: number;
   feedback: string;
-  projectPositions: ReviewPosition[];
   tagIds: number[];
 }
 
@@ -38,7 +37,6 @@ const toCreateReviewBody = (data: CreateReviewRequest): CreateReviewApiBody => (
     projectId: data.projectId,
     revieweeId: data.revieweeId,
     feedback: data.feedback.trim(),
-    projectPositions: data.projectPositions,
     tagIds: data.tagIds,
   },
   spectrumReqDtos: data.spectrums.map((spectrum) => ({

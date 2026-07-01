@@ -37,6 +37,3 @@ export const ReviewSpectrumRow = ({ spectrumId, leftLabel, rightLabel, valueStep
     </Fragment>
   );
 };
-
-// step 0–5 → backend strength 1–6
-export const spectrumStepToValue = (step: number): number => step + 1;
