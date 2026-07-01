@@ -1,6 +1,6 @@
 export { exchangeKakaoCode, fetchNeedsOnboarding } from './auth.api';
 export { LOGIN_RETURN_COOKIE_NAME, USER_LINK_TYPE_OPTIONS, USER_LINKS_MAX } from './auth.constants';
-export type { UserLinkType } from './auth.types';
+export type { PositionValue, UserLinkType } from './auth.types';
 export { useLoginGate } from './login-modal.hooks';
 export { openLoginModalOnPage, resolveKakaoLoginDestination, saveLoginReturnPath } from './auth.lib';
 export { AccountDeletionModal } from './components/account-deletion-modal';

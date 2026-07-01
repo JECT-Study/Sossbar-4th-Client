@@ -9,7 +9,7 @@ import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { ApiError } from '@/shared/lib/api';
 
-import type { Profile, UpdateProfilePayload } from './profile.types';
+import type { MyProfile, UpdateProfilePayload } from './profile.types';
 import type { z } from 'zod';
 
 import { fetchMyProfileOptional, fetchProfileById, updateProfile } from './profile.api';
@@ -56,7 +56,7 @@ export const useIsMyProfile = (userId: number) => {
 export type ProfileEditFormData = z.infer<typeof ProfileEditFormSchema>;
 
 interface UseProfileEditFormParams {
-  profile: Profile;
+  profile: MyProfile;
   onSubmitProfile: (payload: UpdateProfilePayload) => Promise<void>;
 }
 

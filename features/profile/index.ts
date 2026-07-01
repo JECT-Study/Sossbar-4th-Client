@@ -9,4 +9,4 @@ export { ProfileDetailView } from './components/profile-detail-view';
 export { ProfileSectionLoading } from './components/profile-section-loading';
 export { buildProfileShareMetadata, buildReviewRequestDescription } from './profile.lib';
 export { profileKeys } from './profile.query-keys';
-export type { Profile, UpdateProfilePayload } from './profile.types';
+export type { MyProfile, PublicProfile, UpdateProfilePayload } from './profile.types';

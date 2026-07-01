@@ -10,7 +10,7 @@ import { Button } from '@/shared/components/button';
 import { TextField } from '@/shared/components/text-field';
 import { TextareaField } from '@/shared/components/textarea-field';
 
-import type { Profile, UpdateProfilePayload } from '../profile.types';
+import type { MyProfile, UpdateProfilePayload } from '../profile.types';
 
 import { PROFILE_BIO_MAX_LENGTH, PROFILE_NICKNAME_MAX_LENGTH } from '../profile.constants';
 import { ProfileAvatar } from './profile-avatar';
@@ -20,7 +20,7 @@ import { useProfileEditForm } from '../profile.hooks';
 const PROFILE_IMAGE_ACCEPT = 'image/png,image/jpeg,image/webp';
 
 interface Props {
-  profile: Profile;
+  profile: MyProfile;
   isSubmitting: boolean;
   onCancel: () => void;
   onSubmitProfile: (payload: UpdateProfilePayload) => Promise<void>;

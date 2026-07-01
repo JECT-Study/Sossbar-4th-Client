@@ -9,7 +9,7 @@ import { Input } from '@/shared/components/input';
 import { Textarea } from '@/shared/components/textarea';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
-import type { Profile } from '../profile.types';
+import type { MyProfile } from '../profile.types';
 
 import { PROFILE_BIO_MAX_LENGTH } from '../profile.constants';
 import { useUpdateProfile } from '../profile.hooks';
@@ -18,7 +18,7 @@ import { MypageInfoRow } from './mypage-info-row';
 import { ProfileAvatar } from './profile-avatar';
 
 interface Props {
-  profile: Profile;
+  profile: MyProfile;
 }
 
 const IMAGE_GUIDE_TEXT = '□ JPG, JPEG, PNG 형식\n□ 최소 100 x 100px';
