@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 
 const RETURN_PATH_COOKIE = 'sossbar-login-return';
 
-const PROTECTED_PREFIXES = ['/mypage', '/personal', '/projects', '/reviews', '/profile', '/signup'];
+const PROTECTED_PREFIXES = ['/mypage', '/my-soss', '/personal', '/projects', '/reviews', '/profile', '/signup'];
 
 const CRAWLER_UA_PATTERNS = [
   'facebookexternalhit',

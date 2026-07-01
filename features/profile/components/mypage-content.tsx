@@ -3,7 +3,7 @@
 import { MypageAlertSection } from './mypage-alert-section';
 import { MypageBasicInfoSection } from './mypage-basic-info-section';
 import { MypageCareerSection } from './mypage-career-section';
-import { useMyProfile } from '../hooks/use-my-profile.query';
+import { useMyProfile } from '../profile.hooks';
 
 export const MypageContent = () => {
   const { data: profile } = useMyProfile();

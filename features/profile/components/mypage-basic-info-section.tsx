@@ -11,8 +11,8 @@ import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
 import type { Profile } from '../profile.types';
 
-import { useUpdateProfile } from '../hooks/use-update-profile.mutation';
 import { PROFILE_BIO_MAX_LENGTH } from '../profile.constants';
+import { useUpdateProfile } from '../profile.hooks';
 import { MypageCard } from './mypage-card';
 import { MypageInfoRow } from './mypage-info-row';
 import { ProfileAvatar } from './profile-avatar';

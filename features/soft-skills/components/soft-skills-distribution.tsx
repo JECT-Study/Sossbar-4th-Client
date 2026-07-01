@@ -1,10 +1,9 @@
 import { cn } from '@/shared/lib/cn';
 
-import type { SpectrumInfo } from '../types/soft-skills.types';
+import type { SpectrumInfo } from '../soft-skills.types';
 
-import { DISTRIBUTION_LEFT_BAR_CLASS, DISTRIBUTION_RIGHT_BAR_CLASS } from '../constants/spectrum-visual.constants';
-import { scaleBarHeight } from '../utils/scale-bar-height';
-import { toDistributionBars } from '../utils/to-distribution-bars';
+import { DISTRIBUTION_LEFT_BAR_CLASS, DISTRIBUTION_RIGHT_BAR_CLASS } from '../soft-skills.constants';
+import { scaleBarHeight, toDistributionBars } from '../soft-skills.lib';
 
 /** 막대+인원 수 스택 영역 높이(px) — scaleBarHeight와 동일 기준 */
 const BAR_STACK_HEIGHT_PX = 198;

@@ -55,7 +55,7 @@ const LandingHeaderInner = () => {
         {isLoggedIn ? (
           <div className="flex items-center gap-1">
             <Button asChild variant="primary" size="medium" className={`${actionButtonClassName} w-[139px]`}>
-              <Link href="/profile">Sossbar 열기</Link>
+              <Link href={ROUTES.MY_SOSS}>Sossbar 열기</Link>
             </Button>
             <Button
               type="button"

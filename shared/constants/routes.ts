@@ -4,6 +4,7 @@ export const ROUTES = {
   LOGIN_KAKAO_CALLBACK: '/login/kakao',
   SIGNUP: '/signup',
   MY_PAGE: '/mypage',
+  MY_SOSS: '/my-soss',
   PRIVACY_POLICY: '/policies/privacy-policy',
   PROFILE_EXAMPLES: '/profile-examples',
   PROFILE: (userId: string | number) => `/profile/${userId}`,

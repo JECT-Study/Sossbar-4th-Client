@@ -3,9 +3,8 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import { SoftSkillsCardBoundary } from './soft-skills-card-boundary';
-import { fetchSpectrumByProject } from '../api/fetch-spectrum-by-project.api';
-import { fetchSpectrum } from '../api/fetch-spectrum.api';
-import { softSkillsKeys } from '../soft-skills.query-key';
+import { fetchSpectrum, fetchSpectrumByProject } from '../soft-skills.api';
+import { softSkillsKeys } from '../soft-skills.query-keys';
 
 interface Props {
   userId: number;

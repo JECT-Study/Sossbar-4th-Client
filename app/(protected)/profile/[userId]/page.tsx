@@ -2,19 +2,26 @@ import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { ProfileSectionStream } from '@/features/profile';
-import { fetchMyProfile } from '@/features/profile/api/fetch-my-profile';
-import { fetchProfileById } from '@/features/profile/api/fetch-profile-by-id';
-import { ProfileSectionSkeleton } from '@/features/profile/components/profile-section-skeleton';
-import { buildProfileShareMetadata } from '@/features/profile/lib/build-profile-share-metadata';
+import {
+  buildProfileShareMetadata,
+  fetchMyProfile,
+  fetchProfileById,
+  ProfileDetailView,
+  ProfileSectionSkeleton,
+  ProfileSectionStream,
+} from '@/features/profile';
+import { ProjectSectionStream } from '@/features/project/components/project-section-stream';
+import { ProjectSectionSkeleton } from '@/features/project/components/project-section.skeleton';
+import { UserReviewStream } from '@/features/review';
+import { UserReviewContainerSkeleton } from '@/features/review/components/user-review-container.skeleton';
+import { SoftSkillsCardSkeleton, SoftSkillsCardStream } from '@/features/soft-skills';
+import { TagCardSkeleton, TagCardStream } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 import { SHARE_USER_NAME_PARAM } from '@/shared/constants/share-query';
 import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
 import { parseShareDisplayName } from '@/shared/lib/parse-share-display-name';
 
 import type { Metadata } from 'next';
-
-import { ProfileDetailStreams } from '../_components/profile-detail-streams';
 
 type ProfilePageProps = {
   params: Promise<{
@@ -84,7 +91,29 @@ const Page = async ({ params }: ProfilePageProps) => {
       <Suspense fallback={<ProfileSectionSkeleton />}>
         <ProfileSectionStream userId={profileUserId} isMyProfile={isMyProfile} />
       </Suspense>
-      <ProfileDetailStreams userId={profileUserId} />
+      <ProfileDetailView
+        userId={profileUserId}
+        allTabContent={
+          <>
+            <div className="flex gap-[30px]">
+              <Suspense fallback={<TagCardSkeleton />}>
+                <TagCardStream userId={profileUserId} />
+              </Suspense>
+              <Suspense fallback={<SoftSkillsCardSkeleton />}>
+                <SoftSkillsCardStream userId={profileUserId} showDistribution />
+              </Suspense>
+            </div>
+            <Suspense fallback={<UserReviewContainerSkeleton />}>
+              <UserReviewStream userId={profileUserId} />
+            </Suspense>
+          </>
+        }
+        projectsTabContent={
+          <Suspense fallback={<ProjectSectionSkeleton />}>
+            <ProjectSectionStream userId={profileUserId} />
+          </Suspense>
+        }
+      />
     </PageContainer>
   );
 };
