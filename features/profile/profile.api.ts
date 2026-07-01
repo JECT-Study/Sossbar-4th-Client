@@ -23,8 +23,8 @@ export const fetchMyProfileOptional = async (init?: ApiRequestOptions): Promise<
   }
 };
 
-export const fetchProfileById = (userId: number, init?: ApiRequestOptions): Promise<PublicProfile> =>
-  apiRequest<PublicProfile>(`/users/profile/${userId}`, init);
+export const fetchProfileById = (userLink: string, init?: ApiRequestOptions): Promise<PublicProfile> =>
+  apiRequest<PublicProfile>(`/users/profile/${userLink}`, init);
 
 const createUpdateProfileFormData = ({ info, profileImage }: UpdateProfilePayload) => {
   const formData = new FormData();

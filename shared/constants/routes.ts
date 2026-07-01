@@ -7,7 +7,7 @@ export const ROUTES = {
   MY_SOSS: '/my-soss',
   PRIVACY_POLICY: '/policies/privacy-policy',
   PROFILE_EXAMPLES: '/profile-examples',
-  PROFILE: (userId: string | number) => `/profile/${userId}`,
-  PROJECT: (userId: string | number, projectId: string | number) => `/profile/${userId}/project/${projectId}`,
+  PROFILE: (userLink: string) => `/profile/${userLink}`,
+  PROJECT: (userLink: string, projectId: string | number) => `/profile/${userLink}/project/${projectId}`,
   TERMS_OF_SERVICE: '/policies/terms-of-service',
 } as const;

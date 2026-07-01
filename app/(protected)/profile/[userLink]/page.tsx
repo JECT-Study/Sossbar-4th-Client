@@ -18,31 +18,27 @@ import { SpectrumCardEntry, SpectrumCardLoading } from '@/features/spectrum';
 import { TagCardEntry, TagCardLoading } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 import { SHARE_USER_NAME_PARAM } from '@/shared/constants/share-query';
-import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
 import { parseShareDisplayName } from '@/shared/lib/parse-share-display-name';
 
 import type { Metadata } from 'next';
 
 type ProfilePageProps = {
   params: Promise<{
-    userId: string;
+    userLink: string;
   }>;
   searchParams: Promise<{
     [SHARE_USER_NAME_PARAM]?: string;
   }>;
 };
 
-const resolveProfileShareUserName = async (
-  profileUserId: number,
-  queryUserName?: string,
-): Promise<string | undefined> => {
+const resolveProfileShareUserName = async (userLink: string, queryUserName?: string): Promise<string | undefined> => {
   const fromQuery = parseShareDisplayName(queryUserName);
   if (fromQuery) {
     return fromQuery;
   }
 
   try {
-    const profile = await fetchProfileById(profileUserId);
+    const profile = await fetchProfileById(userLink);
     return profile.username;
   } catch {
     return undefined;
@@ -50,15 +46,10 @@ const resolveProfileShareUserName = async (
 };
 
 export const generateMetadata = async ({ params, searchParams }: ProfilePageProps): Promise<Metadata> => {
-  const { userId } = await params;
+  const { userLink } = await params;
   const { [SHARE_USER_NAME_PARAM]: rawUserName } = await searchParams;
-  const profileUserId = parsePositiveInt(userId);
 
-  if (profileUserId === null) {
-    return { title: '프로필' };
-  }
-
-  const userName = await resolveProfileShareUserName(profileUserId, rawUserName);
+  const userName = await resolveProfileShareUserName(userLink, rawUserName);
   const queryUserName = parseShareDisplayName(rawUserName);
   const pathSearchParams = new URLSearchParams();
 
@@ -67,35 +58,32 @@ export const generateMetadata = async ({ params, searchParams }: ProfilePageProp
   }
 
   const profilePath =
-    pathSearchParams.size > 0
-      ? `/profile/${profileUserId}?${pathSearchParams.toString()}`
-      : `/profile/${profileUserId}`;
+    pathSearchParams.size > 0 ? `/profile/${userLink}?${pathSearchParams.toString()}` : `/profile/${userLink}`;
 
-  return buildProfileShareMetadata(profileUserId, userName, profilePath);
+  return buildProfileShareMetadata(userLink, userName, profilePath);
 };
 
 const Page = async ({ params }: ProfilePageProps) => {
-  const { userId } = await params;
-  const profileUserId = parsePositiveInt(userId);
+  const { userLink } = await params;
 
-  if (profileUserId === null) {
+  if (!userLink) {
     return notFound();
   }
 
   const cookieStore = await cookies();
   const [profile, myProfile] = await Promise.all([
-    fetchProfileById(profileUserId),
+    fetchProfileById(userLink),
     fetchMyProfile({ headers: { Cookie: cookieStore.toString() } }).catch(() => null),
   ]);
-  const isMyProfile = myProfile?.userId === profileUserId;
+  const isMyProfile = myProfile?.userLink === userLink;
 
   return (
     <PageContainer className="mb-20">
       <Suspense fallback={<ProfileSectionLoading />}>
-        <ProfileByIdSectionEntry userId={profileUserId} isMyProfile={isMyProfile} />
+        <ProfileByIdSectionEntry userLink={userLink} isMyProfile={isMyProfile} />
       </Suspense>
       <ProfileDetailView
-        userId={profileUserId}
+        userId={profile.userId}
         allTabContent={
           <>
             <div className="flex gap-[30px]">
@@ -107,13 +95,13 @@ const Page = async ({ params }: ProfilePageProps) => {
               </Suspense>
             </div>
             <Suspense fallback={<UserReviewContainerSkeleton />}>
-              <UserReviewStream userId={profileUserId} />
+              <UserReviewStream userId={profile.userId} />
             </Suspense>
           </>
         }
         projectsTabContent={
           <Suspense fallback={<ProjectSectionSkeleton />}>
-            <ProjectSectionStream userId={profileUserId} />
+            <ProjectSectionStream userId={profile.userId} userLink={profile.userLink} />
           </Suspense>
         }
       />

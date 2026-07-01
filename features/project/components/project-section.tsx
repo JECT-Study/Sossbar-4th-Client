@@ -21,14 +21,14 @@ const INITIAL_COUNT = 8;
 const DEFAULT_IMAGE_PATH = '/default.png';
 
 interface ProjectItemProps {
-  userId: number;
+  userLink: string;
   project: UserProjectResponse;
 }
 
-const ProjectItem = ({ userId, project }: ProjectItemProps) => {
+const ProjectItem = ({ userLink, project }: ProjectItemProps) => {
   return (
     <Link
-      href={ROUTES.PROJECT(userId, project.projectId)}
+      href={ROUTES.PROJECT(userLink, project.projectId)}
       className="focus-visible:ring-border-secondary block rounded-lg focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
     >
       <article className="flex flex-col gap-4 pb-4">
@@ -54,6 +54,7 @@ const ProjectItem = ({ userId, project }: ProjectItemProps) => {
 
 interface ProjectSectionProps {
   userId: number;
+  userLink: string;
 }
 
 const sortProjects = (projects: UserProjectResponse[], sortOrder: SortOrder) =>
@@ -61,7 +62,7 @@ const sortProjects = (projects: UserProjectResponse[], sortOrder: SortOrder) =>
     sortOrder === 'latest' ? b.startDate.localeCompare(a.startDate) : a.startDate.localeCompare(b.startDate),
   );
 
-export const ProjectSection = ({ userId }: ProjectSectionProps) => {
+export const ProjectSection = ({ userId, userLink }: ProjectSectionProps) => {
   const { data: projects, isPending, isError } = useUserProjects(userId);
   const [showAll, setShowAll] = useState(false);
   const [selectedSort, setSelectedSort] = useState<SortOrder>('latest');
@@ -113,7 +114,7 @@ export const ProjectSection = ({ userId }: ProjectSectionProps) => {
         <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {visibleProjects.map((project) => (
             <li key={project.projectId}>
-              <ProjectItem userId={userId} project={project} />
+              <ProjectItem userLink={userLink} project={project} />
             </li>
           ))}
         </ul>

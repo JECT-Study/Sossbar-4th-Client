@@ -7,16 +7,15 @@ import { getQueryClient } from '@/shared/lib/get-query-client';
 
 interface Props {
   params: Promise<{
-    userId: string;
+    userLink: string;
     projectId: string;
   }>;
 }
 
 const ProjectPage = async ({ params }: Props) => {
-  const { userId, projectId } = await params;
+  const { userLink, projectId } = await params;
   const queryClient = getQueryClient();
 
-  const profileUserId = Number(userId);
   const projectIdNum = Number(projectId);
 
   const [, , profile] = await Promise.all([
@@ -26,14 +25,14 @@ const ProjectPage = async ({ params }: Props) => {
     }),
     queryClient.prefetchQuery({ queryKey: profileKeys.my, queryFn: fetchMyProfile }),
     queryClient.fetchQuery({
-      queryKey: profileKeys.detail(profileUserId),
-      queryFn: () => fetchProfileById(profileUserId),
+      queryKey: profileKeys.detail(userLink),
+      queryFn: () => fetchProfileById(userLink),
     }),
   ]);
 
   return (
     <ProjectDetailStream
-      userId={profileUserId}
+      userId={profile.userId}
       userLink={profile.userLink}
       projectId={projectIdNum}
       state={dehydrate(queryClient)}

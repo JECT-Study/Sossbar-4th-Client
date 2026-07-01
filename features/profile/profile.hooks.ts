@@ -24,10 +24,10 @@ export const useMyProfile = () => {
   });
 };
 
-export const useProfileById = (userId: number) =>
+export const useProfileById = (userLink: string) =>
   useSuspenseQuery({
-    queryKey: profileKeys.detail(userId),
-    queryFn: () => fetchProfileById(userId),
+    queryKey: profileKeys.detail(userLink),
+    queryFn: () => fetchProfileById(userLink),
   });
 
 export const useUpdateProfile = () => {
@@ -36,7 +36,7 @@ export const useUpdateProfile = () => {
   return useMutation({
     mutationFn: updateProfile,
     onSuccess: (profile) => {
-      queryClient.setQueryData(profileKeys.detail(profile.userId), profile);
+      queryClient.setQueryData(profileKeys.detail(profile.userLink), profile);
       queryClient.setQueryData(profileKeys.my, profile);
     },
   });
@@ -45,12 +45,12 @@ export const useUpdateProfile = () => {
 /**
  * 조회 중인 프로필이 현재 로그인한 사용자의 프로필인지 확인한다.
  *
- * @param userId - 비교할 프로필 사용자 ID
+ * @param userLink - 비교할 프로필 사용자 링크
  * @returns 현재 로그인한 사용자의 프로필이면 `true`, 아니면 `false`
  */
-export const useIsMyProfile = (userId: number) => {
+export const useIsMyProfile = (userLink: string) => {
   const { data: myProfile } = useMyProfile();
-  return myProfile?.userId === userId;
+  return myProfile?.userLink === userLink;
 };
 
 export type ProfileEditFormData = z.infer<typeof ProfileEditFormSchema>;
@@ -150,11 +150,11 @@ export const useProfileEditing = () => {
 };
 
 interface UseProfileShareParams {
-  userId: number;
+  userLink: string;
   userName?: string;
 }
 
-export const useProfileShare = ({ userId, userName }: UseProfileShareParams) => {
+export const useProfileShare = ({ userLink, userName }: UseProfileShareParams) => {
   const {
     open: isShareTooltipOpen,
     message: shareTooltipMessage,
@@ -163,8 +163,8 @@ export const useProfileShare = ({ userId, userName }: UseProfileShareParams) => 
   } = useCopyLinkFeedback();
 
   const shareProfile = useCallback(async () => {
-    await copyLink(buildProfileShareClipboardText(userId, userName));
-  }, [copyLink, userId, userName]);
+    await copyLink(buildProfileShareClipboardText(userLink, userName));
+  }, [copyLink, userLink, userName]);
 
   return {
     isShareTooltipOpen,

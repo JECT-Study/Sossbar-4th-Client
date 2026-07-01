@@ -14,7 +14,7 @@ interface Props {
 export const ProfileExamplesClient = ({ userId, userLink }: Props) => {
   return (
     <>
-      <ProfileByIdSectionGate userId={userId} />
+      <ProfileByIdSectionGate userLink={userLink} />
       <ProfileDetailView
         userId={userId}
         allTabContent={
@@ -26,7 +26,7 @@ export const ProfileExamplesClient = ({ userId, userLink }: Props) => {
             <UserReviewContainerBoundary userId={userId} />
           </>
         }
-        projectsTabContent={<ProjectSection userId={userId} />}
+        projectsTabContent={<ProjectSection userId={userId} userLink={userLink} />}
       />
     </>
   );

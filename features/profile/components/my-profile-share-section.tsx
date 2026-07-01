@@ -12,7 +12,7 @@ interface Props {
 
 export const MyProfileShareSection = ({ profile }: Props) => {
   const { isShareTooltipOpen, shareTooltipMessage, closeShareTooltip, shareProfile } = useProfileShare({
-    userId: profile.userId,
+    userLink: profile.userLink,
     userName: profile.username,
   });
 

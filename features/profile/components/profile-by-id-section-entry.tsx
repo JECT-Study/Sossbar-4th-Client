@@ -7,21 +7,21 @@ import { fetchProfileById } from '../profile.api';
 import { ProfileByIdSectionGate } from './profile-by-id-section-gate';
 
 interface Props {
-  userId: number;
+  userLink: string;
   isMyProfile?: boolean;
 }
 
-export const ProfileByIdSectionEntry = async ({ userId, isMyProfile }: Props) => {
+export const ProfileByIdSectionEntry = async ({ userLink, isMyProfile }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: profileKeys.detail(userId),
-    queryFn: () => fetchProfileById(userId),
+    queryKey: profileKeys.detail(userLink),
+    queryFn: () => fetchProfileById(userLink),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProfileByIdSectionGate userId={userId} isMyProfile={isMyProfile} />
+      <ProfileByIdSectionGate userLink={userLink} isMyProfile={isMyProfile} />
     </HydrationBoundary>
   );
 };
