@@ -9,5 +9,6 @@ export const ROUTES = {
   PROFILE_EXAMPLES: '/profile-examples',
   PROFILE: (userLink: string) => `/profile/${userLink}`,
   PROJECT: (userLink: string, projectId: string | number) => `/profile/${userLink}/project/${projectId}`,
+  PROJECT_DETAIL: (projectId: string | number) => `/projects/${projectId}`,
   TERMS_OF_SERVICE: '/policies/terms-of-service',
 } as const;

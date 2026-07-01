@@ -63,22 +63,11 @@ const sortProjects = (projects: UserProjectResponse[], sortOrder: SortOrder) =>
   });
 
 export const ProjectSection = ({ userLink }: ProjectSectionProps) => {
-  const { data: projects, isPending, isError } = useUserProjects(userLink);
+  const { data: projects } = useUserProjects(userLink);
   const [showAll, setShowAll] = useState(false);
   const [selectedSort, setSelectedSort] = useState<SortOrder>('latest');
 
-  const sortedProjects = useMemo(
-    () => (projects ? sortProjects(projects, selectedSort) : []),
-    [projects, selectedSort],
-  );
-
-  if (isPending) {
-    return <p className="text-body-sm text-text-subtle">프로젝트 정보를 불러오는 중...</p>;
-  }
-
-  if (isError) {
-    return <p className="text-body-sm text-text-error">프로젝트 정보를 불러오지 못했습니다.</p>;
-  }
+  const sortedProjects = useMemo(() => sortProjects(projects, selectedSort), [projects, selectedSort]);
 
   if (projects.length === 0) {
     return (
