@@ -30,14 +30,7 @@ const ProjectPage = async ({ params }: Props) => {
     }),
   ]);
 
-  return (
-    <ProjectDetailStream
-      userId={profile.userId}
-      userLink={profile.userLink}
-      projectId={projectIdNum}
-      state={dehydrate(queryClient)}
-    />
-  );
+  return <ProjectDetailStream userLink={profile.userLink} projectId={projectIdNum} state={dehydrate(queryClient)} />;
 };
 
 export default ProjectPage;

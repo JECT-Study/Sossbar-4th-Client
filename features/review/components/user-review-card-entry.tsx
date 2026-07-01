@@ -6,20 +6,20 @@ import { UserReviewCardGate } from './user-review-card-gate';
 import { fetchReviews, reviewKeys } from '../review.api';
 
 interface Props {
-  userId: number;
+  userLink: string;
 }
 
-export const UserReviewCardEntry = async ({ userId }: Props) => {
+export const UserReviewCardEntry = async ({ userLink }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: reviewKeys.reviews(userId),
-    queryFn: () => fetchReviews(userId),
+    queryKey: reviewKeys.reviews(userLink),
+    queryFn: () => fetchReviews(userLink),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <UserReviewCardGate userId={userId} />
+      <UserReviewCardGate userLink={userLink} />
     </HydrationBoundary>
   );
 };

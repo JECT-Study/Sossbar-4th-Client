@@ -23,7 +23,7 @@ export const ProfileExamplesClient = ({ userId, userLink }: Props) => {
               <TagCardGate userLink={userLink} />
               <SpectrumCardGate userLink={userLink} showDistribution />
             </div>
-            <UserReviewCardGate userId={userId} />
+            <UserReviewCardGate userLink={userLink} />
           </>
         }
         projectsTabContent={<ProjectSection userId={userId} userLink={userLink} />}

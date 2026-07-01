@@ -33,7 +33,7 @@ const Page = async () => {
               </Suspense>
             </div>
             <Suspense fallback={<UserReviewCardLoading />}>
-              <UserReviewCardEntry userId={myProfile.userId} />
+              <UserReviewCardEntry userLink={myProfile.userLink} />
             </Suspense>
           </>
         }

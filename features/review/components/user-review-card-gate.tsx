@@ -10,10 +10,10 @@ import { UserReviewCard } from './review-list/user-review-card';
 import { UserReviewCardLoading } from './user-review-card-loading';
 
 interface Props {
-  userId: number;
+  userLink: string;
 }
 
-export const UserReviewCardGate = ({ userId }: Props) => {
+export const UserReviewCardGate = ({ userLink }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -30,7 +30,7 @@ export const UserReviewCardGate = ({ userId }: Props) => {
       )}
     >
       <Suspense fallback={<UserReviewCardLoading />}>
-        <UserReviewCard userId={userId} />
+        <UserReviewCard userLink={userLink} />
       </Suspense>
     </ErrorBoundary>
   );
