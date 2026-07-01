@@ -2,18 +2,18 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
 import { ApiError } from '@/shared/lib/api';
 
 import type { SignupStepId } from './auth.constants';
-import type { SignupFormData } from './auth.types';
+import type { AccountDeletionFormData, DeleteAccountPayload, SignupFormData } from './auth.types';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 
-import { createSignup } from './auth.api';
-import { AGREEMENTS } from './auth.constants';
-import { SignupFormSchema } from './auth.schemas';
+import { createSignup, deleteAccount } from './auth.api';
+import { AGREEMENTS, WITHDRAW_REASON_ENUM_MAP } from './auth.constants';
+import { AccountDeletionFormSchema, SignupFormSchema } from './auth.schemas';
 
 export const useSignupMutation = () => {
   return useMutation({
@@ -131,4 +131,74 @@ export const useSignupFlow = () => {
   };
 
   return { form, currentStep, goNext, goPrev, isPending };
+};
+
+const toDeleteAccountPayload = (data: AccountDeletionFormData): DeleteAccountPayload => {
+  const detail = data.reason === 'other' ? data.detail?.trim() : undefined;
+
+  return {
+    userDeleteReasonEnum: WITHDRAW_REASON_ENUM_MAP[data.reason],
+    ...(detail ? { detail } : {}),
+  };
+};
+
+interface UseAccountDeletionFormParams {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export const useAccountDeletionForm = ({ open, onOpenChange }: UseAccountDeletionFormParams) => {
+  const form = useForm<AccountDeletionFormData>({
+    resolver: zodResolver(AccountDeletionFormSchema),
+    defaultValues: { detail: '' },
+    mode: 'onChange',
+  });
+
+  const { mutateAsync: submitDeleteAccount, isPending: isSubmitting } = useMutation({
+    mutationFn: deleteAccount,
+  });
+
+  const [isCompleteModalOpen, setCompleteModalOpen] = useState(false);
+
+  const reason = useWatch({ control: form.control, name: 'reason' });
+  const isDetailEnabled = reason === 'other';
+
+  const { clearErrors, reset, setValue } = form;
+
+  useEffect(() => {
+    if (isDetailEnabled) {
+      return;
+    }
+    clearErrors('detail');
+    setValue('detail', '', { shouldDirty: false, shouldTouch: false, shouldValidate: false });
+  }, [clearErrors, isDetailEnabled, setValue]);
+
+  useEffect(() => {
+    if (open) {
+      reset();
+    }
+  }, [open, reset]);
+
+  const handleFormSubmit = form.handleSubmit(async (data) => {
+    try {
+      await submitDeleteAccount(toDeleteAccountPayload(data));
+      onOpenChange(false);
+      setCompleteModalOpen(true);
+    } catch {
+      form.setError('root', { message: '오류가 발생했습니다. 잠시 후 다시 시도해주세요.' });
+    }
+  });
+
+  const closeCompleteModal = useCallback(() => setCompleteModalOpen(false), []);
+
+  const canSubmit = form.formState.isValid && !form.formState.isSubmitting && !isSubmitting;
+
+  return {
+    form,
+    isDetailEnabled,
+    canSubmit,
+    isCompleteModalOpen,
+    closeCompleteModal,
+    handleFormSubmit,
+  };
 };

@@ -1,6 +1,6 @@
 import { apiRequest } from '@/shared/lib/api';
 
-import type { KakaoLoginResult, SignupPayload, SignupResponse } from './auth.types';
+import type { DeleteAccountPayload, KakaoLoginResult, SignupPayload, SignupResponse } from './auth.types';
 
 const KAKAO_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'https://api.sossbar.com';
 
@@ -46,6 +46,10 @@ export const createSignup = (payload: SignupPayload): Promise<SignupResponse> =>
     method: 'POST',
     body: createSignupFormData(payload),
   });
+
+export const deleteAccount = async (payload: DeleteAccountPayload): Promise<void> => {
+  await apiRequest('/users', { method: 'DELETE', body: payload });
+};
 
 // 인가코드 → 세션 쿠키 교환. 실패 시 ok:false (route가 '/'로 리다이렉트)
 export const exchangeKakaoCode = async (code: string): Promise<KakaoLoginResult> => {
