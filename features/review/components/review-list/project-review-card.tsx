@@ -1,14 +1,14 @@
 'use client';
 
 import { ReviewListCard } from './review-list-card';
-import { useProjectReviews } from '../../api/queries';
+import { useProjectReviews } from '../../review.hooks';
 
 interface Props {
   userId: number;
   projectId: number;
 }
 
-export const ProjectReviewContainer = ({ userId, projectId }: Props) => {
+export const ProjectReviewCard = ({ userId, projectId }: Props) => {
   const { data: reviews = [], isError } = useProjectReviews(userId, projectId);
 
   if (isError) {

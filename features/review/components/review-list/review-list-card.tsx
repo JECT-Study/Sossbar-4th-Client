@@ -10,7 +10,7 @@ import { SortDropdown, type SortOrder } from '@/shared/components/sort-dropdown'
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
-import type { Review } from '../../types/review';
+import type { Review } from '../../review.types';
 
 import { ReviewListItem } from './review-list-item';
 

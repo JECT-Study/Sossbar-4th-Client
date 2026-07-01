@@ -1,7 +1,29 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+'use client';
 
-import { fetchProjectReviews, fetchReviewFormData, fetchReviewValidation, fetchReviews } from './fetchers';
-import { reviewKeys } from './query-keys';
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+
+import { projectKeys } from '@/features/project';
+
+import {
+  createReview,
+  fetchProjectReviews,
+  fetchReviewFormData,
+  fetchReviewValidation,
+  fetchReviews,
+  reviewKeys,
+} from './review.api';
+
+export const useCreateReview = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createReview,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: reviewKeys.all });
+      queryClient.invalidateQueries({ queryKey: projectKeys.all });
+    },
+  });
+};
 
 export const useUserReviews = (userId: number) =>
   useSuspenseQuery({

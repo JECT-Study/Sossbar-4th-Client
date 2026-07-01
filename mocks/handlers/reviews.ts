@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import type { Spectrum } from '@/features/review/types/spectrum';
+import type { Spectrum } from '@/features/review';
 
 import { isMockReviewSubmitted, markMockReviewSubmitted } from '../lib/submitted-reviews';
 

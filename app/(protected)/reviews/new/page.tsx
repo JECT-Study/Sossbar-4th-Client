@@ -4,8 +4,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { buildReviewRequestDescription } from '@/features/profile';
-import { fetchReviewFormData, ReviewWriteContent, reviewKeys } from '@/features/review';
-import { fetchReviewValidation } from '@/features/review/api/fetchers';
+import { fetchReviewFormData, fetchReviewValidation, ReviewWriteForm, reviewKeys } from '@/features/review';
 import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
 import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
 import { getQueryClient } from '@/shared/lib/get-query-client';
@@ -97,7 +96,7 @@ const ReviewNewPage = async ({ searchParams }: ReviewNewPageProps) => {
     <section className="min-h-0 flex-1" aria-label="후기 작성">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense fallback={<ReviewNewFallback />}>
-          <ReviewWriteContent />
+          <ReviewWriteForm />
         </Suspense>
       </HydrationBoundary>
     </section>

@@ -1,15 +1,15 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
-import { fetchReviews } from '@/features/review/api/fetchers';
-import { reviewKeys } from '@/features/review/api/query-keys';
-import { UserReviewContainerBoundary } from '@/features/review/components/user-review-container-boundary';
 import { getQueryClient } from '@/shared/lib/get-query-client';
+
+import { UserReviewCardGate } from './user-review-card-gate';
+import { fetchReviews, reviewKeys } from '../review.api';
 
 interface Props {
   userId: number;
 }
 
-export const UserReviewStream = async ({ userId }: Props) => {
+export const UserReviewCardEntry = async ({ userId }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
@@ -19,7 +19,7 @@ export const UserReviewStream = async ({ userId }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <UserReviewContainerBoundary userId={userId} />
+      <UserReviewCardGate userId={userId} />
     </HydrationBoundary>
   );
 };
