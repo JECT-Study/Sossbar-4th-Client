@@ -7,7 +7,6 @@ import type {
   ProjectCardMember,
   ProjectMemberResponse,
   ProjectMemberReviewStatus,
-  ProjectResponse,
 } from './project.types';
 import type { QueryClient } from '@tanstack/react-query';
 
@@ -118,7 +117,3 @@ export const mapMyProjectToCardItem = (project: MyProjectResponse, sessionUser: 
 
 export const mapMyProjectsToCardItems = (projects: MyProjectResponse[], sessionUser: SessionInfo): ProjectCardItem[] =>
   projects.map((project) => mapMyProjectToCardItem(project, sessionUser));
-
-/** 방장 판단: 프로젝트의 members 배열에서 현재 유저가 LEADER인지 확인 */
-export const isProjectLeader = (project: ProjectResponse, myUserId: number): boolean =>
-  project.members.some((member) => member.userId === myUserId && member.memberStatus === 'LEADER');

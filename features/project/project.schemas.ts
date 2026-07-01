@@ -28,38 +28,6 @@ export const CreateProjectFormSchema = z.object({
     }),
 });
 
-export const ProjectDetailInfoFormSchema = z
-  .object({
-    projectName: z
-      .string()
-      .trim()
-      .min(1, { message: '프로젝트명을 입력해 주세요.' })
-      .max(PROJECT_FIELD_MAX_LENGTH, { message: '텍스트가 초과했습니다.' }),
-    host: z
-      .string()
-      .trim()
-      .min(1, { message: '주최사를 입력해 주세요.' })
-      .max(PROJECT_FIELD_MAX_LENGTH, { message: '텍스트가 초과했습니다.' }),
-    startDate: z.string().nullable(),
-    endDate: z.string().nullable(),
-    projectUrl: z.union([z.literal(''), z.string().url({ message: '올바른 URL을 입력해 주세요.' })]),
-    projectUrlType: z.enum(['LINK']),
-    image: z.union([
-      z.custom<File>((value) => isFile(value), { message: '이미지 파일을 선택해 주세요.' }),
-      z.string(),
-      z.null(),
-    ]),
-  })
-  .refine(
-    ({ startDate, endDate }) => {
-      if (startDate == null || endDate == null || startDate === '' || endDate === '') {
-        return true;
-      }
-      return startDate <= endDate;
-    },
-    { message: '종료일은 시작일 이후여야 합니다.', path: ['endDate'] },
-  );
-
 export const UpdateProjectFormSchema = z.object({
   projectName: z
     .string()

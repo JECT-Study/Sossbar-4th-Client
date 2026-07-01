@@ -4,7 +4,7 @@ export { ProjectsPageContent } from './components/projects-page-content';
 export { ProjectPageContent } from './components/project-page-content';
 export { ProjectSection } from './components/project-section';
 export { ProjectStatusAlert } from './components/project-status-alert';
-export { ProjectDetailPageContent } from './components/project-detail-page-content';
+export { ProjectDetailPageContent } from './components/project-detail';
 export { ProjectDetailStream } from './components/project-detail-stream';
 export { ProjectsStream } from './components/projects-stream';
 export { ProjectSectionStream } from './components/project-section-stream';
@@ -26,7 +26,6 @@ export {
 } from './project.hooks';
 
 export {
-  isProjectLeader,
   mapMyProjectsToCardItems,
   mapMyProjectToCardItem,
   parseProjectInviteId,

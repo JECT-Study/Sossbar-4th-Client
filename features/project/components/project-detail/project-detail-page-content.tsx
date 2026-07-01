@@ -3,11 +3,10 @@
 import { useMyProfile } from '@/features/profile';
 import { PageContainer } from '@/shared/components/page-container';
 
-import { useProject } from '../project.hooks';
-import { isProjectLeader } from '../project.lib';
 import { ProjectDetailHeading } from './project-detail-heading';
 import { ProjectInfoCard } from './project-info-card';
 import { ProjectMembersCard } from './project-members-card';
+import { useProject } from '../../project.hooks';
 
 interface Props {
   projectId: number;
@@ -41,14 +40,15 @@ export const ProjectDetailPageContent = ({ projectId }: Props) => {
     );
   }
 
-  const isLeader = isProjectLeader(project, myProfile.userId);
+  const isLeader = project.members.some(
+    (member) => member.userId === myProfile.userId && member.memberStatus === 'LEADER',
+  );
 
   return (
     <PageContainer className="mb-20 flex flex-col gap-8">
-      <ProjectDetailHeading projectId={projectId} projectStatus={project.projectStatus} isLeader={isLeader} />
+      <ProjectDetailHeading projectStatus={project.projectStatus} isLeader={isLeader} />
       <ProjectInfoCard project={project} isLeader={isLeader} />
       <ProjectMembersCard
-        projectId={projectId}
         members={project.members}
         projectStatus={project.projectStatus}
         isLeader={isLeader}

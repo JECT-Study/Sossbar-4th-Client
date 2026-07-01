@@ -24,7 +24,7 @@ import {
   updateProject,
 } from './project.api';
 import { buildProjectInviteUrl, invalidateProjectListQueries, mapMyProjectsToCardItems } from './project.lib';
-import { CreateProjectFormSchema, ProjectDetailInfoFormSchema, UpdateProjectFormSchema } from './project.schemas';
+import { CreateProjectFormSchema, UpdateProjectFormSchema } from './project.schemas';
 
 export const useProjects = (enabled = true) =>
   useQuery({
@@ -331,106 +331,6 @@ type UseProjectCardsResult = {
   isError: boolean;
   error: Error | null;
   refetch: ReturnType<typeof useProjects>['refetch'];
-};
-
-export type ProjectDetailInfoFormValues = z.infer<typeof ProjectDetailInfoFormSchema>;
-
-interface UseProjectDetailInfoFormParams {
-  projectId: number;
-  defaultValues: ProjectDetailInfoFormValues;
-}
-
-export const useProjectDetailInfoForm = ({ projectId, defaultValues }: UseProjectDetailInfoFormParams) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const form = useForm<ProjectDetailInfoFormValues>({
-    defaultValues,
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-    resolver: zodResolver(ProjectDetailInfoFormSchema),
-  });
-  const { mutateAsync: updateProjectMutation, isPending: isSaving } = useUpdateProject(projectId);
-
-  const startEditing = useCallback(() => {
-    form.reset(defaultValues);
-    setIsEditing(true);
-  }, [form, defaultValues]);
-
-  const cancelEditing = useCallback(() => {
-    form.reset(defaultValues);
-    setIsEditing(false);
-  }, [form, defaultValues]);
-
-  const onSubmit = useCallback(
-    async (values: ProjectDetailInfoFormValues) => {
-      try {
-        form.clearErrors('root');
-        await updateProjectMutation({
-          request: {
-            projectName: values.projectName.trim(),
-            host: values.host.trim(),
-            startDate: values.startDate,
-            endDate: values.endDate,
-            projectUrl: values.projectUrl,
-            projectUrlType: values.projectUrlType,
-          },
-          image: values.image instanceof File ? values.image : null,
-        });
-        setIsEditing(false);
-      } catch (error) {
-        form.setError('root', {
-          message:
-            error instanceof ApiError
-              ? error.message
-              : '프로젝트 수정 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.',
-        });
-      }
-    },
-    [form, updateProjectMutation],
-  );
-
-  return { form, isSaving, isEditing, startEditing, cancelEditing, onSubmit };
-};
-
-interface UseProjectMembersEditParams {
-  projectId: number;
-}
-
-export const useProjectMembersEdit = ({ projectId }: UseProjectMembersEditParams) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [pendingRemovalIds, setPendingRemovalIds] = useState<Set<number>>(new Set());
-  const { mutateAsync: removeMember, isPending: isSaving } = useDeleteProjectMember(projectId);
-
-  const startEditing = useCallback(() => {
-    setPendingRemovalIds(new Set());
-    setIsEditing(true);
-  }, []);
-
-  const cancelEditing = useCallback(() => {
-    setPendingRemovalIds(new Set());
-    setIsEditing(false);
-  }, []);
-
-  const toggleRemoval = useCallback((userId: number) => {
-    setPendingRemovalIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(userId)) {
-        next.delete(userId);
-      } else {
-        next.add(userId);
-      }
-      return next;
-    });
-  }, []);
-
-  const submit = useCallback(async () => {
-    for (const userId of pendingRemovalIds) {
-      await removeMember(userId);
-    }
-    setPendingRemovalIds(new Set());
-    setIsEditing(false);
-  }, [pendingRemovalIds, removeMember]);
-
-  return { isEditing, startEditing, cancelEditing, pendingRemovalIds, toggleRemoval, isSaving, submit };
 };
 
 export const useProjectCards = (): UseProjectCardsResult => {

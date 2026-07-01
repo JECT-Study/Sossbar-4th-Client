@@ -14,7 +14,6 @@ export type ProjectMemberChipState = 'writable' | 'completed' | 'self';
 
 interface BaseProjectMemberChipProps extends ComponentPropsWithRef<'div'> {
   name: string;
-  showReviewButton?: boolean;
 }
 
 type ReviewActionProps =
@@ -45,11 +44,10 @@ export const ProjectMemberChip = ({
   onRemove,
   onWriteReview,
   removable,
-  showReviewButton = true,
   state,
   ...restProps
 }: ProjectMemberChipProps) => {
-  const shouldShowReviewButton = showReviewButton && state !== 'self';
+  const showReviewButton = state !== 'self';
   const reviewCompleted = state === 'completed';
 
   return (
@@ -68,7 +66,7 @@ export const ProjectMemberChip = ({
       </Avatar.Root>
       <span className="text-body-base text-text-subtle font-medium">{name}</span>
 
-      {shouldShowReviewButton ? (
+      {showReviewButton ? (
         <Button
           type="button"
           variant="tertiary"
