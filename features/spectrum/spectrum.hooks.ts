@@ -2,8 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { fetchSpectrum, fetchSpectrumByProject } from './spectrum.api';
-import { spectrumKeys } from './spectrum.query-keys';
+import { fetchSpectrum, fetchSpectrumByProject, spectrumKeys } from './spectrum.api';
 
 interface UseSpectrumParams {
   userLink: string;
