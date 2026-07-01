@@ -3,8 +3,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useId, useState } from 'react';
 
-import { fetchReceivedTags, fetchReceivedTagsByProject } from './tag.api';
-import { tagKeys } from './tag.query-keys';
+import { fetchReceivedTags, fetchReceivedTagsByProject, tagKeys } from './tag.api';
 
 interface UseReceivedTagsParams {
   userLink: string;
