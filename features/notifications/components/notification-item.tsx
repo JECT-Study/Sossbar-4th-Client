@@ -1,6 +1,8 @@
-import type { NotificationItem as NotificationItemType } from '@/features/notifications';
-import { formatRelativeTime } from '@/features/notifications';
 import { cn } from '@/shared/lib/cn';
+
+import type { NotificationItem as NotificationItemType } from '../notification.types';
+
+import { formatRelativeTime } from '../lib/format-relative-time';
 
 type NotificationItemProps = {
   notification: NotificationItemType;

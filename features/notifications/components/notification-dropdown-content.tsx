@@ -1,5 +1,6 @@
-import type { NotificationItem as NotificationItemType } from '@/features/notifications';
 import { cn } from '@/shared/lib/cn';
+
+import type { NotificationItem as NotificationItemType } from '../notification.types';
 
 import { NotificationItem } from './notification-item';
 

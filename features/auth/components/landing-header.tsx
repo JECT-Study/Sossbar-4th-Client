@@ -5,13 +5,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Suspense, useState } from 'react';
 
-import { LoginButton } from '@/features/auth';
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { useMyProfile } from '@/features/profile';
 import { Button } from '@/shared/components/button/button';
+import { HeaderLogoLink } from '@/shared/components/header/header-logo-link';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
-import { HeaderLogoLink } from './header-logo-link';
+import { LoginButton } from './login-button';
 
 const actionButtonClassName = 'h-10 min-w-[68px] shrink-0 rounded-md px-5 py-0';
 
@@ -44,7 +44,7 @@ const LandingHeaderInner = () => {
   return (
     <header
       className={cn(
-        'px-padding-l py-padding-m sticky top-0 z-50 border-b',
+        'px-padding-l py-padding-m sticky top-0 z-20 border-b',
         isLoggedIn
           ? 'border-divider-1 bg-white/45 backdrop-blur-[10px]'
           : 'border-divider-gray-light bg-white/50 backdrop-blur-[5px]',

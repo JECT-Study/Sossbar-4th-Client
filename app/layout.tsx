@@ -5,14 +5,13 @@ import localFont from 'next/font/local';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
+import { LandingHeader, LoginButton, LoginModal } from '@/features/auth';
 import { fetchMyProfileOptional } from '@/features/profile/api/fetch-my-profile-optional';
 import { HeaderAuthGate } from '@/features/profile/components/header-auth-gate';
 import { profileKeys } from '@/features/profile/profile.query-keys';
-import { LoginModal } from '@/shared/components/dialog/login-modal';
 import { GoogleAnalytics } from '@/shared/components/google-analytics';
 import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-page-view';
 import { Header } from '@/shared/components/header/header';
-import { LandingHeader } from '@/shared/components/header/landing-header';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 import { QueryProvider } from '@/shared/providers/query-provider';
 
@@ -79,7 +78,10 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
             <GoogleAnalyticsPageView />
           </Suspense>
           <HydrationBoundary state={dehydrate(queryClient)}>
-            <LayoutClient defaultHeader={<Header avatarSlot={<HeaderAuthGate />} />} landingHeader={<LandingHeader />}>
+            <LayoutClient
+              defaultHeader={<Header avatarSlot={<HeaderAuthGate />} avatarFallback={<LoginButton />} />}
+              landingHeader={<LandingHeader />}
+            >
               {children}
             </LayoutClient>
             <Suspense fallback={null}>
