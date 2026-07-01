@@ -9,13 +9,13 @@ import { SoftSkillsSpectrum } from './soft-skills-spectrum';
 import { useSpectrum } from '../soft-skills.hooks';
 
 interface Props {
-  userId: number;
+  userLink: string;
   projectId?: number;
   showDistribution?: boolean;
 }
 
-export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: Props) => {
-  const { data: spectrumInfo } = useSpectrum({ userId, projectId });
+export const SoftSkillsCard = ({ userLink, projectId, showDistribution = true }: Props) => {
+  const { data: spectrumInfo } = useSpectrum({ userLink, projectId });
 
   return (
     <ProfileStatCard

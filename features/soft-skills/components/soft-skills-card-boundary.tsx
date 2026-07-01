@@ -10,12 +10,12 @@ import { SoftSkillsCard } from './soft-skills-card';
 import { SoftSkillsCardSkeleton } from './soft-skills-card.skeleton';
 
 interface Props {
-  userId: number;
+  userLink: string;
   projectId?: number;
   showDistribution?: boolean;
 }
 
-export const SoftSkillsCardBoundary = ({ userId, projectId, showDistribution }: Props) => {
+export const SoftSkillsCardBoundary = ({ userLink, projectId, showDistribution }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -32,7 +32,7 @@ export const SoftSkillsCardBoundary = ({ userId, projectId, showDistribution }: 
       )}
     >
       <Suspense fallback={<SoftSkillsCardSkeleton />}>
-        <SoftSkillsCard userId={userId} projectId={projectId} showDistribution={showDistribution} />
+        <SoftSkillsCard userLink={userLink} projectId={projectId} showDistribution={showDistribution} />
       </Suspense>
     </ErrorBoundary>
   );

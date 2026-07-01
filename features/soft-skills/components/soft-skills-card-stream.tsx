@@ -7,22 +7,22 @@ import { fetchSpectrum, fetchSpectrumByProject } from '../soft-skills.api';
 import { softSkillsKeys } from '../soft-skills.query-keys';
 
 interface Props {
-  userId: number;
+  userLink: string;
   projectId?: number;
   showDistribution?: boolean;
 }
 
-export const SoftSkillsCardStream = async ({ userId, projectId, showDistribution }: Props) => {
+export const SoftSkillsCardStream = async ({ userLink, projectId, showDistribution }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: softSkillsKeys.spectrum(userId, projectId),
-    queryFn: () => (projectId === undefined ? fetchSpectrum(userId) : fetchSpectrumByProject(userId, projectId)),
+    queryKey: softSkillsKeys.spectrum(userLink, projectId),
+    queryFn: () => (projectId === undefined ? fetchSpectrum(userLink) : fetchSpectrumByProject(userLink, projectId)),
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <SoftSkillsCardBoundary userId={userId} projectId={projectId} showDistribution={showDistribution} />
+      <SoftSkillsCardBoundary userLink={userLink} projectId={projectId} showDistribution={showDistribution} />
     </HydrationBoundary>
   );
 };

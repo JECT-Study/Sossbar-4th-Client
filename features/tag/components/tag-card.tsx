@@ -11,14 +11,14 @@ import { useReceivedTags, useTagCollapsible } from '../tag.hooks';
 const EMPTY_TAGS = [] as const;
 
 interface Props {
-  userId: number;
+  userLink: string;
   projectId?: number;
   collapsible?: boolean;
 }
 
-export const TagCard = ({ userId, projectId, collapsible }: Props) => {
+export const TagCard = ({ userLink, projectId, collapsible }: Props) => {
   const { isCollapsed, contentId, toggle } = useTagCollapsible(Boolean(collapsible));
-  const { data: { top3Tags = EMPTY_TAGS, allTags = EMPTY_TAGS } = {} } = useReceivedTags({ userId, projectId });
+  const { data: { top3Tags = EMPTY_TAGS, allTags = EMPTY_TAGS } = {} } = useReceivedTags({ userLink, projectId });
   const hasTags = top3Tags.length > 0 || allTags.length > 0;
 
   return (

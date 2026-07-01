@@ -15,7 +15,7 @@ import { ProjectSectionSkeleton } from '@/features/project/components/project-se
 import { UserReviewStream } from '@/features/review';
 import { UserReviewContainerSkeleton } from '@/features/review/components/user-review-container.skeleton';
 import { SoftSkillsCardSkeleton, SoftSkillsCardStream } from '@/features/soft-skills';
-import { TagCardSkeleton, TagCardStream } from '@/features/tag';
+import { TagCardEntry, TagCardLoading } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 import { SHARE_USER_NAME_PARAM } from '@/shared/constants/share-query';
 import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
@@ -83,7 +83,10 @@ const Page = async ({ params }: ProfilePageProps) => {
   }
 
   const cookieStore = await cookies();
-  const myProfile = await fetchMyProfile({ headers: { Cookie: cookieStore.toString() } }).catch(() => null);
+  const [profile, myProfile] = await Promise.all([
+    fetchProfileById(profileUserId),
+    fetchMyProfile({ headers: { Cookie: cookieStore.toString() } }).catch(() => null),
+  ]);
   const isMyProfile = myProfile?.userId === profileUserId;
 
   return (
@@ -96,11 +99,11 @@ const Page = async ({ params }: ProfilePageProps) => {
         allTabContent={
           <>
             <div className="flex gap-[30px]">
-              <Suspense fallback={<TagCardSkeleton />}>
-                <TagCardStream userId={profileUserId} />
+              <Suspense fallback={<TagCardLoading />}>
+                <TagCardEntry userLink={profile.userLink} />
               </Suspense>
               <Suspense fallback={<SoftSkillsCardSkeleton />}>
-                <SoftSkillsCardStream userId={profileUserId} showDistribution />
+                <SoftSkillsCardStream userLink={profile.userLink} showDistribution />
               </Suspense>
             </div>
             <Suspense fallback={<UserReviewContainerSkeleton />}>

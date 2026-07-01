@@ -2,8 +2,8 @@ import { apiRequest } from '@/shared/lib/api';
 
 import type { ReceivedTags } from './tag.types';
 
-export const fetchReceivedTags = (userId: number): Promise<ReceivedTags> =>
-  apiRequest<ReceivedTags>(`/reviews/tags/${userId}`);
+export const fetchReceivedTags = (userLink: string): Promise<ReceivedTags> =>
+  apiRequest<ReceivedTags>(`/reviews/tags/${userLink}`);
 
-export const fetchReceivedTagsByProject = (userId: number, projectId: number): Promise<ReceivedTags> =>
-  apiRequest<ReceivedTags>(`/reviews/tags/${userId}/${projectId}`);
+export const fetchReceivedTagsByProject = (userLink: string, projectId: number): Promise<ReceivedTags> =>
+  apiRequest<ReceivedTags>(`/reviews/tags/${userLink}/${projectId}`);
