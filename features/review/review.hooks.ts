@@ -12,14 +12,7 @@ import { projectKeys, useProject } from '@/features/project';
 import type { ReviewStepId } from './review.constants';
 import type { ReviewWriteFormData } from './review.types';
 
-import {
-  createReview,
-  fetchProjectReviews,
-  fetchReviewFormData,
-  fetchReviewValidation,
-  fetchReviews,
-  reviewKeys,
-} from './review.api';
+import { createReview, fetchProjectReviews, fetchReviewFormData, fetchReviews, reviewKeys } from './review.api';
 import { REVIEW_DEFAULT_SPECTRUM_STEP, REVIEW_STEPS } from './review.constants';
 import { spectrumStepToValue } from './review.lib';
 import { ReviewWriteFormSchema } from './review.schemas';
@@ -53,14 +46,6 @@ export const useProjectReviews = (userLink: string, projectId: number) =>
     queryKey: reviewKeys.projectReviews(userLink, projectId),
     queryFn: () => fetchProjectReviews(userLink, projectId),
     enabled: userLink.length > 0 && projectId > 0,
-    throwOnError: false,
-  });
-
-export const useReviewValidation = (projectId: number, revieweeId: number) =>
-  useQuery({
-    queryKey: reviewKeys.validate(projectId, revieweeId),
-    queryFn: () => fetchReviewValidation(projectId, revieweeId),
-    enabled: projectId > 0 && revieweeId > 0,
     throwOnError: false,
   });
 

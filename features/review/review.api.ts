@@ -11,7 +11,6 @@ export const reviewKeys = {
   reviews: (userLink: string) => [...reviewKeys.all, 'reviews', userLink] as const,
   formData: () => [...reviewKeys.all, 'formData'] as const,
   projectReviews: (userLink: string, projectId: number) => [...reviewKeys.all, 'reviews', userLink, projectId] as const,
-  validate: (projectId: number, revieweeId: number) => [...reviewKeys.all, 'validate', projectId, revieweeId] as const,
 };
 
 interface CreateReviewReviewReqDto {

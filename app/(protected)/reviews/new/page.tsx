@@ -73,16 +73,13 @@ const ReviewNewPage = async ({ searchParams }: ReviewNewPageProps) => {
 
   const cookieStore = await cookies();
 
-  try {
-    const validation = await fetchReviewValidation(projectId, revieweeId, {
-      headers: { Cookie: cookieStore.toString() },
-    });
+  // 요청 실패(네트워크/서버 오류)는 error.tsx의 다시 시도 UI로 전파하고, 정상 거절(canReview=false)만 404로 처리한다.
+  const validation = await fetchReviewValidation(projectId, revieweeId, {
+    headers: { Cookie: cookieStore.toString() },
+  });
 
-    if (!validation.canReview) {
-      return notFound();
-    }
-  } catch {
-    // API 오류(401·네트워크·서버 장애)는 404로 처리하지 않고 폼을 표시; 제출 시 백엔드가 재검증한다.
+  if (!validation.canReview) {
+    return notFound();
   }
 
   const queryClient = getQueryClient();
