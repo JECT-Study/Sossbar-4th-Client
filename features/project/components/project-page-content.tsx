@@ -3,7 +3,7 @@
 import Image from 'next/image';
 
 import { ProjectReviewContainer } from '@/features/review';
-import { SoftSkillsCardBoundary } from '@/features/soft-skills';
+import { SpectrumCardGate } from '@/features/spectrum';
 import { TagCardGate } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
@@ -62,7 +62,7 @@ export const ProjectPageContent = ({ userId, userLink, projectId }: ProjectPageC
 
       <div className="flex gap-[30px]">
         <TagCardGate userLink={userLink} projectId={projectId} collapsible />
-        <SoftSkillsCardBoundary userLink={userLink} projectId={projectId} showDistribution={false} />
+        <SpectrumCardGate userLink={userLink} projectId={projectId} showDistribution={false} />
       </div>
 
       <ProjectReviewContainer userId={userId} projectId={projectId} />

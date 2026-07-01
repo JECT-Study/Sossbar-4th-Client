@@ -3,7 +3,7 @@
 import { ProfileByIdSectionGate, ProfileDetailView } from '@/features/profile';
 import { ProjectSection } from '@/features/project';
 import { UserReviewContainerBoundary } from '@/features/review';
-import { SoftSkillsCardBoundary } from '@/features/soft-skills';
+import { SpectrumCardGate } from '@/features/spectrum';
 import { TagCardGate } from '@/features/tag';
 
 interface Props {
@@ -21,7 +21,7 @@ export const ProfileExamplesClient = ({ userId, userLink }: Props) => {
           <>
             <div className="flex gap-[30px]">
               <TagCardGate userLink={userLink} />
-              <SoftSkillsCardBoundary userLink={userLink} showDistribution />
+              <SpectrumCardGate userLink={userLink} showDistribution />
             </div>
             <UserReviewContainerBoundary userId={userId} />
           </>

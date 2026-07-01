@@ -6,7 +6,7 @@ import { ProjectSectionStream } from '@/features/project/components/project-sect
 import { ProjectSectionSkeleton } from '@/features/project/components/project-section.skeleton';
 import { UserReviewStream } from '@/features/review';
 import { UserReviewContainerSkeleton } from '@/features/review/components/user-review-container.skeleton';
-import { SoftSkillsCardSkeleton, SoftSkillsCardStream } from '@/features/soft-skills';
+import { SpectrumCardEntry, SpectrumCardLoading } from '@/features/spectrum';
 import { TagCardEntry, TagCardLoading } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 
@@ -29,8 +29,8 @@ const Page = async () => {
               <Suspense fallback={<TagCardLoading />}>
                 <TagCardEntry userLink={myProfile.userLink} />
               </Suspense>
-              <Suspense fallback={<SoftSkillsCardSkeleton />}>
-                <SoftSkillsCardStream userLink={myProfile.userLink} showDistribution />
+              <Suspense fallback={<SpectrumCardLoading />}>
+                <SpectrumCardEntry userLink={myProfile.userLink} showDistribution />
               </Suspense>
             </div>
             <Suspense fallback={<UserReviewContainerSkeleton />}>
