@@ -1,18 +1,18 @@
 'use client';
 
-import type { Profile } from '../profile.types';
+import type { PublicProfile } from '../profile.types';
 
 import { useProfileShare } from '../profile.hooks';
 import { ProfileShareActions } from './profile-share-actions';
 import { ProfileSummary } from './profile-summary';
 
 interface Props {
-  profile: Profile;
+  profile: PublicProfile;
 }
 
 export const MyProfileShareSection = ({ profile }: Props) => {
   const { isShareTooltipOpen, shareTooltipMessage, closeShareTooltip, shareProfile } = useProfileShare({
-    userId: profile.userId,
+    userLink: profile.userLink,
     userName: profile.username,
   });
 

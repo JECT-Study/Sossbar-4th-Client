@@ -40,7 +40,7 @@ const Page = async () => {
         }
         projectsTabContent={
           <Suspense fallback={<ProjectSectionSkeleton />}>
-            <ProjectSectionStream userId={myProfile.userId} />
+            <ProjectSectionStream userId={myProfile.userId} userLink={myProfile.userLink} />
           </Suspense>
         }
       />

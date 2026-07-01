@@ -8,7 +8,7 @@ import { Dropdown } from '@/shared/components/dropdown';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
-import type { Profile } from '../profile.types';
+import type { MyProfile } from '../profile.types';
 
 const DEFAULT_AVATAR_SRC = '/sample_user.svg';
 
@@ -16,7 +16,7 @@ const dropdownItemClassName =
   'text-body-sm text-text-basic !h-[44px] min-h-0 shrink-0 justify-start rounded-md px-2 py-0 font-normal';
 
 interface Props {
-  myProfile: Profile;
+  myProfile: MyProfile;
   onLogout: () => void;
 }
 

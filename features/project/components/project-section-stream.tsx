@@ -5,7 +5,12 @@ import { getQueryClient } from '@/shared/lib/get-query-client';
 import { ProjectSection } from './project-section';
 import { fetchUserProjects, projectKeys } from '../project.api';
 
-export const ProjectSectionStream = async ({ userId }: { userId: number }) => {
+interface Props {
+  userId: number;
+  userLink: string;
+}
+
+export const ProjectSectionStream = async ({ userId, userLink }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
@@ -15,7 +20,7 @@ export const ProjectSectionStream = async ({ userId }: { userId: number }) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProjectSection userId={userId} />
+      <ProjectSection userId={userId} userLink={userLink} />
     </HydrationBoundary>
   );
 };

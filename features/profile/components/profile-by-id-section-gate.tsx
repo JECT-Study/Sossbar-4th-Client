@@ -10,11 +10,11 @@ import { ProfileByIdSection } from './profile-by-id-section';
 import { ProfileSectionLoading } from './profile-section-loading';
 
 interface Props {
-  userId: number;
+  userLink: string;
   isMyProfile?: boolean;
 }
 
-export const ProfileByIdSectionGate = ({ userId, isMyProfile }: Props) => {
+export const ProfileByIdSectionGate = ({ userLink, isMyProfile }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -31,7 +31,7 @@ export const ProfileByIdSectionGate = ({ userId, isMyProfile }: Props) => {
       )}
     >
       <Suspense fallback={<ProfileSectionLoading />}>
-        <ProfileByIdSection userId={userId} isMyProfile={isMyProfile} />
+        <ProfileByIdSection userLink={userLink} isMyProfile={isMyProfile} />
       </Suspense>
     </ErrorBoundary>
   );

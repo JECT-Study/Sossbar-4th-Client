@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 
-import type { Profile } from '../profile.types';
+import type { PublicProfile } from '../profile.types';
 
 import { ProfileAvatar } from './profile-avatar';
 
 interface Props {
-  profile: Profile;
+  profile: PublicProfile;
   shareActions?: ReactNode;
 }
 
