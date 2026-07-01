@@ -2,7 +2,7 @@
 
 import { ProfileByIdSectionGate, ProfileDetailView } from '@/features/profile';
 import { ProjectSection } from '@/features/project';
-import { UserReviewContainerBoundary } from '@/features/review';
+import { UserReviewCardGate } from '@/features/review';
 import { SpectrumCardGate } from '@/features/spectrum';
 import { TagCardGate } from '@/features/tag';
 
@@ -23,7 +23,7 @@ export const ProfileExamplesClient = ({ userId, userLink }: Props) => {
               <TagCardGate userLink={userLink} />
               <SpectrumCardGate userLink={userLink} showDistribution />
             </div>
-            <UserReviewContainerBoundary userId={userId} />
+            <UserReviewCardGate userLink={userLink} />
           </>
         }
         projectsTabContent={<ProjectSection userId={userId} userLink={userLink} />}

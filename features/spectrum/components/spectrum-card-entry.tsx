@@ -3,8 +3,7 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import { SpectrumCardGate } from './spectrum-card-gate';
-import { fetchSpectrum, fetchSpectrumByProject } from '../spectrum.api';
-import { spectrumKeys } from '../spectrum.query-keys';
+import { fetchSpectrum, fetchSpectrumByProject, spectrumKeys } from '../spectrum.api';
 
 interface Props {
   userLink: string;

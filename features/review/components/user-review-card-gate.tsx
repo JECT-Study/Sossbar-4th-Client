@@ -6,14 +6,14 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import { RetryErrorCard } from '@/shared/components/retry-error-card';
 
-import { UserReviewContainer } from './review-list/user-review-container';
-import { UserReviewContainerSkeleton } from './user-review-container.skeleton';
+import { UserReviewCard } from './review-list/user-review-card';
+import { UserReviewCardLoading } from './user-review-card-loading';
 
 interface Props {
-  userId: number;
+  userLink: string;
 }
 
-export const UserReviewContainerBoundary = ({ userId }: Props) => {
+export const UserReviewCardGate = ({ userLink }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -29,8 +29,8 @@ export const UserReviewContainerBoundary = ({ userId }: Props) => {
         />
       )}
     >
-      <Suspense fallback={<UserReviewContainerSkeleton />}>
-        <UserReviewContainer userId={userId} />
+      <Suspense fallback={<UserReviewCardLoading />}>
+        <UserReviewCard userLink={userLink} />
       </Suspense>
     </ErrorBoundary>
   );

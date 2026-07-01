@@ -12,8 +12,7 @@ import {
 } from '@/features/profile';
 import { ProjectSectionStream } from '@/features/project/components/project-section-stream';
 import { ProjectSectionSkeleton } from '@/features/project/components/project-section.skeleton';
-import { UserReviewStream } from '@/features/review';
-import { UserReviewContainerSkeleton } from '@/features/review/components/user-review-container.skeleton';
+import { UserReviewCardEntry, UserReviewCardLoading } from '@/features/review';
 import { SpectrumCardEntry, SpectrumCardLoading } from '@/features/spectrum';
 import { TagCardEntry, TagCardLoading } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
@@ -94,8 +93,8 @@ const Page = async ({ params }: ProfilePageProps) => {
                 <SpectrumCardEntry userLink={profile.userLink} showDistribution />
               </Suspense>
             </div>
-            <Suspense fallback={<UserReviewContainerSkeleton />}>
-              <UserReviewStream userId={profile.userId} />
+            <Suspense fallback={<UserReviewCardLoading />}>
+              <UserReviewCardEntry userLink={profile.userLink} />
             </Suspense>
           </>
         }

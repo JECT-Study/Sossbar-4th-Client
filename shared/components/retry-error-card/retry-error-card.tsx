@@ -21,7 +21,7 @@ export const RetryErrorCard = ({
   return (
     <section
       className={cn(
-        'border-border-gray-light bg-surface-gray-subtler flex w-full flex-col items-center justify-between gap-6 rounded-lg border py-8',
+        'border-border-gray-light bg-surface-gray-subtler flex w-full flex-col items-center justify-center gap-6 rounded-lg border py-8',
         className,
       )}
     >

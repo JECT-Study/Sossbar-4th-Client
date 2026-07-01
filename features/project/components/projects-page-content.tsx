@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { CreateProjectModal } from '@/features/project/components/create-project-modal';
 import { ProjectCard } from '@/features/project/components/project-card';
 import { ProjectInviteHandler } from '@/features/project/components/project-invite-handler';
-import { SettingIcon } from '@/shared/assets/icons';
+import { DownIcon, SettingIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { PageContainer } from '@/shared/components/page-container';
 
@@ -57,14 +57,10 @@ export const ProjectsPageContent = () => {
       );
     }
 
-    return (
-      <div className="space-y-6">
-        {projects.map((project) => (
-          <ProjectCard key={project.projectId} project={project} />
-        ))}
-      </div>
-    );
+    return projects.map((project) => <ProjectCard key={project.projectId} project={project} />);
   };
+
+  const listContent = renderProjectList();
 
   return (
     <PageContainer>
@@ -78,7 +74,7 @@ export const ProjectsPageContent = () => {
         <Button
           type="button"
           variant="primary"
-          size="large"
+          size="medium"
           leftIcon={<SettingIcon aria-hidden className="size-6" />}
           onClick={() => setIsCreateModalOpen(true)}
         >
@@ -86,7 +82,27 @@ export const ProjectsPageContent = () => {
         </Button>
       </div>
 
-      <div className="my-10.5">{renderProjectList()}</div>
+      <section className="border-border-gray mt-[30px] mb-20 overflow-hidden rounded-2xl border">
+        <div className="bg-surface-gray-subtle border-border-gray flex h-16 items-center justify-end border-b px-8">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="text-body-base text-text-subtle inline-flex h-6 items-center gap-1 px-4 font-medium"
+            >
+              전체
+              <DownIcon aria-hidden className="size-4" />
+            </button>
+            <button
+              type="button"
+              className="text-body-base text-text-subtle inline-flex h-6 items-center gap-1 px-4 font-medium"
+            >
+              최신순
+              <DownIcon aria-hidden className="size-4" />
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col gap-6 p-8">{listContent}</div>
+      </section>
 
       <CreateProjectModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
       <ProjectInviteHandler />

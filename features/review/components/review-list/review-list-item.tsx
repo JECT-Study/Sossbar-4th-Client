@@ -10,9 +10,9 @@ import { Dropdown } from '@/shared/components/dropdown';
 import { REPORT_FORM_URL } from '@/shared/constants/report';
 import { cn } from '@/shared/lib/cn';
 
-import type { UserPosition } from '../../types/review';
+import type { UserPosition } from '../../review.types';
 
-import { getUserPositionLabel } from '../../utils/get-user-position-label';
+import { getUserPositionLabel } from '../../review.lib';
 
 interface RootProps {
   children: ReactNode;

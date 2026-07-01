@@ -59,17 +59,18 @@ const ProjectsPage = async () => {
   const cookieStore = await cookies();
 
   if (cookieStore.has('accessToken')) {
-    try {
-      await Promise.all([
-        queryClient.prefetchQuery({ queryKey: projectKeys.list(), queryFn: fetchProjects }),
-        queryClient.prefetchQuery({
-          queryKey: profileKeys.my,
-          queryFn: () => fetchMyProfileOptional({ headers: { Cookie: cookieStore.toString() } }),
-        }),
-      ]);
-    } catch {
-      // 비로그인·만료 세션 등 prefetch 실패 시에도 초대 링크 랜딩은 허용
-    }
+    const cookieHeader = cookieStore.toString();
+
+    await Promise.allSettled([
+      queryClient.prefetchQuery({
+        queryKey: projectKeys.list(),
+        queryFn: () => fetchProjects({ headers: { Cookie: cookieHeader } }),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: profileKeys.my,
+        queryFn: () => fetchMyProfileOptional({ headers: { Cookie: cookieHeader } }),
+      }),
+    ]);
   }
 
   return (
