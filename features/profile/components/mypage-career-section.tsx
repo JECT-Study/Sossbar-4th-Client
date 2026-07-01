@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 
+import { USER_LINK_TYPE_OPTIONS, USER_LINKS_MAX } from '@/features/auth';
+import type { UserLinkType } from '@/features/auth';
 import { PlusIcon, TrashIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
@@ -11,12 +13,11 @@ import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
 import type { UrlEntry } from '../mypage.constants';
 
-import { CAREER_FIELD_OPTIONS, MYPAGE_MOCK_FIELDS, MYPAGE_MOCK_URLS, URL_TYPE_OPTIONS } from '../mypage.constants';
+import { CAREER_FIELD_OPTIONS, MYPAGE_MOCK_FIELDS, MYPAGE_MOCK_URLS } from '../mypage.constants';
 import { MypageCard } from './mypage-card';
 import { MypageInfoRow } from './mypage-info-row';
 
 const MAX_FIELDS = 3;
-const MAX_URLS = 3;
 
 const findFieldLabel = (value: string) => CAREER_FIELD_OPTIONS.find((option) => option.value === value)?.label ?? value;
 
@@ -54,7 +55,7 @@ export const MypageCareerSection = () => {
   };
 
   const handleAddUrl = () => {
-    setUrls((prev) => [...prev, { id: crypto.randomUUID(), url: '', type: URL_TYPE_OPTIONS[0].value }]);
+    setUrls((prev) => [...prev, { id: crypto.randomUUID(), url: '', type: USER_LINK_TYPE_OPTIONS[0].value }]);
   };
 
   const handleRemoveUrl = (id: string) => {
@@ -121,12 +122,15 @@ export const MypageCareerSection = () => {
                   onChange={(event) => handleUrlChange(entry.id, { url: event.target.value })}
                   className="h-10.5 px-3"
                 />
-                <Select.Root value={entry.type} onValueChange={(value) => handleUrlChange(entry.id, { type: value })}>
+                <Select.Root
+                  value={entry.type}
+                  onValueChange={(value) => handleUrlChange(entry.id, { type: value as UserLinkType })}
+                >
                   <Select.Trigger aria-label="URL 유형" className="h-10.5 px-3">
                     <Select.Value placeholder="Link" />
                   </Select.Trigger>
                   <Select.Content className="w-(--radix-select-trigger-width)">
-                    {URL_TYPE_OPTIONS.map((option) => (
+                    {USER_LINK_TYPE_OPTIONS.map((option) => (
                       <Select.Item key={option.value} value={option.value}>
                         {option.label}
                       </Select.Item>
@@ -144,7 +148,7 @@ export const MypageCareerSection = () => {
                 />
               </div>
             ))}
-            {urls.length < MAX_URLS ? (
+            {urls.length < USER_LINKS_MAX ? (
               <button
                 type="button"
                 onClick={handleAddUrl}
@@ -154,7 +158,7 @@ export const MypageCareerSection = () => {
                 추가
               </button>
             ) : (
-              <p className="text-text-subtler text-detail-sm font-normal">최대 {MAX_URLS}개까지 등록 가능해요</p>
+              <p className="text-text-subtler text-detail-sm font-normal">최대 {USER_LINKS_MAX}개까지 등록 가능해요</p>
             )}
           </div>
         ) : (

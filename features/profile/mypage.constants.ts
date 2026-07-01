@@ -3,6 +3,8 @@
  * 커리어/알림 정보는 Profile 모델에 없으므로 UI 표시용 상수로만 존재한다.
  */
 
+import type { UserLinkType } from '@/features/auth';
+
 export interface MypageSelectOption {
   value: string;
   label: string;
@@ -11,7 +13,7 @@ export interface MypageSelectOption {
 export interface UrlEntry {
   id: string;
   url: string;
-  type: string;
+  type: UserLinkType;
 }
 
 /** 커리어 분야 multi-select 옵션 (목업) */
@@ -23,20 +25,12 @@ export const CAREER_FIELD_OPTIONS: readonly MypageSelectOption[] = [
   { value: 'data', label: '데이터 분석가' },
 ];
 
-/** URL 타입 select 옵션 (목업) */
-export const URL_TYPE_OPTIONS: readonly MypageSelectOption[] = [
-  { value: 'link', label: 'Link' },
-  { value: 'github', label: 'GitHub' },
-  { value: 'blog', label: 'Blog' },
-  { value: 'portfolio', label: 'Portfolio' },
-];
-
 /** 커리어 분야 초기 선택값 (목업) */
 export const MYPAGE_MOCK_FIELDS: readonly string[] = ['product-designer', 'frontend'];
 
 /** URL 리스트 초기값 (목업) */
 export const MYPAGE_MOCK_URLS: readonly UrlEntry[] = [
-  { id: 'url-1', url: 'https://music.youtube.com/', type: 'link' },
-  { id: 'url-2', url: 'https://music.youtube.com/', type: 'link' },
-  { id: 'url-3', url: 'https://music.youtube.com/', type: 'link' },
+  { id: 'url-1', url: 'https://music.youtube.com/', type: 'LINK' },
+  { id: 'url-2', url: 'https://github.com/', type: 'GITHUB' },
+  { id: 'url-3', url: 'https://instagram.com/', type: 'INSTAGRAM' },
 ];
