@@ -50,10 +50,6 @@ const mockProject1: ProjectResponse = {
       reviewWritten: false,
     },
   ],
-  memberCount: 3,
-  projectPositions: ['FE', 'BE'],
-  projectUrl: 'https://www.surfit.io/profile/1605155595',
-  projectUrlType: 'LINK',
 };
 
 // 팀원 + 완료 + 후기 모두 작성
@@ -84,10 +80,6 @@ const mockProject2: ProjectResponse = {
       reviewWritten: true,
     },
   ],
-  memberCount: 2,
-  projectPositions: ['FE'],
-  projectUrl: '',
-  projectUrlType: 'LINK',
 };
 
 // 방장 + 아카이브 + 후기 미작성
@@ -118,10 +110,6 @@ const mockProject3: ProjectResponse = {
       reviewWritten: false,
     },
   ],
-  memberCount: 2,
-  projectPositions: ['BE'],
-  projectUrl: '',
-  projectUrlType: 'LINK',
 };
 
 const mockProjects = [mockProject1, mockProject2, mockProject3];
