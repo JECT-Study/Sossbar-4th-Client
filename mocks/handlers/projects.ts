@@ -168,12 +168,8 @@ let mockMyProjects: MyProjectResponse[] = [
   },
 ];
 
-function withSubmittedReviewFlags(projects: MyProjectResponse[]): MyProjectResponse[];
-function withSubmittedReviewFlags(projects: ProjectResponse[]): ProjectResponse[];
-function withSubmittedReviewFlags(
-  projects: MyProjectResponse[] | ProjectResponse[],
-): MyProjectResponse[] | ProjectResponse[] {
-  return projects.map((project) => ({
+const withSubmittedReviewFlags = <T extends MyProjectResponse | ProjectResponse>(projects: T[]): T[] =>
+  projects.map((project) => ({
     ...project,
     members: project.members.map(
       (member): ProjectMemberResponse => ({
@@ -182,7 +178,6 @@ function withSubmittedReviewFlags(
       }),
     ),
   }));
-}
 
 export const projectsHandlers = [
   http.get(`${BASE}/projects`, () => wrap(withSubmittedReviewFlags(mockMyProjects))),

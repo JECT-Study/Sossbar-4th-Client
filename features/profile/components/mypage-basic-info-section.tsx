@@ -6,6 +6,7 @@ import { KakaoTalkIcon } from '@/shared/assets/icons';
 import { CharCount } from '@/shared/components/char-count';
 import { FileInput, useImagePreview } from '@/shared/components/file-input';
 import { Input } from '@/shared/components/input';
+import { SectionInfoRow } from '@/shared/components/section-card';
 import { Textarea } from '@/shared/components/textarea';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
@@ -14,7 +15,6 @@ import type { MyProfile } from '../profile.types';
 import { PROFILE_BIO_MAX_LENGTH } from '../profile.constants';
 import { useUpdateProfile } from '../profile.hooks';
 import { MypageCard } from './mypage-card';
-import { MypageInfoRow } from './mypage-info-row';
 import { ProfileAvatar } from './profile-avatar';
 
 interface Props {
@@ -72,7 +72,7 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
       onSave={handleSave}
       isSaving={isPending}
     >
-      <MypageInfoRow label="이미지" align="start">
+      <SectionInfoRow label="이미지" align="start">
         {isEditing ? (
           <div className="flex items-start gap-6">
             <img
@@ -96,9 +96,9 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
             <ProfileAvatar username={profile.username} profileImageUrl={profile.profileImageUrl} />
           </div>
         )}
-      </MypageInfoRow>
+      </SectionInfoRow>
 
-      <MypageInfoRow label="이메일">
+      <SectionInfoRow label="이메일">
         {isEditing ? (
           <div className="bg-surface-gray-subtle text-text-subtle text-body-base flex items-center gap-2 rounded-md px-4 py-3">
             <KakaoTalkIcon className="size-6 shrink-0" aria-hidden />
@@ -110,9 +110,9 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
             <span>{profile.email}</span>
           </div>
         )}
-      </MypageInfoRow>
+      </SectionInfoRow>
 
-      <MypageInfoRow label="이름">
+      <SectionInfoRow label="이름">
         {isEditing ? (
           <Input
             name="username"
@@ -123,9 +123,9 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
         ) : (
           <span className="text-text-basic text-body-base">{profile.username}</span>
         )}
-      </MypageInfoRow>
+      </SectionInfoRow>
 
-      <MypageInfoRow label="한 줄 소개" align={isEditing ? 'start' : 'center'}>
+      <SectionInfoRow label="한 줄 소개" align={isEditing ? 'start' : 'center'}>
         {isEditing ? (
           <div className="flex flex-col gap-2">
             <Textarea
@@ -139,7 +139,7 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
         ) : (
           <span className="text-text-basic text-body-base">{profile.bio ?? '-'}</span>
         )}
-      </MypageInfoRow>
+      </SectionInfoRow>
     </MypageCard>
   );
 };

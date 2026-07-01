@@ -8,6 +8,7 @@ import { PlusIcon, TrashIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
 import { MultiSelect } from '@/shared/components/multi-select';
+import { SectionInfoRow } from '@/shared/components/section-card';
 import { Select } from '@/shared/components/select/select';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
@@ -15,7 +16,6 @@ import type { UrlEntry } from '../mypage.constants';
 
 import { CAREER_FIELD_OPTIONS, MYPAGE_MOCK_FIELDS, MYPAGE_MOCK_URLS } from '../mypage.constants';
 import { MypageCard } from './mypage-card';
-import { MypageInfoRow } from './mypage-info-row';
 
 const MAX_FIELDS = 3;
 
@@ -70,7 +70,7 @@ export const MypageCareerSection = () => {
       onCancel={handleCancel}
       onSave={handleSave}
     >
-      <MypageInfoRow label="분야" align={isEditing ? 'start' : 'center'}>
+      <SectionInfoRow label="분야" align={isEditing ? 'start' : 'center'}>
         {isEditing ? (
           <div className="flex flex-col gap-2">
             <MultiSelect.Root value={fields} onValueChange={setFields}>
@@ -108,9 +108,9 @@ export const MypageCareerSection = () => {
             ))}
           </div>
         )}
-      </MypageInfoRow>
+      </SectionInfoRow>
 
-      <MypageInfoRow label="URL" align="start">
+      <SectionInfoRow label="URL" align="start">
         {isEditing ? (
           <div className="flex flex-col gap-2">
             {urls.map((entry) => (
@@ -170,7 +170,7 @@ export const MypageCareerSection = () => {
             ))}
           </div>
         )}
-      </MypageInfoRow>
+      </SectionInfoRow>
     </MypageCard>
   );
 };
