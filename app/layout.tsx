@@ -6,9 +6,8 @@ import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
 import { LandingHeader, LoginButton, LoginModal } from '@/features/auth';
-import { fetchMyProfileOptional } from '@/features/profile/api/fetch-my-profile-optional';
+import { fetchMyProfileOptional, profileKeys } from '@/features/profile';
 import { HeaderAuthGate } from '@/features/profile/components/header-auth-gate';
-import { profileKeys } from '@/features/profile/profile.query-keys';
 import { GoogleAnalytics } from '@/shared/components/google-analytics';
 import { GoogleAnalyticsPageView } from '@/shared/components/google-analytics-page-view';
 import { Header } from '@/shared/components/header/header';

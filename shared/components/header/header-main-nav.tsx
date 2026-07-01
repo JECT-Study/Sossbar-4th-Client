@@ -8,7 +8,7 @@ import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
 const NAV_LINKS = [
-  { href: '/profile', label: '내 소스', requiresAuth: true },
+  { href: ROUTES.MY_SOSS, label: '내 소스', requiresAuth: true },
   { href: '/projects', label: '프로젝트 관리', requiresAuth: true },
   { href: ROUTES.PROFILE_EXAMPLES, label: '소스 예시 보기', requiresAuth: false },
 ] as const;

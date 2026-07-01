@@ -1,20 +1,10 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-
-import { ProfileSectionBoundary } from '@/features/profile';
-import { ProfileSectionSkeleton } from '@/features/profile/components/profile-section-skeleton';
-
-const ProfileDetailView = dynamic(
-  () =>
-    import('@/app/(protected)/profile/_components/profile-detail-view').then((mod) => ({
-      default: mod.ProfileDetailView,
-    })),
-  {
-    ssr: false,
-    loading: () => <ProfileSectionSkeleton />,
-  },
-);
+import { ProfileDetailView, ProfileSectionBoundary } from '@/features/profile';
+import { ProjectSection } from '@/features/project';
+import { UserReviewContainerBoundary } from '@/features/review';
+import { SoftSkillsCardBoundary } from '@/features/soft-skills';
+import { TagCardBoundary } from '@/features/tag';
 
 interface Props {
   userId: number;
@@ -24,7 +14,19 @@ export const ProfileExamplesClient = ({ userId }: Props) => {
   return (
     <>
       <ProfileSectionBoundary userId={userId} />
-      <ProfileDetailView userId={userId} />
+      <ProfileDetailView
+        userId={userId}
+        allTabContent={
+          <>
+            <div className="flex gap-[30px]">
+              <TagCardBoundary userId={userId} />
+              <SoftSkillsCardBoundary userId={userId} showDistribution />
+            </div>
+            <UserReviewContainerBoundary userId={userId} />
+          </>
+        }
+        projectsTabContent={<ProjectSection userId={userId} />}
+      />
     </>
   );
 };

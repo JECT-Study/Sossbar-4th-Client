@@ -1,8 +1,6 @@
-import { MypageBasicInfoBoundary } from '@/features/profile';
+import { MypageBasicInfoBoundary, MyPageSkeleton } from '@/features/profile';
 
 import type { Metadata } from 'next';
-
-import { MyPageSkeleton } from './page.skeleton';
 
 export const dynamic = 'force-dynamic';
 
