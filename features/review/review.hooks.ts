@@ -25,10 +25,10 @@ export const useCreateReview = () => {
   });
 };
 
-export const useUserReviews = (userId: number) =>
+export const useUserReviews = (userLink: string) =>
   useSuspenseQuery({
-    queryKey: reviewKeys.reviews(userId),
-    queryFn: () => fetchReviews(userId),
+    queryKey: reviewKeys.reviews(userLink),
+    queryFn: () => fetchReviews(userLink),
   });
 
 export const useReviewFormData = () =>
@@ -37,11 +37,11 @@ export const useReviewFormData = () =>
     queryFn: fetchReviewFormData,
   });
 
-export const useProjectReviews = (userId: number, projectId: number) =>
+export const useProjectReviews = (userLink: string, projectId: number) =>
   useQuery({
-    queryKey: reviewKeys.projectReviews(userId, projectId),
-    queryFn: () => fetchProjectReviews(userId, projectId),
-    enabled: userId > 0 && projectId > 0,
+    queryKey: reviewKeys.projectReviews(userLink, projectId),
+    queryFn: () => fetchProjectReviews(userLink, projectId),
+    enabled: userLink.length > 0 && projectId > 0,
     throwOnError: false,
   });
 

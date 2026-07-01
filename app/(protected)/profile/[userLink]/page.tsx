@@ -94,7 +94,7 @@ const Page = async ({ params }: ProfilePageProps) => {
               </Suspense>
             </div>
             <Suspense fallback={<UserReviewCardLoading />}>
-              <UserReviewCardEntry userId={profile.userId} />
+              <UserReviewCardEntry userLink={profile.userLink} />
             </Suspense>
           </>
         }

@@ -13,12 +13,11 @@ import { useProject } from '../project.hooks';
 const DEFAULT_PROJECT_IMAGE = '/default.png';
 
 type ProjectPageContentProps = {
-  userId: number;
   userLink: string;
   projectId: number;
 };
 
-export const ProjectPageContent = ({ userId, userLink, projectId }: ProjectPageContentProps) => {
+export const ProjectPageContent = ({ userLink, projectId }: ProjectPageContentProps) => {
   const { data: project, isPending, isError } = useProject(projectId);
 
   if (isPending) {
@@ -65,7 +64,7 @@ export const ProjectPageContent = ({ userId, userLink, projectId }: ProjectPageC
         <SpectrumCardGate userLink={userLink} projectId={projectId} showDistribution={false} />
       </div>
 
-      <ProjectReviewCard userId={userId} projectId={projectId} />
+      <ProjectReviewCard userLink={userLink} projectId={projectId} />
     </PageContainer>
   );
 };

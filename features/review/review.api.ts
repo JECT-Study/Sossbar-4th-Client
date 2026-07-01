@@ -8,9 +8,9 @@ import { mapReviewFormDataFromApi, mapUserReviewsFromApi } from './review.lib';
 
 export const reviewKeys = {
   all: ['review'] as const,
-  reviews: (userId: number) => [...reviewKeys.all, 'reviews', userId] as const,
+  reviews: (userLink: string) => [...reviewKeys.all, 'reviews', userLink] as const,
   formData: () => [...reviewKeys.all, 'formData'] as const,
-  projectReviews: (userId: number, projectId: number) => [...reviewKeys.all, 'reviews', userId, projectId] as const,
+  projectReviews: (userLink: string, projectId: number) => [...reviewKeys.all, 'reviews', userLink, projectId] as const,
   validate: (projectId: number, revieweeId: number) => [...reviewKeys.all, 'validate', projectId, revieweeId] as const,
 };
 
@@ -52,13 +52,13 @@ export const fetchReviewFormData = async (): Promise<ReviewFormData> => {
   return mapReviewFormDataFromApi(raw);
 };
 
-export const fetchReviews = async (userId: number): Promise<Review[]> => {
-  const raw = await apiRequest<UserReviewsApiResponse>(`/users/${userId}/reviews`);
+export const fetchReviews = async (userLink: string): Promise<Review[]> => {
+  const raw = await apiRequest<UserReviewsApiResponse>(`/users/${userLink}/reviews`);
   return mapUserReviewsFromApi(raw);
 };
 
-export const fetchProjectReviews = async (userId: number, projectId: number): Promise<Review[]> => {
-  const raw = await apiRequest<ReviewApiRaw[]>(`/users/${userId}/projects/${projectId}/reviews`);
+export const fetchProjectReviews = async (userLink: string, projectId: number): Promise<Review[]> => {
+  const raw = await apiRequest<ReviewApiRaw[]>(`/users/${userLink}/projects/${projectId}/reviews`);
   return mapUserReviewsFromApi(raw);
 };
 
