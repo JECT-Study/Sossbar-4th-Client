@@ -1,4 +1,4 @@
-export const ProfileSectionSkeleton = () => (
+export const ProfileSectionLoading = () => (
   <section className="mb-10 flex w-full flex-row justify-between pt-8">
     <div className="flex flex-row gap-6">
       <div className="bg-action-gray-light size-25 shrink-0 animate-pulse rounded-full" />

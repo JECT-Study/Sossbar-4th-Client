@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
-import { fetchMyProfile, ProfileDetailView, ProfileSectionSkeleton, ProfileSectionStream } from '@/features/profile';
+import { fetchMyProfile, MyProfileSectionGate, ProfileDetailView } from '@/features/profile';
 import { ProjectSectionStream } from '@/features/project/components/project-section-stream';
 import { ProjectSectionSkeleton } from '@/features/project/components/project-section.skeleton';
 import { UserReviewStream } from '@/features/review';
@@ -20,9 +20,7 @@ const Page = async () => {
 
   return (
     <PageContainer className="mb-20">
-      <Suspense fallback={<ProfileSectionSkeleton />}>
-        <ProfileSectionStream userId={myProfile.userId} isMyProfile />
-      </Suspense>
+      <MyProfileSectionGate />
       <ProfileDetailView
         userId={myProfile.userId}
         allTabContent={
