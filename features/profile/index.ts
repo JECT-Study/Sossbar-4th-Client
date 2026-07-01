@@ -1,8 +1,7 @@
 export { fetchMyProfile, fetchMyProfileOptional, fetchProfileById } from './profile.api';
 export { useIsMyProfile, useMyProfile, useProfileById, useUpdateProfile } from './profile.hooks';
-export { MypageBasicInfoBoundary } from './components/mypage-basic-info-boundary';
+export { MypageBoundary } from './components/mypage-boundary';
 export { MyProfileSectionGate } from './components/my-profile-section-gate';
-export { MyPageSkeleton } from './components/mypage-skeleton';
 export { ProfileAvatar } from './components/profile-avatar';
 export { ProfileByIdSectionEntry } from './components/profile-by-id-section-entry';
 export { ProfileByIdSectionGate } from './components/profile-by-id-section-gate';

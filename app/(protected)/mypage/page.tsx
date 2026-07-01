@@ -1,4 +1,4 @@
-import { MypageBasicInfoBoundary, MyPageSkeleton } from '@/features/profile';
+import { MypageBoundary } from '@/features/profile';
 
 import type { Metadata } from 'next';
 
@@ -10,11 +10,8 @@ export const metadata: Metadata = {
 
 const Page = () => {
   return (
-    <section className="min-h-0 flex-1" aria-label="마이페이지">
-      <div className="border-divider-gray-light bg-surface-white w-full border-b py-8">
-        <h1 className="text-heading-2xl text-text-basic text-center font-bold">마이페이지</h1>
-      </div>
-      <MypageBasicInfoBoundary fallback={<MyPageSkeleton />} />
+    <section className="min-h-0 flex-1 px-6 pb-20" aria-label="마이페이지">
+      <MypageBoundary />
     </section>
   );
 };

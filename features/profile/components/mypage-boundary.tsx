@@ -8,13 +8,14 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import { RetryErrorCard } from '@/shared/components/retry-error-card';
 
-import { MypageBasicInfoForm } from './mypage-basic-info-form';
+import { MypageContent } from './mypage-content';
+import { MypageSkeleton } from './mypage-skeleton';
 
 interface Props {
-  fallback: ReactNode;
+  fallback?: ReactNode;
 }
 
-export const MypageBasicInfoBoundary = ({ fallback }: Props) => {
+export const MypageBoundary = ({ fallback = <MypageSkeleton /> }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -30,7 +31,7 @@ export const MypageBasicInfoBoundary = ({ fallback }: Props) => {
       )}
     >
       <Suspense fallback={fallback}>
-        <MypageBasicInfoForm />
+        <MypageContent />
       </Suspense>
     </ErrorBoundary>
   );
