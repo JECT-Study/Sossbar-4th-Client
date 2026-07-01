@@ -8,10 +8,9 @@ import { fetchReceivedTags, fetchReceivedTagsByProject, tagKeys } from '../tag.a
 interface Props {
   userLink: string;
   projectId?: number;
-  collapsible?: boolean;
 }
 
-export const TagCardEntry = async ({ userLink, projectId, collapsible }: Props) => {
+export const TagCardEntry = async ({ userLink, projectId }: Props) => {
   const queryClient = getQueryClient();
 
   await queryClient.prefetchQuery({
@@ -22,7 +21,7 @@ export const TagCardEntry = async ({ userLink, projectId, collapsible }: Props) 
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <TagCardGate userLink={userLink} projectId={projectId} collapsible={collapsible} />
+      <TagCardGate userLink={userLink} projectId={projectId} />
     </HydrationBoundary>
   );
 };

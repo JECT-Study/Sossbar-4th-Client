@@ -12,10 +12,9 @@ import { TagCardLoading } from './tag-card-loading';
 interface Props {
   userLink: string;
   projectId?: number;
-  collapsible?: boolean;
 }
 
-export const TagCardGate = ({ userLink, projectId, collapsible }: Props) => {
+export const TagCardGate = ({ userLink, projectId }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -32,7 +31,7 @@ export const TagCardGate = ({ userLink, projectId, collapsible }: Props) => {
       )}
     >
       <Suspense fallback={<TagCardLoading />}>
-        <TagCard userLink={userLink} projectId={projectId} collapsible={collapsible} />
+        <TagCard userLink={userLink} projectId={projectId} />
       </Suspense>
     </ErrorBoundary>
   );
