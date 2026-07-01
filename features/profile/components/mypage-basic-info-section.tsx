@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { KakaoTalkIcon } from '@/shared/assets/icons';
 import { CharCount } from '@/shared/components/char-count';
-import { ImageFileInput } from '@/shared/components/file-input';
+import { FileInput, useImagePreview } from '@/shared/components/file-input';
 import { Input } from '@/shared/components/input';
 import { Textarea } from '@/shared/components/textarea';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
@@ -21,7 +21,7 @@ interface Props {
   profile: Profile;
 }
 
-const IMAGE_GUIDE_TEXT = 'JPG, JPEG, PNG 형식\n최소 100px X 100px';
+const IMAGE_GUIDE_TEXT = '□ JPG, JPEG, PNG 형식\n□ 최소 100 x 100px';
 
 export const MypageBasicInfoSection = ({ profile }: Props) => {
   const [isEditing, startEditing, stopEditing] = useBooleanState(false);
@@ -30,6 +30,12 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
   const [username, setUsername] = useState(profile.username);
   const [bio, setBio] = useState(profile.bio ?? '');
   const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const { previewUrl, onChange: syncPreview } = useImagePreview();
+
+  useEffect(() => {
+    syncPreview(imageFile);
+  }, [imageFile, syncPreview]);
 
   const resetDraft = () => {
     setUsername(profile.username);
@@ -69,13 +75,25 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
       <MypageInfoRow label="이미지" align="start">
         {isEditing ? (
           <div className="flex items-start gap-6">
-            <ImageFileInput value={imageFile} onChange={setImageFile} className="max-w-none" />
-            <p className="text-body-sm text-text-subtler whitespace-pre-line">{IMAGE_GUIDE_TEXT}</p>
+            <img
+              src={previewUrl ?? profile.profileImageUrl ?? '/default-profile.png'}
+              alt="프로필 이미지 미리보기"
+              className="bg-action-gray-light mr-8 size-25 shrink-0 rounded-full object-cover"
+            />
+            <div className="flex flex-col gap-3">
+              <FileInput
+                value={null}
+                onChange={setImageFile}
+                accept="image/jpeg,image/png"
+                label="이미지 업로드하기"
+                className="max-w-none"
+              />
+              <p className="text-body-sm text-text-subtler whitespace-pre-line">{IMAGE_GUIDE_TEXT}</p>
+            </div>
           </div>
         ) : (
           <div className="flex items-center gap-6">
             <ProfileAvatar username={profile.username} profileImageUrl={profile.profileImageUrl} />
-            <p className="text-body-sm text-text-subtler whitespace-pre-line">{IMAGE_GUIDE_TEXT}</p>
           </div>
         )}
       </MypageInfoRow>
