@@ -49,3 +49,5 @@ next-env.d.ts
 docs/tanstack-query-ssr.md
 
 .claude
+_workspace/
+_workspace_prev/
