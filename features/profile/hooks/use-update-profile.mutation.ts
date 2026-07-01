@@ -10,6 +10,7 @@ export const useUpdateProfile = () => {
     mutationFn: updateProfile,
     onSuccess: (profile) => {
       queryClient.setQueryData(profileKeys.detail(profile.userId), profile);
+      queryClient.setQueryData(profileKeys.my, profile);
     },
   });
 };

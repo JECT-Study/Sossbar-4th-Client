@@ -4,10 +4,10 @@ import { Controller } from 'react-hook-form';
 
 import { TextareaField } from '@/shared/components/textarea-field/textarea-field';
 
-import type { AccountDeletionFormData } from '../account-deletion-form.schema';
+import type { AccountDeletionFormData } from '../auth.types';
 import type { Control, UseFormRegister } from 'react-hook-form';
 
-import { WITHDRAW_REASON_OPTIONS } from '../account-deletion.constants';
+import { WITHDRAW_REASON_OPTIONS } from '../auth.constants';
 import { WithdrawReasonRadioGroup } from './withdraw-reason-radio-group';
 
 interface AccountDeletionFieldsProps {

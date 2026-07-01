@@ -4,7 +4,7 @@ import { RadioGroup } from 'radix-ui';
 
 import { cn } from '@/shared/lib/cn';
 
-import type { WithdrawReasonValue } from '../account-deletion.constants';
+import type { WithdrawReasonValue } from '../auth.constants';
 
 interface WithdrawReasonOption {
   value: WithdrawReasonValue;

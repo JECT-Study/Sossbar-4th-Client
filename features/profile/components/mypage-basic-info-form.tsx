@@ -2,35 +2,42 @@
 
 import type { FormEvent } from 'react';
 
+import { AccountDeletionModal } from '@/features/auth';
 import { Button } from '@/shared/components/button';
 import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
-import { AccountDeletionModal } from './account-deletion-modal';
-import { useProfile } from '../hooks/use-profile';
-import { useUpdateMarketingAgree } from '../hooks/use-update-marketing-agree.mutation';
+import { useMyProfile } from '../hooks/use-my-profile.query';
+import { useUpdateProfile } from '../hooks/use-update-profile.mutation';
 
-export const MypageForm = () => {
-  const { data: profile } = useProfile();
-  const { mutate: updateMarketingAgree, isPending } = useUpdateMarketingAgree();
+export const MypageBasicInfoForm = () => {
+  const { data: profile } = useMyProfile();
+  const { mutate: updateProfile, isPending } = useUpdateProfile();
 
-  const [marketingAgreed, , , toggleMarketingAgreed] = useBooleanState(profile.marketingAgree);
+  const [marketingAgreed, , , toggleMarketingAgreed] = useBooleanState(profile?.marketingAgree ?? false);
+  const [isAccountDeletionOpen, openAccountDeletion, closeAccountDeletion] = useBooleanState(false);
+
+  if (!profile) {
+    return null;
+  }
+
   const isDirty = marketingAgreed !== profile.marketingAgree;
-  const [accountActionsOpen, openAccountActions, closeAccountActions] = useBooleanState(false);
 
-  const handleAccountActionsChange = (open: boolean) => {
+  const handleAccountDeletionChange = (open: boolean) => {
     if (open) {
-      openAccountActions();
+      openAccountDeletion();
       return;
     }
 
-    closeAccountActions();
+    closeAccountDeletion();
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    updateMarketingAgree({ username: profile.username, bio: profile.bio ?? '', marketingAgree: marketingAgreed });
+    updateProfile({
+      info: { username: profile.username, bio: profile.bio ?? '', marketingAgree: marketingAgreed },
+    });
   };
 
   return (
@@ -63,13 +70,13 @@ export const MypageForm = () => {
           size="medium"
           type="button"
           className="text-text-disabled focus-visible:ring-border-primary text-body-xl h-14 w-full py-0 outline-none focus-visible:ring-2"
-          onClick={openAccountActions}
+          onClick={openAccountDeletion}
         >
           회원 탈퇴
         </Button>
       </div>
 
-      <AccountDeletionModal open={accountActionsOpen} onOpenChange={handleAccountActionsChange} />
+      <AccountDeletionModal open={isAccountDeletionOpen} onOpenChange={handleAccountDeletionChange} />
     </form>
   );
 };

@@ -1,5 +1,5 @@
 import type { POSITION_VALUES, USER_LINK_TYPE_VALUES } from './auth.constants';
-import type { SignupFormSchema } from './auth.schemas';
+import type { AccountDeletionFormSchema, SignupFormSchema } from './auth.schemas';
 import type { z } from 'zod';
 
 export interface LoginResponse {
@@ -8,6 +8,13 @@ export interface LoginResponse {
 }
 
 export type SignupFormData = z.infer<typeof SignupFormSchema>;
+
+export type AccountDeletionFormData = z.infer<typeof AccountDeletionFormSchema>;
+
+export interface DeleteAccountPayload {
+  userDeleteReasonEnum: string;
+  detail?: string;
+}
 
 export type PositionValue = (typeof POSITION_VALUES)[number];
 

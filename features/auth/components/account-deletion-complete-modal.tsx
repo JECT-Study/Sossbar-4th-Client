@@ -11,17 +11,16 @@ import { cn } from '@/shared/lib/cn';
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onConfirm?: () => void;
 }
 
-export const AccountDeletionCompleteModal = ({ open, onOpenChange, onConfirm }: Props) => {
+export const AccountDeletionCompleteModal = ({ open, onOpenChange }: Props) => {
   const router = useRouter();
   const queryClient = useQueryClient();
+
   const handleOpenChange = (nextOpen: boolean) => {
     onOpenChange(nextOpen);
 
     if (!nextOpen) {
-      onConfirm?.();
       queryClient.clear();
       router.push('/');
     }

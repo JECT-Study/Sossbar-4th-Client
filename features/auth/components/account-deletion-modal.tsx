@@ -4,9 +4,9 @@ import { Dialog } from 'radix-ui';
 
 import { Button } from '@/shared/components/button';
 
+import { useAccountDeletionForm } from '../auth.hooks';
 import { AccountDeletionCompleteModal } from './account-deletion-complete-modal';
 import { AccountDeletionFields } from './account-deletion-fields';
-import { useAccountDeletionController } from '../hooks/use-account-deletion-controller';
 
 interface Props {
   open: boolean;
@@ -14,11 +14,8 @@ interface Props {
 }
 
 export const AccountDeletionModal = ({ open, onOpenChange }: Props) => {
-  const { form, isDetailEnabled, canSubmit, completeOpen, setCompleteOpen, handleFormSubmit } =
-    useAccountDeletionController({
-      open,
-      onOpenChange,
-    });
+  const { form, isDetailEnabled, canSubmit, isCompleteModalOpen, closeCompleteModal, handleFormSubmit } =
+    useAccountDeletionForm({ open, onOpenChange });
 
   const {
     control,
@@ -76,7 +73,7 @@ export const AccountDeletionModal = ({ open, onOpenChange }: Props) => {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <AccountDeletionCompleteModal open={completeOpen} onOpenChange={setCompleteOpen} />
+      <AccountDeletionCompleteModal open={isCompleteModalOpen} onOpenChange={(next) => !next && closeCompleteModal()} />
     </>
   );
 };
