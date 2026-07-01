@@ -2,6 +2,7 @@ import { apiRequest } from '@/shared/lib/api';
 import type { ApiRequestOptions } from '@/shared/lib/api';
 
 import type {
+  FetchMyProjectsParams,
   MyProjectResponse,
   ProjectPayload,
   ProjectRequest,
@@ -11,7 +12,7 @@ import type {
 
 export const projectKeys = {
   all: ['project'] as const,
-  list: () => [...projectKeys.all, 'list'] as const,
+  list: (params: FetchMyProjectsParams) => [...projectKeys.all, 'list', params] as const,
   detail: (projectId: number) => [...projectKeys.all, 'detail', projectId] as const,
   byUser: (userLink: string) => [...projectKeys.all, 'byUser', userLink] as const,
 };
@@ -28,8 +29,13 @@ const createProjectFormData = (request: ProjectRequest, image?: File | null): Fo
 };
 
 /** GET /api/v1/projects 내 프로젝트 목록 */
-export const fetchProjects = (init?: ApiRequestOptions): Promise<MyProjectResponse[]> =>
-  apiRequest<MyProjectResponse[]>('/projects', init);
+export const fetchProjects = (
+  { sort, status }: FetchMyProjectsParams,
+  init?: ApiRequestOptions,
+): Promise<MyProjectResponse[]> => {
+  const params = new URLSearchParams({ sort, status });
+  return apiRequest<MyProjectResponse[]>(`/projects?${params}`, init);
+};
 
 /** GET /api/v1/projects/{projectId} 프로젝트 조회 */
 export const fetchProject = (projectId: number): Promise<ProjectResponse> =>

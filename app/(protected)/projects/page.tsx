@@ -1,14 +1,15 @@
-import { dehydrate } from '@tanstack/react-query';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
 import { buildReviewRequestDescription, fetchMyProfileOptional, profileKeys } from '@/features/profile';
 import {
+  DEFAULT_PROJECT_LIST_PARAMS,
   fetchProjects,
   parseProjectInviteId,
   PROJECT_INVITE_QUERY_KEY,
   projectKeys,
-  ProjectsStream,
+  ProjectsPageContent,
 } from '@/features/project';
 import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
 import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
@@ -63,8 +64,8 @@ const ProjectsPage = async () => {
 
     await Promise.allSettled([
       queryClient.prefetchQuery({
-        queryKey: projectKeys.list(),
-        queryFn: () => fetchProjects({ headers: { Cookie: cookieHeader } }),
+        queryKey: projectKeys.list(DEFAULT_PROJECT_LIST_PARAMS),
+        queryFn: () => fetchProjects(DEFAULT_PROJECT_LIST_PARAMS, { headers: { Cookie: cookieHeader } }),
       }),
       queryClient.prefetchQuery({
         queryKey: profileKeys.my,
@@ -75,7 +76,9 @@ const ProjectsPage = async () => {
 
   return (
     <Suspense fallback={<ProjectsPageFallback />}>
-      <ProjectsStream state={dehydrate(queryClient)} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ProjectsPageContent />
+      </HydrationBoundary>
     </Suspense>
   );
 };

@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCallback, useState } from 'react';
 
 import { EditProjectModal } from '@/features/project/components/edit-project-modal';
@@ -9,6 +10,7 @@ import { EllipsisVerticalIcon, TrashIcon } from '@/shared/assets/icons';
 import { IconButton } from '@/shared/components/button';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { Dropdown } from '@/shared/components/dropdown';
+import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -70,33 +72,40 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   }, [deleteProject, project.projectId]);
 
   return (
-    <article className="border-border-gray-light bg-surface-white flex flex-row gap-6 rounded-2xl border p-6">
-      <ProjectCardImage projectName={project.projectName} projectImage={project.projectImage} />
+    <>
+      <Link
+        href={ROUTES.PROJECT_DETAIL(project.projectId)}
+        className="focus-visible:ring-border-secondary block rounded-2xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+      >
+        <article className="border-border-gray-light bg-surface-white flex flex-row gap-6 rounded-2xl border p-6">
+          <ProjectCardImage projectName={project.projectName} projectImage={project.projectImage} />
 
-      <div className="flex min-w-0 flex-1 flex-col gap-4">
-        <ProjectCardHeader
-          isLeader={isLeader}
-          projectName={project.projectName}
-          projectStatus={project.projectStatus}
-          startDate={project.startDate}
-          onEdit={isLeader ? () => setEditOpen(true) : undefined}
-          onDelete={isLeader ? () => setDeleteProjectOpen(true) : undefined}
-        />
-        <ProjectCardTitle
-          projectName={project.projectName}
-          host={project.host}
-          startDate={project.startDate}
-          endDate={project.endDate}
-        />
-        <ProjectCardNotice projectStatus={project.projectStatus} />
-        <ProjectMemberList
-          members={project.members}
-          isLeader={isLeader}
-          projectStatus={project.projectStatus}
-          reviewedCount={project.reviewedCount}
-          totalReviewTargetCount={project.totalReviewTargetCount}
-        />
-      </div>
+          <div className="flex min-w-0 flex-1 flex-col gap-4">
+            <ProjectCardHeader
+              isLeader={isLeader}
+              projectName={project.projectName}
+              projectStatus={project.projectStatus}
+              startDate={project.startDate}
+              onEdit={isLeader ? () => setEditOpen(true) : undefined}
+              onDelete={isLeader ? () => setDeleteProjectOpen(true) : undefined}
+            />
+            <ProjectCardTitle
+              projectName={project.projectName}
+              host={project.host}
+              startDate={project.startDate}
+              endDate={project.endDate}
+            />
+            <ProjectCardNotice projectStatus={project.projectStatus} />
+            <ProjectMemberList
+              members={project.members}
+              isLeader={isLeader}
+              projectStatus={project.projectStatus}
+              reviewedCount={project.reviewedCount}
+              totalReviewTargetCount={project.totalReviewTargetCount}
+            />
+          </div>
+        </article>
+      </Link>
 
       {isLeader ? (
         <>
@@ -127,7 +136,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           />
         </>
       ) : null}
-    </article>
+    </>
   );
 };
 
@@ -159,22 +168,25 @@ const ProjectCardHeader = ({ isLeader, projectName, projectStatus, startDate, on
           {formatIsoDateToDots(startDate)}
         </time>
         {isLeader ? (
-          <Dropdown.Root>
-            <Dropdown.Trigger asChild>
-              <IconButton
-                type="button"
-                aria-label={`${projectName} 더보기`}
-                icon={<EllipsisVerticalIcon aria-hidden />}
-                className="text-icon-gray-light h-8 w-9 bg-transparent"
-              />
-            </Dropdown.Trigger>
-            <Dropdown.Content align="end" sideOffset={0} className="w-44 gap-1">
-              <Dropdown.Item onSelect={() => onDelete?.()}>
-                삭제
-                <TrashIcon className="size-5 stroke-[1.5]" />
-              </Dropdown.Item>
-            </Dropdown.Content>
-          </Dropdown.Root>
+          // 카드 전체가 상세 페이지 Link이므로 드롭다운 클릭이 네비게이션으로 전파되지 않도록 막는다
+          <div onClick={(e) => e.stopPropagation()}>
+            <Dropdown.Root>
+              <Dropdown.Trigger asChild>
+                <IconButton
+                  type="button"
+                  aria-label={`${projectName} 더보기`}
+                  icon={<EllipsisVerticalIcon aria-hidden />}
+                  className="text-icon-gray-light h-8 w-9 bg-transparent"
+                />
+              </Dropdown.Trigger>
+              <Dropdown.Content align="end" sideOffset={0} className="w-44 gap-1">
+                <Dropdown.Item onSelect={() => onDelete?.()}>
+                  삭제
+                  <TrashIcon className="size-5 stroke-[1.5]" />
+                </Dropdown.Item>
+              </Dropdown.Content>
+            </Dropdown.Root>
+          </div>
         ) : null}
       </div>
     </div>

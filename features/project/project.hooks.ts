@@ -1,14 +1,14 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useMyProfile } from '@/features/profile';
 import { ApiError } from '@/shared/lib/api';
 
-import type { ProjectCardItem, ProjectPayload, ProjectRequest } from './project.types';
+import type { FetchMyProjectsParams, ProjectCardItem, ProjectPayload, ProjectRequest } from './project.types';
 import type { z } from 'zod';
 
 import {
@@ -23,14 +23,15 @@ import {
   projectKeys,
   updateProject,
 } from './project.api';
+import { DEFAULT_PROJECT_LIST_PARAMS } from './project.constants';
 import { buildProjectInviteUrl, invalidateProjectListQueries, mapMyProjectsToCardItems } from './project.lib';
 import { CreateProjectFormSchema, UpdateProjectFormSchema } from './project.schemas';
 
-export const useProjects = (enabled = true) =>
-  useQuery({
-    queryKey: projectKeys.list(),
-    queryFn: () => fetchProjects(),
-    enabled,
+/** 내 프로젝트 목록. 게스트 분기는 상위 Gate에서 처리되므로 항상 세션이 있다고 가정한다. */
+export const useMyProjects = (params: FetchMyProjectsParams = DEFAULT_PROJECT_LIST_PARAMS) =>
+  useSuspenseQuery({
+    queryKey: projectKeys.list(params),
+    queryFn: () => fetchProjects(params),
   });
 
 export const useProject = (projectId: number, enabled = true, options?: { throwOnError?: boolean }) =>
@@ -42,10 +43,9 @@ export const useProject = (projectId: number, enabled = true, options?: { throwO
   });
 
 export const useUserProjects = (userLink: string) =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: projectKeys.byUser(userLink),
     queryFn: () => fetchUserProjects(userLink),
-    enabled: userLink.length > 0,
   });
 
 export const useDeleteProject = () => {
@@ -343,33 +343,18 @@ export const useUpdateProjectModal = ({ projectId, defaultProjectValues, onOpenC
   };
 };
 
-type UseProjectCardsResult = {
-  projects: ProjectCardItem[];
-  hasSession: boolean;
-  isPending: boolean;
-  isError: boolean;
-  error: Error | null;
-  refetch: ReturnType<typeof useProjects>['refetch'];
-};
-
-export const useProjectCards = (): UseProjectCardsResult => {
+/**
+ * 내 프로젝트를 카드 아이템으로 변환해 반환한다.
+ * 세션 판단(게스트 분기)은 상위 Gate가 담당하므로 여기서는 세션이 있다고 가정한다.
+ */
+export const useMyProjectCards = (params: FetchMyProjectsParams = DEFAULT_PROJECT_LIST_PARAMS): ProjectCardItem[] => {
   const { data: profile } = useMyProfile();
-  const hasSession = profile != null;
-  const query = useProjects(hasSession);
+  const { data: projects } = useMyProjects(params);
 
-  const projects = useMemo(() => {
-    if (!query.data || !profile) {
+  return useMemo(() => {
+    if (!profile) {
       return [];
     }
-    return mapMyProjectsToCardItems(query.data, { userId: profile.userId, nickname: profile.username ?? '' });
-  }, [query.data, profile]);
-
-  return {
-    projects,
-    hasSession,
-    isPending: query.isPending,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
-  };
+    return mapMyProjectsToCardItems(projects, { userId: profile.userId, nickname: profile.username ?? '' });
+  }, [projects, profile]);
 };

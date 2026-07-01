@@ -3,6 +3,17 @@ import type { UserLinkType } from '@/features/auth';
 export type ProjectStatus = 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
 export type MemberStatus = 'LEADER' | 'MEMBER';
 
+/** GET /api/v1/projects의 sort 쿼리 파라미터 */
+export type ProjectSort = 'LATEST' | 'OLDEST';
+
+/** GET /api/v1/projects의 status 쿼리 파라미터 */
+export type ProjectListFilterStatus = 'ALL' | 'IN_PROGRESS' | 'COMPLETED';
+
+export interface FetchMyProjectsParams {
+  sort: ProjectSort;
+  status: ProjectListFilterStatus;
+}
+
 /** 프로젝트 내 직군. FE/BE/PM/PD/AI — review 도메인의 후기 작성 직군과 동일한 값 집합 */
 export type ProjectPositionValue = 'FE' | 'BE' | 'PM' | 'PD' | 'AI';
 

@@ -2,7 +2,7 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
-import { ProjectSection } from './project-section';
+import { ProjectSectionGate } from './project-section-gate';
 import { fetchUserProjects, projectKeys } from '../project.api';
 
 interface Props {
@@ -19,7 +19,7 @@ export const ProjectSectionStream = async ({ userLink }: Props) => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProjectSection userLink={userLink} />
+      <ProjectSectionGate userLink={userLink} />
     </HydrationBoundary>
   );
 };

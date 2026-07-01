@@ -55,9 +55,9 @@ export const buildReviewWriteUrl = ({ projectId, revieweeId, revieweeName }: Bui
   return `/reviews/new?${params.toString()}`;
 };
 
-/** 프로젝트 목록·프로필 탭 등 목록성 쿼리 갱신 */
+/** 프로젝트 목록·프로필 탭 등 목록성 쿼리 갱신. sort/status 조합과 무관하게 모든 목록 캐시를 무효화한다. */
 export const invalidateProjectListQueries = (queryClient: QueryClient, userLink?: string) => {
-  void queryClient.invalidateQueries({ queryKey: projectKeys.list() });
+  void queryClient.invalidateQueries({ queryKey: [...projectKeys.all, 'list'] });
 
   if (userLink) {
     void queryClient.invalidateQueries({ queryKey: projectKeys.byUser(userLink) });
