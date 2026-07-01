@@ -12,12 +12,12 @@ import { useProject } from '../project.hooks';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
 
-type ProjectPageContentProps = {
+type ProjectFeedbackPageContentProps = {
   userLink: string;
   projectId: number;
 };
 
-export const ProjectPageContent = ({ userLink, projectId }: ProjectPageContentProps) => {
+export const ProjectFeedbackPageContent = ({ userLink, projectId }: ProjectFeedbackPageContentProps) => {
   const { data: project, isPending, isError } = useProject(projectId);
 
   if (isPending) {

@@ -2,7 +2,7 @@ import { HydrationBoundary } from '@tanstack/react-query';
 
 import type { DehydratedState } from '@tanstack/react-query';
 
-import { ProjectPageClientWrapper } from './project-page-client-wrapper';
+import { ProjectFeedbackPageContent } from './project-feedback-page-content';
 
 interface Props {
   userLink: string;
@@ -10,8 +10,8 @@ interface Props {
   state: DehydratedState;
 }
 
-export const ProjectDetailStream = ({ userLink, projectId, state }: Props) => (
+export const ProjectFeedbackStream = ({ userLink, projectId, state }: Props) => (
   <HydrationBoundary state={state}>
-    <ProjectPageClientWrapper userLink={userLink} projectId={projectId} />
+    <ProjectFeedbackPageContent userLink={userLink} projectId={projectId} />
   </HydrationBoundary>
 );
