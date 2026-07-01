@@ -3,8 +3,7 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import { ProjectSection } from './project-section';
-import { fetchUserProjects } from '../api/fetchers';
-import { projectKeys } from '../api/query-keys';
+import { fetchUserProjects, projectKeys } from '../project.api';
 
 export const ProjectSectionStream = async ({ userId }: { userId: number }) => {
   const queryClient = getQueryClient();

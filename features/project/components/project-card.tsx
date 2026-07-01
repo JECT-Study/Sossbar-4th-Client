@@ -5,13 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 
 import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
-import { useConfirmProjectMembers, useDeleteProject, useDeleteProjectMember } from '@/features/project/api/mutations';
 import { EditProjectModal } from '@/features/project/components/edit-project-modal';
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
 import { ProjectStatusAlert } from '@/features/project/components/project-status-alert';
-import { buildProjectInviteUrl } from '@/features/project/lib/build-project-invite-url';
-import { buildReviewWriteUrl } from '@/features/project/lib/build-review-write-url';
 import { CopyIcon, EditIcon, EllipsisVerticalIcon, RoundCheckIcon, TrashIcon } from '@/shared/assets/icons';
 import { Button, IconButton } from '@/shared/components/button';
 import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
@@ -21,6 +18,9 @@ import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { ApiError } from '@/shared/lib/api';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
+
+import { useConfirmProjectMembers, useDeleteProject, useDeleteProjectMember } from '../project.hooks';
+import { buildProjectInviteUrl, buildReviewWriteUrl } from '../project.lib';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
 

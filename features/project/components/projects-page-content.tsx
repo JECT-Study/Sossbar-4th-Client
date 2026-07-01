@@ -6,10 +6,11 @@ import { useState } from 'react';
 import { CreateProjectModal } from '@/features/project/components/create-project-modal';
 import { ProjectCard } from '@/features/project/components/project-card';
 import { ProjectInviteHandler } from '@/features/project/components/project-invite-handler';
-import { useProjectCards } from '@/features/project/hooks/use-project-cards';
 import { SettingIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { PageContainer } from '@/shared/components/page-container';
+
+import { useProjectCards } from '../project.hooks';
 
 export const ProjectsPageContent = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
