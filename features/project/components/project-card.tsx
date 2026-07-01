@@ -1,28 +1,22 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 
-import { useMyProfile } from '@/features/profile';
 import { EditProjectModal } from '@/features/project/components/edit-project-modal';
-import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
-import { ProjectStatusAlert } from '@/features/project/components/project-status-alert';
-import { CopyIcon, EditIcon, EllipsisVerticalIcon, RoundCheckIcon, TrashIcon } from '@/shared/assets/icons';
-import { Button, IconButton } from '@/shared/components/button';
-import { CopyFeedbackTooltip } from '@/shared/components/copy-feedback-tooltip';
+import { EllipsisVerticalIcon, TrashIcon } from '@/shared/assets/icons';
+import { IconButton } from '@/shared/components/button';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { Dropdown } from '@/shared/components/dropdown';
-import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
-import { ApiError } from '@/shared/lib/api';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
-import { useConfirmProjectMembers, useDeleteProject, useDeleteProjectMember } from '../project.hooks';
-import { buildProjectInviteUrl, buildReviewWriteUrl } from '../project.lib';
+import { useDeleteProject } from '../project.hooks';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
+const PROJECT_REVIEW_TOTAL_FALLBACK = 10;
+const PLACEHOLDER_MEMBER_NAMES = ['양현준', '양현준', '양현준', '양현준', '양현준'];
 
 interface ProjectCardMember {
   memberId: number;
@@ -55,7 +49,7 @@ interface ProjectCardImageProps {
 interface ProjectCardHeaderProps {
   isLeader: boolean;
   projectName: string;
-  projectStatus: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
+  projectStatus: ProjectCardItem['projectStatus'];
   startDate: string;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -64,18 +58,14 @@ interface ProjectCardHeaderProps {
 interface ProjectCardTitleProps {
   host: string;
   projectName: string;
-}
-
-interface ProjectCardActionsProps {
-  projectId: number;
-  isLeader: boolean;
-  projectStatus: ProjectCardItem['projectStatus'];
+  startDate: string;
+  endDate: string;
 }
 
 interface ProjectMemberListProps {
-  projectId: number;
   members: readonly ProjectCardMember[];
   isLeader: boolean;
+  projectStatus: ProjectCardItem['projectStatus'];
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
@@ -96,10 +86,10 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   }, [deleteProject, project.projectId]);
 
   return (
-    <article className="flex flex-row gap-6 p-6">
+    <article className="border-border-gray-light bg-surface-white flex flex-row gap-6 rounded-2xl border p-6">
       <ProjectCardImage projectName={project.projectName} projectImage={project.projectImage} />
 
-      <div className="flex flex-1 flex-col gap-4">
+      <div className="flex min-w-0 flex-1 flex-col gap-4">
         <ProjectCardHeader
           isLeader={isLeader}
           projectName={project.projectName}
@@ -108,9 +98,14 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           onEdit={isLeader ? () => setEditOpen(true) : undefined}
           onDelete={isLeader ? () => setDeleteProjectOpen(true) : undefined}
         />
-        <ProjectCardTitle projectName={project.projectName} host={project.host} />
-        <ProjectCardActions projectId={project.projectId} isLeader={isLeader} projectStatus={project.projectStatus} />
-        <ProjectMemberList projectId={project.projectId} members={project.members} isLeader={isLeader} />
+        <ProjectCardTitle
+          projectName={project.projectName}
+          host={project.host}
+          startDate={project.startDate}
+          endDate={project.endDate}
+        />
+        <ProjectCardNotice projectStatus={project.projectStatus} />
+        <ProjectMemberList members={project.members} isLeader={isLeader} projectStatus={project.projectStatus} />
       </div>
 
       {isLeader ? (
@@ -148,36 +143,29 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
 const ProjectCardImage = ({ projectName, projectImage }: ProjectCardImageProps) => {
   return (
-    <div className="relative h-[214px] w-[286px] overflow-hidden rounded-2xl">
+    <div className="relative h-[214px] w-[286px] shrink-0 overflow-hidden rounded-2xl">
       <Image
         src={projectImage || DEFAULT_PROJECT_IMAGE}
         alt={`${projectName} 이미지`}
         fill
-        sizes="(max-width: 768px) 100vw, 265px"
+        sizes="286px"
         className="object-cover"
       />
     </div>
   );
 };
 
-const ProjectCardHeader = ({
-  isLeader,
-  projectName,
-  projectStatus,
-  startDate,
-  onEdit,
-  onDelete,
-}: ProjectCardHeaderProps) => {
+const ProjectCardHeader = ({ isLeader, projectName, projectStatus, startDate, onDelete }: ProjectCardHeaderProps) => {
   const isInProgress = projectStatus === 'IN_PROGRESS';
 
   return (
-    <div className="flex flex-row items-center justify-between">
-      <div className="flex flex-row gap-2">
+    <div className="flex h-8 flex-row items-start justify-between">
+      <div className="flex flex-row items-center gap-2">
         <ProjectStateBadge variant={isInProgress ? 'waiting' : 'success'} />
         {isLeader ? <ProjectStateBadge variant="leader" /> : null}
       </div>
-      <div className="flex items-center gap-1">
-        <time className="text-detail-base text-text-subtle font-normal" dateTime={startDate}>
+      <div className="flex items-center gap-4">
+        <time className="text-body-base text-text-subtle font-normal" dateTime={startDate}>
           {formatIsoDateToDots(startDate)}
         </time>
         {isLeader ? (
@@ -187,15 +175,10 @@ const ProjectCardHeader = ({
                 type="button"
                 aria-label={`${projectName} 더보기`}
                 icon={<EllipsisVerticalIcon aria-hidden />}
-                className="text-icon-gray-light h-8 w-8 bg-transparent"
+                className="text-icon-gray-light h-8 w-9 bg-transparent"
               />
             </Dropdown.Trigger>
             <Dropdown.Content align="end" sideOffset={0} className="w-44 gap-1">
-              {isInProgress ? (
-                <Dropdown.Item onSelect={() => onEdit?.()}>
-                  수정 <EditIcon className="size-5" />
-                </Dropdown.Item>
-              ) : null}
               <Dropdown.Item onSelect={() => onDelete?.()}>
                 삭제
                 <TrashIcon className="size-5 stroke-[1.5]" />
@@ -208,198 +191,97 @@ const ProjectCardHeader = ({
   );
 };
 
-const ProjectCardTitle = ({ host, projectName }: ProjectCardTitleProps) => {
+const ProjectCardTitle = ({ host, projectName, startDate, endDate }: ProjectCardTitleProps) => {
   return (
-    <div>
+    <div className="flex flex-col">
       <h2 className="text-heading-sm text-text-subtle font-bold">{projectName}</h2>
-      <p className="text-detail-base text-text-subtle mt-1 font-normal">{host}</p>
+      <p className="text-body-base text-text-subtle font-normal">
+        {formatIsoDateToDots(startDate)} - {formatIsoDateToDots(endDate)}
+        <span className="text-text-subtler"> ・ </span>
+        {host}
+      </p>
     </div>
   );
 };
 
-const ProjectCardActions = ({ projectId, isLeader, projectStatus }: ProjectCardActionsProps) => {
-  const { data: myProfile } = useMyProfile();
-  const {
-    open: isInviteTooltipOpen,
-    message: inviteTooltipMessage,
-    close: closeInviteTooltip,
-    copyLink,
-  } = useCopyLinkFeedback();
-  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [confirmError, setConfirmError] = useState<string | null>(null);
-  const { mutateAsync: confirmTeam, isPending: isConfirming } = useConfirmProjectMembers(projectId);
-
-  const handleConfirmTeam = useCallback(async () => {
-    setConfirmError(null);
-    try {
-      await confirmTeam();
-      setConfirmDialogOpen(false);
-    } catch {
-      setConfirmError('팀 확정에 실패했습니다. 다시 시도해주세요.');
-    }
-  }, [confirmTeam]);
-
-  const handleCopyInviteLink = async () => {
-    await copyLink(buildProjectInviteUrl(projectId, myProfile?.username));
-  };
-
-  if (!isLeader) {
-    return <ProjectStatusAlert variant={projectStatus === 'IN_PROGRESS' ? 'warning' : 'success'} />;
-  }
-
-  const isInProgress = projectStatus === 'IN_PROGRESS';
+const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['projectStatus'] }) => {
+  const isCompleted = projectStatus === 'COMPLETED';
+  const message = isCompleted
+    ? '모든 후기 작성이 완료되었습니다! 받은 후기를 확인해보세요.'
+    : '팀의 후기가 모두 모이면 받은 후기를 확인할 수 있습니다.';
 
   return (
-    <div className="flex gap-2">
-      {isInProgress ? (
-        <div className="relative inline-flex">
-          <Button
-            type="button"
-            variant="secondary"
-            size="medium"
-            leftIcon={<CopyIcon aria-hidden className="size-4" />}
-            className={cn(
-              isInviteTooltipOpen &&
-                'bg-button-secondary-fill-pressed hover:bg-button-secondary-fill-pressed focus:bg-button-secondary-fill-pressed active:bg-button-secondary-fill-pressed',
-            )}
-            onClick={() => void handleCopyInviteLink()}
-          >
-            초대 링크 복사
-          </Button>
-          <CopyFeedbackTooltip open={isInviteTooltipOpen} onClose={closeInviteTooltip} message={inviteTooltipMessage} />
-        </div>
-      ) : null}
-      {isInProgress ? (
-        <Button
-          type="button"
-          variant="primary"
-          size="medium"
-          leftIcon={<RoundCheckIcon aria-hidden className="size-4" />}
-          disabled={isConfirming}
-          onClick={() => setConfirmDialogOpen(true)}
-        >
-          우리 팀 확정하기
-        </Button>
-      ) : (
-        <Button
-          type="button"
-          variant="primary"
-          size="medium"
-          disabled
-          leftIcon={<RoundCheckIcon aria-hidden className="size-4" />}
-          className={cn(
-            'bg-button-primary-fill-pressed text-text-basic-inverse',
-            'hover:bg-button-primary-fill-pressed hover:text-text-basic-inverse',
-            'focus:bg-button-primary-fill-pressed focus:text-text-basic-inverse',
-            'active:bg-button-primary-fill-pressed active:text-text-basic-inverse',
-          )}
-        >
-          팀 확정 완료
-        </Button>
+    <div
+      className={cn(
+        'text-body-sm flex h-[37px] items-center rounded-lg px-2 font-normal',
+        isCompleted ? 'bg-surface-success-subtler text-text-success' : 'bg-surface-gray-subtle text-text-subtle',
       )}
-      <ConfirmationDialog
-        open={confirmDialogOpen}
-        title="팀 확정하기"
-        description="확정 후에는 팀원 추가 및 프로젝트 정보 수정이 불가능합니다. 진행하시겠습니까?"
-        confirmText="확정하기"
-        cancelText="취소"
-        onOpenChange={(open) => {
-          if (!open) {
-            setConfirmError(null);
-          }
-          setConfirmDialogOpen(open);
-        }}
-        onConfirm={handleConfirmTeam}
-        isConfirming={isConfirming}
-        errorMessage={confirmError ?? undefined}
-      />
+    >
+      {message}
     </div>
   );
 };
 
-const ProjectMemberList = ({ projectId, members, isLeader }: ProjectMemberListProps) => {
-  const router = useRouter();
-  const [memberToRemove, setMemberToRemove] = useState<{ memberId: number; name: string } | null>(null);
-  const [removeError, setRemoveError] = useState<string | null>(null);
-  const { mutateAsync: removeMember, isPending: isRemovingMember } = useDeleteProjectMember(projectId);
-
-  const handleWriteReview = (member: ProjectCardMember) => {
-    router.push(
-      buildReviewWriteUrl({
-        projectId,
-        revieweeId: member.memberId,
-        revieweeName: member.name,
-      }),
-    );
-  };
-
-  const handleConfirmRemoveMember = useCallback(async () => {
-    if (memberToRemove == null) {
-      return;
-    }
-    setRemoveError(null);
-    try {
-      await removeMember(memberToRemove.memberId);
-      setMemberToRemove(null);
-    } catch (error) {
-      if (error instanceof ApiError && (error.status === 403 || error.status === 405)) {
-        setRemoveError('현재 팀원 제외 기능을 사용할 수 없습니다. 잠시 후 다시 시도해주세요.');
-        return;
-      }
-      setRemoveError('팀원 내보내기에 실패했습니다. 다시 시도해주세요.');
-    }
-  }, [memberToRemove, removeMember]);
+const ProjectMemberList = ({ members, isLeader, projectStatus }: ProjectMemberListProps) => {
+  const completedCount = members.filter((member) => member.reviewStatus === 'completed').length;
+  const fallbackTotal =
+    projectStatus === 'COMPLETED' ? Math.max(members.length, completedCount, 3) : PROJECT_REVIEW_TOTAL_FALLBACK;
+  const displayCompleted = projectStatus === 'COMPLETED' ? fallbackTotal : Math.max(completedCount, 1);
+  const label = isLeader ? '후기 작성' : '내가 작성한 후기';
+  const placeholderMembers =
+    projectStatus === 'IN_PROGRESS'
+      ? PLACEHOLDER_MEMBER_NAMES.map(
+          (name, index): ProjectCardMember => ({
+            memberId: -index - 1,
+            name,
+            reviewStatus: 'writable',
+          }),
+        )
+      : [];
 
   return (
-    <div>
-      <p className="text-detail-base text-text-subtle font-normal">팀원 {members.length}명</p>
-      <ul className="mt-2 flex flex-wrap gap-2">
-        {members.map((member) => {
-          const canRemove = isLeader && member.reviewStatus !== 'self';
-          const removeProps = canRemove
-            ? ({
-                removable: true as const,
-                onRemove: () => setMemberToRemove({ memberId: member.memberId, name: member.name }),
-              } as const)
-            : {};
-
-          if (member.reviewStatus === 'writable') {
-            return (
-              <li key={member.memberId}>
-                <ProjectMemberChip
-                  name={member.name}
-                  state="writable"
-                  onWriteReview={() => handleWriteReview(member)}
-                  {...removeProps}
-                />
-              </li>
-            );
-          }
-
-          return (
+    <div className="flex min-w-0 flex-col gap-2">
+      <p className="text-body-base text-text-subtle font-normal">
+        {label}{' '}
+        <span>
+          {displayCompleted}/{fallbackTotal}
+        </span>
+      </p>
+      <div className="relative min-w-0 overflow-hidden">
+        <ul className="flex flex-nowrap gap-2">
+          {[...members, ...placeholderMembers].map((member) => (
             <li key={member.memberId}>
-              <ProjectMemberChip name={member.name} state={member.reviewStatus} {...removeProps} />
+              <ProjectMemberStatusChip member={member} />
             </li>
-          );
-        })}
-      </ul>
+          ))}
+        </ul>
+        {projectStatus === 'IN_PROGRESS' ? (
+          <div className="pointer-events-none absolute top-0 right-0 flex h-full w-12 items-center justify-end bg-gradient-to-r from-white/0 to-white">
+            <span className="border-border-gray bg-surface-white text-text-subtle flex size-8 items-center justify-center rounded-full border text-xl leading-none">
+              ›
+            </span>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+};
 
-      <ConfirmationDialog
-        open={memberToRemove != null}
-        title="팀원 내보내기"
-        description="팀원을 팀 목록에서 삭제할까요? 삭제된 팀원은 되돌릴 수 없습니다."
-        confirmText="내보내기"
-        cancelText="취소"
-        onOpenChange={(open) => {
-          if (!open) {
-            setRemoveError(null);
-            setMemberToRemove(null);
-          }
-        }}
-        onConfirm={handleConfirmRemoveMember}
-        isConfirming={isRemovingMember}
-        errorMessage={removeError ?? undefined}
-      />
+const ProjectMemberStatusChip = ({ member }: { member: ProjectCardMember }) => {
+  // const isCompleted = member.reviewStatus === 'completed';
+  // const label = isCompleted ? '완료' : member.reviewStatus === 'self' ? '나' : '작성 전';
+
+  return (
+    <div className="border-border-gray bg-surface-white flex h-12.25 items-center rounded-md border px-4">
+      <span className="text-body-base text-text-subtle font-medium whitespace-nowrap">{member.name}</span>
+      {/* <span
+        className={cn(
+          'text-detail-xs rounded-full px-2 py-1 font-normal whitespace-nowrap',
+          isCompleted ? 'bg-surface-success-subtler text-text-success' : 'bg-surface-gray-subtler text-text-subtle',
+        )}
+      >
+        {label}
+      </span> */}
     </div>
   );
 };
