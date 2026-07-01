@@ -3,8 +3,8 @@
 import Image from 'next/image';
 
 import { ProjectReviewContainer } from '@/features/review';
-import { SoftSkillsCardBoundary } from '@/features/soft-skills';
-import { TagCardBoundary } from '@/features/tag';
+import { SpectrumCardGate } from '@/features/spectrum';
+import { TagCardGate } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -14,10 +14,11 @@ const DEFAULT_PROJECT_IMAGE = '/default.png';
 
 type ProjectPageContentProps = {
   userId: number;
+  userLink: string;
   projectId: number;
 };
 
-export const ProjectPageContent = ({ userId, projectId }: ProjectPageContentProps) => {
+export const ProjectPageContent = ({ userId, userLink, projectId }: ProjectPageContentProps) => {
   const { data: project, isPending, isError } = useProject(projectId);
 
   if (isPending) {
@@ -60,8 +61,8 @@ export const ProjectPageContent = ({ userId, projectId }: ProjectPageContentProp
       </section>
 
       <div className="flex gap-[30px]">
-        <TagCardBoundary userId={userId} projectId={projectId} collapsible />
-        <SoftSkillsCardBoundary userId={userId} projectId={projectId} showDistribution={false} />
+        <TagCardGate userLink={userLink} projectId={projectId} collapsible />
+        <SpectrumCardGate userLink={userLink} projectId={projectId} showDistribution={false} />
       </div>
 
       <ProjectReviewContainer userId={userId} projectId={projectId} />

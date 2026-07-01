@@ -1,6 +1,6 @@
-import type { DistributionBar, DistributionBarTone, SpectrumAxisInfo } from './soft-skills.types';
+import type { DistributionBar, DistributionBarTone, SpectrumAxisInfo } from './spectrum.types';
 
-import { spectrumAxisLabels } from './soft-skills.constants';
+import { spectrumAxisLabels } from './spectrum.constants';
 
 const RANK_TONES: DistributionBarTone[] = ['first', 'second', 'third'];
 

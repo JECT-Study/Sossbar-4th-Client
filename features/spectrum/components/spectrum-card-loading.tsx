@@ -61,7 +61,7 @@ const DistributionSkeleton = () => (
   </div>
 );
 
-export const SoftSkillsCardSkeleton = () => (
+export const SpectrumCardLoading = () => (
   <section
     aria-hidden
     className="border-border-gray flex h-[652px] w-[585px] flex-col overflow-hidden rounded-2xl border bg-white"

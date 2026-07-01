@@ -1,12 +1,12 @@
-import type { SpectrumInfo } from '../soft-skills.types';
+import type { SpectrumInfo } from '../spectrum.types';
 
 import {
   SPECTRUM_LEFT_TRACK_CLASS,
   SPECTRUM_MARKER_CLASS,
   SPECTRUM_RIGHT_TRACK_CLASS,
   spectrumAxisLabels,
-} from '../soft-skills.constants';
-import { toMarkerLeft } from '../soft-skills.lib';
+} from '../spectrum.constants';
+import { toMarkerLeft } from '../spectrum.lib';
 
 /** 4축 × (h-7 + gap-1) */
 const SPECTRUM_TRACK_HEIGHT_PX = 136;
@@ -15,7 +15,7 @@ interface Props {
   spectrumInfo: SpectrumInfo;
 }
 
-export const SoftSkillsSpectrum = ({ spectrumInfo }: Props) => (
+export const SpectrumAverageSection = ({ spectrumInfo }: Props) => (
   <div className="w-full">
     <h3 className="text-heading-xs text-text-subtle pb-2 font-bold">평균 지표</h3>
 

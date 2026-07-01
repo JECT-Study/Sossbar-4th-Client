@@ -1,4 +1,4 @@
 export const tagKeys = {
   all: ['tag'] as const,
-  received: (userId: number, projectId?: number) => [...tagKeys.all, 'received', userId, projectId] as const,
+  received: (userLink: string, projectId?: number) => [...tagKeys.all, 'received', userLink, projectId] as const,
 };

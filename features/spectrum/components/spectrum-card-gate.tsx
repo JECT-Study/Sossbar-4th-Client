@@ -6,16 +6,16 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import { RetryErrorCard } from '@/shared/components/retry-error-card';
 
-import { SoftSkillsCard } from './soft-skills-card';
-import { SoftSkillsCardSkeleton } from './soft-skills-card.skeleton';
+import { SpectrumCard } from './spectrum-card';
+import { SpectrumCardLoading } from './spectrum-card-loading';
 
 interface Props {
-  userId: number;
+  userLink: string;
   projectId?: number;
   showDistribution?: boolean;
 }
 
-export const SoftSkillsCardBoundary = ({ userId, projectId, showDistribution }: Props) => {
+export const SpectrumCardGate = ({ userLink, projectId, showDistribution }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -31,8 +31,8 @@ export const SoftSkillsCardBoundary = ({ userId, projectId, showDistribution }: 
         />
       )}
     >
-      <Suspense fallback={<SoftSkillsCardSkeleton />}>
-        <SoftSkillsCard userId={userId} projectId={projectId} showDistribution={showDistribution} />
+      <Suspense fallback={<SpectrumCardLoading />}>
+        <SpectrumCard userLink={userLink} projectId={projectId} showDistribution={showDistribution} />
       </Suspense>
     </ErrorBoundary>
   );

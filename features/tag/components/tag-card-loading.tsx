@@ -27,7 +27,7 @@ const ALL_TAG_BADGE_SKELETONS = [
   { id: 'tag-j', width: 'w-32' },
 ] as const;
 
-export const TagCardSkeleton = () => (
+export const TagCardLoading = () => (
   <section
     aria-busy="true"
     aria-label="받은 태그를 불러오는 중"

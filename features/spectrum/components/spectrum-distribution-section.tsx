@@ -1,9 +1,9 @@
 import { cn } from '@/shared/lib/cn';
 
-import type { SpectrumInfo } from '../soft-skills.types';
+import type { SpectrumInfo } from '../spectrum.types';
 
-import { DISTRIBUTION_LEFT_BAR_CLASS, DISTRIBUTION_RIGHT_BAR_CLASS } from '../soft-skills.constants';
-import { scaleBarHeight, toDistributionBars } from '../soft-skills.lib';
+import { DISTRIBUTION_LEFT_BAR_CLASS, DISTRIBUTION_RIGHT_BAR_CLASS } from '../spectrum.constants';
+import { scaleBarHeight, toDistributionBars } from '../spectrum.lib';
 
 /** 막대+인원 수 스택 영역 높이(px) — scaleBarHeight와 동일 기준 */
 const BAR_STACK_HEIGHT_PX = 198;
@@ -21,7 +21,7 @@ interface Props {
   spectrumInfo: SpectrumInfo;
 }
 
-export const SoftSkillsDistribution = ({ spectrumInfo }: Props) => {
+export const SpectrumDistributionSection = ({ spectrumInfo }: Props) => {
   const bars = toDistributionBars(spectrumInfo.spectrumInfoResDtos);
   const maxCount = Math.max(...bars.map((bar) => bar.count), 0);
 

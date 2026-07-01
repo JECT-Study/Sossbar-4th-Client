@@ -3,14 +3,15 @@
 import { ProfileByIdSectionGate, ProfileDetailView } from '@/features/profile';
 import { ProjectSection } from '@/features/project';
 import { UserReviewContainerBoundary } from '@/features/review';
-import { SoftSkillsCardBoundary } from '@/features/soft-skills';
-import { TagCardBoundary } from '@/features/tag';
+import { SpectrumCardGate } from '@/features/spectrum';
+import { TagCardGate } from '@/features/tag';
 
 interface Props {
   userId: number;
+  userLink: string;
 }
 
-export const ProfileExamplesClient = ({ userId }: Props) => {
+export const ProfileExamplesClient = ({ userId, userLink }: Props) => {
   return (
     <>
       <ProfileByIdSectionGate userId={userId} />
@@ -19,8 +20,8 @@ export const ProfileExamplesClient = ({ userId }: Props) => {
         allTabContent={
           <>
             <div className="flex gap-[30px]">
-              <TagCardBoundary userId={userId} />
-              <SoftSkillsCardBoundary userId={userId} showDistribution />
+              <TagCardGate userLink={userLink} />
+              <SpectrumCardGate userLink={userLink} showDistribution />
             </div>
             <UserReviewContainerBoundary userId={userId} />
           </>

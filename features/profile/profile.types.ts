@@ -1,5 +1,6 @@
 export interface Profile {
   userId: number;
+  userLink: string;
   username: string;
   nickname: string;
   email: string;

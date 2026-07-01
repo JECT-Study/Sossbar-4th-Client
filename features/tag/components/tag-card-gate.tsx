@@ -7,15 +7,15 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { RetryErrorCard } from '@/shared/components/retry-error-card';
 
 import { TagCard } from './tag-card';
-import { TagCardSkeleton } from './tag-card.skeleton';
+import { TagCardLoading } from './tag-card-loading';
 
 interface Props {
-  userId: number;
+  userLink: string;
   projectId?: number;
   collapsible?: boolean;
 }
 
-export const TagCardBoundary = ({ userId, projectId, collapsible }: Props) => {
+export const TagCardGate = ({ userLink, projectId, collapsible }: Props) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -31,8 +31,8 @@ export const TagCardBoundary = ({ userId, projectId, collapsible }: Props) => {
         />
       )}
     >
-      <Suspense fallback={<TagCardSkeleton />}>
-        <TagCard userId={userId} projectId={projectId} collapsible={collapsible} />
+      <Suspense fallback={<TagCardLoading />}>
+        <TagCard userLink={userLink} projectId={projectId} collapsible={collapsible} />
       </Suspense>
     </ErrorBoundary>
   );

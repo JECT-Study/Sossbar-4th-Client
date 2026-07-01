@@ -4,18 +4,18 @@ import { EmptyState } from '@/shared/components/empty-state';
 import { ProfileStatCard } from '@/shared/components/profile-stat-card';
 import { cn } from '@/shared/lib/cn';
 
-import { SoftSkillsDistribution } from './soft-skills-distribution';
-import { SoftSkillsSpectrum } from './soft-skills-spectrum';
-import { useSpectrum } from '../soft-skills.hooks';
+import { SpectrumAverageSection } from './spectrum-average-section';
+import { SpectrumDistributionSection } from './spectrum-distribution-section';
+import { useSpectrum } from '../spectrum.hooks';
 
 interface Props {
-  userId: number;
+  userLink: string;
   projectId?: number;
   showDistribution?: boolean;
 }
 
-export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: Props) => {
-  const { data: spectrumInfo } = useSpectrum({ userId, projectId });
+export const SpectrumCard = ({ userLink, projectId, showDistribution = true }: Props) => {
+  const { data: spectrumInfo } = useSpectrum({ userLink, projectId });
 
   return (
     <ProfileStatCard
@@ -28,8 +28,8 @@ export const SoftSkillsCard = ({ userId, projectId, showDistribution = true }: P
         <EmptyState title="받은 후기가 없어요" />
       ) : (
         <>
-          <SoftSkillsSpectrum spectrumInfo={spectrumInfo} />
-          {!!showDistribution && <SoftSkillsDistribution spectrumInfo={spectrumInfo} />}
+          <SpectrumAverageSection spectrumInfo={spectrumInfo} />
+          {!!showDistribution && <SpectrumDistributionSection spectrumInfo={spectrumInfo} />}
           <div className="bg-surface-gray-subtler mt-auto rounded-lg px-4 py-3">
             <p className="text-detail-sm text-text-subtle font-normal">
               * 지표는 동료들의 평가를 기반으로 자동 산출됩니다.

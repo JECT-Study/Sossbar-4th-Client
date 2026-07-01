@@ -7,15 +7,15 @@ import { fetchReceivedTags, fetchReceivedTagsByProject } from './tag.api';
 import { tagKeys } from './tag.query-keys';
 
 interface UseReceivedTagsParams {
-  userId: number;
+  userLink: string;
   projectId?: number;
 }
 
-export const useReceivedTags = ({ userId, projectId }: UseReceivedTagsParams) =>
+export const useReceivedTags = ({ userLink, projectId }: UseReceivedTagsParams) =>
   useSuspenseQuery({
-    queryKey: tagKeys.received(userId, projectId),
+    queryKey: tagKeys.received(userLink, projectId),
     queryFn: () =>
-      projectId === undefined ? fetchReceivedTags(userId) : fetchReceivedTagsByProject(userId, projectId),
+      projectId === undefined ? fetchReceivedTags(userLink) : fetchReceivedTagsByProject(userLink, projectId),
   });
 
 export const useTagCollapsible = (defaultCollapsed = false) => {
