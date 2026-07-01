@@ -61,7 +61,7 @@ export const ProjectPageContent = ({ userId, userLink, projectId }: ProjectPageC
       </section>
 
       <div className="flex gap-[30px]">
-        <TagCardGate userLink={userLink} projectId={projectId} collapsible />
+        <TagCardGate userLink={userLink} projectId={projectId} />
         <SpectrumCardGate userLink={userLink} projectId={projectId} showDistribution={false} />
       </div>
 
