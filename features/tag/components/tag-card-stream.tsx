@@ -3,9 +3,8 @@ import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 import { TagCardBoundary } from './tag-card-boundary';
-import { fetchReceivedTagsByProject } from '../api/fetch-received-tags-by-project.api';
-import { fetchReceivedTags } from '../api/fetch-received-tags.api';
-import { tagKeys } from '../tag.query-key';
+import { fetchReceivedTags, fetchReceivedTagsByProject } from '../tag.api';
+import { tagKeys } from '../tag.query-keys';
 
 interface Props {
   userId: number;

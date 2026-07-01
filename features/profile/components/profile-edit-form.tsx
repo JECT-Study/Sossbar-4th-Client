@@ -14,7 +14,7 @@ import type { Profile, UpdateProfilePayload } from '../profile.types';
 
 import { PROFILE_BIO_MAX_LENGTH, PROFILE_NICKNAME_MAX_LENGTH } from '../profile.constants';
 import { ProfileAvatar } from './profile-avatar';
-import { useProfileEditForm } from '../hooks/use-profile-edit-form';
+import { useProfileEditForm } from '../profile.hooks';
 
 /** 프로필 이미지 file input accept 속성 */
 const PROFILE_IMAGE_ACCEPT = 'image/png,image/jpeg,image/webp';

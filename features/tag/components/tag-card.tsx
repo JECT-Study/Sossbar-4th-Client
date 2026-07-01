@@ -6,8 +6,7 @@ import { cn } from '@/shared/lib/cn';
 
 import { TagCollapseButton } from './tag-collapse-button';
 import { TagCollapsibleContent } from './tag-collapsible-content';
-import { useReceivedTags } from '../hooks/use-received-tags';
-import { useTagCollapsible } from '../hooks/use-tag-collapsible';
+import { useReceivedTags, useTagCollapsible } from '../tag.hooks';
 
 const EMPTY_TAGS = [] as const;
 

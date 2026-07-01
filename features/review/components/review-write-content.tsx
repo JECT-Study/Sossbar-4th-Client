@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { useMyProfile } from '@/features/profile';
 import { useProject } from '@/features/project';
 import { Button } from '@/shared/components/button';
 import { Textarea } from '@/shared/components/textarea';

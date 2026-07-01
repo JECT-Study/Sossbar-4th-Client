@@ -3,10 +3,7 @@
 import { ProfileAvatar } from './profile-avatar';
 import { ProfileEditForm } from './profile-edit-form';
 import { ProfileOwnerActions } from './profile-owner-actions';
-import { useIsMyProfile } from '../hooks/use-is-my-profile';
-import { useProfileById } from '../hooks/use-profile-by-id.query';
-import { useProfileEditing } from '../hooks/use-profile-editing';
-import { useProfileShare } from '../hooks/use-profile-share';
+import { useIsMyProfile, useProfileById, useProfileEditing, useProfileShare } from '../profile.hooks';
 
 interface Props {
   userId: number;

@@ -1,10 +1,20 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+'use client';
 
-import type { NotificationItem } from '../notification.types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { markAllNotificationsRead } from '../api/mark-all-notifications-read';
-import { markNotificationRead } from '../api/mark-notification-read';
-import { notificationKeys } from '../notification.query-keys';
+import type { NotificationItem } from './notification.types';
+
+import { fetchNotifications, markAllNotificationsRead, markNotificationRead } from './notification.api';
+import { notificationKeys } from './notification.query-keys';
+
+export const useNotifications = () =>
+  useQuery({
+    queryKey: notificationKeys.all,
+    queryFn: fetchNotifications,
+    enabled: false,
+    throwOnError: false,
+    staleTime: 30_000,
+  });
 
 export const useNotificationActions = () => {
   const queryClient = useQueryClient();

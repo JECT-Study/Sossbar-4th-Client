@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { saveLoginReturnPath, useLoginGate } from '@/features/auth';
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { useMyProfile } from '@/features/profile';
 import { ProjectInviteAcceptModal } from '@/features/project/components/project-invite-accept-modal';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
 import { ApiError } from '@/shared/lib/api';

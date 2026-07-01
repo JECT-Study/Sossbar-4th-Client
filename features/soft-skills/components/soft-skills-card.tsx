@@ -6,7 +6,7 @@ import { cn } from '@/shared/lib/cn';
 
 import { SoftSkillsDistribution } from './soft-skills-distribution';
 import { SoftSkillsSpectrum } from './soft-skills-spectrum';
-import { useSpectrum } from '../hooks/use-spectrum';
+import { useSpectrum } from '../soft-skills.hooks';
 
 interface Props {
   userId: number;

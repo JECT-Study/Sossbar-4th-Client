@@ -2,7 +2,7 @@ import { cn } from '@/shared/lib/cn';
 
 import type { NotificationItem as NotificationItemType } from '../notification.types';
 
-import { formatRelativeTime } from '../lib/format-relative-time';
+import { formatRelativeTime } from '../notification.lib';
 
 type NotificationItemProps = {
   notification: NotificationItemType;
