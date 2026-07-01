@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { useMyProfile } from '@/features/profile';
 import { EditProjectModal } from '@/features/project/components/edit-project-modal';
 import { ProjectMemberChip } from '@/features/project/components/project-member-chip';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';

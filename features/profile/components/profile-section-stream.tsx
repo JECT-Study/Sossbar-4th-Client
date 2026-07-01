@@ -1,9 +1,10 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import { ProfileSectionBoundary } from '@/features/profile';
-import { fetchProfileById } from '@/features/profile/api/fetch-profile-by-id';
 import { profileKeys } from '@/features/profile/profile.query-keys';
 import { getQueryClient } from '@/shared/lib/get-query-client';
+
+import { fetchProfileById } from '../profile.api';
 
 interface Props {
   userId: number;

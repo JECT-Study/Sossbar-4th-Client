@@ -2,9 +2,7 @@ import { dehydrate } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 import { Suspense } from 'react';
 
-import { fetchMyProfileOptional } from '@/features/profile/api/fetch-my-profile-optional';
-import { buildReviewRequestDescription } from '@/features/profile/lib/profile-share-content';
-import { profileKeys } from '@/features/profile/profile.query-keys';
+import { buildReviewRequestDescription, fetchMyProfileOptional, profileKeys } from '@/features/profile';
 import {
   fetchProjects,
   parseProjectInviteId,

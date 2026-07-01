@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { useMyProfile } from '@/features/profile';
 import { ApiError } from '@/shared/lib/api';
 
 import type { ProjectCardItem, ProjectPayload, ProjectRequest } from './project.types';

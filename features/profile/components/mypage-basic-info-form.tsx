@@ -8,8 +8,7 @@ import { Checkbox } from '@/shared/components/checkbox';
 import { TextField } from '@/shared/components/text-field';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
-import { useMyProfile } from '../hooks/use-my-profile.query';
-import { useUpdateProfile } from '../hooks/use-update-profile.mutation';
+import { useMyProfile, useUpdateProfile } from '../profile.hooks';
 
 export const MypageBasicInfoForm = () => {
   const { data: profile } = useMyProfile();

@@ -8,7 +8,7 @@ import { LoginButton } from '@/features/auth';
 import { ROUTES } from '@/shared/constants/routes';
 
 import { HeaderMyProfile } from './header-my-profile';
-import { useMyProfile } from '../hooks/use-my-profile.query';
+import { useMyProfile } from '../profile.hooks';
 
 export const HeaderAuthGate = () => {
   const { data: myProfileFromQuery } = useMyProfile();

@@ -1,12 +1,12 @@
-import type { SpectrumInfo } from '../types/soft-skills.types';
+import type { SpectrumInfo } from '../soft-skills.types';
 
-import { spectrumAxisLabels } from '../constants/spectrum-axis-labels';
 import {
   SPECTRUM_LEFT_TRACK_CLASS,
   SPECTRUM_MARKER_CLASS,
   SPECTRUM_RIGHT_TRACK_CLASS,
-} from '../constants/spectrum-visual.constants';
-import { toMarkerLeft } from '../utils/to-marker-left';
+  spectrumAxisLabels,
+} from '../soft-skills.constants';
+import { toMarkerLeft } from '../soft-skills.lib';
 
 /** 4축 × (h-7 + gap-1) */
 const SPECTRUM_TRACK_HEIGHT_PX = 136;

@@ -7,8 +7,7 @@ import { cn } from '@/shared/lib/cn';
 
 import { BellFilled } from './bell-filled';
 import { NotificationDropdownContent } from './notification-dropdown-content';
-import { useNotificationActions } from '../hooks/use-notification-actions';
-import { useNotifications } from '../hooks/use-notifications.query';
+import { useNotificationActions, useNotifications } from '../notification.hooks';
 
 type NotificationBellProps = {
   className?: string;

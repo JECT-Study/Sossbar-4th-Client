@@ -1,4 +1,4 @@
-import { PROFILE_SHARE_TITLE } from '@/features/profile/lib/profile-share-content';
+import { PROFILE_SHARE_TITLE } from '@/features/profile/profile.lib';
 
 import type { Metadata } from 'next';
 
