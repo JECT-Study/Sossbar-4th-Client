@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { Avatar } from 'radix-ui';
 
+import { NotificationBell } from '@/features/notifications';
 import { Dropdown } from '@/shared/components/dropdown';
-import { NotificationBell } from '@/shared/components/notification';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 

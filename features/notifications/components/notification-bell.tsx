@@ -2,12 +2,13 @@
 
 import { useMemo } from 'react';
 
-import { useNotificationActions, useNotifications } from '@/features/notifications';
+import { Dropdown } from '@/shared/components/dropdown';
 import { cn } from '@/shared/lib/cn';
 
-import { Dropdown } from '../dropdown';
 import { BellFilled } from './bell-filled';
 import { NotificationDropdownContent } from './notification-dropdown-content';
+import { useNotificationActions } from '../hooks/use-notification-actions';
+import { useNotifications } from '../hooks/use-notifications.query';
 
 type NotificationBellProps = {
   className?: string;
