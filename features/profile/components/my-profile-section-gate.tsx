@@ -6,15 +6,10 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import { RetryErrorCard } from '@/shared/components/retry-error-card';
 
-import { ProfileSection } from './profile-section';
-import { ProfileSectionSkeleton } from './profile-section-skeleton';
+import { MyProfileSection } from './my-profile-section';
+import { ProfileSectionLoading } from './profile-section-loading';
 
-interface Props {
-  userId: number;
-  isMyProfile?: boolean;
-}
-
-export const ProfileSectionBoundary = ({ userId, isMyProfile }: Props) => {
+export const MyProfileSectionGate = () => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
@@ -30,8 +25,8 @@ export const ProfileSectionBoundary = ({ userId, isMyProfile }: Props) => {
         />
       )}
     >
-      <Suspense fallback={<ProfileSectionSkeleton />}>
-        <ProfileSection userId={userId} isMyProfile={isMyProfile} />
+      <Suspense fallback={<ProfileSectionLoading />}>
+        <MyProfileSection />
       </Suspense>
     </ErrorBoundary>
   );

@@ -1,13 +1,13 @@
 export { fetchMyProfile, fetchMyProfileOptional, fetchProfileById } from './profile.api';
 export { useIsMyProfile, useMyProfile, useProfileById, useUpdateProfile } from './profile.hooks';
 export { MypageBasicInfoBoundary } from './components/mypage-basic-info-boundary';
+export { MyProfileSectionGate } from './components/my-profile-section-gate';
 export { MyPageSkeleton } from './components/mypage-skeleton';
 export { ProfileAvatar } from './components/profile-avatar';
+export { ProfileByIdSectionEntry } from './components/profile-by-id-section-entry';
+export { ProfileByIdSectionGate } from './components/profile-by-id-section-gate';
 export { ProfileDetailView } from './components/profile-detail-view';
-export { ProfileSection } from './components/profile-section';
-export { ProfileSectionBoundary } from './components/profile-section-boundary';
-export { ProfileSectionSkeleton } from './components/profile-section-skeleton';
-export { ProfileSectionStream } from './components/profile-section-stream';
+export { ProfileSectionLoading } from './components/profile-section-loading';
 export { buildProfileShareMetadata, buildReviewRequestDescription } from './profile.lib';
 export { profileKeys } from './profile.query-keys';
 export type { Profile, UpdateProfilePayload } from './profile.types';

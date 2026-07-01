@@ -6,9 +6,9 @@ import {
   buildProfileShareMetadata,
   fetchMyProfile,
   fetchProfileById,
+  ProfileByIdSectionEntry,
   ProfileDetailView,
-  ProfileSectionSkeleton,
-  ProfileSectionStream,
+  ProfileSectionLoading,
 } from '@/features/profile';
 import { ProjectSectionStream } from '@/features/project/components/project-section-stream';
 import { ProjectSectionSkeleton } from '@/features/project/components/project-section.skeleton';
@@ -88,8 +88,8 @@ const Page = async ({ params }: ProfilePageProps) => {
 
   return (
     <PageContainer className="mb-20">
-      <Suspense fallback={<ProfileSectionSkeleton />}>
-        <ProfileSectionStream userId={profileUserId} isMyProfile={isMyProfile} />
+      <Suspense fallback={<ProfileSectionLoading />}>
+        <ProfileByIdSectionEntry userId={profileUserId} isMyProfile={isMyProfile} />
       </Suspense>
       <ProfileDetailView
         userId={profileUserId}
