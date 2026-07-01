@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { PlusIcon } from '@/shared/assets/icons';
+import { PlusIcon, TrashIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
 import { MultiSelect } from '@/shared/components/multi-select';
@@ -16,6 +16,7 @@ import { MypageCard } from './mypage-card';
 import { MypageInfoRow } from './mypage-info-row';
 
 const MAX_FIELDS = 3;
+const MAX_URLS = 3;
 
 const findFieldLabel = (value: string) => CAREER_FIELD_OPTIONS.find((option) => option.value === value)?.label ?? value;
 
@@ -54,6 +55,10 @@ export const MypageCareerSection = () => {
 
   const handleAddUrl = () => {
     setUrls((prev) => [...prev, { id: crypto.randomUUID(), url: '', type: URL_TYPE_OPTIONS[0].value }]);
+  };
+
+  const handleRemoveUrl = (id: string) => {
+    setUrls((prev) => prev.filter((entry) => entry.id !== id));
   };
 
   return (
@@ -108,16 +113,16 @@ export const MypageCareerSection = () => {
         {isEditing ? (
           <div className="flex flex-col gap-2">
             {urls.map((entry) => (
-              <div key={entry.id} className="flex gap-2">
+              <div key={entry.id} className="group grid grid-cols-[1fr_120px_auto] gap-2">
                 <Input
                   name={`url-${entry.id}`}
                   value={entry.url}
                   placeholder="https://"
                   onChange={(event) => handleUrlChange(entry.id, { url: event.target.value })}
-                  className="pr-4"
+                  className="h-10.5 px-3"
                 />
                 <Select.Root value={entry.type} onValueChange={(value) => handleUrlChange(entry.id, { type: value })}>
-                  <Select.Trigger className="w-32 shrink-0">
+                  <Select.Trigger aria-label="URL 유형" className="h-10.5 px-3">
                     <Select.Value placeholder="Link" />
                   </Select.Trigger>
                   <Select.Content className="w-(--radix-select-trigger-width)">
@@ -128,17 +133,29 @@ export const MypageCareerSection = () => {
                     ))}
                   </Select.Content>
                 </Select.Root>
+                <Button
+                  leftIcon={<TrashIcon className="size-5" />}
+                  variant="tertiary"
+                  type="button"
+                  className="hover:text-icon-error px-2.5 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 disabled:hover:cursor-default"
+                  aria-label="링크 제거"
+                  disabled={urls.length <= 1}
+                  onClick={() => handleRemoveUrl(entry.id)}
+                />
               </div>
             ))}
-            <Button
-              type="button"
-              variant="tertiary"
-              onClick={handleAddUrl}
-              leftIcon={<PlusIcon className="size-5 shrink-0" aria-hidden />}
-              className="border-border-gray text-text-subtle h-11 self-start rounded-[6px] border"
-            >
-              추가
-            </Button>
+            {urls.length < MAX_URLS ? (
+              <button
+                type="button"
+                onClick={handleAddUrl}
+                className="text-detail-sm text-text-subtler hover:bg-button-tertiary-fill-hover active:border-border-gray-light flex w-fit flex-row rounded-md border border-transparent pr-1.5 pl-px font-normal"
+              >
+                <PlusIcon className="size-5" aria-hidden />
+                추가
+              </button>
+            ) : (
+              <p className="text-text-subtler text-detail-sm font-normal">최대 {MAX_URLS}개까지 등록 가능해요</p>
+            )}
           </div>
         ) : (
           <div className="flex flex-col gap-1">
