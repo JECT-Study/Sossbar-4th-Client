@@ -18,7 +18,7 @@ export const MypageCard = ({ title, isEditing, onEdit, onCancel, onSave, isSavin
       <div className="flex flex-1 flex-col gap-8">
         <div className="flex flex-row items-center justify-between gap-4">
           <h2 className="text-heading-sm text-text-basic font-bold">{title}</h2>
-          <div className="flex w-36 shrink-0 justify-end">
+          <div className="flex shrink-0 justify-end">
             {isEditing ? (
               <div className="flex gap-2">
                 <Button

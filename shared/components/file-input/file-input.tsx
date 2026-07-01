@@ -41,16 +41,22 @@ export const FileInput = ({
       {value === null ? (
         <Button
           type="button"
-          variant="secondary"
+          variant="tertiary"
           size="small"
           onClick={openPicker}
-          className="px-4 py-2.5"
+          className="border-button-tertiary-fill-pressed border px-4 py-2.5"
           leftIcon={<FileUploadIcon className="size-5 shrink-0" aria-hidden />}
         >
           {label}
         </Button>
       ) : (
-        <Button type="button" variant="secondary" size="small" onClick={openPicker} className="px-4 py-2.5">
+        <Button
+          type="button"
+          variant="tertiary"
+          size="small"
+          onClick={openPicker}
+          className="border-button-tertiary-fill-pressed border px-4 py-2.5"
+        >
           {value.name}
         </Button>
       )}
