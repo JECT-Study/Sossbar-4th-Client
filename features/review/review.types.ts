@@ -1,3 +1,4 @@
+import type { ProjectPositionValue } from '@/features/project';
 import type { Tag } from '@/features/tag';
 
 /**
@@ -6,8 +7,8 @@ import type { Tag } from '@/features/tag';
  */
 export type UserPosition = 'FRONTEND' | 'BACKEND' | 'PM' | 'PD' | 'AI' | 'QA' | 'ETC';
 
-/** POST /api/v1/reviews reviewReqDto.projectPositions 아이템 enum */
-export type ReviewPosition = 'FE' | 'BE' | 'PM' | 'PD' | 'AI';
+/** POST /api/v1/reviews reviewReqDto.projectPositions 아이템 enum. project 도메인의 직군과 동일한 값 집합 */
+export type ReviewPosition = ProjectPositionValue;
 
 export interface Review {
   reviewId: number;

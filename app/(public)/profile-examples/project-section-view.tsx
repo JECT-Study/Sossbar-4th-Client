@@ -40,7 +40,7 @@ const ProjectItem = ({ userLink, project }: ProjectItemProps) => (
       <div className="flex flex-col gap-1">
         <h3 className="text-heading-xs text-text-subtle truncate font-bold">{project.projectName}</h3>
         <p className="text-body-sm text-text-subtler truncate font-medium">
-          {`${project.host} · ${formatIsoDateToDots(project.startDate)}`}
+          {[project.host, formatIsoDateToDots(project.startDate)].filter(Boolean).join(' · ')}
         </p>
       </div>
     </article>
@@ -53,9 +53,10 @@ interface ProjectSectionViewProps {
 }
 
 const sortProjects = (projects: UserProjectResponse[], sortOrder: SortOrder) =>
-  projects.toSorted((a, b) =>
-    sortOrder === 'latest' ? b.startDate.localeCompare(a.startDate) : a.startDate.localeCompare(b.startDate),
-  );
+  projects.toSorted((a, b) => {
+    const [left, right] = sortOrder === 'latest' ? [b.startDate, a.startDate] : [a.startDate, b.startDate];
+    return (left ?? '').localeCompare(right ?? '');
+  });
 
 export const ProjectSectionView = ({ userLink, projects }: ProjectSectionViewProps) => {
   const [showAll, setShowAll] = useState(false);

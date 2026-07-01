@@ -1,5 +1,13 @@
+import type { UserLinkType } from '@/features/auth';
+
 export type ProjectStatus = 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
 export type MemberStatus = 'LEADER' | 'MEMBER';
+
+/** 프로젝트 내 직군. FE/BE/PM/PD/AI — review 도메인의 후기 작성 직군과 동일한 값 집합 */
+export type ProjectPositionValue = 'FE' | 'BE' | 'PM' | 'PD' | 'AI';
+
+/** 프로젝트의 외부 참고 링크 타입 (userLink의 타입과 동일한 값 집합) */
+export type ProjectUrlType = UserLinkType;
 
 export interface ProjectMemberResponse {
   projectMemberId: number;
@@ -8,6 +16,7 @@ export interface ProjectMemberResponse {
   profileImageUrl: string | null;
   memberStatus: MemberStatus;
   reviewWritten?: boolean;
+  projectPositions?: ProjectPositionValue[];
 }
 
 export interface ProjectResponse {
@@ -20,6 +29,10 @@ export interface ProjectResponse {
   projectImage: string | null;
   projectStatus: ProjectStatus;
   members: ProjectMemberResponse[];
+  memberCount?: number;
+  projectPositions?: ProjectPositionValue[];
+  projectUrl?: string;
+  projectUrlType?: ProjectUrlType;
 }
 
 /** GET /api/v1/projects — 내 프로젝트 목록 */
@@ -34,6 +47,12 @@ export interface MyProjectResponse {
   projectStatus: ProjectStatus;
   myMemberStatus: MemberStatus;
   members: ProjectMemberResponse[];
+  memberCount?: number;
+  projectPositions?: ProjectPositionValue[];
+  projectUrl?: string;
+  projectUrlType?: ProjectUrlType;
+  reviewedCount?: number;
+  totalReviewTargetCount?: number;
 }
 
 export type ProjectMemberReviewStatus = 'writable' | 'completed' | 'self';
@@ -56,15 +75,21 @@ export type ProjectCardItem = {
   projectStatus: ProjectStatus;
   myMemberStatus: MemberStatus;
   members: readonly ProjectCardMember[];
+  reviewedCount: number;
+  totalReviewTargetCount: number;
 };
 
+/** GET /api/v1/projects/users/{userLink} — 특정 유저가 속한 프로젝트 목록 */
 export interface UserProjectResponse {
   projectId: number;
   projectName: string;
   host: string;
-  startDate: string;
-  endDate: string;
+  startDate: string | null;
+  endDate: string | null;
   projectImage: string | null;
+  projectPositions?: ProjectPositionValue[];
+  projectUrl?: string;
+  projectUrlType?: ProjectUrlType;
 }
 
 export interface ProjectRequest {
