@@ -63,7 +63,7 @@ export const DatePicker = ({
               type="button"
               aria-label="이전 달"
               onClick={goToPrevMonth}
-              className="text-text-basic flex size-6 shrink-0 items-center justify-center outline-none"
+              className="text-text-basic flex size-6 shrink-0 items-center justify-center outline-none hover:cursor-pointer"
             >
               <ArrowLeftIcon aria-hidden className="size-6" />
             </button>
@@ -72,7 +72,7 @@ export const DatePicker = ({
               type="button"
               aria-label="다음 달"
               onClick={goToNextMonth}
-              className="text-text-basic flex size-6 shrink-0 items-center justify-center outline-none"
+              className="text-text-basic flex size-6 shrink-0 items-center justify-center outline-none hover:cursor-pointer"
             >
               <ArrowRightIcon aria-hidden className="size-6" />
             </button>
@@ -101,8 +101,8 @@ export const DatePicker = ({
                   >
                     <span
                       className={cn(
-                        'text-body-base flex h-10 w-full items-center justify-center rounded-md',
-                        cell.isSelected && 'bg-element-primary text-text-basic-inverse',
+                        'text-body-base hover:bg-button-tertiary-fill-hover active:bg-button-tertiary-fill-pressed flex h-10 w-full items-center justify-center rounded-md',
+                        cell.isSelected && 'bg-element-primary text-text-basic-inverse hover:bg-element-primary',
                         !cell.isSelected && (cell.isCurrentMonth ? 'text-text-subtle' : 'text-text-disabled'),
                       )}
                     >
