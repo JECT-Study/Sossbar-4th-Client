@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import { Dialog } from 'radix-ui';
 
-import { saveLoginReturnPath, useLoginGate } from '@/features/auth';
-import { useMyProfile } from '@/features/profile/hooks/use-my-profile.query';
+import { useMyProfile } from '@/features/profile';
 import { KakaoTalkIcon, XIcon } from '@/shared/assets/icons';
+
+import { saveLoginReturnPath } from '../auth.lib';
+import { useLoginGate } from '../login-modal.hooks';
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
 
@@ -21,8 +23,8 @@ export const LoginModal = () => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-black-75 fixed inset-0 z-20" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 z-20 flex w-lg -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-2xl border bg-white p-10 text-center">
+        <Dialog.Overlay className="bg-black-75 fixed inset-0 z-30" />
+        <Dialog.Content className="fixed top-1/2 left-1/2 z-30 flex w-lg -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 rounded-2xl border bg-white p-10 text-center">
           <Dialog.Close className="ml-auto w-fit cursor-pointer">
             <XIcon width={24} height={24} />
           </Dialog.Close>
