@@ -9,8 +9,12 @@ import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { ApiError } from '@/shared/lib/api';
 
-import type { MyProfile, UpdateProfilePayload } from './profile.types';
-import type { z } from 'zod';
+import type {
+  ProfileEditFormData,
+  UpdateProfilePayload,
+  UseProfileEditFormParams,
+  UseProfileShareParams,
+} from './profile.types';
 
 import { fetchMyProfileOptional, fetchProfileById, updateProfile } from './profile.api';
 import { buildProfileShareClipboardText } from './profile.lib';
@@ -52,13 +56,6 @@ export const useIsMyProfile = (userLink: string) => {
   const { data: myProfile } = useMyProfile();
   return myProfile?.userLink === userLink;
 };
-
-export type ProfileEditFormData = z.infer<typeof ProfileEditFormSchema>;
-
-interface UseProfileEditFormParams {
-  profile: MyProfile;
-  onSubmitProfile: (payload: UpdateProfilePayload) => Promise<void>;
-}
 
 export const useProfileEditForm = ({ profile, onSubmitProfile }: UseProfileEditFormParams) => {
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
@@ -148,11 +145,6 @@ export const useProfileEditing = () => {
     submitProfile,
   };
 };
-
-interface UseProfileShareParams {
-  userLink: string;
-  userName?: string;
-}
 
 export const useProfileShare = ({ userLink, userName }: UseProfileShareParams) => {
   const {

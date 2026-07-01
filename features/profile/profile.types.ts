@@ -1,5 +1,8 @@
 import type { PositionValue, UserLinkType } from '@/features/auth';
 
+import type { ProfileEditFormSchema } from './profile.schemas';
+import type { z } from 'zod';
+
 export interface ProfileLink {
   linkId: number;
   userLinkType: UserLinkType;
@@ -36,3 +39,15 @@ export interface UpdateProfilePayload {
 }
 
 export type UpdateProfileResponse = MyProfile;
+
+export type ProfileEditFormData = z.infer<typeof ProfileEditFormSchema>;
+
+export interface UseProfileEditFormParams {
+  profile: MyProfile;
+  onSubmitProfile: (payload: UpdateProfilePayload) => Promise<void>;
+}
+
+export interface UseProfileShareParams {
+  userLink: string;
+  userName?: string;
+}
