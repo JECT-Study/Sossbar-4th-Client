@@ -92,6 +92,20 @@ export type ProjectCardItem = {
   totalReviewTargetCount: number;
 };
 
+/** GET /api/v1/projects/users/{userLink}/{projectId} — 특정 유저의 단일 프로젝트 조회 */
+export interface UserProjectDetailResponse {
+  projectId: number;
+  projectName: string;
+  host: string;
+  startDate: string | null;
+  endDate: string | null;
+  projectImage: string | null;
+  projectPositions?: ProjectPositionValue[];
+  projectUrl?: string;
+  projectUrlType?: ProjectUrlType;
+  createdAt?: string;
+}
+
 /** GET /api/v1/projects/users/{userLink} — 특정 유저가 속한 프로젝트 목록 */
 export interface UserProjectResponse {
   projectId: number;

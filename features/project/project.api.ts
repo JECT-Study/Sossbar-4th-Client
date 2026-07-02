@@ -8,6 +8,7 @@ import type {
   ProjectPositionValue,
   ProjectRequest,
   ProjectResponse,
+  UserProjectDetailResponse,
   UserProjectResponse,
 } from './project.types';
 
@@ -16,6 +17,7 @@ export const projectKeys = {
   list: (params: FetchMyProjectsParams) => [...projectKeys.all, 'list', params] as const,
   detail: (projectId: number) => [...projectKeys.all, 'detail', projectId] as const,
   byUser: (userLink: string) => [...projectKeys.all, 'byUser', userLink] as const,
+  byUserDetail: (userLink: string, projectId: number) => [...projectKeys.all, 'byUser', userLink, projectId] as const,
 };
 
 const createProjectFormData = (request: ProjectRequest, image?: File | null): FormData => {
@@ -45,6 +47,10 @@ export const fetchProject = (projectId: number): Promise<ProjectResponse> =>
 /** GET /api/v1/projects/users/{userLink} 유저별 프로젝트 목록 조회 */
 export const fetchUserProjects = (userLink: string): Promise<UserProjectResponse[]> =>
   apiRequest<UserProjectResponse[]>(`/projects/users/${userLink}`);
+
+/** GET /api/v1/projects/users/{userLink}/{projectId} 특정 유저의 단일 프로젝트 조회 */
+export const fetchUserProject = (userLink: string, projectId: number): Promise<UserProjectDetailResponse> =>
+  apiRequest<UserProjectDetailResponse>(`/projects/users/${userLink}/${projectId}`);
 
 /** DELETE /api/v1/projects/{projectId} 프로젝트 삭제 */
 export const deleteProject = (projectId: number): Promise<void> =>
