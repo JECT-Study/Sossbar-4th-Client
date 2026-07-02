@@ -87,10 +87,7 @@ export const ReviewListCard = ({
                       <ReviewListItem.NameRow>
                         <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
                         {review.projectPosition ? (
-                          <ReviewListItem.PositionBadge
-                            position={review.projectPosition}
-                            detailPosition={review.projectDetailPosition}
-                          />
+                          <ReviewListItem.PositionBadge position={review.projectPosition} />
                         ) : null}
                       </ReviewListItem.NameRow>
                     ) : (

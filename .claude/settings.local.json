@@ -19,7 +19,11 @@
       "Bash(git add *)",
       "Bash(git rm *)",
       "Bash(git restore *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(mkdir *)",
+      "Bash(mkdir:*)",
+      "Write",
+      "Edit"
     ]
   }
 }

@@ -53,7 +53,7 @@ export const dummyReviews: Review[] = [
     createdAt: '2026-06-01T10:00:00.000Z',
     feedback: '초기 기획부터 릴리즈까지 안정적으로 리드해 주셨어요. 이슈 대응 속도도 인상적이었습니다.',
     reviewerNickname: '김디자이너',
-    projectPosition: 'FRONTEND',
+    projectPosition: 'FE',
     projectStatus: 'COMPLETED',
   },
   {
@@ -64,7 +64,7 @@ export const dummyReviews: Review[] = [
     createdAt: '2026-05-14T09:30:00.000Z',
     feedback: '팀원 의견을 잘 정리해 주고, 문제 해결에 필요한 리소스를 빠르게 찾아왔어요.',
     reviewerNickname: '이백엔드',
-    projectPosition: 'BACKEND',
+    projectPosition: 'BE',
     projectStatus: 'COMPLETED',
   },
   {

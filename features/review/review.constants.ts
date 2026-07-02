@@ -8,12 +8,6 @@ export const REVIEW_STEPS = [
 
 export type ReviewStepId = (typeof REVIEW_STEPS)[number]['id'];
 
-export const REVIEW_STEP_DESCRIPTIONS: Record<ReviewStepId, string> = {
-  tag: '프로젝트에 참여했던 직군을 선택해주세요.',
-  spectrum: '성향을 선택해주세요.',
-  feedback: '솔직한 후기를 작성해주세요.',
-};
-
 export const REVIEW_MAX_TAGS = 3;
 
 /** 스펙트럼 슬라이더 단계 수 (백엔드 강도 1~6에 대응) */
