@@ -1,6 +1,63 @@
 import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
 import { getSiteOrigin } from '@/shared/lib/get-site-origin';
 
+/** 이미지를 Canvas로 재인코딩해 maxBytes 이하로 압축한다. nginx 1MB 업로드 제한 대응. */
+export const compressImage = (file: File, maxBytes = 900 * 1024): Promise<File> => {
+  if (file.size <= maxBytes) {
+    return Promise.resolve(file);
+  }
+
+  return new Promise((resolve) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      const MAX_DIMENSION = 1920;
+      let { width, height } = img;
+      if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+        const ratio = Math.min(MAX_DIMENSION / width, MAX_DIMENSION / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, width, height);
+
+      let quality = 0.85;
+      const attempt = () => {
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              resolve(file);
+              return;
+            }
+            if (blob.size <= maxBytes || quality <= 0.3) {
+              resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+            } else {
+              quality = parseFloat((quality - 0.1).toFixed(1));
+              attempt();
+            }
+          },
+          'image/jpeg',
+          quality,
+        );
+      };
+      attempt();
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(file);
+    };
+
+    img.src = objectUrl;
+  });
+};
+
 import type {
   MyProjectResponse,
   ProjectCardItem,

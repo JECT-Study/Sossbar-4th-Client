@@ -112,6 +112,7 @@ export interface ProjectRequest {
   endDate: string;
   projectUrl: string;
   projectUrlType: 'LINK';
+  projectPositions?: ProjectPositionValue[];
 }
 
 export type ProjectPayload = {
