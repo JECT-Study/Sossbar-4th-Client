@@ -4,20 +4,36 @@ const BASE = '/api/v1';
 
 type MockProfile = {
   userId: number;
+  userLink: string;
   username: string | null;
   email: string;
   bio: string | null;
   profileImageUrl: string | null;
+  defaultPositions: string[];
+  links: {
+    linkId: number;
+    userLinkType: string;
+    userLink: string;
+  }[];
   userType: string;
+  marketingAgree: boolean;
 };
 
 const mockProfile: MockProfile = {
   userId: 1,
+  userLink: 'mock-user',
   username: null,
   email: 'kakao-user@sossbar.mock',
   bio: null,
   profileImageUrl: null,
+  defaultPositions: ['FE'],
+  links: [
+    { linkId: 1, userLinkType: 'GITHUB', userLink: 'https://github.com' },
+    { linkId: 2, userLinkType: 'BEHANCE', userLink: 'https://www.behance.net' },
+    { linkId: 3, userLinkType: 'GITHUB', userLink: 'https://github.com' },
+  ],
   userType: 'KAKAO',
+  marketingAgree: false,
 };
 
 const mockUserReviews = [
@@ -106,12 +122,16 @@ export const usersHandlers = [
       message: '요청이 성공했습니다.',
       data: {
         userId: mockProfile.userId,
+        userLink: mockProfile.userLink,
         username,
         nickname: username,
         email: mockProfile.email,
         bio,
         profileImageUrl: null,
+        defaultPositions: mockProfile.defaultPositions,
+        links: mockProfile.links,
         userType: 'KAKAO',
+        marketingAgree: mockProfile.marketingAgree,
       },
     });
   }),
