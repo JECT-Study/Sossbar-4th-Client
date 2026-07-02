@@ -4,6 +4,7 @@ import { Dialog } from 'radix-ui';
 import { useState } from 'react';
 
 import { Button } from '@/shared/components/button';
+import { MultiSelect } from '@/shared/components/multi-select';
 import { cn } from '@/shared/lib/cn';
 
 import type { ProjectPositionValue } from '../project.types';
@@ -30,24 +31,10 @@ export const ProjectInviteAcceptModal = ({
 }: ProjectInviteAcceptModalProps) => {
   // 선택 상태는 컴포넌트 로컬로만 관리한다. 핸들러가 projectLink 기준 key로 마운트하므로
   // 초대마다 새 인스턴스가 생성돼 별도 초기화 로직이 필요 없다.
-  const [selectedPositions, setSelectedPositions] = useState<Set<ProjectPositionValue>>(() => new Set());
+  const [selectedPositions, setSelectedPositions] = useState<ProjectPositionValue[]>([]);
 
-  const togglePosition = (position: ProjectPositionValue) => {
-    setSelectedPositions((prev) => {
-      const next = new Set(prev);
-      if (next.has(position)) {
-        next.delete(position);
-        return next;
-      }
-      if (next.size >= PROJECT_INVITE_MAX_POSITIONS) {
-        return prev;
-      }
-      next.add(position);
-      return next;
-    });
-  };
-
-  const canConfirm = selectedPositions.size > 0 && !isConfirming;
+  const canConfirm = selectedPositions.length > 0 && !isConfirming;
+  const isMaxPositionReached = selectedPositions.length >= PROJECT_INVITE_MAX_POSITIONS;
 
   const handleOpenChange = (next: boolean) => {
     if (!next && isConfirming) {
@@ -84,31 +71,35 @@ export const ProjectInviteAcceptModal = ({
             <p className="text-body-sm text-text-basic font-medium">
               이 프로젝트에서 맡은 직군을 선택해주세요. (최대 {PROJECT_INVITE_MAX_POSITIONS}개)
             </p>
-            <div className="flex flex-wrap gap-2">
-              {PROJECT_POSITIONS.map((position) => {
-                const selected = selectedPositions.has(position);
-                const disabled = !selected && selectedPositions.size >= PROJECT_INVITE_MAX_POSITIONS;
-                return (
-                  <button
+            <MultiSelect.Root
+              value={selectedPositions}
+              onValueChange={(value) => setSelectedPositions(value as ProjectPositionValue[])}
+            >
+              <MultiSelect.Trigger disabled={isConfirming}>
+                {selectedPositions.length === 0 ? (
+                  <span className="text-text-disabled">
+                    {'\uc9c1\uad70\uc744 \uc120\ud0dd\ud574\uc8fc\uc138\uc694'}
+                  </span>
+                ) : (
+                  selectedPositions.map((position) => (
+                    <MultiSelect.Tag key={position} value={position}>
+                      {PROJECT_POSITION_LABELS[position]}
+                    </MultiSelect.Tag>
+                  ))
+                )}
+              </MultiSelect.Trigger>
+              <MultiSelect.Content className="w-(--radix-popover-trigger-width)">
+                {PROJECT_POSITIONS.map((position) => (
+                  <MultiSelect.Item
                     key={position}
-                    type="button"
-                    aria-pressed={selected}
-                    disabled={disabled || isConfirming}
-                    className={cn(
-                      'text-body-sm inline-flex h-[33px] shrink-0 items-center justify-center rounded-full border px-3 font-normal transition-colors outline-none focus-visible:ring-2 focus-visible:ring-(--color-border-primary) focus-visible:ring-offset-1',
-                      selected
-                        ? 'border-border-gray-light bg-action-secondary-pressed text-text-basic'
-                        : 'border-border-gray-light bg-action-gray-light text-text-basic hover:border-action-secondary-hover hover:bg-action-secondary-hover',
-                      disabled &&
-                        'hover:border-border-gray-light hover:bg-action-gray-light cursor-not-allowed opacity-30',
-                    )}
-                    onClick={() => togglePosition(position)}
+                    value={position}
+                    disabled={isConfirming || (isMaxPositionReached && !selectedPositions.includes(position))}
                   >
                     {PROJECT_POSITION_LABELS[position]}
-                  </button>
-                );
-              })}
-            </div>
+                  </MultiSelect.Item>
+                ))}
+              </MultiSelect.Content>
+            </MultiSelect.Root>
           </div>
 
           {!!errorMessage && (
