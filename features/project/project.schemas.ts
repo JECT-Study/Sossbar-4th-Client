@@ -49,8 +49,11 @@ export const CreateProjectFormSchema = z
     projectUrl: z
       .string()
       .trim()
+      .refine((value) => value.length === 0 || /^https?:\/\//i.test(value), {
+        message: 'http:// 또는 https://로 시작하는 URL을 입력해 주세요.',
+      })
       .refine((value) => value.length === 0 || z.string().url().safeParse(value).success, {
-        message: '올바른 URL을 입력해 주세요.',
+        message: '올바른 URL 형식이 아닙니다.',
       }),
     projectUrlType: z.literal('LINK'),
   })
@@ -88,8 +91,11 @@ export const UpdateProjectFormSchema = z
     projectUrl: z
       .string()
       .trim()
+      .refine((value) => value.length === 0 || /^https?:\/\//i.test(value), {
+        message: 'http:// 또는 https://로 시작하는 URL을 입력해 주세요.',
+      })
       .refine((value) => value.length === 0 || z.string().url().safeParse(value).success, {
-        message: '올바른 URL을 입력해 주세요.',
+        message: '올바른 URL 형식이 아닙니다.',
       }),
     projectUrlType: z.literal('LINK'),
   })
