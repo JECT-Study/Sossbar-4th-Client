@@ -1,6 +1,12 @@
 import { z } from 'zod';
 
-import { PROJECT_FIELD_MAX_LENGTH, PROJECT_IMAGE_ACCEPT, PROJECT_IMAGE_MAX_SIZE } from './project.constants';
+import {
+  PROJECT_FIELD_MAX_LENGTH,
+  PROJECT_IMAGE_ACCEPT,
+  PROJECT_IMAGE_MAX_SIZE,
+  PROJECT_POSITIONS_MAX_SELECT,
+  PROJECT_POSITION_VALUES,
+} from './project.constants';
 
 const imageMimeTypes = PROJECT_IMAGE_ACCEPT.split(',');
 
@@ -19,6 +25,12 @@ export const CreateProjectFormSchema = z
       .trim()
       .min(1, { message: '주최사를 입력해 주세요.' })
       .max(PROJECT_FIELD_MAX_LENGTH, `주최사는 ${PROJECT_FIELD_MAX_LENGTH}자 이하로 입력해 주세요.`),
+    projectPositions: z
+      .array(z.enum(PROJECT_POSITION_VALUES))
+      .min(1, { message: '직군을 1개 이상 선택해 주세요.' })
+      .max(PROJECT_POSITIONS_MAX_SELECT, {
+        message: `직군은 최대 ${PROJECT_POSITIONS_MAX_SELECT}개까지 선택할 수 있어요.`,
+      }),
     startDate: z
       .custom<Date | null>((value) => value === null || isDate(value), { message: '시작일을 선택해 주세요.' })
       .refine((date) => date !== null, { message: '시작일을 선택해 주세요.' }),
