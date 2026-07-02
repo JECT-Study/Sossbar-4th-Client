@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { Button } from '@/shared/components/button';
@@ -7,16 +8,19 @@ import { SectionCard, SectionInfoRow } from '@/shared/components/section-card';
 
 import type { ProjectMemberResponse, ProjectMemberReviewStatus, ProjectStatus } from '../../project.types';
 
+import { useDeleteProjectMember } from '../../project.hooks';
+import { buildReviewWriteUrl } from '../../project.lib';
 import { ProjectMemberChip } from '../project-member-chip';
 
 interface Props {
+  projectId: number;
   members: ProjectMemberResponse[];
   projectStatus: ProjectStatus;
   isLeader: boolean;
   myUserId: number;
 }
 
-export const ProjectMembersCard = ({ members, projectStatus, isLeader, myUserId }: Props) => {
+export const ProjectMembersCard = ({ projectId, members, projectStatus, isLeader, myUserId }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const action = !isLeader ? null : isEditing ? (
@@ -47,21 +51,29 @@ export const ProjectMembersCard = ({ members, projectStatus, isLeader, myUserId 
   return (
     <SectionCard title="팀원 정보" action={action}>
       {isEditing ? (
-        <ProjectMembersEditFields members={members} myUserId={myUserId} />
+        <ProjectMembersEditFields projectId={projectId} members={members} myUserId={myUserId} />
       ) : (
-        <ProjectMembersViewFields members={members} myUserId={myUserId} projectStatus={projectStatus} />
+        <ProjectMembersViewFields
+          projectId={projectId}
+          members={members}
+          myUserId={myUserId}
+          projectStatus={projectStatus}
+        />
       )}
     </SectionCard>
   );
 };
 
 interface ViewFieldsProps {
+  projectId: number;
   members: ProjectMemberResponse[];
   myUserId: number;
   projectStatus: ProjectStatus;
 }
 
-const ProjectMembersViewFields = ({ members, myUserId, projectStatus }: ViewFieldsProps) => {
+const ProjectMembersViewFields = ({ projectId, members, myUserId, projectStatus }: ViewFieldsProps) => {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col gap-4">
       <SectionInfoRow label="참여한 팀원" align="start">
@@ -73,7 +85,19 @@ const ProjectMembersViewFields = ({ members, myUserId, projectStatus }: ViewFiel
             if (reviewStatus === 'writable') {
               return (
                 <li key={member.userId}>
-                  <ProjectMemberChip name={member.username} state="writable" onWriteReview={() => undefined} />
+                  <ProjectMemberChip
+                    name={member.username}
+                    state="writable"
+                    onWriteReview={() =>
+                      router.push(
+                        buildReviewWriteUrl({
+                          projectId,
+                          revieweeId: member.userId,
+                          revieweeName: member.username,
+                        }),
+                      )
+                    }
+                  />
                 </li>
               );
             }
@@ -96,31 +120,44 @@ const ProjectMembersViewFields = ({ members, myUserId, projectStatus }: ViewFiel
 };
 
 interface EditFieldsProps {
+  projectId: number;
   members: ProjectMemberResponse[];
   myUserId: number;
 }
 
-const ProjectMembersEditFields = ({ members, myUserId }: EditFieldsProps) => (
-  <SectionInfoRow label="참여한 팀원" align="start">
-    <ul className="flex flex-wrap gap-2">
-      {members.map((member) => {
-        const isSelf = member.userId === myUserId;
-        const chipState: 'completed' | 'self' = isSelf ? 'self' : member.reviewWritten === true ? 'completed' : 'self';
+const ProjectMembersEditFields = ({ projectId, members, myUserId }: EditFieldsProps) => {
+  const { mutate: deleteMember, isPending } = useDeleteProjectMember(projectId);
 
-        if (isSelf) {
+  return (
+    <SectionInfoRow label="참여한 팀원" align="start">
+      <ul className="flex flex-wrap gap-2">
+        {members.map((member) => {
+          // 편집 모드에서는 후기 작성/작성 완료 버튼을 노출하지 않는다. 본인은 일반 태그, 나머지 팀원은 삭제 가능한 태그로 표시한다.
+          if (member.userId === myUserId) {
+            return (
+              <li key={member.userId}>
+                <ProjectMemberChip name={member.username} state="self" />
+              </li>
+            );
+          }
+
           return (
             <li key={member.userId}>
-              <ProjectMemberChip name={member.username} state={chipState} />
+              <ProjectMemberChip
+                name={member.username}
+                state="self"
+                removable
+                onRemove={() => {
+                  if (isPending) {
+                    return;
+                  }
+                  deleteMember(member.userId);
+                }}
+              />
             </li>
           );
-        }
-
-        return (
-          <li key={member.userId}>
-            <ProjectMemberChip name={member.username} state={chipState} removable onRemove={() => undefined} />
-          </li>
-        );
-      })}
-    </ul>
-  </SectionInfoRow>
-);
+        })}
+      </ul>
+    </SectionInfoRow>
+  );
+};
