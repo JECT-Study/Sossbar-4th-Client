@@ -34,9 +34,7 @@ export const ReviewSpectrumSlider = ({ leftLabel, rightLabel, value, onChange }:
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
     event.currentTarget.setPointerCapture(event.pointerId);
     const next = stepFromPointer(event.currentTarget, event.clientX);
-    if (next !== value) {
-      onChange(next);
-    }
+    onChange(next);
   };
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {

@@ -1,35 +1,16 @@
 import type { Tag } from '@/features/tag';
 
-import type { Review, ReviewFormData, ReviewPosition, Spectrum, UserPosition } from './review.types';
+import type { Review, ReviewFormData, Spectrum, UserPosition } from './review.types';
 
-/** POST /api/v1/reviews 작성 폼에서 선택 가능한 직군 (최대 2개) */
-export const REVIEW_POSITION_LABELS: Record<ReviewPosition, string> = {
+/** 스펙트럼 슬라이더 step(0~5) → 백엔드 강도(1~6) */
+export const spectrumStepToValue = (step: number): number => step + 1;
+
+/** 후기에 표시되는 직군 라벨 */
+export const USER_POSITION_LABELS: Record<UserPosition, string> = {
   FE: '프론트엔드',
   BE: '백엔드',
-  PM: 'PM',
-  PD: 'PD',
-  AI: 'AI',
-};
-
-export const REVIEW_POSITIONS = Object.keys(REVIEW_POSITION_LABELS) as ReviewPosition[];
-
-/** 과거 스키마(UserPosition)로 저장된 후기의 직군 표시 라벨 */
-const USER_POSITION_LABELS: Record<UserPosition, string> = {
-  FRONTEND: '프론트엔드',
-  BACKEND: '백엔드',
-  PM: 'PM',
-  PD: 'PD',
-  AI: 'AI',
-  QA: 'QA',
-  ETC: '기타',
-};
-
-export const getUserPositionLabel = (position: UserPosition, detailPosition?: string): string => {
-  if (position === 'ETC' && detailPosition?.trim()) {
-    return detailPosition.trim();
-  }
-
-  return USER_POSITION_LABELS[position];
+  PM: '프로덕트 매니저',
+  PD: '프로덕트 디자이너',
 };
 
 /** GET /api/v1/form-data — 백엔드 FormDataResDto */
@@ -86,7 +67,6 @@ export interface ReviewApiRaw {
   feedback?: string;
   reviewerNickname?: string;
   projectPosition?: UserPosition;
-  projectDetailPosition?: string;
   projectStatus?: Review['projectStatus'];
 }
 
@@ -108,7 +88,6 @@ export const mapReviewFromApi = (raw: ReviewApiRaw): Review => ({
   feedback: normalizeText(raw.feedback),
   reviewerNickname: normalizeText(raw.reviewerNickname) || '익명의 동료',
   projectPosition: raw.projectPosition,
-  projectDetailPosition: raw.projectDetailPosition,
   projectStatus: raw.projectStatus,
 });
 
