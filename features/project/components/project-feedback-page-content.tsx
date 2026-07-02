@@ -8,7 +8,7 @@ import { TagCardGate } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
-import { useProject } from '../project.hooks';
+import { useUserProject } from '../project.hooks';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
 
@@ -18,7 +18,7 @@ type ProjectFeedbackPageContentProps = {
 };
 
 export const ProjectFeedbackPageContent = ({ userLink, projectId }: ProjectFeedbackPageContentProps) => {
-  const { data: project, isPending, isError } = useProject(projectId);
+  const { data: project, isPending, isError } = useUserProject(userLink, projectId);
 
   if (isPending) {
     return (

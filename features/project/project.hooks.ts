@@ -24,6 +24,7 @@ import {
   deleteProjectMember,
   fetchProject,
   fetchProjects,
+  fetchUserProject,
   fetchUserProjects,
   inviteProjectMember,
   projectKeys,
@@ -57,6 +58,13 @@ export const useUserProjects = (userLink: string) =>
   useSuspenseQuery({
     queryKey: projectKeys.byUser(userLink),
     queryFn: () => fetchUserProjects(userLink),
+  });
+
+export const useUserProject = (userLink: string, projectId: number) =>
+  useQuery({
+    queryKey: projectKeys.byUserDetail(userLink, projectId),
+    queryFn: () => fetchUserProject(userLink, projectId),
+    enabled: Boolean(userLink) && projectId > 0,
   });
 
 export const useDeleteProject = () => {

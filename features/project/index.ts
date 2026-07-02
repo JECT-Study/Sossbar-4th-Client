@@ -17,6 +17,7 @@ export {
   useInviteProjectMember,
   useProject,
   useUpdateProject,
+  useUserProject,
 } from './project.hooks';
 
 export {
@@ -44,5 +45,6 @@ export type {
   ProjectSort,
   ProjectStatus,
   ProjectUrlType,
+  UserProjectDetailResponse,
   UserProjectResponse,
 } from './project.types';
