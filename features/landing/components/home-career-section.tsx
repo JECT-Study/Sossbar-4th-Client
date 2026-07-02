@@ -1,6 +1,7 @@
 import { PageContainer } from '@/shared/components/page-container';
 import { cn } from '@/shared/lib/cn';
 
+import { HomeReveal, HomeRevealGroup, HomeRevealItem } from './home-reveal';
 import { HomeSectionHeader } from './home-section-header';
 
 type CareerPillar = {
@@ -106,17 +107,24 @@ export const HomeCareerSection = () => {
   return (
     <section className="h-[800px] bg-white">
       <PageContainer className="flex h-full flex-col items-center justify-center">
-        <HomeSectionHeader
-          badge="커리어의 완성"
-          heading="하드 스킬과 소프트 스킬을 한번에!"
-          description="커리어를 위해 필요한 3가지 요소를 소스바에서 한 눈에 볼 수 있습니다."
-        />
+        <HomeReveal className="w-full" amount={0.5}>
+          <HomeSectionHeader
+            badge="커리어의 완성"
+            heading="하드 스킬과 소프트 스킬을 한번에!"
+            description="커리어를 위해 필요한 3가지 요소를 소스바에서 한 눈에 볼 수 있습니다."
+          />
+        </HomeReveal>
 
-        <div className="gap-margin-l mt-10 flex w-full flex-col items-center justify-center lg:flex-row">
+        <HomeRevealGroup
+          className="gap-margin-l mt-10 flex w-full flex-col items-center justify-center lg:flex-row"
+          amount={0.5}
+        >
           {CAREER_PILLARS.map((pillar) => (
-            <CareerPillarCard key={pillar.step} pillar={pillar} />
+            <HomeRevealItem key={pillar.step} className="flex w-full max-w-[384px] justify-center">
+              <CareerPillarCard pillar={pillar} />
+            </HomeRevealItem>
           ))}
-        </div>
+        </HomeRevealGroup>
       </PageContainer>
     </section>
   );

@@ -1,6 +1,7 @@
 import { PageContainer } from '@/shared/components/page-container';
 
 import { HomeHowItWorksStepPreview } from './home-how-it-works-step-preview';
+import { HomeReveal } from './home-reveal';
 import { HomeSectionHeader } from './home-section-header';
 
 const STEPS = [
@@ -31,11 +32,13 @@ export const HomeHowItWorksSection = () => {
   return (
     <section className="py-margin-xxl box-border flex flex-col items-center bg-white">
       <PageContainer className="gap-margin-xl flex w-full max-w-[1200px] flex-col items-center">
-        <HomeSectionHeader badge="사용법" heading="Sossbar 이용 방법" />
+        <HomeReveal className="w-full">
+          <HomeSectionHeader badge="사용법" heading="Sossbar 이용 방법" />
+        </HomeReveal>
 
         <div className="flex w-full max-w-[1200px] flex-col gap-20">
           {STEPS.map((step) => (
-            <div key={step.step} className="flex w-full flex-col items-center gap-6 lg:flex-row">
+            <HomeReveal key={step.step} className="flex w-full flex-col items-center gap-6 lg:flex-row" amount={0.4}>
               <div className="gap-margin-m py-padding-m relative flex h-[260px] w-full flex-col lg:flex-1">
                 <div
                   aria-hidden
@@ -55,7 +58,7 @@ export const HomeHowItWorksSection = () => {
               </div>
 
               <HomeHowItWorksStepPreview variant={step.variant} title={step.title} />
-            </div>
+            </HomeReveal>
           ))}
         </div>
       </PageContainer>

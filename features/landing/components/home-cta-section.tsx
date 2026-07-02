@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { Button } from '@/shared/components/button/button';
 import { ProtectedLink } from '@/shared/components/protected-link';
 
+import { HomeReveal } from './home-reveal';
+
 export const HomeCtaSection = () => {
   return (
     <section
@@ -30,7 +32,7 @@ export const HomeCtaSection = () => {
           />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_38%,rgba(0,0,0,0.28)_100%)]" />
 
-          <div className="relative z-10 flex min-h-109.5 w-full flex-col items-center pt-20 pb-10 text-center sm:px-4">
+          <HomeReveal className="relative z-10 flex min-h-109.5 w-full flex-col items-center pt-20 pb-10 text-center sm:px-4">
             <div className="flex w-full max-w-6xl flex-col items-center gap-4">
               <Image src="/home-cta-quotation-marks.svg" alt="" width={64} height={48} className="h-12 w-16" />
               <h2 className="text-text-basic-inverse text-heading-2xl font-bold">
@@ -44,7 +46,7 @@ export const HomeCtaSection = () => {
             <Button asChild variant="primary" size="large" className="mx-auto mt-10">
               <ProtectedLink href="/mypage">프로젝트 생성하러 가기</ProtectedLink>
             </Button>
-          </div>
+          </HomeReveal>
         </div>
       </div>
     </section>

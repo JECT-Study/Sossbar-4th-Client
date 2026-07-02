@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { PageContainer } from '@/shared/components/page-container';
 
+import { HomeReveal, HomeRevealGroup, HomeRevealItem } from './home-reveal';
 import { HomeSectionHeader } from './home-section-header';
 
 const FEATURES = [
@@ -38,26 +39,27 @@ export const HomeFeaturesSection = () => {
       </div>
 
       <PageContainer className="relative z-10 flex h-full flex-col items-center justify-center">
-        <HomeSectionHeader
-          badge="주요 기능"
-          heading="보이지 않던 협업 역량을 투명한 데이터로!"
-          description="기술, 스펙, 스킬은 포트폴리오나 깃허브로 증명할 수 있지만 소통 방식과 책임감과 같은 소프트스킬은 어떻게 보여주시나요?"
-        />
+        <HomeReveal className="w-full">
+          <HomeSectionHeader
+            badge="주요 기능"
+            heading="보이지 않던 협업 역량을 투명한 데이터로!"
+            description="기술, 스펙, 스킬은 포트폴리오나 깃허브로 증명할 수 있지만 소통 방식과 책임감과 같은 소프트스킬은 어떻게 보여주시나요?"
+          />
+        </HomeReveal>
 
-        <div className="gap-margin-l mt-10 grid w-full grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+        <HomeRevealGroup className="gap-margin-l mt-10 grid w-full grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
           {FEATURES.map((feature) => (
-            <article
-              key={feature.title}
-              className="border-divider-1 bg-surface-white flex flex-col gap-2 rounded-2xl border p-4"
-            >
-              <div className="bg-primary-50 flex size-10 items-center justify-center rounded-full p-2">
-                <Image src={feature.imageSrc} alt="" width={24} height={24} className="size-6" />
-              </div>
-              <h3 className="text-text-basic text-heading-sm font-bold">{feature.title}</h3>
-              <p className="text-text-subtle text-body-sm min-h-[86px] leading-[1.5]">{feature.description}</p>
-            </article>
+            <HomeRevealItem key={feature.title}>
+              <article className="border-divider-1 bg-surface-white flex h-full flex-col gap-2 rounded-2xl border p-4">
+                <div className="bg-primary-50 flex size-10 items-center justify-center rounded-full p-2">
+                  <Image src={feature.imageSrc} alt="" width={24} height={24} className="size-6" />
+                </div>
+                <h3 className="text-text-basic text-heading-sm font-bold">{feature.title}</h3>
+                <p className="text-text-subtle text-body-sm min-h-[86px] leading-[1.5]">{feature.description}</p>
+              </article>
+            </HomeRevealItem>
           ))}
-        </div>
+        </HomeRevealGroup>
       </PageContainer>
     </section>
   );
