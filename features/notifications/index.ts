@@ -1,4 +1,4 @@
-export type { NotificationItem } from './notification.types';
-export { useNotifications, useNotificationActions } from './notification.hooks';
+export type { NotificationItem, NotificationType } from './notification.types';
+export { useNotifications, useNotificationActions, useUnreadCount } from './notification.hooks';
 export { formatRelativeTime } from './notification.lib';
 export { NotificationBell } from './components/notification-bell';

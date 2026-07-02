@@ -1,26 +1,29 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import { Dropdown } from '@/shared/components/dropdown';
 import { cn } from '@/shared/lib/cn';
 
 import { BellFilled } from './bell-filled';
 import { NotificationDropdownContent } from './notification-dropdown-content';
-import { useNotificationActions, useNotifications } from '../notification.hooks';
+import { useNotificationActions, useNotifications, useUnreadCount } from '../notification.hooks';
 
 type NotificationBellProps = {
   className?: string;
 };
 
 export const NotificationBell = ({ className }: NotificationBellProps) => {
-  const { data: notifications = [] } = useNotifications();
+  const { data: notifications = [], refetch } = useNotifications();
+  const { data: unreadCount = 0 } = useUnreadCount();
   const { markAllRead, markRead } = useNotificationActions();
 
-  const unreadCount = useMemo(() => notifications.filter((item) => !item.isRead).length, [notifications]);
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      refetch();
+    }
+  };
 
   return (
-    <Dropdown.Root>
+    <Dropdown.Root onOpenChange={handleOpenChange}>
       <Dropdown.Trigger
         type="button"
         className={cn(

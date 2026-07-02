@@ -5,6 +5,8 @@ import type { NotificationItem } from './notification.types';
 export const fetchNotifications = (): Promise<NotificationItem[]> =>
   apiRequest<NotificationItem[]>('/notifications/all');
 
+export const fetchUnreadCount = (): Promise<number> => apiRequest<number>('/notifications/unread-count');
+
 export const markAllNotificationsRead = (): Promise<void> =>
   apiRequest<void>('/notifications/read/all', { method: 'PATCH' });
 
