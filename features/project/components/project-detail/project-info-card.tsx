@@ -1,10 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Controller } from 'react-hook-form';
 
 import { Button } from '@/shared/components/button';
 import { DatePicker } from '@/shared/components/date-picker';
+import { ErrorMessage } from '@/shared/components/error-message';
 import { FileInput, useImagePreview } from '@/shared/components/file-input';
 import { Label } from '@/shared/components/label';
 import { SectionCard, SectionInfoRow } from '@/shared/components/section-card';
@@ -15,14 +17,19 @@ import { formatIsoDateToDots } from '@/shared/lib/format-date';
 import type { ProjectResponse } from '../../project.types';
 
 import { PROJECT_FIELD_MAX_LENGTH, PROJECT_IMAGE_ACCEPT } from '../../project.constants';
+import { useUpdateProjectModal } from '../../project.hooks';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
 const IMAGE_GUIDE_TEXT = '□ JPG, JPEG, PNG 형식\n□ 최소 100 x 100px';
+const PROJECT_INFO_EDIT_FORM_ID = 'project-info-edit-form';
 
 interface Props {
   project: ProjectResponse;
   isLeader: boolean;
 }
+
+type UpdateProjectForm = ReturnType<typeof useUpdateProjectModal>['form'];
+type UpdateProjectSubmit = ReturnType<typeof useUpdateProjectModal>['onSubmit'];
 
 const formatDateRange = (startDate: string | null, endDate: string | null): string => {
   if (!startDate && !endDate) {
@@ -33,26 +40,31 @@ const formatDateRange = (startDate: string | null, endDate: string | null): stri
   return `${start} - ${end}`;
 };
 
-const parseDate = (value: string | null): Date | null => {
-  if (!value) {
-    return null;
-  }
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
-
 export const ProjectInfoCard = ({ project, isLeader }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
+  const { form, handleOpenChange, isSubmitting, onSubmit } = useUpdateProjectModal({
+    projectId: project.projectId,
+    defaultProjectValues: {
+      projectName: project.projectName,
+      host: project.host,
+      startDate: project.startDate ?? '',
+      endDate: project.endDate ?? '',
+      projectUrl: project.projectUrl ?? '',
+      projectUrlType: 'LINK',
+    },
+    onOpenChange: setIsEditing,
+  });
 
   const action = !isLeader ? null : isEditing ? (
     <div className="flex gap-2">
-      <Button type="button" variant="tertiary" onClick={() => setIsEditing(false)} className="text-text-basic">
+      <Button type="button" variant="tertiary" onClick={() => handleOpenChange(false)} disabled={isSubmitting}>
         취소
       </Button>
       <Button
-        type="button"
+        type="submit"
+        form={PROJECT_INFO_EDIT_FORM_ID}
         variant="tertiary"
-        onClick={() => setIsEditing(false)}
+        disabled={isSubmitting}
         className="border-border-gray-dark text-text-basic border"
       >
         저장
@@ -71,7 +83,11 @@ export const ProjectInfoCard = ({ project, isLeader }: Props) => {
 
   return (
     <SectionCard title="프로젝트 정보" action={action}>
-      {isEditing ? <ProjectInfoEditFields project={project} /> : <ProjectInfoViewFields project={project} />}
+      {isEditing ? (
+        <ProjectInfoEditFields project={project} form={form} onSubmit={onSubmit} isSubmitting={isSubmitting} />
+      ) : (
+        <ProjectInfoViewFields project={project} />
+      )}
     </SectionCard>
   );
 };
@@ -115,78 +131,176 @@ const ProjectInfoViewFields = ({ project }: { project: ProjectResponse }) => (
   </div>
 );
 
-const ProjectInfoEditFields = ({ project }: { project: ProjectResponse }) => {
+interface ProjectInfoEditFieldsProps {
+  project: ProjectResponse;
+  form: UpdateProjectForm;
+  onSubmit: UpdateProjectSubmit;
+  isSubmitting: boolean;
+}
+
+const ProjectInfoEditFields = ({ project, form, onSubmit, isSubmitting }: ProjectInfoEditFieldsProps) => {
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    trigger,
+  } = form;
+  const dateErrorMessage = errors.startDate?.message ?? errors.endDate?.message;
+
   return (
-    <div className="flex flex-col gap-8">
+    <form id={PROJECT_INFO_EDIT_FORM_ID} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
       <SectionInfoRow label="주최사" align="start">
-        <div className="flex flex-col gap-1">
-          <TextField
-            name="host"
-            label="주최사"
-            required
-            maxLength={PROJECT_FIELD_MAX_LENGTH}
-            defaultValue={project.host}
-            placeholder="주최사를 입력하세요"
-            className="[&>label]:sr-only"
-          />
-        </div>
+        <Controller
+          control={control}
+          name="host"
+          render={({ field }) => (
+            <TextField
+              label="주최사"
+              required
+              maxLength={PROJECT_FIELD_MAX_LENGTH}
+              placeholder="주최사를 입력하세요"
+              errorMessage={errors.host?.message}
+              disabled={isSubmitting}
+              className="[&>label]:sr-only"
+              {...field}
+            />
+          )}
+        />
       </SectionInfoRow>
 
       <SectionInfoRow label="프로젝트명" align="start">
-        <div className="flex flex-col gap-1">
-          <TextField
-            name="projectName"
-            label="프로젝트명"
-            required
-            maxLength={PROJECT_FIELD_MAX_LENGTH}
-            defaultValue={project.projectName}
-            placeholder="프로젝트명을 입력하세요"
-            className="[&>label]:sr-only"
-          />
-        </div>
+        <Controller
+          control={control}
+          name="projectName"
+          render={({ field }) => (
+            <TextField
+              label="프로젝트명"
+              required
+              maxLength={PROJECT_FIELD_MAX_LENGTH}
+              placeholder="프로젝트명을 입력하세요"
+              errorMessage={errors.projectName?.message}
+              disabled={isSubmitting}
+              className="[&>label]:sr-only"
+              {...field}
+            />
+          )}
+        />
       </SectionInfoRow>
 
       <SectionInfoRow label="날짜" align="start">
-        <div className="flex items-center gap-2">
-          <DatePicker defaultValue={parseDate(project.startDate)} placeholder="시작일" />
-          <span className="text-text-subtle text-body-base">-</span>
-          <DatePicker defaultValue={parseDate(project.endDate)} placeholder="종료일" />
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <Controller
+              control={control}
+              name="startDate"
+              render={({ field }) => (
+                <DatePicker
+                  value={field.value}
+                  onChange={(date) => {
+                    field.onChange(date);
+                    void trigger(['startDate', 'endDate']);
+                  }}
+                  placeholder="시작일"
+                  disabled={isSubmitting}
+                  error={!!errors.startDate}
+                />
+              )}
+            />
+            <span className="text-text-subtle text-body-base">-</span>
+            <Controller
+              control={control}
+              name="endDate"
+              render={({ field }) => (
+                <DatePicker
+                  value={field.value}
+                  onChange={(date) => {
+                    field.onChange(date);
+                    void trigger(['startDate', 'endDate']);
+                  }}
+                  placeholder="종료일"
+                  disabled={isSubmitting}
+                  error={!!errors.endDate}
+                />
+              )}
+            />
+          </div>
+          {dateErrorMessage ? <ErrorMessage className="static">{dateErrorMessage}</ErrorMessage> : null}
         </div>
       </SectionInfoRow>
 
       <SectionInfoRow label="협업 인증 사진" align="start">
-        <ProjectImageEditField project={project} />
+        <Controller
+          control={control}
+          name="image"
+          render={({ field: { value, onChange } }) => (
+            <ProjectImageEditField
+              project={project}
+              value={value}
+              onChange={onChange}
+              disabled={isSubmitting}
+              errorMessage={errors.image?.message}
+            />
+          )}
+        />
       </SectionInfoRow>
 
       <SectionInfoRow label="URL" align="start">
         <div className="grid grid-cols-[1fr_120px] items-start gap-2">
-          <TextField
+          <Controller
+            control={control}
             name="projectUrl"
-            label="URL"
-            defaultValue={project.projectUrl ?? ''}
-            placeholder="https://"
-            className="[&>label]:sr-only"
+            render={({ field }) => (
+              <TextField
+                label="URL"
+                placeholder="https://"
+                errorMessage={errors.projectUrl?.message}
+                disabled={isSubmitting}
+                className="[&>label]:sr-only"
+                {...field}
+                value={field.value ?? ''}
+              />
+            )}
           />
           <div className="flex flex-col gap-2">
             <Label className="sr-only">URL 유형</Label>
-            <Select.Root defaultValue={project.projectUrlType ?? 'LINK'}>
-              <Select.Trigger aria-label="URL 유형">
-                <Select.Value />
-              </Select.Trigger>
-              <Select.Content className="w-(--radix-select-trigger-width)">
-                <Select.Item value="LINK">Link</Select.Item>
-              </Select.Content>
-            </Select.Root>
+            <Controller
+              control={control}
+              name="projectUrlType"
+              render={({ field }) => (
+                <Select.Root value={field.value ?? 'LINK'} onValueChange={field.onChange} disabled={isSubmitting}>
+                  <Select.Trigger aria-label="URL 유형">
+                    <Select.Value />
+                  </Select.Trigger>
+                  <Select.Content className="w-(--radix-select-trigger-width)">
+                    <Select.Item value="LINK">Link</Select.Item>
+                  </Select.Content>
+                </Select.Root>
+              )}
+            />
           </div>
         </div>
       </SectionInfoRow>
-    </div>
+
+      {errors.root?.message ? <ErrorMessage className="static">{errors.root.message}</ErrorMessage> : null}
+    </form>
   );
 };
 
-const ProjectImageEditField = ({ project }: { project: ProjectResponse }) => {
-  const { file, previewUrl, onChange } = useImagePreview();
+interface ProjectImageEditFieldProps {
+  project: ProjectResponse;
+  value: File | null;
+  onChange: (file: File | null) => void;
+  disabled: boolean;
+  errorMessage?: string;
+}
+
+const ProjectImageEditField = ({ project, value, onChange, disabled, errorMessage }: ProjectImageEditFieldProps) => {
+  const { previewUrl, onChange: syncPreview } = useImagePreview();
   const imageSrc = previewUrl ?? project.projectImage ?? DEFAULT_PROJECT_IMAGE;
+
+  useEffect(() => {
+    syncPreview(value);
+  }, [syncPreview, value]);
 
   return (
     <div className="flex items-start gap-6">
@@ -197,13 +311,15 @@ const ProjectImageEditField = ({ project }: { project: ProjectResponse }) => {
       />
       <div className="flex min-w-0 flex-col gap-2">
         <FileInput
-          value={file}
+          value={value}
           onChange={onChange}
           label="이미지 업로드하기"
           accept={PROJECT_IMAGE_ACCEPT}
+          disabled={disabled}
           className="max-w-full"
         />
         <p className="text-body-sm text-text-subtler whitespace-pre-line">{IMAGE_GUIDE_TEXT}</p>
+        {errorMessage ? <ErrorMessage className="static">{errorMessage}</ErrorMessage> : null}
       </div>
     </div>
   );

@@ -19,6 +19,10 @@ interface Props {
   projectId: number;
   defaultProjectName: string;
   defaultHost: string;
+  defaultStartDate: string;
+  defaultEndDate: string;
+  defaultProjectUrl: string;
+  defaultProjectUrlType: 'LINK';
   className?: string;
 }
 
@@ -28,11 +32,22 @@ export const EditProjectModal = ({
   projectId,
   defaultProjectName,
   defaultHost,
+  defaultStartDate,
+  defaultEndDate,
+  defaultProjectUrl,
+  defaultProjectUrlType,
   className,
 }: Props) => {
   const { form, handleOpenChange, isSubmitting, onSubmit } = useUpdateProjectModal({
     projectId,
-    defaultProjectValues: { projectName: defaultProjectName, host: defaultHost },
+    defaultProjectValues: {
+      projectName: defaultProjectName,
+      host: defaultHost,
+      startDate: defaultStartDate,
+      endDate: defaultEndDate,
+      projectUrl: defaultProjectUrl,
+      projectUrlType: defaultProjectUrlType,
+    },
     onOpenChange,
   });
   const {

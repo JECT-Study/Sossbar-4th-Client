@@ -83,8 +83,6 @@ export const useDeleteProjectMember = (projectId: number) => {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
       invalidateProjectListQueries(queryClient, profile?.userLink);
-      // 삭제된 팀원의 userLink를 이 시점에 알 수 없어 그 사람의 byUser 캐시는
-      // staleTime(1분) 경과 후 자연스럽게 갱신된다.
     },
   });
 };
@@ -141,8 +139,8 @@ const CREATE_PROJECT_DEFAULT_VALUES: CreateProjectFormInput = {
   projectUrlType: 'LINK',
 };
 
-const formatDateTimeForRequest = (date: Date | null, time: '00:00:00' | '23:59:59'): string => {
-  if (date === null) {
+const formatDateTimeForRequest = (date: Date | null | undefined, time: '00:00:00' | '23:59:59'): string => {
+  if (!date) {
     return '';
   }
 
@@ -151,6 +149,14 @@ const formatDateTimeForRequest = (date: Date | null, time: '00:00:00' | '23:59:5
   const day = `${date.getDate()}`.padStart(2, '0');
 
   return `${year}-${month}-${day}T${time}`;
+};
+
+const parseProjectFormDate = (value: string | null | undefined): Date | null => {
+  if (!value) {
+    return null;
+  }
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
 };
 
 export const useCreateProjectForm = () => {
@@ -171,31 +177,37 @@ export const useCreateProjectForm = () => {
   };
 };
 
-export type UpdateProjectFormValues = z.infer<typeof UpdateProjectFormSchema>;
+export type UpdateProjectFormInput = z.input<typeof UpdateProjectFormSchema>;
+export type UpdateProjectFormValues = z.output<typeof UpdateProjectFormSchema>;
 
 interface UpdateProjectFormParams {
   defaultProjectValues: ProjectRequest;
 }
 
 export const useUpdateProjectForm = ({ defaultProjectValues }: UpdateProjectFormParams) => {
-  const form = useForm<UpdateProjectFormValues>({
-    defaultValues: {
+  const defaultValues: UpdateProjectFormInput = useMemo(
+    () => ({
       projectName: defaultProjectValues.projectName,
       host: defaultProjectValues.host,
+      startDate: parseProjectFormDate(defaultProjectValues.startDate),
+      endDate: parseProjectFormDate(defaultProjectValues.endDate),
       image: null,
-    },
+      projectUrl: defaultProjectValues.projectUrl,
+      projectUrlType: defaultProjectValues.projectUrlType,
+    }),
+    [defaultProjectValues],
+  );
+
+  const form = useForm<UpdateProjectFormInput, unknown, UpdateProjectFormValues>({
+    defaultValues,
     mode: 'onChange',
     reValidateMode: 'onChange',
     resolver: zodResolver(UpdateProjectFormSchema),
   });
 
   const resetForm = useCallback(() => {
-    form.reset({
-      projectName: defaultProjectValues.projectName,
-      host: defaultProjectValues.host,
-      image: null,
-    });
-  }, [form, defaultProjectValues.projectName, defaultProjectValues.host]);
+    form.reset(defaultValues);
+  }, [defaultValues, form]);
 
   return {
     form,
@@ -316,13 +328,19 @@ export const useUpdateProjectModal = ({ projectId, defaultProjectValues, onOpenC
   );
 
   const onSubmit = async (data: UpdateProjectFormValues) => {
+    const request: ProjectRequest = {
+      projectName: data.projectName.trim(),
+      host: data.host.trim(),
+      startDate: formatDateTimeForRequest(data.startDate, '00:00:00'),
+      endDate: formatDateTimeForRequest(data.endDate, '23:59:59'),
+      projectUrl: data.projectUrl.trim(),
+      projectUrlType: data.projectUrlType,
+    };
+
     try {
       form.clearErrors('root');
       await updateProjectMutation({
-        request: {
-          projectName: data.projectName.trim(),
-          host: data.host.trim(),
-        },
+        request,
         image: data.image,
       });
 

@@ -85,6 +85,8 @@ export type ProjectCardItem = {
   projectImage: string | null;
   projectStatus: ProjectStatus;
   myMemberStatus: MemberStatus;
+  projectUrl: string;
+  projectUrlType: 'LINK';
   members: readonly ProjectCardMember[];
   reviewedCount: number;
   totalReviewTargetCount: number;
@@ -106,10 +108,10 @@ export interface UserProjectResponse {
 export interface ProjectRequest {
   projectName: string;
   host: string;
-  startDate?: string;
-  endDate?: string;
-  projectUrl?: string;
-  projectUrlType?: 'LINK';
+  startDate: string;
+  endDate: string;
+  projectUrl: string;
+  projectUrlType: 'LINK';
 }
 
 export type ProjectPayload = {

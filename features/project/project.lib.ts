@@ -112,6 +112,8 @@ export const mapMyProjectToCardItem = (project: MyProjectResponse, sessionUser: 
     projectImage: project.projectImage,
     projectStatus: project.projectStatus,
     myMemberStatus: project.myMemberStatus,
+    projectUrl: project.projectUrl ?? '',
+    projectUrlType: 'LINK',
     members: members.map((member) => toCardMember(member, sessionUserId)),
     reviewedCount: project.reviewedCount ?? 0,
     totalReviewTargetCount: project.totalReviewTargetCount ?? 0,

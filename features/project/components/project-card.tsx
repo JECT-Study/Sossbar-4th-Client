@@ -116,6 +116,10 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             projectId={project.projectId}
             defaultProjectName={project.projectName}
             defaultHost={project.host}
+            defaultStartDate={project.startDate}
+            defaultEndDate={project.endDate}
+            defaultProjectUrl={project.projectUrl}
+            defaultProjectUrlType={project.projectUrlType}
           />
 
           <ConfirmationDialog

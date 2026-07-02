@@ -47,23 +47,41 @@ export const CreateProjectFormSchema = z
     path: ['endDate'],
   });
 
-export const UpdateProjectFormSchema = z.object({
-  projectName: z
-    .string()
-    .trim()
-    .min(1, { message: '프로젝트명을 입력해 주세요.' })
-    .max(PROJECT_FIELD_MAX_LENGTH, `프로젝트명은 ${PROJECT_FIELD_MAX_LENGTH}자 이하로 입력해 주세요.`),
-  host: z
-    .string()
-    .trim()
-    .min(1, { message: '주최사를 입력해 주세요.' })
-    .max(PROJECT_FIELD_MAX_LENGTH, `주최사는 ${PROJECT_FIELD_MAX_LENGTH}자 이하로 입력해 주세요.`),
-  image: z
-    .custom<File | null>((value) => value === null || isFile(value), { message: '이미지 파일을 선택해 주세요.' })
-    .refine((file) => file === null || imageMimeTypes.includes(file.type), {
-      message: 'JPG, JPEG, PNG 이미지만 업로드할 수 있습니다.',
-    })
-    .refine((file) => file === null || file.size <= PROJECT_IMAGE_MAX_SIZE, {
-      message: '이미지는 5MB 이하로 업로드해 주세요.',
-    }),
-});
+export const UpdateProjectFormSchema = z
+  .object({
+    projectName: z
+      .string()
+      .trim()
+      .min(1, { message: '프로젝트명을 입력해 주세요.' })
+      .max(PROJECT_FIELD_MAX_LENGTH, `프로젝트명은 ${PROJECT_FIELD_MAX_LENGTH}자 이하로 입력해 주세요.`),
+    host: z
+      .string()
+      .trim()
+      .min(1, { message: '주최사를 입력해 주세요.' })
+      .max(PROJECT_FIELD_MAX_LENGTH, `주최사는 ${PROJECT_FIELD_MAX_LENGTH}자 이하로 입력해 주세요.`),
+    image: z
+      .custom<File | null>((value) => value === null || isFile(value), { message: '이미지 파일을 선택해 주세요.' })
+      .refine((file) => file === null || imageMimeTypes.includes(file.type), {
+        message: 'JPG, JPEG, PNG 이미지만 업로드할 수 있습니다.',
+      })
+      .refine((file) => file === null || file.size <= PROJECT_IMAGE_MAX_SIZE, {
+        message: '이미지는 5MB 이하로 업로드해 주세요.',
+      }),
+    startDate: z
+      .custom<Date | null>((value) => value === null || isDate(value), { message: '시작일을 선택해 주세요.' })
+      .refine((date) => date !== null, { message: '시작일을 선택해 주세요.' }),
+    endDate: z
+      .custom<Date | null>((value) => value === null || isDate(value), { message: '종료일을 선택해 주세요.' })
+      .refine((date) => date !== null, { message: '종료일을 선택해 주세요.' }),
+    projectUrl: z
+      .string()
+      .trim()
+      .refine((value) => value.length === 0 || z.string().url().safeParse(value).success, {
+        message: '올바른 URL을 입력해 주세요.',
+      }),
+    projectUrlType: z.literal('LINK'),
+  })
+  .refine(({ startDate, endDate }) => startDate === null || endDate === null || startDate <= endDate, {
+    message: '종료일은 시작일 이후로 선택해 주세요.',
+    path: ['endDate'],
+  });
