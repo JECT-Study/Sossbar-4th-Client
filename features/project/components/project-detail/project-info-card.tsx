@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import { Button } from '@/shared/components/button';
 import { DatePicker } from '@/shared/components/date-picker';
-import { ImageFileInput } from '@/shared/components/file-input';
+import { FileInput, useImagePreview } from '@/shared/components/file-input';
 import { Label } from '@/shared/components/label';
 import { SectionCard, SectionInfoRow } from '@/shared/components/section-card';
 import { Select } from '@/shared/components/select/select';
@@ -155,15 +155,7 @@ const ProjectInfoEditFields = ({ project }: { project: ProjectResponse }) => {
       </SectionInfoRow>
 
       <SectionInfoRow label="협업 인증 사진" align="start">
-        <div className="flex flex-col gap-2">
-          <ImageFileInput
-            value={null}
-            onChange={() => undefined}
-            label="이미지 업로드하기"
-            accept={PROJECT_IMAGE_ACCEPT}
-          />
-          <p className="text-body-sm text-text-subtler whitespace-pre-line">{IMAGE_GUIDE_TEXT}</p>
-        </div>
+        <ProjectImageEditField project={project} />
       </SectionInfoRow>
 
       <SectionInfoRow label="URL" align="start">
@@ -188,6 +180,31 @@ const ProjectInfoEditFields = ({ project }: { project: ProjectResponse }) => {
           </div>
         </div>
       </SectionInfoRow>
+    </div>
+  );
+};
+
+const ProjectImageEditField = ({ project }: { project: ProjectResponse }) => {
+  const { file, previewUrl, onChange } = useImagePreview();
+  const imageSrc = previewUrl ?? project.projectImage ?? DEFAULT_PROJECT_IMAGE;
+
+  return (
+    <div className="flex items-start gap-6">
+      <img
+        src={imageSrc}
+        alt={`${project.projectName} 협업 인증 사진 미리보기`}
+        className="size-25 shrink-0 rounded-2xl object-cover"
+      />
+      <div className="flex min-w-0 flex-col gap-2">
+        <FileInput
+          value={file}
+          onChange={onChange}
+          label="이미지 업로드하기"
+          accept={PROJECT_IMAGE_ACCEPT}
+          className="max-w-full"
+        />
+        <p className="text-body-sm text-text-subtler whitespace-pre-line">{IMAGE_GUIDE_TEXT}</p>
+      </div>
     </div>
   );
 };
