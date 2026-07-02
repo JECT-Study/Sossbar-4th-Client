@@ -23,7 +23,7 @@ export {
 export {
   mapMyProjectsToCardItems,
   mapMyProjectToCardItem,
-  parseProjectInviteId,
+  parseProjectInviteLink,
   PROJECT_INVITE_QUERY_KEY,
 } from './project.lib';
 

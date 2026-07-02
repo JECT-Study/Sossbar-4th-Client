@@ -5,6 +5,7 @@ import type {
   FetchMyProjectsParams,
   MyProjectResponse,
   ProjectPayload,
+  ProjectPositionValue,
   ProjectRequest,
   ProjectResponse,
   UserProjectResponse,
@@ -49,9 +50,12 @@ export const fetchUserProjects = (userLink: string): Promise<UserProjectResponse
 export const deleteProject = (projectId: number): Promise<void> =>
   apiRequest<void>(`/projects/${projectId}`, { method: 'DELETE' });
 
-/** POST /api/v1/projects/invite/{projectId} 팀원 추가 (본인 초대 수락) */
-export const inviteProjectMember = (projectId: number): Promise<void> =>
-  apiRequest<void>(`/projects/invite/${projectId}`, { method: 'POST' });
+/** POST /api/v1/projects/invite/{projectLink} 팀원 추가 (본인 초대 수락) */
+export const inviteProjectMember = (projectLink: string, projectPositions: ProjectPositionValue[]): Promise<void> =>
+  apiRequest<void>(`/projects/invite/${projectLink}`, {
+    method: 'POST',
+    body: { projectPositions },
+  });
 
 /** DELETE /api/v1/projects/{projectId}/{userId} 팀원 삭제 */
 export const deleteProjectMember = (projectId: number, userId: number): Promise<void> =>

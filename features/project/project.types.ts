@@ -15,7 +15,7 @@ export interface FetchMyProjectsParams {
 }
 
 /** 프로젝트 내 직군. FE/BE/PM/PD/AI — review 도메인의 후기 작성 직군과 동일한 값 집합 */
-export type ProjectPositionValue = 'FE' | 'BE' | 'PM' | 'PD' | 'AI';
+export type ProjectPositionValue = 'FE' | 'BE' | 'PM' | 'PD';
 
 /** 프로젝트의 외부 참고 링크 타입 (userLink의 타입과 동일한 값 집합) */
 export type ProjectUrlType = UserLinkType;

@@ -12,20 +12,16 @@ import type { QueryClient } from '@tanstack/react-query';
 
 import { projectKeys } from './project.api';
 
-export const PROJECT_INVITE_QUERY_KEY = 'inviteProjectId';
+export const PROJECT_INVITE_QUERY_KEY = 'invite';
 
-export const parseProjectInviteId = (raw: string | null): number | null => {
-  if (raw == null || raw.trim() === '') {
-    return null;
-  }
-
-  const parsed = Number.parseInt(raw, 10);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+export const parseProjectInviteLink = (raw: string | null): string | null => {
+  const trimmed = raw?.trim();
+  return trimmed ? trimmed : null;
 };
 
-export const buildProjectInviteUrl = (projectId: number, inviterName?: string): string => {
+export const buildProjectInviteUrl = (projectLink: string, inviterName?: string): string => {
   const searchParams = new URLSearchParams({
-    [PROJECT_INVITE_QUERY_KEY]: String(projectId),
+    [PROJECT_INVITE_QUERY_KEY]: projectLink,
   });
 
   const trimmedName = inviterName?.trim();

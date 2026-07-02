@@ -7,10 +7,17 @@ import { saveLoginReturnPath, useLoginGate } from '@/features/auth';
 import { useMyProfile } from '@/features/profile';
 import { ProjectInviteAcceptModal } from '@/features/project/components/project-invite-accept-modal';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
+import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
 import { ApiError } from '@/shared/lib/api';
+import { parseShareDisplayName } from '@/shared/lib/parse-share-display-name';
 
-import { useInviteProjectMember, useProject } from '../project.hooks';
-import { parseProjectInviteId, PROJECT_INVITE_QUERY_KEY } from '../project.lib';
+import type { ProjectPositionValue } from '../project.types';
+
+import { useInviteProjectMember } from '../project.hooks';
+import { parseProjectInviteLink, PROJECT_INVITE_QUERY_KEY } from '../project.lib';
+
+/** 초대 링크 자체가 유효하지 않을 때(만료/삭제) 백엔드가 내려주는 상태 코드 */
+const INVALID_INVITE_STATUSES = new Set([400, 404, 410]);
 
 const removeInviteParamFromUrl = (pathname: string, searchParams: URLSearchParams): string => {
   const next = new URLSearchParams(searchParams.toString());
@@ -26,11 +33,17 @@ export const ProjectInviteHandler = () => {
   const { data: profile } = useMyProfile();
   const { openLogin } = useLoginGate();
 
-  const projectId = useMemo(() => parseProjectInviteId(searchParams.get(PROJECT_INVITE_QUERY_KEY)), [searchParams]);
+  const projectLink = useMemo(() => parseProjectInviteLink(searchParams.get(PROJECT_INVITE_QUERY_KEY)), [searchParams]);
 
   const [joinError, setJoinError] = useState<string | null>(null);
+  const [invalidLink, setInvalidLink] = useState(false);
 
   const hasSession = profile != null;
+
+  const inviterName = useMemo(
+    () => parseShareDisplayName(searchParams.get(SHARE_INVITER_NAME_PARAM) ?? undefined) ?? '',
+    [searchParams],
+  );
 
   const clearInviteParam = useCallback(() => {
     if (searchParams.get(PROJECT_INVITE_QUERY_KEY) == null) {
@@ -39,45 +52,25 @@ export const ProjectInviteHandler = () => {
     router.replace(removeInviteParamFromUrl(pathname, searchParams), { scroll: false });
   }, [pathname, router, searchParams]);
 
-  const shouldFetchProject = projectId != null && hasSession;
-  const { data: project, isPending, isError } = useProject(projectId ?? 0, shouldFetchProject, { throwOnError: false });
-  const { mutateAsync: joinProject, isPending: isJoining } = useInviteProjectMember(projectId ?? 0);
-
-  const isAlreadyMember = useMemo(() => {
-    if (!project || !profile) {
-      return false;
-    }
-    return project.members.some((member) => member.userId === profile.userId);
-  }, [project, profile]);
+  const { mutateAsync: joinProject, isPending: isJoining } = useInviteProjectMember(projectLink ?? '');
 
   useEffect(() => {
     const raw = searchParams.get(PROJECT_INVITE_QUERY_KEY);
-    if (raw != null && projectId == null) {
+    if (raw != null && projectLink == null) {
       clearInviteParam();
     }
-  }, [clearInviteParam, projectId, searchParams]);
+  }, [clearInviteParam, projectLink, searchParams]);
 
   useEffect(() => {
-    if (projectId == null || hasSession) {
+    if (projectLink == null || hasSession) {
       return;
     }
     saveLoginReturnPath();
     openLogin();
-  }, [hasSession, openLogin, projectId]);
+  }, [hasSession, openLogin, projectLink]);
 
-  useEffect(() => {
-    if (!shouldFetchProject || isPending || !project) {
-      return;
-    }
-    if (isAlreadyMember) {
-      clearInviteParam();
-    }
-  }, [clearInviteParam, isAlreadyMember, isPending, project, shouldFetchProject]);
-
-  const acceptModalOpen =
-    projectId != null && hasSession && !isPending && !isError && project != null && !isAlreadyMember;
-
-  const invalidInviteModalOpen = projectId != null && hasSession && shouldFetchProject && !isPending && isError;
+  // POST 성공 전까지는 프로젝트 정보를 알 수 없으므로 링크·세션만으로 수락 모달을 연다.
+  const acceptModalOpen = projectLink != null && hasSession && !invalidLink;
 
   const handleAcceptOpenChange = useCallback(
     (open: boolean) => {
@@ -89,50 +82,59 @@ export const ProjectInviteHandler = () => {
     [clearInviteParam],
   );
 
-  const handleJoin = useCallback(async () => {
-    if (projectId == null) {
-      return;
-    }
-    setJoinError(null);
-    try {
-      await joinProject();
-      clearInviteParam();
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 409) {
-        setJoinError('이미 참여 중인 프로젝트입니다.');
+  const handleJoin = useCallback(
+    async (projectPositions: ProjectPositionValue[]) => {
+      if (projectLink == null) {
         return;
       }
-      setJoinError('프로젝트 참여에 실패했습니다. 다시 시도해 주세요.');
-    }
-  }, [clearInviteParam, joinProject, projectId]);
+      setJoinError(null);
+      try {
+        await joinProject(projectPositions);
+        clearInviteParam();
+      } catch (err) {
+        if (err instanceof ApiError) {
+          if (err.status === 409) {
+            setJoinError('이미 참여 중인 프로젝트입니다.');
+            return;
+          }
+          if (INVALID_INVITE_STATUSES.has(err.status)) {
+            setInvalidLink(true);
+            return;
+          }
+        }
+        setJoinError('프로젝트 참여에 실패했습니다. 다시 시도해 주세요.');
+      }
+    },
+    [clearInviteParam, joinProject, projectLink],
+  );
 
   const handleInvalidOpenChange = useCallback(
     (open: boolean) => {
       if (!open) {
+        setInvalidLink(false);
         clearInviteParam();
       }
     },
     [clearInviteParam],
   );
 
-  if (projectId == null) {
+  if (projectLink == null) {
     return null;
   }
 
   return (
     <>
-      {project ? (
-        <ProjectInviteAcceptModal
-          open={acceptModalOpen}
-          projectName={project.projectName}
-          onOpenChange={handleAcceptOpenChange}
-          onConfirm={handleJoin}
-          isConfirming={isJoining}
-          errorMessage={joinError ?? undefined}
-        />
-      ) : null}
+      <ProjectInviteAcceptModal
+        key={projectLink}
+        open={acceptModalOpen}
+        inviterName={inviterName}
+        onOpenChange={handleAcceptOpenChange}
+        onConfirm={handleJoin}
+        isConfirming={isJoining}
+        errorMessage={joinError ?? undefined}
+      />
       <ConfirmationDialog
-        open={invalidInviteModalOpen}
+        open={invalidLink}
         title="유효하지 않은 링크입니다"
         description="이미 종료되었거나 유효하지 않은 링크입니다. 프로젝트 방장에게 새 초대 링크를 요청해 주세요."
         confirmText="확인"
