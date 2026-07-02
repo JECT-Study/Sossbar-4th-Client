@@ -295,7 +295,6 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
           endDate: formatDateTimeForRequest(data.endDate, '23:59:59'),
           projectUrl: data.projectUrl.trim(),
           projectUrlType: data.projectUrlType,
-          projectPositions: (myProfile?.defaultPositions ?? []) as ProjectPositionValue[],
         },
         image,
       });
