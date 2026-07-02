@@ -44,7 +44,7 @@ export const ConfirmationDialog = ({
         <Dialog.Overlay className="bg-black-75 fixed inset-0 z-50" />
         <Dialog.Content
           className={cn(
-            'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex w-[360px] max-w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col',
+            'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex w-md max-w-[calc(100vw-32px)] -translate-x-1/2 -translate-y-1/2 flex-col',
             'gap-4 overflow-hidden rounded-xl border p-6 outline-none',
           )}
         >
