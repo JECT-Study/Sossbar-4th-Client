@@ -49,6 +49,7 @@ export const ProjectDetailPageContent = ({ projectId }: Props) => {
       <ProjectDetailHeading projectStatus={project.projectStatus} isLeader={isLeader} />
       <ProjectInfoCard project={project} isLeader={isLeader} />
       <ProjectMembersCard
+        projectId={projectId}
         members={project.members}
         projectStatus={project.projectStatus}
         isLeader={isLeader}

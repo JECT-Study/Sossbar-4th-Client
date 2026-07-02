@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { Button } from '@/shared/components/button';
@@ -7,16 +8,18 @@ import { SectionCard, SectionInfoRow } from '@/shared/components/section-card';
 
 import type { ProjectMemberResponse, ProjectMemberReviewStatus, ProjectStatus } from '../../project.types';
 
+import { buildReviewWriteUrl } from '../../project.lib';
 import { ProjectMemberChip } from '../project-member-chip';
 
 interface Props {
+  projectId: number;
   members: ProjectMemberResponse[];
   projectStatus: ProjectStatus;
   isLeader: boolean;
   myUserId: number;
 }
 
-export const ProjectMembersCard = ({ members, projectStatus, isLeader, myUserId }: Props) => {
+export const ProjectMembersCard = ({ projectId, members, projectStatus, isLeader, myUserId }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const action = !isLeader ? null : isEditing ? (
@@ -49,19 +52,27 @@ export const ProjectMembersCard = ({ members, projectStatus, isLeader, myUserId 
       {isEditing ? (
         <ProjectMembersEditFields members={members} myUserId={myUserId} />
       ) : (
-        <ProjectMembersViewFields members={members} myUserId={myUserId} projectStatus={projectStatus} />
+        <ProjectMembersViewFields
+          projectId={projectId}
+          members={members}
+          myUserId={myUserId}
+          projectStatus={projectStatus}
+        />
       )}
     </SectionCard>
   );
 };
 
 interface ViewFieldsProps {
+  projectId: number;
   members: ProjectMemberResponse[];
   myUserId: number;
   projectStatus: ProjectStatus;
 }
 
-const ProjectMembersViewFields = ({ members, myUserId, projectStatus }: ViewFieldsProps) => {
+const ProjectMembersViewFields = ({ projectId, members, myUserId, projectStatus }: ViewFieldsProps) => {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col gap-4">
       <SectionInfoRow label="참여한 팀원" align="start">
@@ -73,7 +84,19 @@ const ProjectMembersViewFields = ({ members, myUserId, projectStatus }: ViewFiel
             if (reviewStatus === 'writable') {
               return (
                 <li key={member.userId}>
-                  <ProjectMemberChip name={member.username} state="writable" onWriteReview={() => undefined} />
+                  <ProjectMemberChip
+                    name={member.username}
+                    state="writable"
+                    onWriteReview={() =>
+                      router.push(
+                        buildReviewWriteUrl({
+                          projectId,
+                          revieweeId: member.userId,
+                          revieweeName: member.username,
+                        }),
+                      )
+                    }
+                  />
                 </li>
               );
             }
