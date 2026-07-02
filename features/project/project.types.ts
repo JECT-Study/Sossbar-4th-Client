@@ -112,7 +112,6 @@ export interface ProjectRequest {
   endDate: string;
   projectUrl: string;
   projectUrlType: 'LINK';
-  /** 프로젝트 생성 시 선택한 직군. 수정 요청에는 포함되지 않는다. */
   projectPositions?: ProjectPositionValue[];
 }
 

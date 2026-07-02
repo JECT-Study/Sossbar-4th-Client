@@ -30,7 +30,12 @@ import {
   updateProject,
 } from './project.api';
 import { DEFAULT_PROJECT_LIST_PARAMS } from './project.constants';
-import { buildProjectInviteUrl, invalidateProjectListQueries, mapMyProjectsToCardItems } from './project.lib';
+import {
+  buildProjectInviteUrl,
+  compressImage,
+  invalidateProjectListQueries,
+  mapMyProjectsToCardItems,
+} from './project.lib';
 import { CreateProjectFormSchema, UpdateProjectFormSchema } from './project.schemas';
 
 /** 내 프로젝트 목록. 게스트 분기는 상위 Gate에서 처리되므로 항상 세션이 있다고 가정한다. */
@@ -280,6 +285,7 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
   const onSubmit = async (data: CreateProjectFormValues) => {
     try {
       form.clearErrors('root');
+      const image = data.image ? await compressImage(data.image) : null;
       const createdProject = await createProjectMutation({
         request: {
           projectName: data.projectName.trim(),
@@ -290,7 +296,7 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
           projectUrl: data.projectUrl.trim(),
           projectUrlType: data.projectUrlType,
         },
-        image: data.image,
+        image,
       });
 
       setCreatedProjectLink(createdProject.projectLink);
@@ -346,9 +352,10 @@ export const useUpdateProjectModal = ({ projectId, defaultProjectValues, onOpenC
 
     try {
       form.clearErrors('root');
+      const image = data.image ? await compressImage(data.image) : null;
       await updateProjectMutation({
         request,
-        image: data.image,
+        image,
       });
 
       onOpenChange(false);
