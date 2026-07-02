@@ -149,25 +149,6 @@ const ProjectInfoEditFields = ({ project, form, onSubmit, isSubmitting }: Projec
 
   return (
     <form id={PROJECT_INFO_EDIT_FORM_ID} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
-      <SectionInfoRow label="주최사" align="start">
-        <Controller
-          control={control}
-          name="host"
-          render={({ field }) => (
-            <TextField
-              label="주최사"
-              required
-              maxLength={PROJECT_FIELD_MAX_LENGTH}
-              placeholder="주최사를 입력하세요"
-              errorMessage={errors.host?.message}
-              disabled={isSubmitting}
-              className="[&>label]:sr-only"
-              {...field}
-            />
-          )}
-        />
-      </SectionInfoRow>
-
       <SectionInfoRow label="프로젝트명" align="start">
         <Controller
           control={control}
@@ -179,6 +160,25 @@ const ProjectInfoEditFields = ({ project, form, onSubmit, isSubmitting }: Projec
               maxLength={PROJECT_FIELD_MAX_LENGTH}
               placeholder="프로젝트명을 입력하세요"
               errorMessage={errors.projectName?.message}
+              disabled={isSubmitting}
+              className="[&>label]:sr-only"
+              {...field}
+            />
+          )}
+        />
+      </SectionInfoRow>
+
+      <SectionInfoRow label="주최사" align="start">
+        <Controller
+          control={control}
+          name="host"
+          render={({ field }) => (
+            <TextField
+              label="주최사"
+              required
+              maxLength={PROJECT_FIELD_MAX_LENGTH}
+              placeholder="주최사를 입력하세요"
+              errorMessage={errors.host?.message}
               disabled={isSubmitting}
               className="[&>label]:sr-only"
               {...field}
