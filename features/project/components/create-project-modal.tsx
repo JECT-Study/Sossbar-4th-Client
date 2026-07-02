@@ -4,7 +4,12 @@ import { Dialog } from 'radix-ui';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 
-import { PROJECT_FIELD_MAX_LENGTH, PROJECT_IMAGE_ACCEPT } from '@/features/project/project.constants';
+import {
+  PROJECT_FIELD_MAX_LENGTH,
+  PROJECT_IMAGE_ACCEPT,
+  PROJECT_POSITIONS_MAX_SELECT,
+  PROJECT_POSITION_OPTIONS,
+} from '@/features/project/project.constants';
 import { FileUploadIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { DatePicker } from '@/shared/components/date-picker';
@@ -12,6 +17,7 @@ import { ErrorMessage } from '@/shared/components/error-message';
 import { useFileInput, useImagePreview } from '@/shared/components/file-input';
 import { Input } from '@/shared/components/input';
 import { Label } from '@/shared/components/label';
+import { MultiSelectField } from '@/shared/components/multi-select-field';
 import { Select } from '@/shared/components/select';
 import { TextField } from '@/shared/components/text-field';
 import { cn } from '@/shared/lib/cn';
@@ -116,6 +122,28 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                       />
                     )}
                   />
+
+                  <Controller
+                    control={control}
+                    name="projectPositions"
+                    render={({ field }) => (
+                      <MultiSelectField
+                        name="projectPositions"
+                        label="직군"
+                        required
+                        options={PROJECT_POSITION_OPTIONS}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        max={PROJECT_POSITIONS_MAX_SELECT}
+                        placeholder={`직군을 최대 ${PROJECT_POSITIONS_MAX_SELECT}개까지 선택해주세요.`}
+                        className="-mt-2"
+                        contentClassName="w-(--radix-popover-trigger-width)"
+                      />
+                    )}
+                  />
+                  {errors.projectPositions?.message ? (
+                    <ErrorMessage className="static -mt-2">{errors.projectPositions.message}</ErrorMessage>
+                  ) : null}
 
                   <div className="-mt-2 flex flex-col gap-2">
                     <Label required>날짜</Label>

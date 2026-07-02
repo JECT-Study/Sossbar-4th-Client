@@ -137,6 +137,7 @@ export type CreateProjectFormValues = z.output<typeof CreateProjectFormSchema>;
 const CREATE_PROJECT_DEFAULT_VALUES: CreateProjectFormInput = {
   projectName: '',
   host: '',
+  projectPositions: [],
   startDate: null,
   endDate: null,
   image: null,
@@ -283,6 +284,7 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
         request: {
           projectName: data.projectName.trim(),
           host: data.host.trim(),
+          projectPositions: data.projectPositions,
           startDate: formatDateTimeForRequest(data.startDate, '00:00:00'),
           endDate: formatDateTimeForRequest(data.endDate, '23:59:59'),
           projectUrl: data.projectUrl.trim(),

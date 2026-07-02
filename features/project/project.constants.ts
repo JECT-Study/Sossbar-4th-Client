@@ -12,6 +12,20 @@ export const PROJECT_POSITION_LABELS: Record<ProjectPositionValue, string> = {
 
 export const PROJECT_POSITIONS = Object.keys(PROJECT_POSITION_LABELS) as ProjectPositionValue[];
 
+/** zod enum·옵션 파생용 직군 값 튜플 (단일 출처) */
+export const PROJECT_POSITION_VALUES = ['FE', 'BE', 'PM', 'PD'] as const satisfies readonly ProjectPositionValue[];
+
+/** 프로젝트 생성 시 직군 선택 옵션. 회원가입(POSITION_OPTIONS)과 동일한 라벨 */
+export const PROJECT_POSITION_OPTIONS = [
+  { value: 'FE', label: '💻 프론트엔드' },
+  { value: 'BE', label: '🗄️ 백엔드' },
+  { value: 'PM', label: '📋 프로덕트 매니저' },
+  { value: 'PD', label: '🎨 프로덕트 디자이너' },
+] as const satisfies readonly { value: ProjectPositionValue; label: string }[];
+
+/** 프로젝트 생성 시 선택 가능한 최대 직군 수 */
+export const PROJECT_POSITIONS_MAX_SELECT = 2;
+
 /** 초대 수락 시 선택 가능한 최대 직군 수 (review projectPositions와 동일) */
 export const PROJECT_INVITE_MAX_POSITIONS = 2;
 
