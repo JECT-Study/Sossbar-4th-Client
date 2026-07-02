@@ -1,5 +1,4 @@
 export { CreateProjectModal } from './components/create-project-modal';
-export { EditProjectModal } from './components/edit-project-modal';
 export { ProjectsPageContent } from './components/projects-page-content';
 export { ProjectFeedbackPageContent } from './components/project-feedback-page-content';
 export { ProjectStatusAlert } from './components/project-status-alert';

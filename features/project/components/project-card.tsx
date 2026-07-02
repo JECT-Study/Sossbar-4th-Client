@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
 
-import { EditProjectModal } from '@/features/project/components/edit-project-modal';
 import { ProjectStateBadge } from '@/features/project/components/project-state-badge';
 import { EllipsisVerticalIcon, TrashIcon } from '@/shared/assets/icons';
 import { IconButton } from '@/shared/components/button';
@@ -34,7 +33,6 @@ interface ProjectCardHeaderProps {
   projectName: string;
   projectStatus: ProjectCardItem['projectStatus'];
   startDate: string;
-  onEdit?: () => void;
   onDelete?: () => void;
 }
 
@@ -55,7 +53,6 @@ interface ProjectMemberListProps {
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isLeader = project.myMemberStatus === 'LEADER';
-  const [editOpen, setEditOpen] = useState(false);
   const [deleteProjectOpen, setDeleteProjectOpen] = useState(false);
   const [deleteProjectError, setDeleteProjectError] = useState<string | null>(null);
   const { mutateAsync: deleteProject, isPending: isDeletingProject } = useDeleteProject();
@@ -85,7 +82,6 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               projectName={project.projectName}
               projectStatus={project.projectStatus}
               startDate={project.startDate}
-              onEdit={isLeader ? () => setEditOpen(true) : undefined}
               onDelete={isLeader ? () => setDeleteProjectOpen(true) : undefined}
             />
             <ProjectCardTitle
@@ -107,37 +103,22 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       </Link>
 
       {isLeader ? (
-        <>
-          <EditProjectModal
-            key={String(editOpen)}
-            open={editOpen}
-            onOpenChange={setEditOpen}
-            projectId={project.projectId}
-            defaultProjectName={project.projectName}
-            defaultHost={project.host}
-            defaultStartDate={project.startDate}
-            defaultEndDate={project.endDate}
-            defaultProjectUrl={project.projectUrl}
-            defaultProjectUrlType={project.projectUrlType}
-          />
-
-          <ConfirmationDialog
-            open={deleteProjectOpen}
-            title="프로젝트를 삭제할까요?"
-            description="삭제하면 복구할 수 없습니다. 팀원과의 후기 기록도 함께 삭제될 수 있습니다."
-            confirmText="삭제하기"
-            cancelText="취소"
-            onOpenChange={(open) => {
-              if (!open) {
-                setDeleteProjectError(null);
-              }
-              setDeleteProjectOpen(open);
-            }}
-            onConfirm={handleDeleteProject}
-            isConfirming={isDeletingProject}
-            errorMessage={deleteProjectError ?? undefined}
-          />
-        </>
+        <ConfirmationDialog
+          open={deleteProjectOpen}
+          title="프로젝트를 삭제할까요?"
+          description="삭제하면 복구할 수 없습니다. 팀원과의 후기 기록도 함께 삭제될 수 있습니다."
+          confirmText="삭제하기"
+          cancelText="취소"
+          onOpenChange={(open) => {
+            if (!open) {
+              setDeleteProjectError(null);
+            }
+            setDeleteProjectOpen(open);
+          }}
+          onConfirm={handleDeleteProject}
+          isConfirming={isDeletingProject}
+          errorMessage={deleteProjectError ?? undefined}
+        />
       ) : null}
     </>
   );
