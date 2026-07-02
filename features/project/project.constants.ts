@@ -1,6 +1,20 @@
-import type { FetchMyProjectsParams } from './project.types';
+import type { FetchMyProjectsParams, ProjectPositionValue } from './project.types';
 
 export const PROJECT_FIELD_MAX_LENGTH = 20;
+
+/** 프로젝트 직군 표시 라벨. review 도메인의 직군 라벨과 동일한 값 집합 */
+export const PROJECT_POSITION_LABELS: Record<ProjectPositionValue, string> = {
+  FE: '프론트엔드',
+  BE: '백엔드',
+  PM: 'PM',
+  PD: 'PD',
+  AI: 'AI',
+};
+
+export const PROJECT_POSITIONS = Object.keys(PROJECT_POSITION_LABELS) as ProjectPositionValue[];
+
+/** 초대 수락 시 선택 가능한 최대 직군 수 (review projectPositions와 동일) */
+export const PROJECT_INVITE_MAX_POSITIONS = 2;
 
 export const PROJECT_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 

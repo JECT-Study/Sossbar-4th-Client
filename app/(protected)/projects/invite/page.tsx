@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { parseProjectInviteId, PROJECT_INVITE_QUERY_KEY } from '@/features/project';
+import { parseProjectInviteLink, PROJECT_INVITE_QUERY_KEY } from '@/features/project';
 
 import type { Metadata } from 'next';
 
@@ -10,15 +10,15 @@ export const metadata: Metadata = {
 };
 
 type ProjectInvitePageProps = {
-  searchParams: Promise<{ projectId?: string }>;
+  searchParams: Promise<{ projectLink?: string }>;
 };
 
 const ProjectInviteRedirectPage = async ({ searchParams }: ProjectInvitePageProps) => {
-  const { projectId: rawProjectId } = await searchParams;
-  const projectId = parseProjectInviteId(rawProjectId ?? null);
+  const { projectLink: rawProjectLink } = await searchParams;
+  const projectLink = parseProjectInviteLink(rawProjectLink ?? null);
 
-  if (projectId != null) {
-    redirect(`/projects?${PROJECT_INVITE_QUERY_KEY}=${projectId}`);
+  if (projectLink != null) {
+    redirect(`/projects?${PROJECT_INVITE_QUERY_KEY}=${encodeURIComponent(projectLink)}`);
   }
 
   redirect('/projects');
