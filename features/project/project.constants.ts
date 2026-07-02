@@ -6,9 +6,8 @@ export const PROJECT_FIELD_MAX_LENGTH = 20;
 export const PROJECT_POSITION_LABELS: Record<ProjectPositionValue, string> = {
   FE: '프론트엔드',
   BE: '백엔드',
-  PM: 'PM',
-  PD: 'PD',
-  AI: 'AI',
+  PM: '프로덕트 매니저',
+  PD: '프로덕트 디자이너',
 };
 
 export const PROJECT_POSITIONS = Object.keys(PROJECT_POSITION_LABELS) as ProjectPositionValue[];
