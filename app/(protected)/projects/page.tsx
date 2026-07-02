@@ -10,6 +10,7 @@ import {
   PROJECT_INVITE_QUERY_KEY,
   projectKeys,
   ProjectsPageContent,
+  ProjectsPageSkeleton,
 } from '@/features/project';
 import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
 import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
@@ -49,12 +50,6 @@ export const generateMetadata = async ({ searchParams }: ProjectsPageMetadataPro
   });
 };
 
-const ProjectsPageFallback = () => (
-  <div className="flex min-h-[240px] items-center justify-center">
-    <p className="text-body-base text-text-subtle">화면을 불러오는 중…</p>
-  </div>
-);
-
 const ProjectsPage = async () => {
   const queryClient = getQueryClient();
   const cookieStore = await cookies();
@@ -75,7 +70,7 @@ const ProjectsPage = async () => {
   }
 
   return (
-    <Suspense fallback={<ProjectsPageFallback />}>
+    <Suspense fallback={<ProjectsPageSkeleton />}>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <ProjectsPageContent />
       </HydrationBoundary>
