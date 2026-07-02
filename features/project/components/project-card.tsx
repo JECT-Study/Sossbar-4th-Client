@@ -19,7 +19,6 @@ import type { ProjectCardItem, ProjectCardMember } from '../project.types';
 import { useDeleteProject } from '../project.hooks';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
-const PLACEHOLDER_MEMBER_NAMES = ['양현준', '양현준', '양현준', '양현준', '양현준'];
 
 interface ProjectCardProps {
   project: ProjectCardItem;
@@ -228,24 +227,8 @@ const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['
   );
 };
 
-const ProjectMemberList = ({
-  members,
-  isLeader,
-  projectStatus,
-  reviewedCount,
-  totalReviewTargetCount,
-}: ProjectMemberListProps) => {
+const ProjectMemberList = ({ members, isLeader, reviewedCount, totalReviewTargetCount }: ProjectMemberListProps) => {
   const label = isLeader ? '후기 작성' : '내가 작성한 후기';
-  const placeholderMembers =
-    projectStatus === 'IN_PROGRESS'
-      ? PLACEHOLDER_MEMBER_NAMES.map(
-          (name, index): ProjectCardMember => ({
-            memberId: -index - 1,
-            name,
-            reviewStatus: 'writable',
-          }),
-        )
-      : [];
 
   return (
     <div className="flex min-w-0 flex-col gap-2">
@@ -257,7 +240,7 @@ const ProjectMemberList = ({
       </p>
       <div className="relative min-w-0 overflow-hidden">
         <ul className="flex flex-nowrap gap-2">
-          {[...members, ...placeholderMembers].map((member) => (
+          {members.map((member) => (
             <li key={member.memberId}>
               <ProjectMemberStatusChip member={member} />
             </li>
