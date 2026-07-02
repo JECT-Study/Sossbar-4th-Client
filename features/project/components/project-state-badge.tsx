@@ -28,11 +28,11 @@ type Props = Omit<ComponentPropsWithRef<'span'>, 'children'> & VariantProps<type
 const projectStateBadgeContents = {
   waiting: {
     icon: <TimeIcon aria-hidden className="size-4 shrink-0" />,
-    label: '대기중',
+    label: '팀 확정 전',
   },
   success: {
     icon: <CheckFilledIcon aria-hidden className="size-4 shrink-0" />,
-    label: '확정됨',
+    label: '팀 확정',
   },
   leader: {
     icon: null,

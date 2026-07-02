@@ -199,7 +199,7 @@ const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['
   return (
     <div
       className={cn(
-        'text-body-sm flex h-[37px] items-center rounded-lg px-2 font-normal',
+        'text-body-sm flex h-[37px] items-center rounded-lg px-3 font-normal',
         isCompleted ? 'bg-surface-success-subtler text-text-success' : 'bg-surface-gray-subtle text-text-subtle',
       )}
     >
@@ -208,13 +208,11 @@ const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['
   );
 };
 
-const ProjectMemberList = ({ members, isLeader, reviewedCount, totalReviewTargetCount }: ProjectMemberListProps) => {
-  const label = isLeader ? '후기 작성' : '내가 작성한 후기';
-
+const ProjectMemberList = ({ members, reviewedCount, totalReviewTargetCount }: ProjectMemberListProps) => {
   return (
     <div className="flex min-w-0 flex-col gap-2">
       <p className="text-body-base text-text-subtle font-normal">
-        {label}{' '}
+        {'내가 작성한 후기 '}
         <span>
           {reviewedCount}/{totalReviewTargetCount}
         </span>
@@ -233,20 +231,29 @@ const ProjectMemberList = ({ members, isLeader, reviewedCount, totalReviewTarget
 };
 
 const ProjectMemberStatusChip = ({ member }: { member: ProjectCardMember }) => {
-  // const isCompleted = member.reviewStatus === 'completed';
-  // const label = isCompleted ? '완료' : member.reviewStatus === 'self' ? '나' : '작성 전';
+  const isSelf = member.reviewStatus === 'self';
+  const isCompleted = member.reviewStatus === 'completed';
+  const label = isCompleted ? '완료' : '작성 전';
 
   return (
-    <div className="border-border-gray bg-surface-white flex h-12.25 items-center rounded-md border px-4">
+    <div className="border-border-gray bg-surface-white flex h-12.25 items-center gap-2 rounded-md border px-4">
       <span className="text-body-base text-text-subtle font-medium whitespace-nowrap">{member.name}</span>
-      {/* <span
-        className={cn(
-          'text-detail-xs rounded-full px-2 py-1 font-normal whitespace-nowrap',
-          isCompleted ? 'bg-surface-success-subtler text-text-success' : 'bg-surface-gray-subtler text-text-subtle',
-        )}
-      >
-        {label}
-      </span> */}
+      {isSelf ? null : (
+        <span
+          className={cn(
+            'text-body-xs inline-flex h-5.5 items-center gap-1 rounded-full px-2.5 font-medium whitespace-nowrap',
+            isCompleted
+              ? 'bg-surface-success-subtler text-text-success'
+              : 'bg-surface-warning-subtler text-text-warning',
+          )}
+        >
+          <span
+            aria-hidden
+            className={cn('size-2 rounded-full', isCompleted ? 'bg-element-success' : 'bg-element-warning')}
+          />
+          {label}
+        </span>
+      )}
     </div>
   );
 };
