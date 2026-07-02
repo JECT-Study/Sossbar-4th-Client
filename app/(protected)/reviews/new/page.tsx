@@ -1,10 +1,9 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 
 import { buildReviewRequestDescription } from '@/features/profile';
-import { fetchReviewFormData, fetchReviewValidation, ReviewWriteForm, reviewKeys } from '@/features/review';
+import { fetchReviewFormData, fetchReviewValidation, reviewKeys, WriteReviewFlow } from '@/features/review';
 import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
 import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
 import { getQueryClient } from '@/shared/lib/get-query-client';
@@ -52,17 +51,11 @@ export const generateMetadata = async ({ searchParams }: ReviewNewPageMetadataPr
 };
 
 type ReviewNewPageProps = {
-  searchParams: Promise<{ projectId?: string; revieweeId?: string }>;
+  searchParams: Promise<{ projectId?: string; revieweeId?: string; reviewee?: string }>;
 };
 
-const ReviewNewFallback = () => (
-  <div className="border-divider-gray-light bg-surface-white flex min-h-[240px] w-full items-center justify-center border-b">
-    <p className="text-body-base text-text-subtle">화면을 불러오는 중…</p>
-  </div>
-);
-
 const ReviewNewPage = async ({ searchParams }: ReviewNewPageProps) => {
-  const { projectId: rawProjectId, revieweeId: rawRevieweeId } = await searchParams;
+  const { projectId: rawProjectId, revieweeId: rawRevieweeId, reviewee } = await searchParams;
 
   const projectId = parsePositiveInt(rawProjectId ?? '');
   const revieweeId = parsePositiveInt(rawRevieweeId ?? '');
@@ -70,6 +63,8 @@ const ReviewNewPage = async ({ searchParams }: ReviewNewPageProps) => {
   if (projectId === null || revieweeId === null) {
     return notFound();
   }
+
+  const revieweeName = parseShareDisplayName(reviewee) ?? '';
 
   const cookieStore = await cookies();
 
@@ -90,13 +85,11 @@ const ReviewNewPage = async ({ searchParams }: ReviewNewPageProps) => {
   });
 
   return (
-    <section className="min-h-0 flex-1" aria-label="후기 작성">
+    <div className="flex min-h-[calc(100vh-73px-168px)] flex-col items-center bg-white px-4 py-15">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense fallback={<ReviewNewFallback />}>
-          <ReviewWriteForm />
-        </Suspense>
+        <WriteReviewFlow projectId={projectId} revieweeId={revieweeId} revieweeName={revieweeName} />
       </HydrationBoundary>
-    </section>
+    </div>
   );
 };
 

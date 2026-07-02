@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { FormProvider } from 'react-hook-form';
 
 import { Button } from '@/shared/components/button';
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export const WriteReviewFlow = ({ projectId, revieweeId, revieweeName }: Props) => {
+  const router = useRouter();
   const {
     form,
     formData,
@@ -36,7 +38,18 @@ export const WriteReviewFlow = ({ projectId, revieweeId, revieweeName }: Props) 
     handleSubmit,
   } = useWriteReviewFlow({ projectId, revieweeId });
 
-  const displayName = revieweeName.trim() || '동료';
+  const displayName = revieweeName.trim();
+
+  if (displayName.length === 0) {
+    return (
+      <div className="flex min-h-[320px] w-full max-w-[480px] flex-col items-center justify-center gap-4 px-4">
+        <p className="text-body-base text-text-basic text-center">후기 작성 대상 정보가 올바르지 않습니다.</p>
+        <Button type="button" variant="secondary" size="medium" onClick={() => router.push('/projects')}>
+          프로젝트 관리로 돌아가기
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full max-w-[480px] flex-col items-center">

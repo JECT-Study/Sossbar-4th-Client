@@ -12,7 +12,7 @@ import { cn } from '@/shared/lib/cn';
 
 import type { UserPosition } from '../../review.types';
 
-import { getUserPositionLabel } from '../../review.lib';
+import { USER_POSITION_LABELS } from '../../review.lib';
 
 interface RootProps {
   children: ReactNode;
@@ -78,12 +78,11 @@ const ReviewListItemName = ({ children }: NameProps) => (
 
 interface PositionBadgeProps {
   position: UserPosition;
-  detailPosition?: string;
 }
 
-const ReviewListItemPositionBadge = ({ position, detailPosition }: PositionBadgeProps) => (
+const ReviewListItemPositionBadge = ({ position }: PositionBadgeProps) => (
   <span className="bg-surface-gray-subtle text-body-sm text-text-subtle inline-flex items-center rounded px-1 py-0.5 font-medium">
-    {getUserPositionLabel(position, detailPosition)}
+    {USER_POSITION_LABELS[position]}
   </span>
 );
 

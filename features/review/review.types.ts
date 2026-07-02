@@ -15,7 +15,6 @@ export interface Review {
   feedback: string;
   reviewerNickname: string;
   projectPosition?: UserPosition;
-  projectDetailPosition?: string;
   projectStatus?: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED'; // 팀 확정 여부 필터링용
 }
 
