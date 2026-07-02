@@ -132,7 +132,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                             }}
                             placeholder="시작일을 선택해주세요"
                             disabled={isSubmitting}
-                            className={cn(errors.startDate && 'border-border-error border-2')}
+                            error={!!errors.startDate}
                           />
                         )}
                       />
@@ -148,7 +148,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                             }}
                             placeholder="완료일을 선택해주세요"
                             disabled={isSubmitting}
-                            className={cn(errors.endDate && 'border-border-error border-2')}
+                            error={!!errors.endDate}
                           />
                         )}
                       />

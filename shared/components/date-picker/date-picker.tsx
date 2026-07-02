@@ -15,6 +15,7 @@ interface Props {
   onChange?: (date: Date | null) => void;
   placeholder?: string;
   disabled?: boolean;
+  error?: boolean;
   className?: string;
 }
 
@@ -24,6 +25,7 @@ export const DatePicker = ({
   onChange,
   placeholder = '날짜를 선택해주세요',
   disabled,
+  error = false,
   className,
 }: Props) => {
   const { open, handleOpenChange, handleSelect, goToPrevMonth, goToNextMonth, displayDate, monthLabel, weeks } =
@@ -35,8 +37,11 @@ export const DatePicker = ({
         <button
           type="button"
           disabled={disabled}
+          aria-invalid={error || undefined}
           className={cn(
-            'bg-surface-white border-input-border data-[state=open]:border-border-primary flex w-full items-center gap-2 rounded-md border px-4 py-3 outline-none disabled:cursor-not-allowed data-[state=open]:border-2',
+            'bg-surface-white border-input-border data-[state=open]:border-border-primary data-[state=open]:ring-border-primary flex w-full items-center gap-2 rounded-md border px-4 py-3 outline-none disabled:cursor-not-allowed data-[state=open]:ring-2 data-[state=open]:ring-inset',
+            error &&
+              'border-border-error ring-border-error data-[state=open]:border-border-error data-[state=open]:ring-border-error ring-2 ring-inset',
             className,
           )}
         >
