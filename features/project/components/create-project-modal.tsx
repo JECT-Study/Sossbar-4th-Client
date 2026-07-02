@@ -134,6 +134,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                         options={PROJECT_POSITION_OPTIONS}
                         value={field.value}
                         onValueChange={field.onChange}
+                        onBlur={field.onBlur}
                         max={PROJECT_POSITIONS_MAX_SELECT}
                         placeholder={`직군을 최대 ${PROJECT_POSITIONS_MAX_SELECT}개까지 선택해주세요.`}
                         className="-mt-2"
@@ -158,6 +159,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                               field.onChange(date);
                               void trigger(['startDate', 'endDate']);
                             }}
+                            onBlur={field.onBlur}
                             placeholder="시작일을 선택해주세요"
                             disabled={isSubmitting}
                             error={!!errors.startDate}
@@ -174,6 +176,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                               field.onChange(date);
                               void trigger(['startDate', 'endDate']);
                             }}
+                            onBlur={field.onBlur}
                             placeholder="완료일을 선택해주세요"
                             disabled={isSubmitting}
                             error={!!errors.endDate}
@@ -192,10 +195,11 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                     <Controller
                       control={control}
                       name="image"
-                      render={({ field: { value, onChange } }) => (
+                      render={({ field: { value, onChange, onBlur } }) => (
                         <ProjectImageInput
                           value={value}
                           onChange={onChange}
+                          onBlur={onBlur}
                           disabled={isSubmitting}
                           accept={PROJECT_IMAGE_ACCEPT}
                           errorMessage={errors.image?.message}
@@ -267,12 +271,13 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
 interface ProjectImageInputProps {
   value: File | null;
   onChange: (file: File | null) => void;
+  onBlur?: () => void;
   accept: string;
   disabled?: boolean;
   errorMessage?: string;
 }
 
-const ProjectImageInput = ({ value, onChange, accept, disabled, errorMessage }: ProjectImageInputProps) => {
+const ProjectImageInput = ({ value, onChange, onBlur, accept, disabled, errorMessage }: ProjectImageInputProps) => {
   const { previewUrl, onChange: syncPreview } = useImagePreview();
   const { inputRef, inputId, openPicker, handleFileChange } = useFileInput({ disabled, onChange });
 
@@ -305,6 +310,7 @@ const ProjectImageInput = ({ value, onChange, accept, disabled, errorMessage }: 
             variant="tertiary"
             size="small"
             onClick={openPicker}
+            onBlur={onBlur}
             disabled={disabled}
             className="border-button-tertiary-fill-pressed border px-4 py-2.5"
             leftIcon={<FileUploadIcon className="size-5 shrink-0" aria-hidden />}

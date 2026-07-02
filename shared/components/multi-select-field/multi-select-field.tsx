@@ -21,6 +21,7 @@ interface Props {
   value?: string[];
   defaultValue?: string[];
   onValueChange?: (value: string[]) => void;
+  onBlur?: () => void;
   required?: boolean;
   /** 최대 선택 가능 개수. 도달 시 미선택 항목들이 자동으로 disabled 처리됩니다. */
   max?: number;
@@ -38,6 +39,7 @@ export const MultiSelectField = ({
   value,
   defaultValue,
   onValueChange,
+  onBlur,
   required,
   max,
   placeholder = '항목을 선택해주세요',
@@ -61,7 +63,7 @@ export const MultiSelectField = ({
         {label}
       </Label>
       <MultiSelect.Root value={selectedValue} onValueChange={setSelectedValue}>
-        <MultiSelect.Trigger ref={ref} id={`multi-select-${name}`} className={triggerClassName}>
+        <MultiSelect.Trigger ref={ref} id={`multi-select-${name}`} onBlur={onBlur} className={triggerClassName}>
           {selectedOptions.length === 0 ? (
             <span className="text-text-disabled">{placeholder}</span>
           ) : (

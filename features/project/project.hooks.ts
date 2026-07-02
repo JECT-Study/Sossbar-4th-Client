@@ -181,7 +181,7 @@ const parseProjectFormDate = (value: string | null | undefined): Date | null => 
 export const useCreateProjectForm = () => {
   const form = useForm<CreateProjectFormInput, unknown, CreateProjectFormValues>({
     defaultValues: CREATE_PROJECT_DEFAULT_VALUES,
-    mode: 'onChange',
+    mode: 'onTouched',
     reValidateMode: 'onChange',
     resolver: zodResolver(CreateProjectFormSchema),
   });
