@@ -38,7 +38,7 @@ export const ProjectMembersCard = ({ members, projectStatus, isLeader, myUserId 
       type="button"
       variant="tertiary"
       onClick={() => setIsEditing(true)}
-      className="border-border-gray-dark text-text-subtle w-17 border"
+      className="border-border-gray-dark text-text-subtle border"
     >
       수정
     </Button>

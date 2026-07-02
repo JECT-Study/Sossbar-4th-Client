@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 import { Button } from '@/shared/components/button';
-import { CharCount } from '@/shared/components/char-count';
 import { DatePicker } from '@/shared/components/date-picker';
 import { ImageFileInput } from '@/shared/components/file-input';
 import { Label } from '@/shared/components/label';
@@ -64,7 +63,7 @@ export const ProjectInfoCard = ({ project, isLeader }: Props) => {
       type="button"
       variant="tertiary"
       onClick={() => setIsEditing(true)}
-      className="border-border-gray-dark text-text-subtle w-17 border"
+      className="border-border-gray-dark text-text-subtle border"
     >
       수정
     </Button>
@@ -130,7 +129,6 @@ const ProjectInfoEditFields = ({ project }: { project: ProjectResponse }) => {
             placeholder="주최사를 입력하세요"
             className="[&>label]:sr-only"
           />
-          <CharCount current={project.host.length} max={PROJECT_FIELD_MAX_LENGTH} />
         </div>
       </SectionInfoRow>
 
@@ -145,7 +143,6 @@ const ProjectInfoEditFields = ({ project }: { project: ProjectResponse }) => {
             placeholder="프로젝트명을 입력하세요"
             className="[&>label]:sr-only"
           />
-          <CharCount current={project.projectName.length} max={PROJECT_FIELD_MAX_LENGTH} />
         </div>
       </SectionInfoRow>
 
