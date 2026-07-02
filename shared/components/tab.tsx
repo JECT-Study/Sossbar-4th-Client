@@ -71,7 +71,7 @@ const TabTrigger = ({ className, ...restProps }: ComponentPropsWithRef<typeof Ta
   return (
     <Tabs.Trigger
       className={cn(
-        'h-10 cursor-pointer text-center transition-colors',
+        'h-16 cursor-pointer text-center transition-colors',
         'text-text-subtle data-[state=active]:text-text-secondary',
         'text-heading-sm px-3 font-bold',
         className,

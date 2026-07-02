@@ -2,12 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 import { ApiError } from '@/shared/lib/api';
+import { buildPathWithSearch, setSearchParam } from '@/shared/lib/url/search-params';
 
 import type {
   ProfileEditFormData,
@@ -17,6 +19,12 @@ import type {
 } from './profile.types';
 
 import { fetchMyProfileOptional, fetchProfileById, updateProfile } from './profile.api';
+import {
+  DEFAULT_PROFILE_DETAIL_TAB,
+  isProfileDetailTab,
+  PROFILE_DETAIL_TAB_QUERY_KEY,
+  type ProfileDetailTab,
+} from './profile.constants';
 import { buildProfileShareClipboardText } from './profile.lib';
 import { profileKeys } from './profile.query-keys';
 import { ProfileEditFormSchema } from './profile.schemas';
@@ -164,4 +172,32 @@ export const useProfileShare = ({ userLink, userName }: UseProfileShareParams) =
     closeShareTooltip,
     shareProfile,
   };
+};
+
+/**
+ * 프로필 상세 탭 상태를 URL query parameter(`?tab=all|projects`)와 동기화한다.
+ *
+ * 유효하지 않은 값은 기본 탭('all')으로 폴백한다. 탭 전환 시
+ * `window.history.replaceState`로 URL만 갱신해 서버 컴포넌트 리페치와 스크롤
+ * 이동 없이 shallow routing을 수행한다.
+ */
+export const useProfileDetailTab = (): {
+  value: ProfileDetailTab;
+  onValueChange: (next: string) => void;
+} => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const raw = searchParams.get(PROFILE_DETAIL_TAB_QUERY_KEY);
+  const value = isProfileDetailTab(raw) ? raw : DEFAULT_PROFILE_DETAIL_TAB;
+
+  const onValueChange = useCallback(
+    (next: string) => {
+      const params = setSearchParam(searchParams, PROFILE_DETAIL_TAB_QUERY_KEY, next);
+      window.history.replaceState(null, '', buildPathWithSearch(pathname, params));
+    },
+    [pathname, searchParams],
+  );
+
+  return { value, onValueChange };
 };
