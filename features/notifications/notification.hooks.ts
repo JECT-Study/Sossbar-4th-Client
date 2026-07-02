@@ -4,14 +4,26 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import type { NotificationItem } from './notification.types';
 
-import { fetchNotifications, markAllNotificationsRead, markNotificationRead } from './notification.api';
+import {
+  fetchNotifications,
+  fetchUnreadCount,
+  markAllNotificationsRead,
+  markNotificationRead,
+} from './notification.api';
 import { notificationKeys } from './notification.query-keys';
 
 export const useNotifications = () =>
   useQuery({
     queryKey: notificationKeys.all,
     queryFn: fetchNotifications,
-    enabled: false,
+    throwOnError: false,
+    staleTime: 30_000,
+  });
+
+export const useUnreadCount = () =>
+  useQuery({
+    queryKey: notificationKeys.unreadCount,
+    queryFn: fetchUnreadCount,
     throwOnError: false,
     staleTime: 30_000,
   });
