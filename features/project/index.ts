@@ -6,6 +6,7 @@ export { ProjectDetailPageContent } from './components/project-detail';
 export { ProjectFeedbackStream } from './components/project-feedback-stream';
 export { ProjectSectionStream } from './components/project-section-stream';
 export { ProjectSectionSkeleton } from './components/project-section.skeleton';
+export { ProjectsPageSkeleton } from './components/projects-page.skeleton';
 
 export { fetchProject, fetchProjects, projectKeys } from './project.api';
 
