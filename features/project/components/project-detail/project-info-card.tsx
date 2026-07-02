@@ -100,14 +100,14 @@ const ProjectInfoViewFields = ({ project }: { project: ProjectResponse }) => (
       </div>
     </SectionInfoRow>
     <SectionInfoRow label="URL">
-      {project.projectLink ? (
+      {project.projectUrl ? (
         <a
-          href={project.projectLink}
+          href={project.projectUrl}
           target="_blank"
           rel="noreferrer noopener"
           className="text-text-primary text-body-base underline"
         >
-          {project.projectLink}
+          {project.projectUrl}
         </a>
       ) : (
         <span className="text-text-subtle text-body-base">-</span>
@@ -172,15 +172,15 @@ const ProjectInfoEditFields = ({ project }: { project: ProjectResponse }) => {
       <SectionInfoRow label="URL" align="start">
         <div className="grid grid-cols-[1fr_120px] items-start gap-2">
           <TextField
-            name="projectLink"
+            name="projectUrl"
             label="URL"
-            defaultValue={project.projectLink}
+            defaultValue={project.projectUrl ?? ''}
             placeholder="https://"
             className="[&>label]:sr-only"
           />
           <div className="flex flex-col gap-2">
             <Label className="sr-only">URL 유형</Label>
-            <Select.Root defaultValue="LINK">
+            <Select.Root defaultValue={project.projectUrlType ?? 'LINK'}>
               <Select.Trigger aria-label="URL 유형">
                 <Select.Value />
               </Select.Trigger>
