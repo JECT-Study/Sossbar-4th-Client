@@ -1,6 +1,6 @@
 /** OG 크롤러·초대/후기 링크 등 로그인 없이 접근해야 하는 경로 */
 export const isPublicShareRoute = (pathname: string, searchParams: URLSearchParams): boolean => {
-  if (pathname === '/projects' && searchParams.has('inviteProjectId')) {
+  if (pathname === '/projects' && searchParams.has('invite')) {
     return true;
   }
 

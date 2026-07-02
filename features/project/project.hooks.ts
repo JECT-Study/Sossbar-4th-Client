@@ -8,7 +8,13 @@ import { useForm } from 'react-hook-form';
 import { useMyProfile } from '@/features/profile';
 import { ApiError } from '@/shared/lib/api';
 
-import type { FetchMyProjectsParams, ProjectCardItem, ProjectPayload, ProjectRequest } from './project.types';
+import type {
+  FetchMyProjectsParams,
+  ProjectCardItem,
+  ProjectPayload,
+  ProjectPositionValue,
+  ProjectRequest,
+} from './project.types';
 import type { z } from 'zod';
 
 import {
@@ -61,14 +67,13 @@ export const useDeleteProject = () => {
   });
 };
 
-export const useInviteProjectMember = (projectId: number) => {
+export const useInviteProjectMember = (projectLink: string) => {
   const queryClient = useQueryClient();
   const { data: profile } = useMyProfile();
 
   return useMutation({
-    mutationFn: () => inviteProjectMember(projectId),
+    mutationFn: (projectPositions: ProjectPositionValue[]) => inviteProjectMember(projectLink, projectPositions),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
       invalidateProjectListQueries(queryClient, profile?.userLink);
     },
   });
@@ -220,7 +225,7 @@ interface CreateProjectModalParams {
 }
 
 export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams) => {
-  const [createdProjectId, setCreatedProjectId] = useState<number | null>(null);
+  const [createdProjectLink, setCreatedProjectLink] = useState<string | null>(null);
   const [linkCopied, setLinkCopied] = useState(false);
   const copyResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { data: myProfile } = useMyProfile();
@@ -239,13 +244,13 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
   }, [clearCopyResetTimer]);
 
   const inviteUrl = useMemo(
-    () => (createdProjectId !== null ? buildProjectInviteUrl(createdProjectId, myProfile?.username) : ''),
-    [createdProjectId, myProfile?.username],
+    () => (createdProjectLink !== null ? buildProjectInviteUrl(createdProjectLink, myProfile?.username) : ''),
+    [createdProjectLink, myProfile?.username],
   );
 
   const resetAll = useCallback(() => {
     resetForm();
-    setCreatedProjectId(null);
+    setCreatedProjectLink(null);
     setLinkCopied(false);
     clearCopyResetTimer();
   }, [clearCopyResetTimer, resetForm]);
@@ -286,7 +291,7 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
         image: data.image,
       });
 
-      setCreatedProjectId(createdProject.projectId);
+      setCreatedProjectLink(createdProject.projectLink);
     } catch (error) {
       form.setError('root', {
         message:
@@ -296,7 +301,7 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
   };
 
   return {
-    createdProjectId,
+    createdProjectLink,
     form,
     handleCopyLink,
     handleOpenChange,

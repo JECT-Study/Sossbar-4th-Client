@@ -213,7 +213,7 @@ export const projectsHandlers = [
     return new HttpResponse(null, { status: 204 });
   }),
 
-  http.post(`${BASE}/projects/invite/:projectId`, () => wrap(null)),
+  http.post(`${BASE}/projects/invite/:projectLink`, () => wrap(null)),
 
   http.delete(`${BASE}/projects/:projectId/:userId`, () => {
     return new HttpResponse(null, { status: 204 });

@@ -6,7 +6,7 @@ import { buildReviewRequestDescription, fetchMyProfileOptional, profileKeys } fr
 import {
   DEFAULT_PROJECT_LIST_PARAMS,
   fetchProjects,
-  parseProjectInviteId,
+  parseProjectInviteLink,
   PROJECT_INVITE_QUERY_KEY,
   projectKeys,
   ProjectsPageContent,
@@ -27,16 +27,16 @@ type ProjectsPageMetadataProps = {
 
 export const generateMetadata = async ({ searchParams }: ProjectsPageMetadataProps): Promise<Metadata> => {
   const params = await searchParams;
-  const projectId = parseProjectInviteId(params[PROJECT_INVITE_QUERY_KEY] ?? null);
+  const projectLink = parseProjectInviteLink(params[PROJECT_INVITE_QUERY_KEY] ?? null);
 
-  if (projectId === null) {
+  if (projectLink === null) {
     return { title: '프로젝트' };
   }
 
   const inviterName = parseShareDisplayName(params[SHARE_INVITER_NAME_PARAM]) ?? '';
   const description = buildReviewRequestDescription(inviterName);
   const pathSearchParams = new URLSearchParams({
-    [PROJECT_INVITE_QUERY_KEY]: String(projectId),
+    [PROJECT_INVITE_QUERY_KEY]: projectLink,
   });
 
   if (inviterName) {

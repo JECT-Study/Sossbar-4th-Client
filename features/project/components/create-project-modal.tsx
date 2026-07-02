@@ -25,7 +25,7 @@ interface Props {
 }
 
 export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => {
-  const { createdProjectId, form, handleCopyLink, handleOpenChange, inviteUrl, isSubmitting, linkCopied, onSubmit } =
+  const { createdProjectLink, form, handleCopyLink, handleOpenChange, inviteUrl, isSubmitting, linkCopied, onSubmit } =
     useCreateProjectModal({ onOpenChange });
   const {
     control,
@@ -45,7 +45,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
             className,
           )}
         >
-          {createdProjectId !== null ? (
+          {createdProjectLink !== null ? (
             <>
               <div className="flex flex-col gap-2">
                 <Dialog.Title className="text-heading-base text-text-basic font-bold">
