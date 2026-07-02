@@ -47,6 +47,7 @@ export const ProjectDetailPageContent = ({ projectId }: Props) => {
   return (
     <PageContainer className="mb-20 flex flex-col gap-8">
       <ProjectDetailHeading
+        projectId={projectId}
         projectStatus={project.projectStatus}
         isLeader={isLeader}
         projectLink={project.projectLink}

@@ -7,18 +7,21 @@ import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
 
 import type { ProjectStatus } from '../../project.types';
 
+import { useConfirmProjectMembers } from '../../project.hooks';
 import { buildProjectInviteUrl } from '../../project.lib';
 
 interface Props {
+  projectId: number;
   projectStatus: ProjectStatus;
   isLeader: boolean;
   projectLink: string;
   inviterName?: string;
 }
 
-export const ProjectDetailHeading = ({ projectStatus, isLeader, projectLink, inviterName }: Props) => {
+export const ProjectDetailHeading = ({ projectId, projectStatus, isLeader, projectLink, inviterName }: Props) => {
   const isInProgress = projectStatus === 'IN_PROGRESS';
   const { open, message, close, copyLink } = useCopyLinkFeedback();
+  const { mutate: confirmMembers, isPending: isConfirming } = useConfirmProjectMembers(projectId);
 
   const handleCopyInviteLink = () => {
     void copyLink(buildProjectInviteUrl(projectLink, inviterName));
@@ -50,6 +53,8 @@ export const ProjectDetailHeading = ({ projectStatus, isLeader, projectLink, inv
             variant="primary"
             size="medium"
             leftIcon={<RoundCheckIcon aria-hidden className="size-4" />}
+            disabled={isConfirming}
+            onClick={() => confirmMembers()}
           >
             우리 팀 확정하기
           </Button>
