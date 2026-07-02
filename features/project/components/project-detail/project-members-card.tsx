@@ -90,6 +90,7 @@ const ProjectMembersViewFields = ({ projectId, members, myUserId, projectStatus 
                 <li key={member.userId}>
                   <ProjectMemberChip
                     name={member.username}
+                    profileImageUrl={member.profileImageUrl}
                     state="writable"
                     onWriteReview={() =>
                       router.push(
@@ -106,7 +107,11 @@ const ProjectMembersViewFields = ({ projectId, members, myUserId, projectStatus 
             }
             return (
               <li key={member.userId}>
-                <ProjectMemberChip name={member.username} state={reviewStatus} />
+                <ProjectMemberChip
+                  name={member.username}
+                  profileImageUrl={member.profileImageUrl}
+                  state={reviewStatus}
+                />
               </li>
             );
           })}
@@ -139,7 +144,7 @@ const ProjectMembersEditFields = ({ projectId, members, myUserId }: EditFieldsPr
           if (member.userId === myUserId) {
             return (
               <li key={member.userId}>
-                <ProjectMemberChip name={member.username} state="self" />
+                <ProjectMemberChip name={member.username} profileImageUrl={member.profileImageUrl} state="self" />
               </li>
             );
           }
@@ -148,6 +153,7 @@ const ProjectMembersEditFields = ({ projectId, members, myUserId }: EditFieldsPr
             <li key={member.userId}>
               <ProjectMemberChip
                 name={member.username}
+                profileImageUrl={member.profileImageUrl}
                 state="self"
                 removable
                 onRemove={() => {

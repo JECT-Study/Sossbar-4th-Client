@@ -208,13 +208,11 @@ const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['
   );
 };
 
-const ProjectMemberList = ({ members, isLeader, reviewedCount, totalReviewTargetCount }: ProjectMemberListProps) => {
-  const label = isLeader ? '후기 작성' : '내가 작성한 후기';
-
+const ProjectMemberList = ({ members, reviewedCount, totalReviewTargetCount }: ProjectMemberListProps) => {
   return (
     <div className="flex min-w-0 flex-col gap-2">
       <p className="text-body-base text-text-subtle font-normal">
-        {label}{' '}
+        {'내가 작성한 후기 '}
         <span>
           {reviewedCount}/{totalReviewTargetCount}
         </span>
