@@ -9,7 +9,7 @@ export interface ProfileLink {
   userLink: string;
 }
 
-/** GET /users/profile/{userLink} 응답. 누구나 조회 가능한 공개 프로필 정보. */
+/** GET /users/profile/{userLink} 응답 — 누구나 조회 가능한 공개 프로필 정보 */
 export interface PublicProfile {
   userId: number;
   userLink: string;
@@ -20,11 +20,7 @@ export interface PublicProfile {
   links: ProfileLink[];
 }
 
-export type ProfilePosition = PublicProfile['defaultPositions'][number];
-
-export type ProfileLinkType = ProfileLink['userLinkType'];
-
-/** GET /users/profile 응답. 본인만 조회 가능한 계정 정보가 더해진다. */
+/** GET /users/profile 응답 — 본인만 조회 가능, 공개 정보에 계정 정보가 더해진다 */
 export interface MyProfile extends PublicProfile {
   email: string;
   userType: string;

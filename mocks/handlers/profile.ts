@@ -5,20 +5,12 @@ const PROFILE_IMAGE_URL = '/default-profile.png';
 
 const mockProfile = {
   userId: 1,
-  userLink: 'mock-user',
   username: '김이름',
   nickname: '김이름',
   email: '@daum.net',
   bio: '안녕하세요',
   profileImageUrl: PROFILE_IMAGE_URL,
-  defaultPositions: ['FE'],
-  links: [
-    { linkId: 1, userLinkType: 'GITHUB', userLink: 'https://github.com' },
-    { linkId: 2, userLinkType: 'BEHANCE', userLink: 'https://www.behance.net' },
-    { linkId: 3, userLinkType: 'GITHUB', userLink: 'https://github.com' },
-  ],
   userType: 'KAKAO',
-  marketingAgree: false,
 };
 
 type MockProfileInfo = {
