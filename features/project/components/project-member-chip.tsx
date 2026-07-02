@@ -14,6 +14,7 @@ export type ProjectMemberChipState = 'writable' | 'completed' | 'self';
 
 interface BaseProjectMemberChipProps extends ComponentPropsWithRef<'div'> {
   name: string;
+  profileImageUrl?: string | null;
 }
 
 type ReviewActionProps =
@@ -43,12 +44,14 @@ export const ProjectMemberChip = ({
   name,
   onRemove,
   onWriteReview,
+  profileImageUrl,
   removable,
   state,
   ...restProps
 }: ProjectMemberChipProps) => {
   const showReviewButton = state !== 'self';
   const reviewCompleted = state === 'completed';
+  const avatarSrc = profileImageUrl || DEFAULT_PROFILE_SRC;
 
   return (
     <div
@@ -59,7 +62,7 @@ export const ProjectMemberChip = ({
       {...restProps}
     >
       <Avatar.Root className="bg-surface-gray-subtle mr-2 size-6 shrink-0 overflow-hidden rounded-full">
-        <Avatar.Image src={DEFAULT_PROFILE_SRC} alt={`${name} 프로필 이미지`} />
+        <Avatar.Image src={avatarSrc} alt={`${name} 프로필 이미지`} />
         <Avatar.Fallback className="text-body-xs text-text-subtle flex h-full w-full items-center justify-center font-medium">
           {name.charAt(0)}
         </Avatar.Fallback>

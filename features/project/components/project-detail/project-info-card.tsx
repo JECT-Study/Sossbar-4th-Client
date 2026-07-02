@@ -55,7 +55,10 @@ export const ProjectInfoCard = ({ project, isLeader }: Props) => {
     onOpenChange: setIsEditing,
   });
 
-  const action = !isLeader ? null : isEditing ? (
+  // 팀 확정(IN_PROGRESS 종료) 이후에는 프로젝트 정보를 수정할 수 없으므로 수정 버튼을 숨긴다.
+  const isEditable = isLeader && project.projectStatus === 'IN_PROGRESS';
+
+  const action = !isEditable ? null : isEditing ? (
     <div className="flex gap-2">
       <Button type="button" variant="tertiary" onClick={() => handleOpenChange(false)} disabled={isSubmitting}>
         취소
