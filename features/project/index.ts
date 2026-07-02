@@ -3,6 +3,7 @@ export { ProjectsPageContent } from './components/projects-page-content';
 export { ProjectFeedbackPageContent } from './components/project-feedback-page-content';
 export { ProjectStatusAlert } from './components/project-status-alert';
 export { ProjectDetailPageContent } from './components/project-detail';
+export { ProjectDetailPageSkeleton } from './components/project-detail-page.skeleton';
 export { ProjectFeedbackStream } from './components/project-feedback-stream';
 export { ProjectSectionStream } from './components/project-section-stream';
 export { ProjectSectionSkeleton } from './components/project-section.skeleton';
