@@ -46,7 +46,13 @@ export const ProjectDetailPageContent = ({ projectId }: Props) => {
 
   return (
     <PageContainer className="mb-20 flex flex-col gap-8">
-      <ProjectDetailHeading projectStatus={project.projectStatus} isLeader={isLeader} />
+      <ProjectDetailHeading
+        projectId={projectId}
+        projectStatus={project.projectStatus}
+        isLeader={isLeader}
+        projectLink={project.projectLink}
+        inviterName={myProfile.username}
+      />
       <ProjectInfoCard project={project} isLeader={isLeader} />
       <ProjectMembersCard
         projectId={projectId}
