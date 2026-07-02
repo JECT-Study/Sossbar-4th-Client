@@ -4,18 +4,12 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { fetchMyProfileOptional, profileKeys } from '@/features/profile';
-import { fetchProject, ProjectDetailPageContent, projectKeys } from '@/features/project';
+import { fetchProject, ProjectDetailPageContent, ProjectDetailPageSkeleton, projectKeys } from '@/features/project';
 import { getQueryClient } from '@/shared/lib/get-query-client';
 
 interface Props {
   params: Promise<{ id: string }>;
 }
-
-const ProjectDetailFallback = () => (
-  <div className="flex min-h-[240px] items-center justify-center">
-    <p className="text-body-base text-text-subtle">화면을 불러오는 중…</p>
-  </div>
-);
 
 const ProjectDetailPage = async ({ params }: Props) => {
   const { id } = await params;
@@ -46,7 +40,7 @@ const ProjectDetailPage = async ({ params }: Props) => {
   }
 
   return (
-    <Suspense fallback={<ProjectDetailFallback />}>
+    <Suspense fallback={<ProjectDetailPageSkeleton />}>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <ProjectDetailPageContent projectId={projectId} />
       </HydrationBoundary>
