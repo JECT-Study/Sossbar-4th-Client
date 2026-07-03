@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { POSITION_OPTIONS, POSITIONS_MAX_SELECT, USER_LINK_TYPE_OPTIONS, USER_LINKS_MAX } from '@/features/auth';
 import type { PositionValue, UserLinkType } from '@/features/auth';
 import { PlusIcon, TrashIcon } from '@/shared/assets/icons';
+import { Badge } from '@/shared/components/badge';
 import { Button } from '@/shared/components/button';
 import { Input } from '@/shared/components/input';
 import { MultiSelect } from '@/shared/components/multi-select';
@@ -14,6 +15,7 @@ import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
 import type { MyProfile, ProfileLink } from '../profile.types';
 
+import { POSITION_BADGE_MAP } from '../profile.constants';
 import { useUpdateProfile } from '../profile.hooks';
 import { buildUpdateProfileInfo } from '../profile.lib';
 import { MypageCard } from './mypage-card';
@@ -125,11 +127,14 @@ export const MypageCareerSection = ({ profile }: Props) => {
           </div>
         ) : (
           <div className="flex flex-wrap gap-2">
-            {profile.defaultPositions.map((value) => (
-              <span key={value} className="bg-surface-gray-subtle text-text-basic text-body-sm rounded-[4px] px-2 py-1">
-                {findPositionLabel(value)}
-              </span>
-            ))}
+            {profile.defaultPositions.map((position) => {
+              const { label, Icon } = POSITION_BADGE_MAP[position];
+              return (
+                <Badge key={position} icon={<Icon />}>
+                  {label}
+                </Badge>
+              );
+            })}
           </div>
         )}
       </SectionInfoRow>

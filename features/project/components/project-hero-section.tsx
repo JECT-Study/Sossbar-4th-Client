@@ -1,30 +1,13 @@
-import type { ComponentType, SVGProps } from 'react';
-
 import Image from 'next/image';
 
-import {
-  BackendIcon,
-  FrontendIcon,
-  OpenNewWindowIcon,
-  ProductDesignerIcon,
-  ProductManagerIcon,
-} from '@/shared/assets/icons';
+import { POSITION_BADGE_MAP } from '@/features/profile';
+import { OpenNewWindowIcon } from '@/shared/assets/icons';
 import { Badge } from '@/shared/components/badge';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
 import type { ProjectPositionValue } from '../project.types';
 
 const DEFAULT_PROJECT_IMAGE = '/default.png';
-
-const POSITION_BADGE_MAP: Record<
-  ProjectPositionValue,
-  { label: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }
-> = {
-  FE: { label: '프론트엔드', Icon: FrontendIcon },
-  BE: { label: '백엔드', Icon: BackendIcon },
-  PM: { label: '프로덕트 매니저', Icon: ProductManagerIcon },
-  PD: { label: '프로덕트 디자이너', Icon: ProductDesignerIcon },
-};
 
 interface Props {
   projectName: string;
