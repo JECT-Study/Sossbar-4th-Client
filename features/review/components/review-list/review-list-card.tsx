@@ -83,19 +83,15 @@ export const ReviewListCard = ({
                 <ReviewListItem.Heading compact={showReportMenu}>
                   <ReviewListItem.Avatar name={review.reviewerNickname} imageUrl={review.reviewerImageUrl} />
                   <ReviewListItem.HeadingText>
-                    {showReportMenu ? (
-                      <ReviewListItem.NameRow>
-                        <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
-                        {review.projectPosition ? (
-                          <ReviewListItem.PositionBadge position={review.projectPosition} />
-                        ) : null}
-                      </ReviewListItem.NameRow>
-                    ) : (
-                      <>
-                        <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
-                        <ReviewListItem.Meta>{buildMetaLine(review, showProjectName)}</ReviewListItem.Meta>
-                      </>
-                    )}
+                    <ReviewListItem.NameRow>
+                      <ReviewListItem.Name>{review.reviewerNickname}</ReviewListItem.Name>
+                      {review.projectPosition ? (
+                        <ReviewListItem.PositionBadge position={review.projectPosition} />
+                      ) : null}
+                    </ReviewListItem.NameRow>
+                    <ReviewListItem.Meta>
+                      {showReportMenu ? formatIsoDateToDots(review.createdAt) : buildMetaLine(review, showProjectName)}
+                    </ReviewListItem.Meta>
                   </ReviewListItem.HeadingText>
                 </ReviewListItem.Heading>
                 {review.feedback.trim().length > 0 ? (

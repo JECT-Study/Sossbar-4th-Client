@@ -1,4 +1,7 @@
+import type { ComponentType, SVGProps } from 'react';
+
 import type { Tag } from '@/features/tag';
+import { BackendIcon, FrontendIcon, ProductDesignerIcon, ProductManagerIcon } from '@/shared/assets/icons';
 
 import type { Review, ReviewFormData, Spectrum, UserPosition } from './review.types';
 
@@ -11,6 +14,14 @@ export const USER_POSITION_LABELS: Record<UserPosition, string> = {
   BE: '백엔드',
   PM: '프로덕트 매니저',
   PD: '프로덕트 디자이너',
+};
+
+/** 후기 직군 뱃지에 표시되는 아이콘 */
+export const USER_POSITION_ICONS: Record<UserPosition, ComponentType<SVGProps<SVGSVGElement>>> = {
+  FE: FrontendIcon,
+  BE: BackendIcon,
+  PM: ProductManagerIcon,
+  PD: ProductDesignerIcon,
 };
 
 /** GET /api/v1/form-data — 백엔드 FormDataResDto */

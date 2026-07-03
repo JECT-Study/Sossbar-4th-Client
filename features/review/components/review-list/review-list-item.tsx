@@ -13,7 +13,7 @@ import { cn } from '@/shared/lib/cn';
 
 import type { UserPosition } from '../../review.types';
 
-import { USER_POSITION_LABELS } from '../../review.lib';
+import { USER_POSITION_ICONS, USER_POSITION_LABELS } from '../../review.lib';
 
 interface RootProps {
   children: ReactNode;
@@ -76,7 +76,7 @@ interface NameRowProps {
   children: ReactNode;
 }
 
-const ReviewListItemNameRow = ({ children }: NameRowProps) => <div className="flex items-end gap-1">{children}</div>;
+const ReviewListItemNameRow = ({ children }: NameRowProps) => <div className="flex items-end gap-2">{children}</div>;
 
 interface NameProps {
   children: ReactNode;
@@ -90,11 +90,16 @@ interface PositionBadgeProps {
   position: UserPosition;
 }
 
-const ReviewListItemPositionBadge = ({ position }: PositionBadgeProps) => (
-  <span className="bg-surface-gray-subtle text-body-sm text-text-subtle inline-flex items-center rounded px-1 py-0.5 font-medium">
-    {USER_POSITION_LABELS[position]}
-  </span>
-);
+const ReviewListItemPositionBadge = ({ position }: PositionBadgeProps) => {
+  const Icon = USER_POSITION_ICONS[position];
+
+  return (
+    <span className="bg-surface-gray-subtle text-body-sm text-text-subtle inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-medium">
+      <Icon aria-hidden className="size-4 shrink-0" />
+      {USER_POSITION_LABELS[position]}
+    </span>
+  );
+};
 
 interface MetaProps {
   children: ReactNode;
