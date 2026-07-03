@@ -35,9 +35,9 @@ export const ProfileLinkList = ({ links }: Props) => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={findLinkTypeLabel(link.userLinkType)}
-              className="bg-surface-gray-subtle text-text-basic hover:bg-surface-gray-subtler inline-flex size-9 items-center justify-center rounded-full transition-colors"
+              className="bg-surface-gray-subtle text-text-basic hover:bg-surface-gray-subtler inline-flex size-9 items-center justify-center rounded-full rounded-br-none transition-colors"
             >
-              <Icon aria-hidden className="size-5" />
+              <Icon aria-hidden className="size-5.5" />
             </a>
           </li>
         );
