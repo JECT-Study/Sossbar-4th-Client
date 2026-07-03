@@ -7,6 +7,7 @@ export { ProfileByIdSectionEntry } from './components/profile-by-id-section-entr
 export { ProfileByIdSectionGate } from './components/profile-by-id-section-gate';
 export { ProfileDetailView } from './components/profile-detail-view';
 export { ProfileSectionLoading } from './components/profile-section-loading';
+export { POSITION_BADGE_MAP } from './profile.constants';
 export { buildProfileShareMetadata, buildReviewRequestDescription } from './profile.lib';
 export { profileKeys } from './profile.query-keys';
 export type { MyProfile, PublicProfile, UpdateProfilePayload } from './profile.types';

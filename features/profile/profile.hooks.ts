@@ -25,7 +25,7 @@ import {
   PROFILE_DETAIL_TAB_QUERY_KEY,
   type ProfileDetailTab,
 } from './profile.constants';
-import { buildProfileShareClipboardText } from './profile.lib';
+import { buildProfileShareClipboardText, buildUpdateProfileInfo } from './profile.lib';
 import { profileKeys } from './profile.query-keys';
 import { ProfileEditFormSchema } from './profile.schemas';
 
@@ -110,11 +110,10 @@ export const useProfileEditForm = ({ profile, onSubmitProfile }: UseProfileEditF
   const onSubmit = async (data: ProfileEditFormData) => {
     try {
       await onSubmitProfile({
-        info: {
+        info: buildUpdateProfileInfo(profile, {
           username: data.username.trim(),
           bio: data.bio.trim(),
-          marketingAgree: profile.marketingAgree,
-        },
+        }),
         profileImage: data.profileImage,
       });
     } catch (error) {
