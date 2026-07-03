@@ -44,7 +44,7 @@ export const HomeHeroSection = () => {
 
       <HomeReveal className="relative h-[440px] w-full max-w-[588px] flex-1" delay={0.1}>
         <Image
-          src="/home-renewal/hero-role-pointers.png"
+          src="/home-renewal/hero-role-pointers.svg"
           alt=""
           fill
           className="object-contain object-center"
