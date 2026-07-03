@@ -66,6 +66,7 @@ export interface ReviewApiRaw {
   createdAt: string;
   feedback?: string;
   reviewerNickname?: string;
+  reviewerProfileImageUrl?: string | null;
   projectPosition?: UserPosition;
   projectStatus?: Review['projectStatus'];
 }
@@ -87,6 +88,7 @@ export const mapReviewFromApi = (raw: ReviewApiRaw): Review => ({
   createdAt: normalizeCreatedAt(raw.createdAt),
   feedback: normalizeText(raw.feedback),
   reviewerNickname: normalizeText(raw.reviewerNickname) || '익명의 동료',
+  reviewerImageUrl: raw.reviewerProfileImageUrl ?? null,
   projectPosition: raw.projectPosition,
   projectStatus: raw.projectStatus,
 });
