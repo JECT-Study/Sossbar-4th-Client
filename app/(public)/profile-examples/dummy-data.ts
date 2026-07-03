@@ -7,11 +7,15 @@ import type { ReceivedTags } from '@/features/tag/tag.types';
 export const dummyProfile: PublicProfile = {
   userId: 999,
   userLink: 'example-user',
-  username: '홍길동',
-  bio: '커뮤니케이션과 실행력을 중요하게 생각하는 프론트엔드 개발자입니다.',
-  profileImageUrl: null,
+  username: '김민준',
+  bio: '함께 만드는 과정을 즐기는 프론트엔드 개발자입니다.',
+  profileImageUrl: '/profile-example.png',
   defaultPositions: ['FE'],
-  links: [],
+  links: [
+    { linkId: 1, userLinkType: 'GITHUB', userLink: 'https://github.com' },
+    { linkId: 2, userLinkType: 'BEHANCE', userLink: 'https://www.behance.net' },
+    { linkId: 3, userLinkType: 'GITHUB', userLink: 'github.com' },
+  ],
 };
 
 export const dummyReceivedTags: ReceivedTags = {
@@ -25,7 +29,7 @@ export const dummyReceivedTags: ReceivedTags = {
     { tagId: 2, tagName: '커뮤니케이션이 원활해요', count: 9 },
     { tagId: 3, tagName: '문제 해결이 빨라요', count: 7 },
     { tagId: 4, tagName: '꼼꼼해요', count: 6 },
-    { tagId: 5, tagName: '아이디어가 풍부해요', count: 5 },
+    { tagId: 5, tagName: '아이디어가 많아요', count: 5 },
     { tagId: 6, tagName: '리더십이 있어요', count: 4 },
     { tagId: 7, tagName: '주도적으로 일해요', count: 4 },
     { tagId: 8, tagName: '분위기를 잘 만들어요', count: 3 },
@@ -58,11 +62,11 @@ export const dummyReviews: Review[] = [
   },
   {
     reviewId: 2,
-    projectName: '팀 스프린트 대시보드',
-    host: '내부 스터디',
+    projectName: 'AI 스프린트 대시보드',
+    host: '모던 스터디',
     projectImage: null,
     createdAt: '2026-05-14T09:30:00.000Z',
-    feedback: '팀원 의견을 잘 정리해 주고, 문제 해결에 필요한 리소스를 빠르게 찾아왔어요.',
+    feedback: '팀원 의견을 잘 정리해 주고, 문제 해결에 필요한 리소스를 빠르게 찾아주었어요.',
     reviewerNickname: '이백엔드',
     projectPosition: 'BE',
     projectStatus: 'COMPLETED',
@@ -70,7 +74,7 @@ export const dummyReviews: Review[] = [
   {
     reviewId: 3,
     projectName: '해커톤 24H',
-    host: '오픈 커뮤니티',
+    host: '스픽 커뮤니티',
     projectImage: null,
     createdAt: '2026-04-02T18:00:00.000Z',
     feedback: '짧은 시간 안에 결과물을 만들어내는 실행력이 강점이에요.',
@@ -94,8 +98,8 @@ export const dummyProjects: UserProjectResponse[] = [
   },
   {
     projectId: 102,
-    projectName: '팀 스프린트 대시보드',
-    host: '내부 스터디',
+    projectName: 'AI 스프린트 대시보드',
+    host: '모던 스터디',
     startDate: '2026-01-15',
     endDate: '2026-05-14',
     projectImage: null,
@@ -106,7 +110,7 @@ export const dummyProjects: UserProjectResponse[] = [
   {
     projectId: 103,
     projectName: '해커톤 24H',
-    host: '오픈 커뮤니티',
+    host: '스픽 커뮤니티',
     startDate: '2026-04-01',
     endDate: '2026-04-02',
     projectImage: null,
