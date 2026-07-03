@@ -64,12 +64,18 @@ export const toDistributionBars = (axes: SpectrumAxisInfo[]): DistributionBar[] 
     ];
   });
 
-const STRENGTH_RANGE = 5;
+/** 스펙트럼 슬라이더 최대 스텝 인덱스(7단계, 후기 슬라이더와 동일). 중앙 스텝 3은 사용하지 않는다. */
+const SPECTRUM_MAX_STEP_INDEX = 6;
 
-/** 평균 강도(1=좌, 6=우)를 마커 CSS `left` 퍼센트로 변환합니다. */
+/**
+ * 평균 강도(1=좌, 6=우)를 7단계 슬라이더의 마커 CSS `left` 퍼센트로 변환합니다.
+ * UI는 0~6 스텝이지만 중앙(3)은 비워두고 나머지 6개 스텝만 사용하므로,
+ * 강도 1~3은 스텝 0~2, 강도 4~6은 스텝 4~6에 대응시켜 6분할 트랙과 정렬합니다.
+ */
 export const toMarkerLeft = (averageStrength: number): string => {
   const strength = normalizeStrength(averageStrength);
-  const percent = ((strength - 1) / STRENGTH_RANGE) * 100;
+  const step = strength <= 3 ? strength - 1 : strength;
+  const percent = (step / SPECTRUM_MAX_STEP_INDEX) * 100;
 
   return `${percent}%`;
 };

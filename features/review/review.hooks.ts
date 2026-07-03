@@ -13,7 +13,7 @@ import type { ReviewStepId } from './review.constants';
 import type { ReviewWriteFormData } from './review.types';
 
 import { createReview, fetchProjectReviews, fetchReviewFormData, fetchReviews, reviewKeys } from './review.api';
-import { REVIEW_DEFAULT_SPECTRUM_STEP, REVIEW_STEPS } from './review.constants';
+import { REVIEW_STEPS } from './review.constants';
 import { spectrumStepToValue } from './review.lib';
 import { ReviewWriteFormSchema } from './review.schemas';
 
@@ -125,7 +125,7 @@ export const useWriteReviewFlow = ({ projectId, revieweeId }: UseWriteReviewFlow
           const answer = formSpectrums.find((item) => item.spectrumId === spectrum.spectrumId);
           return {
             spectrumId: spectrum.spectrumId,
-            value: spectrumStepToValue(answer?.step ?? REVIEW_DEFAULT_SPECTRUM_STEP),
+            value: answer ? spectrumStepToValue(answer.step) : 1,
           };
         });
     try {

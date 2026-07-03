@@ -4,6 +4,7 @@ import {
   REVIEW_FEEDBACK_MAX_LENGTH,
   REVIEW_FEEDBACK_MIN_LENGTH,
   REVIEW_MAX_TAGS,
+  REVIEW_DEFAULT_SPECTRUM_STEP,
   REVIEW_SPECTRUM_STEP_COUNT,
 } from './review.constants';
 
@@ -19,7 +20,8 @@ export const ReviewSpectrumAnswerSchema = z.object({
     .number()
     .int()
     .min(0)
-    .max(REVIEW_SPECTRUM_STEP_COUNT - 1),
+    .max(REVIEW_SPECTRUM_STEP_COUNT - 1)
+    .refine((step) => step !== REVIEW_DEFAULT_SPECTRUM_STEP),
 });
 
 export const ReviewTagIdsSchema = z

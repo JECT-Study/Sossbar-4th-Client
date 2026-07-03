@@ -2,8 +2,8 @@ import type { Tag } from '@/features/tag';
 
 import type { Review, ReviewFormData, Spectrum, UserPosition } from './review.types';
 
-/** 스펙트럼 슬라이더 step(0~5) → 백엔드 강도(1~6) */
-export const spectrumStepToValue = (step: number): number => step + 1;
+/** 스펙트럼 슬라이더 step(0~6, 중앙 제외) -> 백엔드 강도(1~6) */
+export const spectrumStepToValue = (step: number): number => (step < 3 ? step + 1 : step);
 
 /** 후기에 표시되는 직군 라벨 */
 export const USER_POSITION_LABELS: Record<UserPosition, string> = {
