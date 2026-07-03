@@ -3,6 +3,8 @@ import type { ReactNode } from 'react';
 import type { PublicProfile } from '../profile.types';
 
 import { ProfileAvatar } from './profile-avatar';
+import { ProfileLinkList } from './profile-link-list';
+import { ProfilePositionTags } from './profile-position-tags';
 
 interface Props {
   profile: PublicProfile;
@@ -14,9 +16,9 @@ export const ProfileSummary = ({ profile, shareActions }: Props) => (
     <div className="flex flex-row gap-6">
       <ProfileAvatar username={profile.username} profileImageUrl={profile.profileImageUrl} />
       <div className="flex flex-1 flex-col gap-4 py-1">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2">
           <h2 className="text-heading-lg text-text-basic font-bold">{profile.username}</h2>
-          {/* 직무 배지: API 미제공 — 데이터 추가 시 노출 */}
+          <ProfilePositionTags positions={profile.defaultPositions} />
         </div>
         {profile.bio ? (
           <div className="flex flex-col gap-1">
@@ -24,7 +26,12 @@ export const ProfileSummary = ({ profile, shareActions }: Props) => (
             <p className="text-body-base text-text-subtle font-normal">{profile.bio}</p>
           </div>
         ) : null}
-        {/* 하드 스킬: API 미제공 — 링크 데이터 추가 시 노출 */}
+        {profile.links.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            <p className="text-heading-xs text-text-basic font-medium">하드 스킬</p>
+            <ProfileLinkList links={profile.links} />
+          </div>
+        ) : null}
       </div>
     </div>
     {shareActions}

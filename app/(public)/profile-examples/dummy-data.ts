@@ -13,8 +13,8 @@ export const dummyProfile: PublicProfile = {
   defaultPositions: ['FE'],
   links: [
     { linkId: 1, userLinkType: 'GITHUB', userLink: 'https://github.com' },
-    { linkId: 2, userLinkType: 'BEHANCE', userLink: 'https://www.behance.net' },
-    { linkId: 3, userLinkType: 'GITHUB', userLink: 'github.com' },
+    { linkId: 2, userLinkType: 'NOTION', userLink: 'https://notion.so' },
+    { linkId: 3, userLinkType: 'LINKEDIN', userLink: 'https://linkedin.com' },
   ],
 };
 

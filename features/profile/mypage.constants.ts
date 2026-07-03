@@ -30,7 +30,7 @@ export const MYPAGE_MOCK_FIELDS: readonly string[] = ['product-designer', 'front
 
 /** URL 리스트 초기값 (목업) */
 export const MYPAGE_MOCK_URLS: readonly UrlEntry[] = [
-  { id: 'url-1', url: 'https://music.youtube.com/', type: 'LINK' },
-  { id: 'url-2', url: 'https://github.com/', type: 'GITHUB' },
-  { id: 'url-3', url: 'https://instagram.com/', type: 'INSTAGRAM' },
+  { id: 'url-1', url: 'https://github.com/', type: 'GITHUB' },
+  { id: 'url-2', url: 'https://linkedin.com/', type: 'LINKEDIN' },
+  { id: 'url-3', url: 'https://notion.so/', type: 'NOTION' },
 ];

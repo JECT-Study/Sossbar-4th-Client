@@ -6,17 +6,20 @@ import { cn } from '@/shared/lib/cn';
 
 import type { VariantProps } from 'class-variance-authority';
 
-const badgeVariants = cva('bg-surface-gray-subtle inline-flex items-center gap-1 rounded-sm font-medium', {
-  variants: {
-    size: {
-      medium: 'text-heading-xs text-text-subtle px-2 py-1',
-      small: 'text-body-sm text-text-subtler px-1 py-0.5',
+const badgeVariants = cva(
+  'bg-surface-gray-subtle inline-flex w-fit shrink-0 items-center gap-1 whitespace-nowrap rounded-sm font-medium',
+  {
+    variants: {
+      size: {
+        medium: 'text-heading-xs text-text-subtle px-2 py-1',
+        small: 'text-body-sm text-text-subtler px-1 py-0.5',
+      },
+    },
+    defaultVariants: {
+      size: 'medium',
     },
   },
-  defaultVariants: {
-    size: 'medium',
-  },
-});
+);
 
 interface Props extends ComponentPropsWithRef<'span'>, VariantProps<typeof badgeVariants> {
   icon?: ReactElement;
