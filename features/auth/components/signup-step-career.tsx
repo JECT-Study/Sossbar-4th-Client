@@ -99,7 +99,7 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
         {linkRows.length < USER_LINKS_MAX ? (
           <button
             type="button"
-            onClick={() => append({ userLinkType: 'LINK', userLink: '' })}
+            onClick={() => append({ userLinkType: 'GITHUB', userLink: '' })}
             className="text-detail-sm text-text-subtler hover:bg-button-tertiary-fill-hover active:border-border-gray-light flex w-fit flex-row rounded-md border border-transparent pr-1.5 pl-px font-normal"
           >
             <PlusIcon className="size-5" aria-hidden />

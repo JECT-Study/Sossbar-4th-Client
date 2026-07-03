@@ -31,7 +31,7 @@ const defaultValues: SignupFormData = {
     privacy: false,
   },
   positions: [],
-  links: [{ userLinkType: 'LINK', userLink: '' }],
+  links: [{ userLinkType: 'GITHUB', userLink: '' }],
 };
 
 export const useSignupForm = () => {

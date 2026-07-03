@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { InfoIcon } from '@/shared/assets/icons';
+import { Tooltip } from '@/shared/components/tooltip';
 import { cn } from '@/shared/lib/cn';
 
 interface Props {
@@ -33,9 +34,15 @@ export const ProfileStatCard = ({
       <div className="flex items-center gap-1.5">
         <h2 className="text-heading-sm text-text-basic font-bold">{title}</h2>
         {info ? (
-          <span role="img" aria-label={infoLabel} title={infoLabel} className="text-icon-gray-fill inline-flex">
-            <InfoIcon aria-hidden className="size-6" />
-          </span>
+          <Tooltip content={infoLabel}>
+            <button
+              type="button"
+              aria-label={infoLabel}
+              className="text-icon-gray-fill inline-flex cursor-default focus-visible:outline-none"
+            >
+              <InfoIcon aria-hidden className="text-text-subtler size-6" />
+            </button>
+          </Tooltip>
         ) : null}
       </div>
       {headerAction ??

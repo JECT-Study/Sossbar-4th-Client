@@ -29,14 +29,12 @@ export const POSITION_OPTIONS = [
 
 export const POSITIONS_MAX_SELECT = 2;
 
-export const USER_LINK_TYPE_VALUES = ['LINK', 'GITHUB', 'INSTAGRAM', 'BEHANCE', 'BRUNCH'] as const;
+export const USER_LINK_TYPE_VALUES = ['GITHUB', 'LINKEDIN', 'NOTION'] as const;
 
 export const USER_LINK_TYPE_OPTIONS = [
-  { value: 'LINK', label: 'Link' },
   { value: 'GITHUB', label: 'GitHub' },
-  { value: 'INSTAGRAM', label: 'Instagram' },
-  { value: 'BEHANCE', label: 'Behance' },
-  { value: 'BRUNCH', label: 'Brunch' },
+  { value: 'LINKEDIN', label: 'LinkedIn' },
+  { value: 'NOTION', label: 'Notion' },
 ] as const satisfies readonly { value: (typeof USER_LINK_TYPE_VALUES)[number]; label: string }[];
 
 export const USER_LINKS_MAX = 3;

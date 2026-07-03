@@ -1,18 +1,15 @@
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
+import { ProjectHeroSection } from '@/features/project/components/project-hero-section';
 import { ReviewListCard } from '@/features/review/components/review-list/review-list-card';
 import { SpectrumAverageSection } from '@/features/spectrum/components/spectrum-average-section';
 import { TagAllSection } from '@/features/tag/components/tag-all-section';
 import { TagTop3Section } from '@/features/tag/components/tag-top3-section';
 import { PageContainer } from '@/shared/components/page-container';
 import { ProfileStatCard } from '@/shared/components/profile-stat-card';
-import { formatIsoDateToDots } from '@/shared/lib/format-date';
 import { parsePositiveInt } from '@/shared/lib/parse-positive-int';
 
 import { dummyReceivedTags, dummyReviews, dummyProjects, dummySpectrumInfo } from '../../dummy-data';
-
-const DEFAULT_PROJECT_IMAGE = '/default.png';
 
 interface Props {
   params: Promise<{
@@ -34,27 +31,16 @@ const ProfileExampleProjectPage = async ({ params }: Props) => {
     notFound();
   }
 
-  const subtitle = [project.host, project.startDate ? formatIsoDateToDots(project.startDate) : null]
-    .filter(Boolean)
-    .join(' · ');
-
   return (
     <PageContainer className="mb-20 flex flex-col gap-[30px] pt-8">
-      <section className="border-border-gray-light flex w-full gap-6 border-b-[3px] pb-8">
-        <div className="border-border-gray-light relative h-[106px] w-[142px] shrink-0 overflow-hidden rounded-2xl border">
-          <Image
-            src={project.projectImage ?? DEFAULT_PROJECT_IMAGE}
-            alt={`${project.projectName} 이미지`}
-            fill
-            sizes="142px"
-            className="object-cover"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <h1 className="text-heading-lg text-text-basic font-bold">{project.projectName}</h1>
-          {subtitle ? <p className="text-body-base text-text-subtle font-normal">{subtitle}</p> : null}
-        </div>
-      </section>
+      <ProjectHeroSection
+        projectName={project.projectName}
+        projectImage={project.projectImage}
+        host={project.host}
+        startDate={project.startDate}
+        projectPositions={project.projectPositions}
+        projectUrl={project.projectUrl}
+      />
 
       <div className="flex gap-[30px]">
         <ProfileStatCard
