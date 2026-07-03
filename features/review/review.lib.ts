@@ -65,12 +65,14 @@ export interface ReviewApiRaw {
   projectImage?: string | null;
   createdAt: string;
   feedback?: string;
-  reviewerNickname?: string;
+  reviewerNickname?: string | null;
+  reviewerProfileImage?: string | null;
   projectPosition?: UserPosition;
+  projectPositions?: UserPosition[];
   projectStatus?: Review['projectStatus'];
 }
 
-const normalizeText = (value: string | undefined): string => value?.trim() ?? '';
+const normalizeText = (value: string | null | undefined): string => value?.trim() ?? '';
 
 const normalizeCreatedAt = (value: string): string => {
   if (value.includes('T')) {
@@ -87,7 +89,8 @@ export const mapReviewFromApi = (raw: ReviewApiRaw): Review => ({
   createdAt: normalizeCreatedAt(raw.createdAt),
   feedback: normalizeText(raw.feedback),
   reviewerNickname: normalizeText(raw.reviewerNickname) || '익명의 동료',
-  projectPosition: raw.projectPosition,
+  reviewerImageUrl: raw.reviewerProfileImage ?? null,
+  projectPosition: raw.projectPosition ?? raw.projectPositions?.[0],
   projectStatus: raw.projectStatus,
 });
 
