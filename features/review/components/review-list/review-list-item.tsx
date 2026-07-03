@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 
+import Image from 'next/image';
 import { useLayoutEffect, useRef, useState } from 'react';
 
 import { EllipsisVerticalIcon, EmergencyIcon } from '@/shared/assets/icons';
@@ -39,10 +40,19 @@ const ReviewListItemHeading = ({ children, compact = false }: HeadingProps) => (
 
 interface AvatarProps {
   name: string;
+  imageUrl?: string | null;
 }
 
-const ReviewListItemAvatar = ({ name }: AvatarProps) => {
+const ReviewListItemAvatar = ({ name, imageUrl }: AvatarProps) => {
   const fallbackText = name.trim().slice(0, 1) || '?';
+
+  if (imageUrl) {
+    return (
+      <div className="relative size-[54px] shrink-0 overflow-hidden rounded-full">
+        <Image src={imageUrl} alt="" fill sizes="54px" className="object-cover" aria-hidden />
+      </div>
+    );
+  }
 
   return (
     <div
