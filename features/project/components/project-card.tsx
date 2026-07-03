@@ -191,7 +191,7 @@ const ProjectCardTitle = ({ host, projectName, startDate, endDate }: ProjectCard
 };
 
 const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['projectStatus'] }) => {
-  const isCompleted = projectStatus === 'COMPLETED';
+  const isCompleted = projectStatus === 'ARCHIVED';
   const message = isCompleted
     ? '모든 후기 작성이 완료되었습니다! 받은 후기를 확인해보세요.'
     : '팀의 후기가 모두 모이면 받은 후기를 확인할 수 있습니다.';
@@ -200,7 +200,7 @@ const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['
     <div
       className={cn(
         'text-body-sm flex h-[37px] items-center rounded-lg px-3 font-normal',
-        isCompleted ? 'bg-surface-success-subtler text-text-success' : 'bg-surface-gray-subtle text-text-subtle',
+        'bg-surface-gray-subtle text-text-subtle',
       )}
     >
       {message}
