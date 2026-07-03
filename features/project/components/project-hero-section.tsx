@@ -2,13 +2,7 @@ import type { ComponentType, SVGProps } from 'react';
 
 import Image from 'next/image';
 
-import {
-  BackendIcon,
-  FrontendIcon,
-  OpenNewWindowIcon,
-  ProductDesignerIcon,
-  ProductManagerIcon,
-} from '@/shared/assets/icons';
+import { BackendIcon, FrontendIcon, LinkIcon, ProductDesignerIcon, ProductManagerIcon } from '@/shared/assets/icons';
 import { Badge } from '@/shared/components/badge';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -87,7 +81,7 @@ export const ProjectHeroSection = ({
             rel="noopener noreferrer"
             className="text-body-base text-text-subtle hover:text-text-basic inline-flex w-fit items-center gap-1"
           >
-            <OpenNewWindowIcon aria-hidden className="size-4 shrink-0" />
+            <LinkIcon aria-hidden className="size-4 shrink-0" />
             <span className="underline">{projectUrl}</span>
           </a>
         ) : null}

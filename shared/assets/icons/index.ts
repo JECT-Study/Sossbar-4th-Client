@@ -26,6 +26,7 @@ export { default as GithubIcon } from './github.svg';
 export { default as InfoIcon } from './info.svg';
 export { default as InputClearIcon } from './input-clear.svg';
 export { default as KakaoTalkIcon } from './kakao-talk.svg';
+export { default as LinkIcon } from './link.svg';
 export { default as LinkedinIcon } from './linkedin.svg';
 export { default as NotionIcon } from './notion.svg';
 export { default as OpenNewWindowIcon } from './open-new-window.svg';
