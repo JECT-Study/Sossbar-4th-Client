@@ -3,7 +3,26 @@ import { SHARE_USER_NAME_PARAM } from '@/shared/constants/share-query';
 import { buildShareOgMetadata } from '@/shared/lib/build-share-metadata';
 import { getSiteOrigin } from '@/shared/lib/get-site-origin';
 
+import type { MyProfile, UpdateProfileInfo } from './profile.types';
 import type { Metadata } from 'next';
+
+/**
+ * PATCH /users/profile 요청 페이로드를 만든다.
+ * 마이페이지 3개 섹션은 API 하나를 공유하므로, 저장하는 섹션만 override로 덮어쓰고
+ * 나머지 필드는 현재 프로필 값을 그대로 재전송한다. `requiredAgree`는 서비스 정책상 항상 true.
+ */
+export const buildUpdateProfileInfo = (
+  profile: MyProfile,
+  overrides: Partial<UpdateProfileInfo> = {},
+): UpdateProfileInfo => ({
+  username: profile.username,
+  bio: profile.bio ?? '',
+  defaultPositions: profile.defaultPositions,
+  links: profile.links.map(({ userLinkType, userLink }) => ({ userLinkType, userLink })),
+  requiredAgree: true,
+  marketingAgree: profile.marketingAgree,
+  ...overrides,
+});
 
 export const PROFILE_SHARE_TITLE = '[Sossbar] 프로젝트 동료 리뷰';
 

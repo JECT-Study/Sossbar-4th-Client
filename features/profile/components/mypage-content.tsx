@@ -20,8 +20,8 @@ export const MypageContent = () => {
       </header>
 
       <MypageBasicInfoSection profile={profile} />
-      <MypageCareerSection />
-      <MypageAlertSection />
+      <MypageCareerSection profile={profile} />
+      <MypageAlertSection profile={profile} />
     </div>
   );
 };

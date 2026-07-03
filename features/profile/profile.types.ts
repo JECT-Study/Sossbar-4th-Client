@@ -31,9 +31,17 @@ export interface MyProfile extends PublicProfile {
   marketingAgree: boolean;
 }
 
+export interface UpdateProfileLink {
+  userLinkType: UserLinkType;
+  userLink: string;
+}
+
 export interface UpdateProfileInfo {
   username: string;
   bio: string;
+  defaultPositions: PositionValue[];
+  links: UpdateProfileLink[];
+  requiredAgree: boolean;
   marketingAgree: boolean;
 }
 
