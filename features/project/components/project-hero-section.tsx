@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import { POSITION_BADGE_MAP } from '@/features/profile';
-import { OpenNewWindowIcon } from '@/shared/assets/icons';
+import { LinkIcon } from '@/shared/assets/icons';
 import { Badge } from '@/shared/components/badge';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -70,7 +70,7 @@ export const ProjectHeroSection = ({
             rel="noopener noreferrer"
             className="text-body-base text-text-subtle hover:text-text-basic inline-flex w-fit items-center gap-1"
           >
-            <OpenNewWindowIcon aria-hidden className="size-4 shrink-0" />
+            <LinkIcon aria-hidden className="size-4 shrink-0" />
             <span className="underline">{projectUrl}</span>
           </a>
         ) : null}
