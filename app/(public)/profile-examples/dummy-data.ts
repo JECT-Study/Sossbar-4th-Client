@@ -96,7 +96,7 @@ export const dummyProjects: UserProjectResponse[] = [
     endDate: '2026-06-01',
     projectImage: '/project_example_1.jpg',
     projectPositions: ['FE'],
-    projectUrl: '',
+    projectUrl: 'https://www.surfit.io/profile/1605155595',
     projectUrlType: 'LINK',
   },
   {

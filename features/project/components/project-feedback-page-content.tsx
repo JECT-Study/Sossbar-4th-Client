@@ -1,16 +1,12 @@
 'use client';
 
-import Image from 'next/image';
-
 import { ProjectReviewCard } from '@/features/review';
 import { SpectrumCardGate } from '@/features/spectrum';
 import { TagCardGate } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
-import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
 import { useUserProject } from '../project.hooks';
-
-const DEFAULT_PROJECT_IMAGE = '/default.png';
+import { ProjectHeroSection } from './project-hero-section';
 
 type ProjectFeedbackPageContentProps = {
   userLink: string;
@@ -36,28 +32,16 @@ export const ProjectFeedbackPageContent = ({ userLink, projectId }: ProjectFeedb
     );
   }
 
-  const subtitleParts = [project.host, project.startDate ? formatIsoDateToDots(project.startDate) : null].filter(
-    Boolean,
-  );
-  const subtitle = subtitleParts.join(' · ');
-
   return (
     <PageContainer className="mb-20 flex flex-col gap-[30px] pt-8">
-      <section className="border-border-gray-light flex w-full gap-6 border-b-[3px] pb-8">
-        <div className="border-border-gray-light relative h-[106px] w-[142px] shrink-0 overflow-hidden rounded-2xl border">
-          <Image
-            src={project.projectImage ?? DEFAULT_PROJECT_IMAGE}
-            alt={`${project.projectName} 이미지`}
-            fill
-            sizes="142px"
-            className="object-cover"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <h1 className="text-heading-lg text-text-basic font-bold">{project.projectName}</h1>
-          {subtitle ? <p className="text-body-base text-text-subtle font-normal">{subtitle}</p> : null}
-        </div>
-      </section>
+      <ProjectHeroSection
+        projectName={project.projectName}
+        projectImage={project.projectImage}
+        host={project.host}
+        startDate={project.startDate}
+        projectPositions={project.projectPositions}
+        projectUrl={project.projectUrl}
+      />
 
       <div className="flex gap-[30px]">
         <TagCardGate userLink={userLink} projectId={projectId} />
