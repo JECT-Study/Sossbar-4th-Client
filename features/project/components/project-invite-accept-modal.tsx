@@ -49,7 +49,7 @@ export const ProjectInviteAcceptModal = ({
       <DialogAnimatedPortal
         open={open}
         className={cn(
-          'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex w-[360px] max-w-[calc(100vw-32px)] flex-col',
+          'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex w-md max-w-[calc(100vw-32px)] flex-col',
           'gap-4 overflow-hidden rounded-xl border p-6 outline-none',
         )}
       >
