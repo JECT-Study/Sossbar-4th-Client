@@ -10,11 +10,11 @@ export type ReviewStepId = (typeof REVIEW_STEPS)[number]['id'];
 
 export const REVIEW_MAX_TAGS = 3;
 
-/** 스펙트럼 슬라이더 단계 수 (백엔드 강도 1~6에 대응) */
-export const REVIEW_SPECTRUM_STEP_COUNT = 6;
+/** 스펙트럼 슬라이더 핸들 위치 수. 중앙 위치는 초기 중립 상태로만 사용한다. */
+export const REVIEW_SPECTRUM_STEP_COUNT = 7;
 
-/** 스펙트럼 슬라이더 초기 단계 (0~5 중 중앙) */
-export const REVIEW_DEFAULT_SPECTRUM_STEP = 2;
+/** 스펙트럼 슬라이더 초기 단계 (0~6 중 중앙) */
+export const REVIEW_DEFAULT_SPECTRUM_STEP = 3;
 
 export const REVIEW_FEEDBACK_MIN_LENGTH = 10;
 
