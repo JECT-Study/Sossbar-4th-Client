@@ -47,7 +47,7 @@ const ProfileExamplesPage = () => (
           <ReviewListCard reviews={dummyReviews} showProjectName showSort />
         </>
       }
-      projectsTabContent={<ProjectSectionView userLink={dummyProfile.userLink} projects={dummyProjects} />}
+      projectsTabContent={<ProjectSectionView projects={dummyProjects} />}
     />
   </PageContainer>
 );

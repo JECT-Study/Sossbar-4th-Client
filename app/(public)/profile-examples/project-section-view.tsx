@@ -18,13 +18,12 @@ const INITIAL_COUNT = 8;
 const DEFAULT_IMAGE_PATH = '/default.png';
 
 interface ProjectItemProps {
-  userLink: string;
   project: UserProjectResponse;
 }
 
-const ProjectItem = ({ userLink, project }: ProjectItemProps) => (
+const ProjectItem = ({ project }: ProjectItemProps) => (
   <Link
-    href={ROUTES.PROJECT(userLink, project.projectId)}
+    href={ROUTES.PROFILE_EXAMPLE_PROJECT(project.projectId)}
     className="focus-visible:ring-border-secondary block rounded-lg focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:outline-none"
   >
     <article className="flex flex-col gap-4 pb-4">
@@ -48,7 +47,6 @@ const ProjectItem = ({ userLink, project }: ProjectItemProps) => (
 );
 
 interface ProjectSectionViewProps {
-  userLink: string;
   projects: UserProjectResponse[];
 }
 
@@ -58,7 +56,7 @@ const sortProjects = (projects: UserProjectResponse[], sortOrder: SortOrder) =>
     return (left ?? '').localeCompare(right ?? '');
   });
 
-export const ProjectSectionView = ({ userLink, projects }: ProjectSectionViewProps) => {
+export const ProjectSectionView = ({ projects }: ProjectSectionViewProps) => {
   const [showAll, setShowAll] = useState(false);
   const [selectedSort, setSelectedSort] = useState<SortOrder>('latest');
 
@@ -98,7 +96,7 @@ export const ProjectSectionView = ({ userLink, projects }: ProjectSectionViewPro
         <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {visibleProjects.map((project) => (
             <li key={project.projectId}>
-              <ProjectItem userLink={userLink} project={project} />
+              <ProjectItem project={project} />
             </li>
           ))}
         </ul>
