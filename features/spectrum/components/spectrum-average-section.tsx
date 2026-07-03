@@ -1,9 +1,12 @@
+import { cn } from '@/shared/lib/cn';
+
 import type { SpectrumInfo } from '../spectrum.types';
 
 import {
   SPECTRUM_LEFT_TRACK_CLASS,
   SPECTRUM_MARKER_CLASS,
   SPECTRUM_RIGHT_TRACK_CLASS,
+  SPECTRUM_TRACK_SEGMENT_KEYS,
   spectrumAxisLabels,
 } from '../spectrum.constants';
 import { toMarkerLeft } from '../spectrum.lib';
@@ -33,20 +36,22 @@ export const SpectrumAverageSection = ({ spectrumInfo }: Props) => (
           const markerLeft = toMarkerLeft(axis.averageStrength);
 
           return (
-            <div key={axis.axisName} className="relative h-7 min-h-7">
-              <div className="absolute top-1/2 right-0 left-0 h-2 -translate-y-1/2">
-                <div
-                  aria-hidden
-                  className={`absolute top-0 left-0 h-full rounded-l-[2px] ${SPECTRUM_LEFT_TRACK_CLASS}`}
-                  style={{ width: markerLeft }}
-                />
-                <div
-                  aria-hidden
-                  className={`absolute top-0 h-full rounded-r-[2px] ${SPECTRUM_RIGHT_TRACK_CLASS}`}
-                  style={{ left: markerLeft, width: `calc(100% - ${markerLeft})` }}
-                />
-                <div aria-hidden className={SPECTRUM_MARKER_CLASS} style={{ left: markerLeft }} />
+            <div key={axis.axisName} className="relative flex h-7 min-h-7 items-center">
+              <div className="relative h-3 w-full overflow-hidden rounded">
+                <div aria-hidden className={cn('absolute inset-y-0 left-0 w-1/2', SPECTRUM_LEFT_TRACK_CLASS)} />
+                <div aria-hidden className={cn('absolute inset-y-0 right-0 w-1/2', SPECTRUM_RIGHT_TRACK_CLASS)} />
+                <div aria-hidden className="absolute inset-0 grid grid-cols-6">
+                  {SPECTRUM_TRACK_SEGMENT_KEYS.map((key, index) => (
+                    <span
+                      key={key}
+                      className={cn(
+                        index < SPECTRUM_TRACK_SEGMENT_KEYS.length - 1 && 'border-input-surface border-r-[0.5px]',
+                      )}
+                    />
+                  ))}
+                </div>
               </div>
+              <div aria-hidden className={SPECTRUM_MARKER_CLASS} style={{ left: markerLeft }} />
             </div>
           );
         })}
