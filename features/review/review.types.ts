@@ -14,7 +14,6 @@ export interface Review {
   createdAt: string;
   feedback: string;
   reviewerNickname: string;
-  /** 프로필 예시 등 더미/목 데이터용 후기 작성자 아바타 */
   reviewerImageUrl?: string | null;
   projectPosition?: UserPosition;
   projectStatus?: 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED'; // 팀 확정 여부 필터링용
