@@ -81,7 +81,7 @@ export const ReviewListCard = ({
                 }
               >
                 <ReviewListItem.Heading compact={showReportMenu}>
-                  <ReviewListItem.Avatar name={review.reviewerNickname} />
+                  <ReviewListItem.Avatar name={review.reviewerNickname} imageUrl={review.reviewerImageUrl} />
                   <ReviewListItem.HeadingText>
                     {showReportMenu ? (
                       <ReviewListItem.NameRow>

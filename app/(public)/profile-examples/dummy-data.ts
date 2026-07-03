@@ -48,6 +48,12 @@ export const dummySpectrumInfo: SpectrumInfo = {
   ],
 };
 
+const REVIEWER_IMAGES = {
+  designer: '/profile-examples/reviewer-designer.png',
+  backend: '/profile-examples/reviewer-backend.png',
+  pm: '/profile-examples/reviewer-pm.png',
+} as const;
+
 export const dummyReviews: Review[] = [
   {
     reviewId: 1,
@@ -58,6 +64,7 @@ export const dummyReviews: Review[] = [
     feedback:
       '초기 기획 단계에서 화면별 우선순위를 먼저 정리해 주셔서 팀이 같은 기준으로 움직일 수 있었습니다. 디자인 변경이 잦았는데도 컴포넌트 단위로 빠르게 반영했고, 배포 직전 발견된 반응형 이슈도 원인을 짚어 안정적으로 해결해 주셨어요.',
     reviewerNickname: '김디자이너',
+    reviewerImageUrl: REVIEWER_IMAGES.designer,
     projectPosition: 'FE',
     projectStatus: 'COMPLETED',
   },
@@ -70,6 +77,7 @@ export const dummyReviews: Review[] = [
     feedback:
       '대시보드 지표 정의가 계속 바뀌는 상황에서도 회의 내용을 기능 단위로 정리해 주셔서 백엔드 작업 범위를 맞추기 좋았습니다. API 응답이 늦게 확정된 부분은 임시 데이터 구조를 먼저 제안해 화면 개발을 진행했고, 실제 연동 때도 수정 범위를 작게 유지해 주셨어요.',
     reviewerNickname: '이백엔드',
+    reviewerImageUrl: REVIEWER_IMAGES.backend,
     projectPosition: 'BE',
     projectStatus: 'COMPLETED',
   },
@@ -82,6 +90,7 @@ export const dummyReviews: Review[] = [
     feedback:
       '해커톤처럼 시간이 짧은 프로젝트에서 MVP 범위를 빠르게 좁히고, 발표에 꼭 필요한 사용자 흐름부터 완성한 점이 좋았습니다. 구현 중 막히는 부분이 생기면 혼자 오래 붙잡기보다 팀원에게 바로 공유했고, 덕분에 마지막까지 화면 완성도와 발표 준비를 같이 챙길 수 있었습니다.',
     reviewerNickname: '박PM',
+    reviewerImageUrl: REVIEWER_IMAGES.pm,
     projectPosition: 'PM',
     projectStatus: 'COMPLETED',
   },
