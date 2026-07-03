@@ -14,17 +14,17 @@ export type SignupStepId = (typeof SIGNUP_STEPS)[number]['id'];
 
 export const SIGNUP_STEP_DESCRIPTIONS: Record<SignupStepId, string> = {
   basic: '기본 정보를 입력해 주세요.',
-  career: '나를 잘 나타내는 분야와 링크를 등록해 주세요.',
+  career: '나를 잘 나타내는 직군과 링크를 등록해 주세요.',
   complete: '프로젝트를 생성하고 동료에게 후기를 요청해 프로필을 완성해 보세요!',
 };
 
 export const POSITION_VALUES = ['FE', 'BE', 'PM', 'PD'] as const;
 
 export const POSITION_OPTIONS = [
-  { value: 'FE', label: '💻 프론트엔드' },
-  { value: 'BE', label: '🗄️ 백엔드' },
-  { value: 'PM', label: '📋 프로덕트 매니저' },
-  { value: 'PD', label: '🎨 프로덕트 디자이너' },
+  { value: 'FE', label: '프론트엔드 개발자' },
+  { value: 'BE', label: '백엔드 개발자' },
+  { value: 'PM', label: '프로덕트 매니저' },
+  { value: 'PD', label: '프로덕트 디자이너' },
 ] as const satisfies readonly { value: (typeof POSITION_VALUES)[number]; label: string }[];
 
 export const POSITIONS_MAX_SELECT = 2;

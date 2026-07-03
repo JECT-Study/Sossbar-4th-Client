@@ -35,13 +35,13 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
         render={({ field }) => (
           <MultiSelectField
             name="positions"
-            label="분야"
+            label="직군"
             required
             options={POSITION_OPTIONS}
             value={field.value}
             onValueChange={field.onChange}
             max={POSITIONS_MAX_SELECT}
-            placeholder="분야를 최대 2개까지 선택해 주세요."
+            placeholder="직군을 최대 2개까지 선택해 주세요."
           />
         )}
       />

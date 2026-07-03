@@ -48,8 +48,8 @@ export const SignupFormSchema = z.object({
     }),
   positions: z
     .array(z.enum(POSITION_VALUES))
-    .min(1, { message: '분야를 1개 이상 선택해 주세요.' })
-    .max(POSITIONS_MAX_SELECT, { message: `분야는 최대 ${POSITIONS_MAX_SELECT}개까지 선택할 수 있어요.` }),
+    .min(1, { message: '직군을 1개 이상 선택해 주세요.' })
+    .max(POSITIONS_MAX_SELECT, { message: `직군은 최대 ${POSITIONS_MAX_SELECT}개까지 선택할 수 있어요.` }),
   links: z
     .array(UserLinkSchema)
     .max(USER_LINKS_MAX, { message: `링크는 최대 ${USER_LINKS_MAX}개까지 등록할 수 있어요.` }),

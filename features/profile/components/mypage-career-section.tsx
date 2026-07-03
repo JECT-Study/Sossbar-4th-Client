@@ -96,13 +96,13 @@ export const MypageCareerSection = ({ profile }: Props) => {
       onSave={handleSave}
       isSaving={isPending}
     >
-      <SectionInfoRow label="분야" align={isEditing ? 'start' : 'center'}>
+      <SectionInfoRow label="직군" align={isEditing ? 'start' : 'center'}>
         {isEditing ? (
           <div className="flex flex-col gap-2">
             <MultiSelect.Root value={positions} onValueChange={(next) => setPositions(next as PositionValue[])}>
               <MultiSelect.Trigger>
                 {positions.length === 0 ? (
-                  <span className="text-text-disabled">분야를 선택해주세요</span>
+                  <span className="text-text-disabled">직군을 선택해주세요</span>
                 ) : (
                   positions.map((value) => (
                     <MultiSelect.Tag key={value} value={value}>

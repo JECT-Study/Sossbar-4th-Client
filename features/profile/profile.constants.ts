@@ -11,8 +11,8 @@ export const POSITION_BADGE_MAP: Record<
   PositionValue,
   { label: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }
 > = {
-  FE: { label: '프론트엔드', Icon: FrontendIcon },
-  BE: { label: '백엔드', Icon: BackendIcon },
+  FE: { label: '프론트엔드 개발자', Icon: FrontendIcon },
+  BE: { label: '백엔드 개발자', Icon: BackendIcon },
   PM: { label: '프로덕트 매니저', Icon: ProductManagerIcon },
   PD: { label: '프로덕트 디자이너', Icon: ProductDesignerIcon },
 };
