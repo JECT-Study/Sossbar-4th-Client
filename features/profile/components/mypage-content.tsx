@@ -1,5 +1,6 @@
 'use client';
 
+import { MypageAccountDeletionSection } from './mypage-account-deletion-section';
 import { MypageAlertSection } from './mypage-alert-section';
 import { MypageBasicInfoSection } from './mypage-basic-info-section';
 import { MypageCareerSection } from './mypage-career-section';
@@ -22,6 +23,7 @@ export const MypageContent = () => {
       <MypageBasicInfoSection profile={profile} />
       <MypageCareerSection profile={profile} />
       <MypageAlertSection profile={profile} />
+      <MypageAccountDeletionSection />
     </div>
   );
 };
