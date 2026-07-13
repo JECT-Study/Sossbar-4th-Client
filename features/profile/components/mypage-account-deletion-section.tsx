@@ -13,7 +13,7 @@ export const MypageAccountDeletionSection = () => {
         <button
           type="button"
           onClick={openDeletion}
-          className="text-body-base text-text-subtle inline-flex items-center font-medium"
+          className="text-body-base text-text-subtle hover:bg-button-tertiary-fill-hover inline-flex h-10 items-center rounded-md px-2 font-medium transition-colors"
         >
           회원 탈퇴
           <ArrowRightIcon aria-hidden className="size-[18px]" />
