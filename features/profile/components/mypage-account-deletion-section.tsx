@@ -1,7 +1,7 @@
 'use client';
 
 import { AccountDeletionModal } from '@/features/auth';
-import { Button } from '@/shared/components/button';
+import { ArrowRightIcon } from '@/shared/assets/icons';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 
 export const MypageAccountDeletionSection = () => {
@@ -9,17 +9,16 @@ export const MypageAccountDeletionSection = () => {
 
   return (
     <>
-      <section className="border-border-gray bg-surface-white flex items-center justify-between rounded-2xl border p-8">
-        <h2 className="text-heading-sm text-text-basic font-bold">회원 탈퇴</h2>
-        <Button
+      <div className="flex justify-end">
+        <button
           type="button"
-          variant="tertiary"
           onClick={openDeletion}
-          className="border-border-gray-dark text-text-subtle border"
+          className="text-body-base text-text-subtle hover:bg-button-tertiary-fill-hover inline-flex h-10 items-center rounded-md px-2 font-medium transition-colors"
         >
-          탈퇴하기
-        </Button>
-      </section>
+          회원 탈퇴
+          <ArrowRightIcon aria-hidden className="size-[18px]" />
+        </button>
+      </div>
 
       <AccountDeletionModal open={isDeletionOpen} onOpenChange={(next) => (next ? openDeletion() : closeDeletion())} />
     </>
