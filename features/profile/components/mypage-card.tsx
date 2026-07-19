@@ -41,7 +41,7 @@ export const MypageCard = ({ title, isEditing, onEdit, onCancel, onSave, isSavin
   );
 
   return (
-    <SectionCard title={title} action={action}>
+    <SectionCard title={title} action={action} headerClassName="bg-surface-white sticky top-[61px] z-10 lg:static">
       {children}
     </SectionCard>
   );

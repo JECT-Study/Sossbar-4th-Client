@@ -7,9 +7,10 @@ interface Props {
   action?: ReactNode;
   children: ReactNode;
   className?: string;
+  headerClassName?: string;
 }
 
-export const SectionCard = ({ title, action, children, className }: Props) => {
+export const SectionCard = ({ title, action, children, className, headerClassName }: Props) => {
   return (
     <section
       className={cn(
@@ -18,8 +19,8 @@ export const SectionCard = ({ title, action, children, className }: Props) => {
       )}
     >
       <div className="flex flex-1 flex-col gap-6 lg:gap-8">
-        <div className="flex flex-row items-center justify-between gap-4">
-          <h2 className="text-heading-sm text-text-basic font-bold">{title}</h2>
+        <div className={cn('flex flex-row items-center justify-between gap-4', headerClassName)}>
+          <h2 className="text-heading-sm text-text-basic min-w-0 font-bold">{title}</h2>
           {action != null ? <div className="flex shrink-0 justify-end">{action}</div> : null}
         </div>
         {children}

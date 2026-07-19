@@ -10,8 +10,8 @@ export const spectrumStepToValue = (step: number): number => (step < 3 ? step + 
 
 /** 후기에 표시되는 직군 라벨 */
 export const USER_POSITION_LABELS: Record<UserPosition, string> = {
-  FE: '프론트엔드 개발자',
-  BE: '백엔드 개발자',
+  FE: '프론트엔드',
+  BE: '백엔드',
   PM: '프로덕트 매니저',
   PD: '프로덕트 디자이너',
 };

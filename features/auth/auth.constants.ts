@@ -21,8 +21,8 @@ export const SIGNUP_STEP_DESCRIPTIONS: Record<SignupStepId, string> = {
 export const POSITION_VALUES = ['FE', 'BE', 'PM', 'PD'] as const;
 
 export const POSITION_OPTIONS = [
-  { value: 'FE', label: '프론트엔드 개발자' },
-  { value: 'BE', label: '백엔드 개발자' },
+  { value: 'FE', label: '프론트엔드' },
+  { value: 'BE', label: '백엔드' },
   { value: 'PM', label: '프로덕트 매니저' },
   { value: 'PD', label: '프로덕트 디자이너' },
 ] as const satisfies readonly { value: (typeof POSITION_VALUES)[number]; label: string }[];
