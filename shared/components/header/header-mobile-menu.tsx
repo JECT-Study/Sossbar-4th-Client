@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Avatar } from 'radix-ui';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 import { MenuIcon, XIcon } from '@/shared/assets/icons';
 import { ProtectedLink } from '@/shared/components/protected-link';
@@ -58,31 +59,37 @@ export const HeaderMobileMenu = ({ avatarSrc, displayName, className }: HeaderMo
         {isOpen ? <XIcon width={24} height={24} /> : <MenuIcon width={24} height={24} />}
       </button>
 
-      {isOpen ? (
-        <div className="border-divider-gray-light bg-surface-white fixed inset-x-0 top-[61px] bottom-0 z-30 border-t">
-          <nav aria-label="모바일 메뉴" className="flex flex-col">
-            <div className={cn(menuItemClassName, 'gap-3')}>
-              <Avatar.Root className="bg-surface-gray-subtle relative size-7 shrink-0 overflow-hidden rounded-full">
-                <Avatar.Image src={avatarSrc} alt={`${displayName}의 프로필 이미지`} />
-                <Avatar.Fallback>{displayName.charAt(0)}</Avatar.Fallback>
-              </Avatar.Root>
-              <span className="font-bold">{displayName}님</span>
-            </div>
+      {isOpen
+        ? createPortal(
+            <div
+              className="border-divider-gray-light fixed inset-x-0 top-[61px] bottom-0 z-40 overflow-y-auto border-t bg-white"
+              role="presentation"
+            >
+              <nav aria-label="모바일 메뉴" className="flex flex-col">
+                <div className={cn(menuItemClassName, 'gap-3')}>
+                  <Avatar.Root className="bg-surface-gray-subtle relative size-7 shrink-0 overflow-hidden rounded-full">
+                    <Avatar.Image src={avatarSrc} alt={`${displayName}의 프로필 이미지`} />
+                    <Avatar.Fallback>{displayName.charAt(0)}</Avatar.Fallback>
+                  </Avatar.Root>
+                  <span className="font-bold">{displayName}님</span>
+                </div>
 
-            {MOBILE_MENU_LINKS.map(({ href, label, requiresAuth }) =>
-              requiresAuth ? (
-                <ProtectedLink key={label} href={href} className={menuItemClassName} onClick={handleNavigate}>
-                  {label}
-                </ProtectedLink>
-              ) : (
-                <Link key={label} href={href} className={menuItemClassName} onClick={handleNavigate}>
-                  {label}
-                </Link>
-              ),
-            )}
-          </nav>
-        </div>
-      ) : null}
+                {MOBILE_MENU_LINKS.map(({ href, label, requiresAuth }) =>
+                  requiresAuth ? (
+                    <ProtectedLink key={label} href={href} className={menuItemClassName} onClick={handleNavigate}>
+                      {label}
+                    </ProtectedLink>
+                  ) : (
+                    <Link key={label} href={href} className={menuItemClassName} onClick={handleNavigate}>
+                      {label}
+                    </Link>
+                  ),
+                )}
+              </nav>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 };

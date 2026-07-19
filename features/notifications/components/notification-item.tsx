@@ -19,6 +19,7 @@ export const NotificationItem = ({ notification, onSelect, className }: Notifica
       onClick={() => onSelect?.(notificationId)}
       className={cn(
         'hover:bg-action-secondary-hover focus-visible:bg-action-secondary-hover relative flex min-h-[89px] w-full shrink-0 items-start px-4 py-3 text-left outline-none',
+        !isRead && 'bg-action-secondary-hover',
         className,
       )}
     >

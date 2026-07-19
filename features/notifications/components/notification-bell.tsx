@@ -80,21 +80,22 @@ export const NotificationBell = ({ className }: NotificationBellProps) => {
         >
           <DialogAnimatedPortal
             open={isMobileOpen}
-            overlayClassName="z-40 bg-black/70"
-            className="bg-surface-white fixed top-1/2 left-1/2 z-40 flex h-dvh w-screen max-w-none flex-col rounded-none border-0 p-0"
+            overlayClassName="z-40 bg-white"
+            className="fixed top-1/2 left-1/2 z-40 flex h-dvh w-screen max-w-none flex-col rounded-none border-0 bg-white p-0"
           >
-            <div className="border-divider-gray-light flex h-[61px] shrink-0 items-center justify-between border-b px-5">
-              <Dialog.Title className="text-body-base text-text-basic font-bold">알림함</Dialog.Title>
+            <div className="border-divider-gray-light flex h-[61px] shrink-0 items-center justify-between border-b bg-white/50 px-5 backdrop-blur-[5px]">
+              <Dialog.Title className="text-body-base text-text-basic font-bold">알림</Dialog.Title>
               <Dialog.Close className="hover:bg-surface-gray-subtler focus-visible:ring-border-primary inline-flex size-11 items-center justify-center rounded-lg outline-none focus-visible:ring-2">
                 <XIcon width={24} height={24} />
               </Dialog.Close>
             </div>
             <Dialog.Description className="sr-only">알림 목록</Dialog.Description>
-            <div className="min-h-0 flex-1 overflow-y-auto">
+            <div className="min-h-0 flex-1 overflow-y-auto bg-white">
               <NotificationDropdownContent
                 notifications={notifications}
                 onMarkAllRead={() => markAllRead.mutate()}
                 onSelectNotification={(notificationId) => markRead.mutate(notificationId)}
+                showHeader={false}
                 className="w-full max-w-none rounded-none border-0 shadow-none"
               />
             </div>

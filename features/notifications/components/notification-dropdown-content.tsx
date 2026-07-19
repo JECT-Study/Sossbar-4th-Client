@@ -8,6 +8,7 @@ type NotificationDropdownContentProps = {
   notifications: NotificationItemType[];
   onMarkAllRead?: () => void;
   onSelectNotification?: (notificationId: number) => void;
+  showHeader?: boolean;
   className?: string;
 };
 
@@ -15,6 +16,7 @@ export const NotificationDropdownContent = ({
   notifications,
   onMarkAllRead,
   onSelectNotification,
+  showHeader = true,
   className,
 }: NotificationDropdownContentProps) => {
   const hasUnread = notifications.some((item) => !item.isRead);
@@ -41,20 +43,22 @@ export const NotificationDropdownContent = ({
         className,
       )}
     >
-      <div className="flex items-center justify-between px-4 pt-4 pb-3">
-        <p className="text-heading-xs text-text-basic leading-normal font-bold">알림</p>
-        {hasUnread ? (
-          <button
-            type="button"
-            onClick={onMarkAllRead}
-            className="text-detail-xs text-text-primary leading-normal font-medium hover:underline"
-          >
-            {unreadCount}건
-          </button>
-        ) : null}
-      </div>
+      {showHeader ? (
+        <div className="flex items-center justify-between px-4 pt-4 pb-3">
+          <p className="text-heading-xs text-text-basic leading-normal font-bold">알림</p>
+          {hasUnread ? (
+            <button
+              type="button"
+              onClick={onMarkAllRead}
+              className="text-detail-xs text-text-primary leading-normal font-medium hover:underline"
+            >
+              {unreadCount}건
+            </button>
+          ) : null}
+        </div>
+      ) : null}
 
-      <div className="flex max-h-[min(320px,60vh)] flex-col overflow-y-auto">
+      <div className={cn('flex flex-col overflow-y-auto', showHeader && 'max-h-[min(320px,60vh)]')}>
         {notifications.map((notification) => (
           <NotificationItem
             key={notification.notificationId}
@@ -64,7 +68,7 @@ export const NotificationDropdownContent = ({
         ))}
       </div>
 
-      <div className="bg-divider-gray-light h-px w-full shrink-0" aria-hidden />
+      {showHeader ? <div className="bg-divider-gray-light h-px w-full shrink-0" aria-hidden /> : null}
     </div>
   );
 };
