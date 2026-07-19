@@ -14,8 +14,8 @@ export const MypageContent = () => {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-[30px]">
-      <header className="border-border-gray-light flex flex-col gap-2 border-b-[3px] pt-[62px] pb-8">
+    <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-5 lg:gap-[30px]">
+      <header className="lg:border-border-gray-light flex flex-col gap-2 pt-8 pb-4 lg:border-b-[3px] lg:pt-[62px] lg:pb-8">
         <h1 className="text-heading-lg text-text-basic font-bold">마이페이지</h1>
         <p className="text-heading-xs text-text-subtle">기본 정보, 커리어 정보, 알림 수신여부를 수정할 수 있어요</p>
       </header>

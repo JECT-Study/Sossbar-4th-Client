@@ -126,11 +126,11 @@ export const MypageCareerSection = ({ profile }: Props) => {
             <p className="text-body-sm text-text-subtler">최대 {POSITIONS_MAX_SELECT}개까지 등록 가능해요.</p>
           </div>
         ) : (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-nowrap gap-2 overflow-x-auto">
             {profile.defaultPositions.map((position) => {
               const { label, Icon } = POSITION_BADGE_MAP[position];
               return (
-                <Badge key={position} icon={<Icon />}>
+                <Badge key={position} icon={<Icon />} className="shrink-0">
                   {label}
                 </Badge>
               );

@@ -98,11 +98,11 @@ const MultiSelectTrigger = ({
       <button
         type="button"
         className={cn(
-          'group border-input-border bg-input-surface text-body-sm flex h-12 min-h-11.25 w-full items-center justify-between gap-2 rounded-md border px-3 outline-none',
+          'group border-input-border bg-input-surface text-body-sm flex min-h-12 w-full items-center justify-between gap-2 rounded-md border px-3 py-2 outline-none',
           className,
         )}
       >
-        <span className="flex flex-1 flex-wrap items-center gap-1.5">{children}</span>
+        <span className="flex min-w-0 flex-1 flex-nowrap items-center gap-1.5 overflow-x-auto">{children}</span>
         <DropdownIcon aria-hidden className="text-input-border size-5 shrink-0 group-data-[state=open]:rotate-180" />
       </button>
     </PopoverPrimitive.Trigger>
@@ -190,7 +190,7 @@ const MultiSelectTag = ({ value, children, onRemove, className }: MultiSelectTag
   return (
     <span
       className={cn(
-        'bg-action-secondary-selected text-text-basic text-detail-sm border-action-tag-primary inline-flex items-center gap-1 rounded-full border py-1 pr-2 pl-3 font-medium',
+        'bg-action-secondary-selected text-text-basic text-detail-sm border-action-tag-primary inline-flex shrink-0 items-center gap-1 rounded-full border py-1 pr-2 pl-3 font-medium whitespace-nowrap',
         className,
       )}
     >

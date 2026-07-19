@@ -78,11 +78,11 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
       >
         <SectionInfoRow label="이미지" align="start">
           {isEditing ? (
-            <div className="flex items-start gap-6">
+            <div className="flex flex-col items-start gap-4 lg:flex-row lg:gap-6">
               <img
                 src={previewUrl ?? profile.profileImageUrl ?? '/default-profile.png'}
                 alt="프로필 이미지 미리보기"
-                className="bg-action-gray-light mr-8 size-25 shrink-0 rounded-full object-cover"
+                className="bg-action-gray-light size-25 shrink-0 rounded-full object-cover lg:mr-8"
               />
               <div className="flex flex-col gap-3">
                 <FileInput
@@ -102,17 +102,25 @@ export const MypageBasicInfoSection = ({ profile }: Props) => {
           )}
         </SectionInfoRow>
 
-        <SectionInfoRow label="이메일">
+        <SectionInfoRow
+          label={
+            <>
+              이메일
+              <span
+                className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-[#FAE100] text-black"
+                aria-hidden
+              >
+                <KakaoTalkIcon className="size-3.5" />
+              </span>
+            </>
+          }
+        >
           {isEditing ? (
-            <div className="bg-surface-gray-subtle text-text-subtle text-body-base flex items-center gap-2 rounded-md px-4 py-3">
-              <KakaoTalkIcon className="size-6 shrink-0" aria-hidden />
-              <span>{profile.email}</span>
+            <div className="bg-surface-gray-subtle text-text-disabled text-body-base border-border-gray rounded-md border px-4 py-3">
+              {profile.email}
             </div>
           ) : (
-            <div className="text-text-basic text-body-base flex items-center gap-2">
-              <KakaoTalkIcon className="size-6 shrink-0" aria-hidden />
-              <span>{profile.email}</span>
-            </div>
+            <span className="text-text-basic text-body-base">{profile.email}</span>
           )}
         </SectionInfoRow>
 
