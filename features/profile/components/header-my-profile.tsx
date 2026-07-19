@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Avatar } from 'radix-ui';
-import { useState } from 'react';
 
 import { NotificationBell } from '@/features/notifications';
 import { Dropdown } from '@/shared/components/dropdown';
@@ -25,11 +24,10 @@ interface Props {
 export const HeaderMyProfile = ({ myProfile, onLogout }: Props) => {
   const avatarSrc = myProfile.profileImageUrl || DEFAULT_AVATAR_SRC;
   const name = myProfile.username ?? myProfile.email;
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <div className="flex h-10 items-center gap-1 lg:gap-2">
-      {!isMobileMenuOpen ? <NotificationBell /> : null}
+      <NotificationBell />
 
       <div className="hidden lg:block">
         <Dropdown.Root>
@@ -65,7 +63,7 @@ export const HeaderMyProfile = ({ myProfile, onLogout }: Props) => {
         </Dropdown.Root>
       </div>
 
-      <HeaderMobileMenu onLogout={onLogout} onOpenChange={setIsMobileMenuOpen} />
+      <HeaderMobileMenu avatarSrc={avatarSrc} displayName={name} />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Avatar } from 'radix-ui';
 import { useEffect } from 'react';
 
 import { MenuIcon, XIcon } from '@/shared/assets/icons';
@@ -9,23 +10,24 @@ import { ROUTES } from '@/shared/constants/routes';
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 import { cn } from '@/shared/lib/cn';
 
-import { HEADER_NAV_LINKS } from './header-main-nav';
+const MOBILE_MENU_LINKS = [
+  { href: '/projects', label: '프로젝트 관리', requiresAuth: true },
+  { href: ROUTES.MY_SOSS, label: '내 소스', requiresAuth: true },
+  { href: ROUTES.PROFILE_EXAMPLES, label: '프로필 예시 보기', requiresAuth: false },
+  { href: ROUTES.MY_PAGE, label: '마이페이지', requiresAuth: false },
+] as const;
 
 type HeaderMobileMenuProps = {
-  onLogout: () => void;
-  onOpenChange?: (open: boolean) => void;
+  avatarSrc: string;
+  displayName: string;
   className?: string;
 };
 
 const menuItemClassName =
-  'text-body-base text-text-basic flex h-12 w-full items-center rounded-md px-4 font-medium hover:bg-button-tertiary-fill-hover';
+  'text-body-base text-text-subtle border-surface-gray-subtle flex min-h-14 w-full items-center border-b px-5 font-medium';
 
-export const HeaderMobileMenu = ({ onLogout, onOpenChange, className }: HeaderMobileMenuProps) => {
+export const HeaderMobileMenu = ({ avatarSrc, displayName, className }: HeaderMobileMenuProps) => {
   const [isOpen, , close, toggle] = useBooleanState(false);
-
-  useEffect(() => {
-    onOpenChange?.(isOpen);
-  }, [isOpen, onOpenChange]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -58,8 +60,16 @@ export const HeaderMobileMenu = ({ onLogout, onOpenChange, className }: HeaderMo
 
       {isOpen ? (
         <div className="border-divider-gray-light bg-surface-white fixed inset-x-0 top-[61px] bottom-0 z-30 border-t">
-          <nav aria-label="모바일 메뉴" className="flex flex-col gap-1 px-5 py-4">
-            {HEADER_NAV_LINKS.map(({ href, label, requiresAuth }) =>
+          <nav aria-label="모바일 메뉴" className="flex flex-col">
+            <div className={cn(menuItemClassName, 'gap-3')}>
+              <Avatar.Root className="bg-surface-gray-subtle relative size-7 shrink-0 overflow-hidden rounded-full">
+                <Avatar.Image src={avatarSrc} alt={`${displayName}의 프로필 이미지`} />
+                <Avatar.Fallback>{displayName.charAt(0)}</Avatar.Fallback>
+              </Avatar.Root>
+              <span className="font-bold">{displayName}님</span>
+            </div>
+
+            {MOBILE_MENU_LINKS.map(({ href, label, requiresAuth }) =>
               requiresAuth ? (
                 <ProtectedLink key={label} href={href} className={menuItemClassName} onClick={handleNavigate}>
                   {label}
@@ -70,19 +80,6 @@ export const HeaderMobileMenu = ({ onLogout, onOpenChange, className }: HeaderMo
                 </Link>
               ),
             )}
-            <Link href={ROUTES.MY_PAGE} className={menuItemClassName} onClick={handleNavigate}>
-              마이페이지
-            </Link>
-            <button
-              type="button"
-              className={cn(menuItemClassName, 'text-left')}
-              onClick={() => {
-                close();
-                onLogout();
-              }}
-            >
-              로그아웃
-            </button>
           </nav>
         </div>
       ) : null}
