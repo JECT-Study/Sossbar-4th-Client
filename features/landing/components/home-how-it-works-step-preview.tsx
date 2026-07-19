@@ -25,7 +25,7 @@ export const HomeHowItWorksStepPreview = ({ variant, title }: HomeHowItWorksStep
         fill
         className="origin-center object-cover object-center"
         style={{ transform: `scale(${scale})` }}
-        sizes="352px"
+        sizes="(max-width: 1024px) 100vw, 352px"
       />
     </div>
   );

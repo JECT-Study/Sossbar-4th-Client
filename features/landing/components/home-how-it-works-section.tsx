@@ -36,13 +36,13 @@ export const HomeHowItWorksSection = () => {
           <HomeSectionHeader badge="사용법" heading="Sossbar 이용 방법" />
         </HomeReveal>
 
-        <div className="flex w-full max-w-[1200px] flex-col gap-20">
+        <div className="flex w-full max-w-[1200px] flex-col gap-12 lg:gap-20">
           {STEPS.map((step) => (
             <HomeReveal key={step.step} className="flex w-full flex-col items-center gap-6 lg:flex-row" amount={0.4}>
-              <div className="gap-margin-m py-padding-m relative flex h-[260px] w-full flex-col lg:flex-1">
+              <div className="gap-margin-m py-padding-m relative flex w-full flex-col lg:h-[260px] lg:flex-1">
                 <div
                   aria-hidden
-                  className="bg-divider-1 pointer-events-none absolute top-11 right-0 left-[7.09%] h-px"
+                  className="bg-divider-1 pointer-events-none absolute top-11 right-0 left-[7.09%] hidden h-px lg:block"
                 />
                 <div className="bg-surface-white text-text-primary relative z-10 flex h-14 w-[112px] shrink-0 items-center justify-center rounded-full px-4 shadow-[0px_4px_12px_rgba(0,0,0,0.1)]">
                   <span className="text-heading-base font-bold whitespace-nowrap">{step.step}</span>

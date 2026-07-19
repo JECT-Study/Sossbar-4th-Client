@@ -18,7 +18,7 @@ const actionButtonClassName = 'h-10 min-w-[68px] shrink-0 rounded-md px-5 py-0';
 
 const LandingHeaderFallback = () => {
   return (
-    <header className="border-divider-gray-light px-padding-l py-padding-m sticky top-0 z-50 border-b bg-white/50 backdrop-blur-[5px]">
+    <header className="border-divider-gray-light py-padding-m lg:px-padding-l sticky top-0 z-50 border-b bg-white/50 px-5 backdrop-blur-[5px]">
       <div className="mx-auto flex h-10 w-full max-w-[1200px] items-center justify-between">
         <HeaderLogoLink />
         <LoginButton />
@@ -47,24 +47,24 @@ const LandingHeaderInner = () => {
   return (
     <header
       className={cn(
-        'px-padding-l py-padding-m sticky top-0 z-20 border-b',
+        'py-padding-m lg:px-padding-l sticky top-0 z-20 border-b px-5',
         isLoggedIn
           ? 'border-divider-1 bg-white/45 backdrop-blur-[10px]'
           : 'border-divider-gray-light bg-white/50 backdrop-blur-[5px]',
       )}
     >
-      <div className="mx-auto flex h-10 w-full max-w-[1200px] items-center justify-between">
+      <div className="mx-auto flex h-10 w-full max-w-[1200px] items-center justify-between gap-2">
         <HeaderLogoLink />
         {isLoggedIn ? (
           <div className="flex items-center gap-1">
-            <Button asChild variant="primary" size="medium" className={`${actionButtonClassName} w-[139px]`}>
+            <Button asChild variant="primary" size="medium" className={`${actionButtonClassName} sm:w-[139px]`}>
               <Link href={ROUTES.MY_SOSS}>Sossbar 열기</Link>
             </Button>
             <Button
               type="button"
               variant="tertiary"
               size="medium"
-              className={`${actionButtonClassName} w-[139px]`}
+              className={`${actionButtonClassName} sm:w-[139px]`}
               onClick={handleLogout}
             >
               로그아웃

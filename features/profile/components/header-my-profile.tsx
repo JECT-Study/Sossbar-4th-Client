@@ -5,6 +5,7 @@ import { Avatar } from 'radix-ui';
 
 import { NotificationBell } from '@/features/notifications';
 import { Dropdown } from '@/shared/components/dropdown';
+import { HeaderMobileMenu } from '@/shared/components/header/header-mobile-menu';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 
@@ -25,39 +26,44 @@ export const HeaderMyProfile = ({ myProfile, onLogout }: Props) => {
   const name = myProfile.username ?? myProfile.email;
 
   return (
-    <div className="flex h-10 items-center gap-2">
+    <div className="flex h-10 items-center gap-1 lg:gap-2">
       <NotificationBell />
-      <Dropdown.Root>
-        <Dropdown.Trigger
-          type="button"
-          className={cn(
-            'flex h-10 max-w-[220px] items-center gap-2 rounded-lg px-1 outline-none',
-            'hover:bg-surface-gray-subtler focus-visible:ring-border-primary focus-visible:ring-2',
-          )}
-          aria-label={`계정 메뉴, ${name}`}
-        >
-          <Avatar.Root className="bg-surface-gray-subtle relative h-[30px] w-[30px] shrink-0 overflow-hidden rounded-full">
-            <Avatar.Image src={avatarSrc} alt={`${name}의 프로필 이미지`} />
-            <Avatar.Fallback>{name.charAt(0)}</Avatar.Fallback>
-          </Avatar.Root>
-          <span className="text-detail-base text-text-subtle truncate leading-[150%] font-bold">{name}님</span>
-        </Dropdown.Trigger>
-        <Dropdown.Content
-          align="end"
-          sideOffset={8}
-          collisionPadding={16}
-          className="border-border-gray-light w-[121px] max-w-[121px] min-w-[121px] flex-col gap-2 overflow-hidden rounded-lg border p-2"
-        >
-          <Dropdown.Item asChild className={dropdownItemClassName}>
-            <Link href={ROUTES.MY_PAGE} className="flex h-full w-full items-center">
-              마이페이지
-            </Link>
-          </Dropdown.Item>
-          <Dropdown.Item className={dropdownItemClassName} onSelect={onLogout}>
-            로그아웃
-          </Dropdown.Item>
-        </Dropdown.Content>
-      </Dropdown.Root>
+
+      <div className="hidden lg:block">
+        <Dropdown.Root>
+          <Dropdown.Trigger
+            type="button"
+            className={cn(
+              'flex h-10 max-w-[220px] items-center gap-2 rounded-lg px-1 outline-none',
+              'hover:bg-surface-gray-subtler focus-visible:ring-border-primary focus-visible:ring-2',
+            )}
+            aria-label={`계정 메뉴, ${name}`}
+          >
+            <Avatar.Root className="bg-surface-gray-subtle relative h-[30px] w-[30px] shrink-0 overflow-hidden rounded-full">
+              <Avatar.Image src={avatarSrc} alt={`${name}의 프로필 이미지`} />
+              <Avatar.Fallback>{name.charAt(0)}</Avatar.Fallback>
+            </Avatar.Root>
+            <span className="text-detail-base text-text-subtle truncate leading-[150%] font-bold">{name}님</span>
+          </Dropdown.Trigger>
+          <Dropdown.Content
+            align="end"
+            sideOffset={8}
+            collisionPadding={16}
+            className="border-border-gray-light w-[121px] max-w-[121px] min-w-[121px] flex-col gap-2 overflow-hidden rounded-lg border p-2"
+          >
+            <Dropdown.Item asChild className={dropdownItemClassName}>
+              <Link href={ROUTES.MY_PAGE} className="flex h-full w-full items-center">
+                마이페이지
+              </Link>
+            </Dropdown.Item>
+            <Dropdown.Item className={dropdownItemClassName} onSelect={onLogout}>
+              로그아웃
+            </Dropdown.Item>
+          </Dropdown.Content>
+        </Dropdown.Root>
+      </div>
+
+      <HeaderMobileMenu avatarSrc={avatarSrc} displayName={name} />
     </div>
   );
 };
