@@ -105,7 +105,7 @@ const CareerPillarCard = ({ pillar }: CareerPillarCardProps) => {
 
 export const HomeCareerSection = () => {
   return (
-    <section className="h-[800px] bg-white">
+    <section className="bg-white py-16 lg:h-[800px] lg:py-0">
       <PageContainer className="flex h-full flex-col items-center justify-center">
         <HomeReveal className="w-full" amount={0.5}>
           <HomeSectionHeader

@@ -30,10 +30,10 @@ const FEATURES = [
 
 export const HomeFeaturesSection = () => {
   return (
-    <section className="relative h-[800px] overflow-hidden bg-white">
+    <section className="relative overflow-hidden bg-white py-16 lg:h-[800px] lg:py-0">
       <div
         aria-hidden
-        className="pointer-events-none absolute top-[151px] left-1/2 h-[1026px] w-[min(3328px,200vw)] -translate-x-1/2"
+        className="pointer-events-none absolute top-[151px] left-1/2 hidden h-[1026px] w-[min(3328px,200vw)] -translate-x-1/2 sm:block"
       >
         <Image src="/home-renewal/features-background.svg" alt="" fill className="object-cover" sizes="200vw" />
       </div>
@@ -50,12 +50,12 @@ export const HomeFeaturesSection = () => {
         <HomeRevealGroup className="gap-margin-l mt-10 grid w-full grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
           {FEATURES.map((feature) => (
             <HomeRevealItem key={feature.title}>
-              <article className="border-divider-1 bg-surface-white flex h-full flex-col gap-2 rounded-2xl border p-4">
+              <article className="border-divider-1 bg-surface-white flex h-full flex-col gap-2 rounded-2xl border p-4 shadow-[0px_8px_12px_rgba(0,0,0,0.1)] lg:shadow-none">
                 <div className="bg-primary-50 flex size-10 items-center justify-center rounded-full p-2">
                   <Image src={feature.imageSrc} alt="" width={24} height={24} className="size-6" />
                 </div>
                 <h3 className="text-text-basic text-heading-sm font-bold">{feature.title}</h3>
-                <p className="text-text-subtle text-body-sm min-h-[86px] leading-[1.5]">{feature.description}</p>
+                <p className="text-text-subtle text-body-sm leading-[1.5] lg:min-h-[86px]">{feature.description}</p>
               </article>
             </HomeRevealItem>
           ))}
