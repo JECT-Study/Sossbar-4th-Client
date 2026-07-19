@@ -4,8 +4,8 @@ export const PROJECT_FIELD_MAX_LENGTH = 20;
 
 /** 프로젝트 직군 표시 라벨. review 도메인의 직군 라벨과 동일한 값 집합 */
 export const PROJECT_POSITION_LABELS: Record<ProjectPositionValue, string> = {
-  FE: '프론트엔드 개발자',
-  BE: '백엔드 개발자',
+  FE: '프론트엔드',
+  BE: '백엔드',
   PM: '프로덕트 매니저',
   PD: '프로덕트 디자이너',
 };
@@ -17,8 +17,8 @@ export const PROJECT_POSITION_VALUES = ['FE', 'BE', 'PM', 'PD'] as const satisfi
 
 /** 프로젝트 생성 시 직군 선택 옵션. 회원가입(POSITION_OPTIONS)과 동일한 라벨 */
 export const PROJECT_POSITION_OPTIONS = [
-  { value: 'FE', label: '프론트엔드 개발자' },
-  { value: 'BE', label: '백엔드 개발자' },
+  { value: 'FE', label: '프론트엔드' },
+  { value: 'BE', label: '백엔드' },
   { value: 'PM', label: '프로덕트 매니저' },
   { value: 'PD', label: '프로덕트 디자이너' },
 ] as const satisfies readonly { value: ProjectPositionValue; label: string }[];

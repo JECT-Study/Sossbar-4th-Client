@@ -121,6 +121,8 @@ const MultiSelectContent = ({
       <PopoverPrimitive.Content
         align={align}
         sideOffset={sideOffset}
+        onOpenAutoFocus={(event) => event.preventDefault()}
+        onCloseAutoFocus={(event) => event.preventDefault()}
         className={cn('bg-input-surface z-50 flex flex-col overflow-hidden rounded-md shadow-lg', className)}
         {...restProps}
       >
