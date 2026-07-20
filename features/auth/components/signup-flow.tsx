@@ -18,7 +18,7 @@ export const SignupFlow = () => {
   return (
     <div className="flex w-full max-w-[480px] flex-col items-center">
       <h1 className="text-heading-lg text-text-basic text-center font-bold">회원가입</h1>
-      <h2 className="text-body-base text-text-subtle mt-2 mb-6 text-center font-medium">
+      <h2 className="text-body-base text-text-subtle mt-2 mb-6 text-center font-medium whitespace-pre-line">
         {SIGNUP_STEP_DESCRIPTIONS[currentStep]}
       </h2>
       <StepIndicator steps={SIGNUP_STEPS} current={currentStep} aria-label="회원가입 단계" />
@@ -34,7 +34,7 @@ export const SignupFlow = () => {
         >
           {currentStep === 'basic' ? <SignupStepBasic onNext={goNext} /> : null}
           {currentStep === 'career' ? <SignupStepCareer onPrev={goPrev} isSubmitting={isPending} /> : null}
-          {currentStep === 'complete' ? <SignupStepComplete onConfirm={() => router.push('/')} /> : null}
+          {currentStep === 'complete' ? <SignupStepComplete onConfirm={() => router.push('/projects')} /> : null}
         </form>
       </FormProvider>
     </div>

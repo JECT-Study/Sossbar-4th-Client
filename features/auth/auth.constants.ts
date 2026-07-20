@@ -18,7 +18,7 @@ export type SignupStepId = (typeof SIGNUP_STEPS)[number]['id'];
 export const SIGNUP_STEP_DESCRIPTIONS: Record<SignupStepId, string> = {
   basic: '기본 정보를 입력해 주세요.',
   career: '직군을 최대 2개 선택하고 포트폴리오 링크를 첨부해주세요.',
-  complete: '프로젝트를 생성하고 동료에게 후기를 요청해 프로필을 완성해 보세요!',
+  complete: '프로젝트를 생성 후 동료에게 후기를 요청하여\n프로필을 완성해보세요!',
 };
 
 export const POSITION_VALUES = ['FE', 'BE', 'PM', 'PD'] as const;
