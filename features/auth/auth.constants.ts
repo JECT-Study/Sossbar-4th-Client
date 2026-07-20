@@ -1,3 +1,6 @@
+import type { ComponentType, SVGProps } from 'react';
+
+import { BackendIcon, FrontendIcon, ProductDesignerIcon, ProductManagerIcon } from '@/shared/assets/icons';
 import type { StepIndicatorStep } from '@/shared/components/step-indicator';
 
 export const BIO_MAX_LENGTH = 50;
@@ -14,18 +17,20 @@ export type SignupStepId = (typeof SIGNUP_STEPS)[number]['id'];
 
 export const SIGNUP_STEP_DESCRIPTIONS: Record<SignupStepId, string> = {
   basic: '기본 정보를 입력해 주세요.',
-  career: '나를 잘 나타내는 직군과 링크를 등록해 주세요.',
-  complete: '프로젝트를 생성하고 동료에게 후기를 요청해 프로필을 완성해 보세요!',
+  career: '직군을 최대 2개 선택하고 포트폴리오 링크를 첨부해주세요.',
+  complete: '프로젝트를 생성 후 동료에게 후기를 요청하여\n프로필을 완성해보세요!',
 };
 
 export const POSITION_VALUES = ['FE', 'BE', 'PM', 'PD'] as const;
 
+type PositionIcon = ComponentType<SVGProps<SVGSVGElement>>;
+
 export const POSITION_OPTIONS = [
-  { value: 'FE', label: '프론트엔드' },
-  { value: 'BE', label: '백엔드' },
-  { value: 'PM', label: '프로덕트 매니저' },
-  { value: 'PD', label: '프로덕트 디자이너' },
-] as const satisfies readonly { value: (typeof POSITION_VALUES)[number]; label: string }[];
+  { value: 'FE', label: '프론트엔드', Icon: FrontendIcon },
+  { value: 'BE', label: '백엔드', Icon: BackendIcon },
+  { value: 'PM', label: '프로덕트 매니저', Icon: ProductManagerIcon },
+  { value: 'PD', label: '프로덕트 디자이너', Icon: ProductDesignerIcon },
+] as const satisfies readonly { value: (typeof POSITION_VALUES)[number]; label: string; Icon: PositionIcon }[];
 
 export const POSITIONS_MAX_SELECT = 2;
 

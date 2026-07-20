@@ -11,6 +11,8 @@ import { Label } from '../label';
 export type MultiSelectFieldOption = {
   value: string;
   label: ReactNode;
+  /** 드롭다운 항목 앞에 표시할 아이콘. 트리거 태그에는 포함되지 않습니다. */
+  icon?: ReactNode;
   disabled?: boolean;
 };
 
@@ -82,6 +84,7 @@ export const MultiSelectField = ({
               value={option.value}
               disabled={option.disabled || (isMaxReached && !selectedValue.includes(option.value))}
             >
+              {option.icon}
               {option.label}
             </MultiSelect.Item>
           ))}

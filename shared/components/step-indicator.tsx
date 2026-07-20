@@ -45,7 +45,10 @@ export const StepIndicator = ({ steps, current, 'aria-label': ariaLabel, classNa
             </div>
             {!isLast ? (
               <span
-                className={cn('mx-4 h-px flex-1', isCompleted ? 'bg-element-primary' : 'bg-element-disabled-light')}
+                className={cn(
+                  'mx-2 h-px flex-1 lg:mx-4',
+                  isCompleted ? 'bg-element-primary' : 'bg-element-disabled-light',
+                )}
                 aria-hidden
               />
             ) : null}
