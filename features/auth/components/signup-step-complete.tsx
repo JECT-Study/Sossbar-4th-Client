@@ -17,7 +17,7 @@ export const SignupStepComplete = ({ onConfirm }: Props) => {
         type="button"
         size="medium"
         onClick={onConfirm}
-        className="text-body-xl lg:text-body-base mt-20 h-14 w-full lg:mt-12 lg:h-auto"
+        className="text-body-xl lg:text-body-base mt-[140px] h-14 w-full lg:mt-12 lg:h-auto"
       >
         프로젝트 생성하러 가기
       </Button>
