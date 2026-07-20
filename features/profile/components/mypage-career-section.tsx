@@ -112,13 +112,14 @@ export const MypageCareerSection = ({ profile }: Props) => {
                 )}
               </MultiSelect.Trigger>
               <MultiSelect.Content className="w-(--radix-popover-trigger-width)">
-                {POSITION_OPTIONS.map((option) => (
+                {POSITION_OPTIONS.map(({ value, label, Icon }) => (
                   <MultiSelect.Item
-                    key={option.value}
-                    value={option.value}
-                    disabled={isMaxReached ? !positions.includes(option.value) : false}
+                    key={value}
+                    value={value}
+                    disabled={isMaxReached ? !positions.includes(value) : false}
                   >
-                    {option.label}
+                    <Icon className="size-4 shrink-0" aria-hidden />
+                    {label}
                   </MultiSelect.Item>
                 ))}
               </MultiSelect.Content>

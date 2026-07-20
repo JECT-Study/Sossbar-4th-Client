@@ -123,7 +123,10 @@ const MultiSelectContent = ({
         sideOffset={sideOffset}
         onOpenAutoFocus={(event) => event.preventDefault()}
         onCloseAutoFocus={(event) => event.preventDefault()}
-        className={cn('bg-input-surface z-50 flex flex-col overflow-hidden rounded-md shadow-lg', className)}
+        className={cn(
+          'bg-input-surface z-50 flex flex-col overflow-hidden rounded-md shadow-[0px_8px_24px_rgba(0,0,0,0.1)]',
+          className,
+        )}
         {...restProps}
       >
         {children}
@@ -151,8 +154,8 @@ const MultiSelectItem = ({ value, children, className, disabled = false }: Multi
       disabled={disabled}
       onClick={() => toggle(value)}
       className={cn(
-        'text-body-sm text-text-basic hover:bg-action-gray-light data-[state=checked]:bg-action-secondary-selected flex h-12 cursor-pointer items-center gap-3 px-4 text-left font-medium outline-none',
-        'disabled:text-text-disabled disabled:cursor-not-allowed disabled:hover:bg-transparent',
+        'text-body-sm text-text-basic hover:bg-action-gray-light data-[state=checked]:bg-action-primary-selected flex h-12 cursor-pointer items-center gap-2 px-4 py-3 text-left font-medium outline-none',
+        'disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent',
         className,
       )}
       data-state={isChecked ? 'checked' : 'unchecked'}
@@ -162,14 +165,13 @@ const MultiSelectItem = ({ value, children, className, disabled = false }: Multi
         className={cn(
           'relative flex size-5 shrink-0 items-center justify-center rounded border transition-colors',
           isChecked ? 'border-button-primary-fill bg-button-primary-fill' : 'border-divider-gray bg-white',
-          disabled && !isChecked && 'border-element-disabled-light bg-bg-gray-subtler',
         )}
       >
         {isChecked ? (
           <CheckIcon className="text-text-basic-inverse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
         ) : null}
       </span>
-      <span>{children}</span>
+      <span className="flex min-w-0 items-center gap-1">{children}</span>
     </button>
   );
 };
