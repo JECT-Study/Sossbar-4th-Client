@@ -33,9 +33,7 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
 
   return (
     <div className="mt-8 flex w-full max-w-[480px] flex-col gap-6">
-      <div
-        className={`border-border-gray-light flex ${CAREER_FORM_CARD_MIN_HEIGHT_CLASS} flex-col gap-10 rounded-3xl border px-5 py-10`}
-      >
+      <div className={`flex ${CAREER_FORM_CARD_MIN_HEIGHT_CLASS} flex-col gap-10 px-5 py-10`}>
         <div className="flex flex-col">
           <Controller
             control={control}
