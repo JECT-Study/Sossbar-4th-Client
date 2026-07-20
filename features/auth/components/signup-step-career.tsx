@@ -85,7 +85,7 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
                 leftIcon={<TrashIcon className="size-5" />}
                 variant="tertiary"
                 type="button"
-                className="hover:text-icon-error px-2.5 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 disabled:hover:cursor-default"
+                className="hover:text-icon-error px-2.5 opacity-100 transition-opacity focus-visible:opacity-100 disabled:hover:cursor-default lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="링크 제거"
                 disabled={linkRows.length <= 1}
                 onClick={() => remove(index)}
@@ -118,11 +118,16 @@ export const SignupStepCareer = ({ onPrev, isSubmitting }: Props) => {
           variant="tertiary"
           size="medium"
           onClick={onPrev}
-          className="border-border-gray-light w-full border"
+          className="border-border-gray-light text-body-xl lg:text-body-base h-14 w-full border lg:h-auto"
         >
           이전
         </Button>
-        <Button type="submit" size="medium" disabled={!canSubmit || isSubmitting} className="w-full">
+        <Button
+          type="submit"
+          size="medium"
+          disabled={!canSubmit || isSubmitting}
+          className="text-body-xl lg:text-body-base h-14 w-full lg:h-auto"
+        >
           가입완료
         </Button>
       </div>

@@ -117,7 +117,13 @@ export const SignupStepBasic = ({ onNext }: Props) => {
         <p className="text-body-sm text-text-error mt-3">{errors.agreements.message}</p>
       ) : null}
 
-      <Button type="button" size="medium" onClick={onNext} disabled={!canGoNext} className="mt-12 w-full">
+      <Button
+        type="button"
+        size="medium"
+        onClick={onNext}
+        disabled={!canGoNext}
+        className="text-body-xl lg:text-body-base mt-12 h-14 w-full lg:h-auto"
+      >
         다음
       </Button>
     </div>
