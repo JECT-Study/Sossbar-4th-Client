@@ -23,7 +23,7 @@ export const TagCard = ({ userLink, projectId }: Props) => {
       title="받은 태그"
       info
       infoLabel="동료들이 남긴 후기에서 많이 선택된 태그예요"
-      className="h-[652px] w-[585px]"
+      className="h-auto w-full lg:h-[652px] lg:w-[585px]"
       bodyClassName="gap-8"
     >
       {!hasTags ? (

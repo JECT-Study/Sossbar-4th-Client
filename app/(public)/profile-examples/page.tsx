@@ -18,12 +18,12 @@ const ProfileExamplesPage = () => (
       userId={dummyProfile.userId}
       allTabContent={
         <>
-          <div className="flex gap-[30px]">
+          <div className="grid grid-cols-1 gap-[30px] xl:grid-cols-2 max-xl:[&>*]:h-auto! max-xl:[&>*]:w-full!">
             <ProfileStatCard
               title="받은 태그"
               info
               infoLabel="동료들이 남긴 후기에서 많이 선택된 태그예요"
-              className="h-[652px] w-[585px]"
+              className="h-auto w-full lg:h-[652px] lg:w-[585px]"
               bodyClassName="gap-8"
             >
               <TagTop3Section tags={dummyReceivedTags.top3Tags} />
@@ -33,7 +33,7 @@ const ProfileExamplesPage = () => (
               title="소프트 스킬 스펙트럼"
               info
               infoLabel="동료들의 평가를 기반으로 자동 산출된 협업 성향이에요"
-              className="h-[652px] w-[585px]"
+              className="h-auto w-full lg:h-[652px] lg:w-[585px]"
             >
               <SpectrumAverageSection spectrumInfo={dummySpectrumInfo} />
               <SpectrumDistributionSection spectrumInfo={dummySpectrumInfo} />

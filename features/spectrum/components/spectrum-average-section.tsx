@@ -11,9 +11,6 @@ import {
 } from '../spectrum.constants';
 import { toMarkerLeft } from '../spectrum.lib';
 
-/** 4축 × (h-7 + gap-1) */
-const SPECTRUM_TRACK_HEIGHT_PX = 136;
-
 interface Props {
   spectrumInfo: SpectrumInfo;
 }
@@ -22,30 +19,24 @@ export const SpectrumAverageSection = ({ spectrumInfo }: Props) => (
   <div className="w-full">
     <h3 className="text-heading-xs text-text-subtle pb-2 font-bold">평균 지표</h3>
 
-    <div className="flex items-center gap-4" style={{ height: SPECTRUM_TRACK_HEIGHT_PX }}>
-      <div className="flex w-[108px] shrink-0 flex-col gap-1" style={{ height: SPECTRUM_TRACK_HEIGHT_PX }}>
-        {spectrumAxisLabels.map((row) => (
-          <p key={`${row.left}-left`} className="text-body-xs text-text-subtle flex h-7 items-center font-medium">
-            {row.left}
-          </p>
-        ))}
-      </div>
+    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[108px_minmax(0,1fr)_max-content] lg:items-center lg:gap-x-4 lg:gap-y-1">
+      {(spectrumInfo.spectrumInfoResDtos ?? []).map((axis, index) => {
+        const labels = spectrumAxisLabels[index];
+        const markerLeft = toMarkerLeft(axis.averageStrength);
 
-      <div className="flex min-w-0 flex-1 flex-col gap-1" style={{ height: SPECTRUM_TRACK_HEIGHT_PX }}>
-        {(spectrumInfo.spectrumInfoResDtos ?? []).map((axis) => {
-          const markerLeft = toMarkerLeft(axis.averageStrength);
-
-          return (
-            <div key={axis.axisName} className="relative flex h-7 min-h-7 items-center">
+        return (
+          <div key={axis.axisName} className="flex flex-wrap items-center gap-x-4 gap-y-1 lg:contents">
+            <p className="text-body-xs text-text-subtle order-1 shrink-0 font-medium lg:order-none">{labels.left}</p>
+            <div className="relative order-3 flex h-7 min-h-7 w-full min-w-0 items-center lg:order-none lg:w-auto">
               <div className="relative h-3 w-full overflow-hidden rounded">
                 <div aria-hidden className={cn('absolute inset-y-0 left-0 w-1/2', SPECTRUM_LEFT_TRACK_CLASS)} />
                 <div aria-hidden className={cn('absolute inset-y-0 right-0 w-1/2', SPECTRUM_RIGHT_TRACK_CLASS)} />
                 <div aria-hidden className="absolute inset-0 grid grid-cols-6">
-                  {SPECTRUM_TRACK_SEGMENT_KEYS.map((key, index) => (
+                  {SPECTRUM_TRACK_SEGMENT_KEYS.map((key, segIndex) => (
                     <span
                       key={key}
                       className={cn(
-                        index < SPECTRUM_TRACK_SEGMENT_KEYS.length - 1 && 'border-input-surface border-r-[0.5px]',
+                        segIndex < SPECTRUM_TRACK_SEGMENT_KEYS.length - 1 && 'border-input-surface border-r-[0.5px]',
                       )}
                     />
                   ))}
@@ -53,20 +44,12 @@ export const SpectrumAverageSection = ({ spectrumInfo }: Props) => (
               </div>
               <div aria-hidden className={SPECTRUM_MARKER_CLASS} style={{ left: markerLeft }} />
             </div>
-          );
-        })}
-      </div>
-
-      <div className="flex shrink-0 flex-col gap-1" style={{ height: SPECTRUM_TRACK_HEIGHT_PX }}>
-        {spectrumAxisLabels.map((row) => (
-          <p
-            key={`${row.right}-right`}
-            className="text-body-xs text-text-subtle flex h-7 items-center font-medium whitespace-nowrap"
-          >
-            {row.right}
-          </p>
-        ))}
-      </div>
+            <p className="text-body-xs text-text-subtle order-2 ml-auto shrink-0 font-medium whitespace-nowrap lg:order-none lg:ml-0">
+              {labels.right}
+            </p>
+          </div>
+        );
+      })}
     </div>
   </div>
 );
