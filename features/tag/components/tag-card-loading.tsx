@@ -31,7 +31,7 @@ export const TagCardLoading = () => (
   <section
     aria-busy="true"
     aria-label="받은 태그를 불러오는 중"
-    className="border-border-gray flex h-[652px] w-[585px] flex-col overflow-hidden rounded-2xl border bg-white"
+    className="border-border-gray flex h-auto w-full flex-col overflow-hidden rounded-2xl border bg-white lg:h-[652px] lg:w-[585px]"
   >
     <div className="bg-surface-gray-subtler flex items-center px-6 py-5">
       <SkeletonLine className="h-5 w-24" />

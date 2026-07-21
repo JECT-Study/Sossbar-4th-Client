@@ -22,7 +22,7 @@ export const SpectrumCard = ({ userLink, projectId, showDistribution = true }: P
       title="소프트 스킬 스펙트럼"
       info
       infoLabel="동료들의 평가를 기반으로 자동 산출된 협업 성향이에요"
-      className={cn('w-[585px]', showDistribution ? 'h-[652px]' : 'h-auto')}
+      className={cn('w-full lg:w-[585px]', showDistribution ? 'h-auto lg:h-[652px]' : 'h-auto')}
     >
       {spectrumInfo.totalCount === 0 ? (
         <EmptyState title="받은 후기가 없어요" />

@@ -16,15 +16,15 @@ export const ProfileShareActions = ({
   onCloseShareTooltip,
   onShareProfile,
 }: Props) => (
-  <div className="ml-auto flex shrink-0 items-start gap-2">
-    <div className="relative inline-flex">
+  <div className="flex w-full shrink-0 items-start gap-2 lg:ml-auto lg:w-auto">
+    <div className="relative inline-flex w-full lg:w-auto">
       <Button
         type="button"
         variant="primary"
         size="medium"
         leftIcon={<ShareIcon aria-hidden />}
         className={cn(
-          'h-11',
+          'h-11 w-full lg:w-auto',
           isShareTooltipOpen &&
             'bg-button-primary-fill-pressed hover:bg-button-primary-fill-pressed focus:bg-button-primary-fill-pressed active:bg-button-primary-fill-pressed',
         )}

@@ -85,7 +85,7 @@ const Page = async ({ params }: ProfilePageProps) => {
         userId={profile.userId}
         allTabContent={
           <>
-            <div className="flex gap-[30px]">
+            <div className="flex flex-col gap-[30px] lg:flex-row">
               <Suspense fallback={<TagCardLoading />}>
                 <TagCardEntry userLink={profile.userLink} />
               </Suspense>
