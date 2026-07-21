@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { EmptyState } from '@/shared/components/empty-state';
 import { ProfileStatCard } from '@/shared/components/profile-stat-card';
-import { SortDropdown, type SortOrder } from '@/shared/components/sort-dropdown';
+import { sortOptions, type SortOrder } from '@/shared/components/sort-dropdown';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
 
@@ -51,12 +51,28 @@ export const ReviewListCard = ({
 
   const headerAction =
     showSort && reviews.length > 0 ? (
-      <SortDropdown
-        value={selectedSort}
-        onValueChange={setSelectedSort}
-        ariaLabel="후기 정렬"
-        triggerClassName="h-10"
-      />
+      <div role="group" aria-label="후기 정렬" className="text-detail-xs flex items-center gap-2 font-medium">
+        {sortOptions.map((option, index) => (
+          <Fragment key={option.value}>
+            {index > 0 ? (
+              <span aria-hidden className="text-text-disabled">
+                ·
+              </span>
+            ) : null}
+            <button
+              type="button"
+              aria-pressed={selectedSort === option.value}
+              onClick={() => setSelectedSort(option.value)}
+              className={cn(
+                'focus-visible:ring-border-primary cursor-pointer rounded-xs transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+                selectedSort === option.value ? 'text-text-subtler' : 'text-text-disabled',
+              )}
+            >
+              {option.label}
+            </button>
+          </Fragment>
+        ))}
+      </div>
     ) : null;
 
   return (
