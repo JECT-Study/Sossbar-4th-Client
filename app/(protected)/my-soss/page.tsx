@@ -24,7 +24,7 @@ const Page = async () => {
         userId={myProfile.userId}
         allTabContent={
           <>
-            <div className="flex flex-col gap-[30px] lg:flex-row">
+            <div className="grid grid-cols-1 gap-[30px] xl:grid-cols-2 max-xl:[&>*]:h-auto! max-xl:[&>*]:w-full!">
               <Suspense fallback={<TagCardLoading />}>
                 <TagCardEntry userLink={myProfile.userLink} />
               </Suspense>
