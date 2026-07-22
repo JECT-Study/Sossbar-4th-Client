@@ -36,10 +36,10 @@ export const ReviewStepTag = ({ tags, onPrev, onNext }: Props) => {
   };
 
   return (
-    <div className="mt-13 flex w-full max-w-[480px] flex-col">
+    <div className="mt-4 flex w-full max-w-[480px] flex-col">
       <h3 className="text-heading-sm text-text-basic font-bold">태그 선택(최대 {REVIEW_MAX_TAGS}개)</h3>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap gap-3">
         {tags.map((tag) => {
           const selected = selectedTagIdSet.has(tag.tagId);
           const disabled = !selected && selectedTagIds.length >= REVIEW_MAX_TAGS;
@@ -65,17 +65,23 @@ export const ReviewStepTag = ({ tags, onPrev, onNext }: Props) => {
         })}
       </div>
 
-      <div className="mt-12 flex w-full gap-3">
+      <div className="mt-12 flex w-full gap-4">
         <Button
           type="button"
           variant="tertiary"
-          size="medium"
+          size="large"
           onClick={onPrev}
-          className="border-border-gray-light w-full border"
+          className="border-border-gray-light h-14 min-h-12 w-full self-stretch rounded-md border"
         >
           뒤로가기
         </Button>
-        <Button type="button" size="medium" onClick={onNext} disabled={!canGoNext} className="w-full">
+        <Button
+          type="button"
+          size="large"
+          onClick={onNext}
+          disabled={!canGoNext}
+          className="h-14 min-h-12 w-full self-stretch rounded-md"
+        >
           다음
         </Button>
       </div>

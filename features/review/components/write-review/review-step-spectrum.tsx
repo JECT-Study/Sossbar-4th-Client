@@ -33,10 +33,10 @@ export const ReviewStepSpectrum = ({ spectrums, onPrev, onNext }: Props) => {
   };
 
   return (
-    <div className="mt-13 flex w-full max-w-[480px] flex-col">
-      <h3 className="text-heading-sm text-text-basic font-bold">업무 성향 스펙트럼 선택</h3>
+    <div className="mt-4 flex w-full max-w-[480px] flex-col">
+      <h3 className="text-heading-sm text-text-basic font-bold">소프트 스킬 스펙트럼 성향</h3>
 
-      <div className="mt-6 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-4 gap-y-6">
+      <div className="mt-6 flex flex-col gap-4">
         {spectrums.map((spectrum) => {
           const answer = selectedSpectrums.find((item) => item.spectrumId === spectrum.spectrumId);
 
@@ -52,17 +52,23 @@ export const ReviewStepSpectrum = ({ spectrums, onPrev, onNext }: Props) => {
         })}
       </div>
 
-      <div className="mt-12 flex w-full gap-3">
+      <div className="mt-12 flex w-full gap-4">
         <Button
           type="button"
           variant="tertiary"
-          size="medium"
+          size="large"
           onClick={onPrev}
-          className="border-border-gray-light w-full border"
+          className="border-border-gray-light h-14 min-h-12 w-full self-stretch rounded-md border"
         >
           뒤로가기
         </Button>
-        <Button type="button" size="medium" onClick={onNext} disabled={!canGoNext} className="w-full">
+        <Button
+          type="button"
+          size="large"
+          onClick={onNext}
+          disabled={!canGoNext}
+          className="h-14 min-h-12 w-full self-stretch rounded-md"
+        >
           다음
         </Button>
       </div>

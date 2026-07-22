@@ -1,6 +1,7 @@
 'use client';
 
 import { useMyProfile } from '@/features/profile';
+import { ReviewSubmittedToast } from '@/features/review/components/review-submitted-toast';
 import { PageContainer } from '@/shared/components/page-container';
 
 import { ProjectDetailHeading } from './project-detail-heading';
@@ -61,6 +62,7 @@ export const ProjectDetailPageContent = ({ projectId }: Props) => {
         isLeader={isLeader}
         myUserId={myProfile.userId}
       />
+      <ReviewSubmittedToast />
     </PageContainer>
   );
 };

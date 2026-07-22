@@ -4,7 +4,7 @@
  */
 export const GUIDANCE_COPY = {
   banner: {
-    reviewSubmitted: '후기가 제출되었습니다. 팀원들에게도 후기를 남겨보세요.',
+    reviewSubmitted: '후기 제출이 완료되었습니다.',
     projectCreated: '프로젝트가 생성되었습니다. 초대 링크를 팀원에게 공유해 보세요.',
     inviteAccepted: '프로젝트에 참여했습니다. 팀 확정 후 후기를 작성할 수 있어요.',
     signupComplete: '프로필 설정이 완료되었습니다. 프로젝트를 시작해 보세요.',
@@ -43,8 +43,9 @@ export const GUIDANCE_COPY = {
       cancel: '닫기',
     },
     inviteAccept: {
-      title: '후기 작성',
-      descriptionPrefix: '후기 작성에 참여하시겠습니까?',
+      title: '프로젝트 참여',
+      descriptionPrefix: '이번 프로젝트에서 본인의 역할을 선택해주세요.',
+      helper: '최대 2개까지 등록 가능해요.',
       confirm: '참여하기',
       cancel: '취소',
     },

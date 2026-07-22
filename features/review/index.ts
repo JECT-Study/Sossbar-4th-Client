@@ -1,4 +1,5 @@
 export { ReviewSubmitDialog } from './components/review-submit-dialog';
+export { ReviewSubmittedToast } from './components/review-submitted-toast';
 export { WriteReviewFlow } from './components/write-review/write-review-flow';
 export { UserReviewCardLoading } from './components/user-review-card-loading';
 export { fetchReviewFormData, fetchReviewValidation, reviewKeys } from './review.api';

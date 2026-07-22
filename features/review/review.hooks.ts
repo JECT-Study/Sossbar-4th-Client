@@ -137,7 +137,7 @@ export const useWriteReviewFlow = ({ projectId, revieweeId }: UseWriteReviewFlow
         spectrums,
       });
       setSubmitDialogOpen(false);
-      router.push(`/projects/${projectId}`);
+      router.push(`/projects/${projectId}?reviewSubmitted=1`);
     } catch {
       setSubmitError('제출에 실패했습니다. 다시 시도해주세요.');
     }

@@ -44,11 +44,11 @@ export const ConfirmationDialog = ({
       <DialogAnimatedPortal
         open={open}
         className={cn(
-          'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex w-md max-w-[calc(100vw-32px)] flex-col',
+          'border-border-gray bg-surface-white fixed top-1/2 left-1/2 z-50 flex w-full max-w-[min(28rem,calc(100vw-40px))] flex-col',
           'gap-4 overflow-hidden rounded-xl border p-6 outline-none',
         )}
       >
-        <div className="flex h-[108px] w-full shrink-0 flex-col gap-2 px-4 py-2">
+        <div className="flex min-h-[108px] w-full shrink-0 flex-col justify-center gap-2 px-4 py-2">
           <Dialog.Title className="text-heading-base text-text-basic leading-normal font-bold">{title}</Dialog.Title>
           <Dialog.Description asChild>
             <div className="text-body-base text-text-subtle flex flex-col leading-normal">{description}</div>
