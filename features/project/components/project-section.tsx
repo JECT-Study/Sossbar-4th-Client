@@ -2,12 +2,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 
 import { DownIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { EmptyState } from '@/shared/components/empty-state';
-import { SortDropdown, type SortOrder } from '@/shared/components/sort-dropdown';
+import { sortOptions, type SortOrder } from '@/shared/components/sort-dropdown';
 import { ROUTES } from '@/shared/constants/routes';
 import { cn } from '@/shared/lib/cn';
 import { formatIsoDateToDots } from '@/shared/lib/format-date';
@@ -37,15 +37,18 @@ const ProjectItem = ({ userLink, project }: ProjectItemProps) => {
             src={project.projectImage ?? DEFAULT_IMAGE_PATH}
             alt="프로젝트 이미지"
             fill
-            sizes="(min-width: 1024px) 282px, (min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1024px) 282px, 50vw"
             className="object-cover"
           />
         </div>
         <div className="flex flex-col gap-1">
-          <h3 className="text-heading-xs text-text-subtle truncate font-bold">{project.projectName}</h3>
-          <p className="text-body-sm text-text-subtler truncate font-medium">
-            {[project.host, formatIsoDateToDots(project.startDate)].filter(Boolean).join(' · ')}
-          </p>
+          <h3 className="text-body-sm text-text-subtle lg:text-heading-xs truncate font-bold">{project.projectName}</h3>
+          <div className="text-detail-xs flex flex-col font-medium">
+            {project.host ? <p className="text-text-subtler truncate">{project.host}</p> : null}
+            {project.startDate ? (
+              <p className="text-text-disabled truncate">{formatIsoDateToDots(project.startDate)}</p>
+            ) : null}
+          </div>
         </div>
       </article>
     </Link>
@@ -90,17 +93,33 @@ export const ProjectSection = ({ userLink }: ProjectSectionProps) => {
       aria-label="프로젝트별 리뷰"
       className={cn('border-border-gray flex flex-col overflow-hidden rounded-2xl border bg-white')}
     >
-      <header className="bg-surface-gray-subtler border-border-gray flex items-center justify-end border-b px-8 py-5">
-        <SortDropdown
-          value={selectedSort}
-          onValueChange={setSelectedSort}
-          ariaLabel="프로젝트 정렬"
-          triggerClassName="h-[30px]"
-        />
+      <header className="bg-surface-gray-subtler border-border-gray flex items-center justify-end border-b px-6 py-5">
+        <div role="group" aria-label="프로젝트 정렬" className="text-detail-xs flex items-center gap-2 font-medium">
+          {sortOptions.map((option, index) => (
+            <Fragment key={option.value}>
+              {index > 0 ? (
+                <span aria-hidden className="text-text-disabled">
+                  ·
+                </span>
+              ) : null}
+              <button
+                type="button"
+                aria-pressed={selectedSort === option.value}
+                onClick={() => setSelectedSort(option.value)}
+                className={cn(
+                  'focus-visible:ring-border-primary cursor-pointer rounded-xs transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+                  selectedSort === option.value ? 'text-text-subtler' : 'text-text-disabled',
+                )}
+              >
+                {option.label}
+              </button>
+            </Fragment>
+          ))}
+        </div>
       </header>
 
-      <div className="flex flex-col gap-[30px] p-6">
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="flex flex-col gap-4 p-4 lg:gap-[30px] lg:p-6">
+        <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
           {visibleProjects.map((project) => (
             <li key={project.projectId}>
               <ProjectItem userLink={userLink} project={project} />
@@ -111,9 +130,8 @@ export const ProjectSection = ({ userLink }: ProjectSectionProps) => {
         {hasMore ? (
           <Button
             variant="tertiary"
-            size="large"
-            rightIcon={<DownIcon className="size-6" aria-hidden />}
-            className="text-body-xl h-[58px] w-full rounded-lg px-7"
+            rightIcon={<DownIcon className="size-4 shrink-0" aria-hidden />}
+            className="border-border-gray text-body-sm lg:text-body-xl h-[52px] w-full justify-center rounded-lg border lg:h-[58px] lg:px-7"
             onClick={() => setShowAll(true)}
           >
             프로젝트 더보기

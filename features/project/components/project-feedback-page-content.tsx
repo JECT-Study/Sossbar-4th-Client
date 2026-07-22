@@ -4,6 +4,7 @@ import { ProjectReviewCard } from '@/features/review';
 import { SpectrumCardGate } from '@/features/spectrum';
 import { TagCardGate } from '@/features/tag';
 import { PageContainer } from '@/shared/components/page-container';
+import { ROUTES } from '@/shared/constants/routes';
 
 import { useUserProject } from '../project.hooks';
 import { ProjectHeroSection } from './project-hero-section';
@@ -33,7 +34,7 @@ export const ProjectFeedbackPageContent = ({ userLink, projectId }: ProjectFeedb
   }
 
   return (
-    <PageContainer className="mb-20 flex flex-col gap-[30px] pt-8">
+    <PageContainer className="mb-20 flex flex-col gap-6 pt-0 lg:gap-[30px] lg:pt-8">
       <ProjectHeroSection
         projectName={project.projectName}
         projectImage={project.projectImage}
@@ -41,9 +42,10 @@ export const ProjectFeedbackPageContent = ({ userLink, projectId }: ProjectFeedb
         startDate={project.startDate}
         projectPositions={project.projectPositions}
         projectUrl={project.projectUrl}
+        backHref={`${ROUTES.PROFILE(userLink)}?tab=projects`}
       />
 
-      <div className="flex gap-[30px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2 xl:gap-[30px] max-xl:[&>*]:h-auto! max-xl:[&>*]:w-full!">
         <TagCardGate userLink={userLink} projectId={projectId} />
         <SpectrumCardGate userLink={userLink} projectId={projectId} showDistribution={false} />
       </div>
