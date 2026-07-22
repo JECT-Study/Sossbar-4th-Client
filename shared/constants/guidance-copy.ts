@@ -43,8 +43,9 @@ export const GUIDANCE_COPY = {
       cancel: '닫기',
     },
     inviteAccept: {
-      title: '후기 작성',
-      descriptionPrefix: '후기 작성에 참여하시겠습니까?',
+      title: '프로젝트 참여',
+      descriptionPrefix: '이번 프로젝트에서 본인의 역할을 선택해주세요.',
+      helper: '최대 2개까지 등록 가능해요.',
       confirm: '참여하기',
       cancel: '취소',
     },

@@ -1,7 +1,5 @@
 'use client';
 
-import { Fragment } from 'react';
-
 import { cn } from '@/shared/lib/cn';
 
 import { REVIEW_DEFAULT_SPECTRUM_STEP, REVIEW_SPECTRUM_STEP_COUNT } from '../../review.constants';
@@ -97,8 +95,11 @@ export const ReviewSpectrumSlider = ({ leftLabel, rightLabel, value, onChange }:
   };
 
   return (
-    <Fragment>
-      <span className="text-detail-sm text-text-subtle shrink-0 font-medium whitespace-nowrap">{leftLabel}</span>
+    <div className="flex w-full flex-col">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-detail-xs text-text-subtle shrink-0 font-medium">{leftLabel}</span>
+        <span className="text-detail-xs text-text-subtle shrink-0 font-medium">{rightLabel}</span>
+      </div>
 
       <div
         role="slider"
@@ -107,7 +108,7 @@ export const ReviewSpectrumSlider = ({ leftLabel, rightLabel, value, onChange }:
         aria-valuemin={1}
         aria-valuemax={MAX_STEP_INDEX}
         aria-valuenow={value < CENTER_STEP ? value + 1 : value}
-        className="relative flex h-5 w-full cursor-pointer touch-none items-center outline-none select-none"
+        className="relative flex h-7 w-full cursor-pointer touch-none items-center outline-none select-none"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -125,12 +126,10 @@ export const ReviewSpectrumSlider = ({ leftLabel, rightLabel, value, onChange }:
         </div>
         <span
           aria-hidden
-          className="bg-input-surface absolute top-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-[0px_4px_16px_rgba(96,96,96,0.3)] transition-[left] duration-75"
+          className="bg-input-surface absolute top-1/2 size-6 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-[0px_4px_16px_rgba(96,96,96,0.3)] transition-[left] duration-75 lg:size-5"
           style={{ left: `${percent}%` }}
         />
       </div>
-
-      <span className="text-detail-sm text-text-subtle shrink-0 font-medium whitespace-nowrap">{rightLabel}</span>
-    </Fragment>
+    </div>
   );
 };

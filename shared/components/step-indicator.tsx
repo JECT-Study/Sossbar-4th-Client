@@ -30,7 +30,7 @@ export const StepIndicator = ({ steps, current, 'aria-label': ariaLabel, classNa
             className="flex min-w-0 flex-1 items-center last:flex-none"
             aria-current={step.id === current ? 'step' : undefined}
           >
-            <div className="flex shrink-0 items-center gap-2">
+            <div className="flex shrink-0 items-center gap-1.5">
               <span
                 className={cn(
                   'text-detail-xs flex size-6 items-center justify-center rounded-full font-normal',
@@ -39,14 +39,19 @@ export const StepIndicator = ({ steps, current, 'aria-label': ariaLabel, classNa
               >
                 {isCompleted ? <CheckIcon className="size-4" aria-hidden /> : index + 1}
               </span>
-              <span className={cn('text-detail-sm font-medium', isActive ? 'text-text-basic' : 'text-text-subtler')}>
+              <span
+                className={cn(
+                  'text-detail-sm shrink-0 font-medium whitespace-nowrap',
+                  isActive ? 'text-text-basic' : 'text-text-subtler',
+                )}
+              >
                 {step.label}
               </span>
             </div>
             {!isLast ? (
               <span
                 className={cn(
-                  'mx-2 h-px flex-1 lg:mx-4',
+                  'mx-2 h-px min-w-4 flex-1 lg:mx-4',
                   isCompleted ? 'bg-element-primary' : 'bg-element-disabled-light',
                 )}
                 aria-hidden

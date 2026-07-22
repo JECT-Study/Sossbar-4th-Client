@@ -51,19 +51,33 @@ export const WriteReviewFlow = ({ projectId, revieweeId, revieweeName }: Props) 
     );
   }
 
+  const stepDescription = {
+    tag: (
+      <>
+        <span className="font-bold">{displayName}</span>님에 태그를 선택해주세요.
+      </>
+    ),
+    spectrum: (
+      <>
+        <span className="font-bold">{displayName}</span>님에 소프트 스킬 스펙트럼을 선택해주세요.
+      </>
+    ),
+    feedback: (
+      <>
+        <span className="font-bold">{displayName}</span>님에 대한 솔직한 후기를 남겨주세요.
+      </>
+    ),
+  }[currentStep];
+
   return (
     <div className="flex w-full max-w-[480px] flex-col items-center">
-      <h1 className="text-heading-lg text-text-basic text-center font-bold">후기 작성</h1>
-      <h2 className="text-body-base text-text-subtle mt-2 mb-6 font-medium">
-        {
-          {
-            tag: `${displayName}님을 잘 나타내는 태그를 선택해주세요.`,
-            spectrum: `${displayName}님의 업무 성향 스펙트럼을 선택해주세요.`,
-            feedback: `${displayName}님에 대한 솔직한 후기를 남겨주세요.`,
-          }[currentStep]
-        }
-      </h2>
-      <StepIndicator steps={REVIEW_STEPS} current={currentStep} aria-label="후기 작성 단계" />
+      <div className="flex w-full flex-col items-center gap-3 pb-6">
+        <div className="flex flex-col items-center gap-2">
+          <h1 className="text-heading-lg text-text-basic text-center font-bold">후기 작성</h1>
+          <p className="text-body-base text-text-subtle text-center font-medium">{stepDescription}</p>
+        </div>
+        <StepIndicator steps={REVIEW_STEPS} current={currentStep} aria-label="후기 작성 단계" />
+      </div>
 
       <FormProvider {...form}>
         <form
@@ -74,9 +88,9 @@ export const WriteReviewFlow = ({ projectId, revieweeId, revieweeName }: Props) 
           noValidate
         >
           {isPending ? (
-            <p className="text-body-base text-text-subtle mt-13">불러오는 중...</p>
+            <p className="text-body-base text-text-subtle mt-4">불러오는 중...</p>
           ) : isError || !formData ? (
-            <div className="mt-13 flex flex-col items-center gap-4">
+            <div className="mt-4 flex flex-col items-center gap-4">
               <p className="text-body-base text-text-basic">데이터를 불러오지 못했습니다.</p>
               <Button type="button" variant="secondary" size="medium" onClick={() => void refetch()}>
                 다시 시도

@@ -7,9 +7,7 @@ import { saveLoginReturnPath, useLoginGate } from '@/features/auth';
 import { useMyProfile } from '@/features/profile';
 import { ProjectInviteAcceptModal } from '@/features/project/components/project-invite-accept-modal';
 import { ConfirmationDialog } from '@/shared/components/dialog/confirmation-dialog';
-import { SHARE_INVITER_NAME_PARAM } from '@/shared/constants/share-query';
 import { ApiError } from '@/shared/lib/api';
-import { parseShareDisplayName } from '@/shared/lib/parse-share-display-name';
 
 import type { ProjectPositionValue } from '../project.types';
 
@@ -39,11 +37,6 @@ export const ProjectInviteHandler = () => {
   const [invalidLink, setInvalidLink] = useState(false);
 
   const hasSession = profile != null;
-
-  const inviterName = useMemo(
-    () => parseShareDisplayName(searchParams.get(SHARE_INVITER_NAME_PARAM) ?? undefined) ?? '',
-    [searchParams],
-  );
 
   const clearInviteParam = useCallback(() => {
     if (searchParams.get(PROJECT_INVITE_QUERY_KEY) == null) {
@@ -127,7 +120,6 @@ export const ProjectInviteHandler = () => {
       <ProjectInviteAcceptModal
         key={projectLink}
         open={acceptModalOpen}
-        inviterName={inviterName}
         onOpenChange={handleAcceptOpenChange}
         onConfirm={handleJoin}
         isConfirming={isJoining}
