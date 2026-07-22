@@ -4,7 +4,7 @@
  */
 export const GUIDANCE_COPY = {
   banner: {
-    reviewSubmitted: '후기가 제출되었습니다. 팀원들에게도 후기를 남겨보세요.',
+    reviewSubmitted: '후기 제출이 완료되었습니다.',
     projectCreated: '프로젝트가 생성되었습니다. 초대 링크를 팀원에게 공유해 보세요.',
     inviteAccepted: '프로젝트에 참여했습니다. 팀 확정 후 후기를 작성할 수 있어요.',
     signupComplete: '프로필 설정이 완료되었습니다. 프로젝트를 시작해 보세요.',
