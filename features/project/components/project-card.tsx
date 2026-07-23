@@ -73,10 +73,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         href={ROUTES.PROJECT_DETAIL(project.projectId)}
         className="focus-visible:ring-border-secondary block rounded-2xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
-        <article className="border-border-gray-light bg-surface-white flex flex-row gap-6 rounded-2xl border p-6">
-          <ProjectCardImage projectName={project.projectName} projectImage={project.projectImage} />
-
-          <div className="flex min-w-0 flex-1 flex-col gap-4">
+        <article className="border-border-gray-light bg-surface-white grid grid-cols-[80px_1fr] gap-x-3 gap-y-4 rounded-2xl border p-4 shadow-[0px_4px_4px_rgba(96,96,96,0.15)] lg:grid-cols-[286px_1fr] lg:gap-6 lg:p-6 lg:shadow-none">
+          <div className="col-span-2 lg:col-start-2 lg:row-start-1">
             <ProjectCardHeader
               isLeader={isLeader}
               projectName={project.projectName}
@@ -84,6 +82,11 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               startDate={project.startDate}
               onDelete={isLeader ? () => setDeleteProjectOpen(true) : undefined}
             />
+          </div>
+
+          <ProjectCardImage projectName={project.projectName} projectImage={project.projectImage} />
+
+          <div className="flex min-w-0 flex-col gap-2 lg:col-start-2 lg:row-start-2 lg:gap-4">
             <ProjectCardTitle
               projectName={project.projectName}
               host={project.host}
@@ -126,12 +129,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
 const ProjectCardImage = ({ projectName, projectImage }: ProjectCardImageProps) => {
   return (
-    <div className="relative h-[214px] w-[286px] shrink-0 overflow-hidden rounded-2xl">
+    <div className="relative size-20 shrink-0 self-start overflow-hidden rounded-xl lg:row-span-3 lg:row-start-1 lg:h-[214px] lg:w-[286px] lg:rounded-2xl">
       <Image
         src={projectImage || DEFAULT_PROJECT_IMAGE}
         alt={`${projectName} 이미지`}
         fill
-        sizes="286px"
+        sizes="(min-width: 1024px) 286px, 80px"
         className="object-cover"
       />
     </div>
@@ -147,8 +150,8 @@ const ProjectCardHeader = ({ isLeader, projectName, projectStatus, startDate, on
         <ProjectStateBadge variant={isInProgress ? 'waiting' : 'success'} />
         {isLeader ? <ProjectStateBadge variant="leader" /> : null}
       </div>
-      <div className="flex items-center gap-4">
-        <time className="text-body-base text-text-subtle font-normal" dateTime={startDate}>
+      <div className="flex items-center gap-1 lg:gap-4">
+        <time className="text-detail-xs text-text-subtle lg:text-body-base font-normal" dateTime={startDate}>
           {formatIsoDateToDots(startDate)}
         </time>
         {isLeader ? (
@@ -180,8 +183,14 @@ const ProjectCardHeader = ({ isLeader, projectName, projectStatus, startDate, on
 const ProjectCardTitle = ({ host, projectName, startDate, endDate }: ProjectCardTitleProps) => {
   return (
     <div className="flex flex-col">
-      <h2 className="text-heading-sm text-text-subtle font-bold">{projectName}</h2>
-      <p className="text-body-base text-text-subtle font-normal">
+      <h2 className="text-detail-xs text-text-basic lg:text-heading-sm lg:text-text-subtle font-bold">{projectName}</h2>
+      <div className="lg:hidden">
+        <p className="text-detail-xs text-text-subtle font-normal">
+          {formatIsoDateToDots(startDate)} - {formatIsoDateToDots(endDate)}
+        </p>
+        <p className="text-detail-xs text-text-subtle font-normal">{host}</p>
+      </div>
+      <p className="text-body-base text-text-subtle hidden font-normal lg:block">
         {formatIsoDateToDots(startDate)} - {formatIsoDateToDots(endDate)}
         <span className="text-text-subtler"> ・ </span>
         {host}
@@ -199,7 +208,8 @@ const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['
   return (
     <div
       className={cn(
-        'text-body-sm flex h-[37px] items-center rounded-lg px-3 font-normal',
+        'flex items-center rounded-lg px-2 py-1 font-normal lg:h-[37px] lg:px-3',
+        'lg:text-body-sm text-[10px] leading-[1.3]',
         'bg-surface-gray-subtle text-text-subtle',
       )}
     >
@@ -211,13 +221,14 @@ const ProjectCardNotice = ({ projectStatus }: { projectStatus: ProjectCardItem['
 const ProjectMemberList = ({ members, reviewedCount, totalReviewTargetCount }: ProjectMemberListProps) => {
   return (
     <div className="flex min-w-0 flex-col gap-2">
-      <p className="text-body-base text-text-subtle font-normal">
-        {'내가 작성한 후기 '}
-        <span>
+      <p className="text-detail-xs text-text-subtle lg:text-body-base font-normal">
+        <span className="lg:hidden">후기 작성 </span>
+        <span className="hidden lg:inline">내가 작성한 후기 </span>
+        <span className="text-text-primary font-medium lg:font-normal lg:text-inherit">
           {reviewedCount}/{totalReviewTargetCount}
         </span>
       </p>
-      <div className="relative min-w-0 overflow-hidden">
+      <div className="relative hidden min-w-0 overflow-hidden lg:block">
         <ul className="flex flex-nowrap gap-2">
           {members.map((member) => (
             <li key={member.memberId}>

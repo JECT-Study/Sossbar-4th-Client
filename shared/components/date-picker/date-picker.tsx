@@ -42,21 +42,21 @@ export const DatePicker = ({
           onBlur={onBlur}
           aria-invalid={error || undefined}
           className={cn(
-            'bg-surface-white border-input-border data-[state=open]:border-border-primary data-[state=open]:ring-border-primary flex w-full items-center gap-2 rounded-md border px-4 py-3 outline-none disabled:cursor-not-allowed data-[state=open]:ring-2 data-[state=open]:ring-inset',
+            'bg-surface-white border-input-border data-[state=open]:border-border-primary data-[state=open]:ring-border-primary flex w-full items-center justify-between gap-2 rounded-md border px-4 py-3 outline-none disabled:cursor-not-allowed data-[state=open]:ring-2 data-[state=open]:ring-inset',
             error &&
               'border-border-error ring-border-error data-[state=open]:border-border-error data-[state=open]:ring-border-error ring-2 ring-inset',
             className,
           )}
         >
-          <CalendarIcon aria-hidden className="text-text-basic size-5 shrink-0" />
           <span
             className={cn(
-              'text-body-sm flex-1 text-left',
+              'text-body-sm min-w-0 flex-1 text-left',
               displayDate !== null ? 'text-text-basic' : 'text-text-disabled',
             )}
           >
             {displayDate ?? placeholder}
           </span>
+          <CalendarIcon aria-hidden className="text-text-basic size-5 shrink-0" />
         </button>
       </PopoverPrimitive.Trigger>
 

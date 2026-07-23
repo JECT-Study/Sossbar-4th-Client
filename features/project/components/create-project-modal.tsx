@@ -11,7 +11,7 @@ import {
   PROJECT_POSITIONS_MAX_SELECT,
   PROJECT_POSITION_OPTIONS,
 } from '@/features/project/project.constants';
-import { FileUploadIcon, XIcon } from '@/shared/assets/icons';
+import { FileUploadIcon, TrashIcon, XIcon } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import { DatePicker } from '@/shared/components/date-picker';
 import { DialogAnimatedOverlay } from '@/shared/components/dialog';
@@ -20,7 +20,6 @@ import { useFileInput, useImagePreview } from '@/shared/components/file-input';
 import { Input } from '@/shared/components/input';
 import { Label } from '@/shared/components/label';
 import { MultiSelectField } from '@/shared/components/multi-select-field';
-import { Select } from '@/shared/components/select';
 import { TextField } from '@/shared/components/text-field';
 import { cn } from '@/shared/lib/cn';
 
@@ -52,10 +51,10 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
             <Dialog.Content
               className={cn(
                 'bg-surface-white fixed z-50 flex flex-col outline-none',
-                // mobile: bottom sheet
-                'inset-x-0 bottom-0 max-h-[90vh] w-full rounded-t-2xl',
+                // mobile: Figma 바텀시트(666px / 상단 178px 노출) — 헤더·푸터 고정, 본문 스크롤
+                'inset-x-0 bottom-0 h-[min(666px,calc(100dvh-178px))] w-full overflow-hidden rounded-t-2xl',
                 // desktop: centered modal
-                'lg:border-border-gray lg:inset-x-auto lg:top-1/2 lg:bottom-auto lg:left-1/2 lg:max-h-[calc(100vh-24px)] lg:w-[min(600px,calc(100vw-16px))] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:rounded-lg lg:border lg:px-11 lg:py-10 lg:shadow-xl',
+                'lg:border-border-gray lg:inset-x-auto lg:top-1/2 lg:bottom-auto lg:left-1/2 lg:h-auto lg:max-h-[calc(100vh-24px)] lg:w-[min(600px,calc(100vw-16px))] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:rounded-lg lg:border lg:px-11 lg:py-10 lg:shadow-xl',
                 className,
               )}
             >
@@ -119,8 +118,8 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                     </Dialog.Close>
                   </div>
 
-                  <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col">
-                    <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-4 lg:mt-7 lg:px-0 lg:pr-2 lg:pb-0">
+                  <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                    <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-5 pb-4 lg:mt-7 lg:px-0 lg:pr-2 lg:pb-0">
                       <Controller
                         control={control}
                         name="projectName"
@@ -163,7 +162,11 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                             name="projectPositions"
                             label="포지션"
                             required
-                            options={PROJECT_POSITION_OPTIONS}
+                            options={PROJECT_POSITION_OPTIONS.map(({ value, label, Icon }) => ({
+                              value,
+                              label,
+                              icon: <Icon className="size-4 shrink-0" aria-hidden />,
+                            }))}
                             value={field.value}
                             onValueChange={field.onChange}
                             onBlur={field.onBlur}
@@ -249,35 +252,32 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
 
                       <div className="flex flex-col gap-2">
                         <Label htmlFor="project-url">URL</Label>
-                        <div className="grid grid-cols-[1fr_120px] gap-2">
-                          <Controller
-                            control={control}
-                            name="projectUrl"
-                            render={({ field }) => (
+                        <Controller
+                          control={control}
+                          name="projectUrl"
+                          render={({ field }) => (
+                            <div className="flex items-center gap-2">
                               <Input
                                 id="project-url"
                                 placeholder="https://"
                                 error={!!errors.projectUrl?.message}
                                 disabled={isSubmitting}
+                                className="min-w-0 flex-1"
                                 {...field}
                               />
-                            )}
-                          />
-                          <Controller
-                            control={control}
-                            name="projectUrlType"
-                            render={({ field }) => (
-                              <Select.Root value={field.value} onValueChange={field.onChange} disabled={isSubmitting}>
-                                <Select.Trigger aria-label="URL 유형">
-                                  <Select.Value />
-                                </Select.Trigger>
-                                <Select.Content className="w-(--radix-select-trigger-width)">
-                                  <Select.Item value="LINK">Link</Select.Item>
-                                </Select.Content>
-                              </Select.Root>
-                            )}
-                          />
-                        </div>
+                              <Button
+                                type="button"
+                                variant="tertiary"
+                                size="medium"
+                                aria-label="URL 지우기"
+                                disabled={isSubmitting || !field.value}
+                                className="bg-button-tertiary-fill-hover h-12 shrink-0 px-2.5"
+                                leftIcon={<TrashIcon className="size-5" aria-hidden />}
+                                onClick={() => field.onChange('')}
+                              />
+                            </div>
+                          )}
+                        />
                         {errors.projectUrl?.message ? <ErrorMessage>{errors.projectUrl.message}</ErrorMessage> : null}
                       </div>
                     </div>

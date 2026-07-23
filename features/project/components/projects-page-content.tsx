@@ -32,8 +32,8 @@ export const ProjectsPageContent = () => {
           type="button"
           variant="primary"
           size="medium"
-          leftIcon={<SettingIcon aria-hidden className="size-6" />}
-          className="w-full justify-center lg:w-auto"
+          leftIcon={<SettingIcon aria-hidden className="size-4 lg:size-6" />}
+          className="h-11 w-full justify-center lg:h-auto lg:w-auto"
           onClick={() => setIsCreateModalOpen(true)}
         >
           새 프로젝트 생성
