@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useMyProfile } from '@/features/profile';
+import { trackEvent } from '@/shared/lib/analytics';
 import { ApiError } from '@/shared/lib/api';
 
 import type {
@@ -308,6 +309,7 @@ export const useCreateProjectModal = ({ onOpenChange }: CreateProjectModalParams
       });
 
       setCreatedProjectLink(createdProject.projectLink);
+      trackEvent('create_review_link');
     } catch (error) {
       form.setError('root', {
         message:

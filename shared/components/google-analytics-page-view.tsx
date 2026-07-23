@@ -5,12 +5,6 @@ import { useEffect, useRef } from 'react';
 
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
 export const GoogleAnalyticsPageView = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
