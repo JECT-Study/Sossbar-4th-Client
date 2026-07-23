@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import { useBooleanState } from '@/shared/hooks/use-boolean-state';
 import { useCopyLinkFeedback } from '@/shared/hooks/use-copy-link-feedback';
+import { trackEvent } from '@/shared/lib/analytics';
 import { ApiError } from '@/shared/lib/api';
 import { buildPathWithSearch, setSearchParam } from '@/shared/lib/url/search-params';
 
@@ -162,7 +163,10 @@ export const useProfileShare = ({ userLink, userName }: UseProfileShareParams) =
   } = useCopyLinkFeedback();
 
   const shareProfile = useCallback(async () => {
-    await copyLink(buildProfileShareClipboardText(userLink, userName));
+    const copied = await copyLink(buildProfileShareClipboardText(userLink, userName));
+    if (copied) {
+      trackEvent('share_profile', { method: 'copy_link' });
+    }
   }, [copyLink, userLink, userName]);
 
   return {

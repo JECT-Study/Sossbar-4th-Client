@@ -17,6 +17,7 @@ export const useCopyLinkFeedback = () => {
     const copied = await copyTextToClipboard(text);
     setMessage(copied ? COPY_SUCCESS_MESSAGE : COPY_FAILURE_MESSAGE);
     setOpen(true);
+    return copied;
   }, []);
 
   return { open, message, close, copyLink };

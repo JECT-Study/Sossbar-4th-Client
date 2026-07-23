@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
+import { trackEvent } from '@/shared/lib/analytics';
 import { ApiError } from '@/shared/lib/api';
 
 import type { SignupStepId } from './auth.constants';
@@ -58,6 +59,8 @@ export const useSignupForm = () => {
         positions: data.positions,
         links: sanitizedLinks,
       });
+
+      trackEvent('sign_up', { method: 'kakao' });
     } catch (error) {
       let message = '서버 오류가 발생했어요. 잠시 후 다시 시도해 주세요.';
 

@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import { useMyProfile } from '@/features/profile';
 import { projectKeys, useProject } from '@/features/project';
+import { trackEvent } from '@/shared/lib/analytics';
 
 import type { ReviewStepId } from './review.constants';
 import type { ReviewWriteFormData } from './review.types';
@@ -136,6 +137,7 @@ export const useWriteReviewFlow = ({ projectId, revieweeId }: UseWriteReviewFlow
         tagIds,
         spectrums,
       });
+      trackEvent('complete_review');
       setSubmitDialogOpen(false);
       router.push(`/projects/${projectId}?reviewSubmitted=1`);
     } catch {
