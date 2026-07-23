@@ -62,9 +62,11 @@ export const DatePicker = ({
 
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
+          side="bottom"
           align="start"
           sideOffset={4}
-          className="bg-surface-white z-50 flex w-90 max-w-[calc(100vw-32px)] flex-col rounded-2xl shadow-[0px_4px_16px_rgba(96,96,96,0.3)]"
+          avoidCollisions={false}
+          className="bg-surface-white z-[60] flex w-90 max-w-[calc(100vw-32px)] flex-col rounded-2xl shadow-[0px_4px_16px_rgba(96,96,96,0.3)]"
         >
           <div className="border-border-gray-light flex h-22 items-center justify-between border-b px-4">
             <button
