@@ -38,10 +38,11 @@ export const PROJECT_SORT_OPTIONS = [
   { value: 'OLDEST', label: '오래된 순' },
 ] as const;
 
+/** 트리거(label)와 메뉴(menuLabel) 문구. 메뉴의 ALL은 Figma '전체 보기'를 쓴다. */
 export const PROJECT_LIST_STATUS_OPTIONS = [
-  { value: 'ALL', label: '전체' },
-  { value: 'IN_PROGRESS', label: '진행중' },
-  { value: 'COMPLETED', label: '완료' },
+  { value: 'ALL', label: '전체', menuLabel: '전체 보기' },
+  { value: 'IN_PROGRESS', label: '팀 확정 전', menuLabel: '팀 확정 전' },
+  { value: 'COMPLETED', label: '팀 확정', menuLabel: '팀 확정' },
 ] as const;
 
 /** 백엔드 GET /api/v1/projects의 sort/status 기본값과 일치해야 SSR prefetch와 클라이언트 쿼리 키가 어긋나지 않는다 */
