@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from 'motion/react';
 import { Dialog } from 'radix-ui';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import {
@@ -41,6 +41,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
     trigger,
   } = form;
   const dateErrorMessage = errors.startDate?.message ?? errors.endDate?.message;
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
@@ -119,7 +120,13 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                   </div>
 
                   <form onSubmit={handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col overflow-hidden">
-                    <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-5 pb-4 lg:mt-7 lg:px-0 lg:pr-2 lg:pb-0">
+                    <div
+                      className={cn(
+                        'flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain px-5 lg:mt-7 lg:px-0 lg:pr-2 lg:pb-0',
+                        // 달력 오픈 시 하단 여유를 늘려 최하단 날짜까지 스크롤·선택할 수 있게 한다.
+                        isDatePickerOpen ? 'pb-52' : 'pb-4',
+                      )}
+                    >
                       <Controller
                         control={control}
                         name="projectName"
@@ -197,6 +204,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                                   void trigger(['startDate', 'endDate']);
                                 }}
                                 onBlur={field.onBlur}
+                                onOpenChange={setIsDatePickerOpen}
                                 placeholder="시작일"
                                 disabled={isSubmitting}
                                 error={!!errors.startDate}
@@ -218,6 +226,7 @@ export const CreateProjectModal = ({ open, onOpenChange, className }: Props) => 
                                   void trigger(['startDate', 'endDate']);
                                 }}
                                 onBlur={field.onBlur}
+                                onOpenChange={setIsDatePickerOpen}
                                 placeholder="완료일"
                                 disabled={isSubmitting}
                                 error={!!errors.endDate}
