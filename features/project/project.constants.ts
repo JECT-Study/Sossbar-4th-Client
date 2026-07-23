@@ -1,3 +1,7 @@
+import type { ComponentType, SVGProps } from 'react';
+
+import { BackendIcon, FrontendIcon, ProductDesignerIcon, ProductManagerIcon } from '@/shared/assets/icons';
+
 import type { FetchMyProjectsParams, ProjectPositionValue } from './project.types';
 
 export const PROJECT_FIELD_MAX_LENGTH = 20;
@@ -15,13 +19,15 @@ export const PROJECT_POSITIONS = Object.keys(PROJECT_POSITION_LABELS) as Project
 /** zod enum·옵션 파생용 직군 값 튜플 (단일 출처) */
 export const PROJECT_POSITION_VALUES = ['FE', 'BE', 'PM', 'PD'] as const satisfies readonly ProjectPositionValue[];
 
-/** 프로젝트 생성 시 직군 선택 옵션. 회원가입(POSITION_OPTIONS)과 동일한 라벨 */
+type ProjectPositionIcon = ComponentType<SVGProps<SVGSVGElement>>;
+
+/** 프로젝트 생성 시 직군 선택 옵션. 회원가입(POSITION_OPTIONS)과 동일한 라벨·아이콘 */
 export const PROJECT_POSITION_OPTIONS = [
-  { value: 'FE', label: '프론트엔드' },
-  { value: 'BE', label: '백엔드' },
-  { value: 'PM', label: '프로덕트 매니저' },
-  { value: 'PD', label: '프로덕트 디자이너' },
-] as const satisfies readonly { value: ProjectPositionValue; label: string }[];
+  { value: 'FE', label: '프론트엔드', Icon: FrontendIcon },
+  { value: 'BE', label: '백엔드', Icon: BackendIcon },
+  { value: 'PM', label: '프로덕트 매니저', Icon: ProductManagerIcon },
+  { value: 'PD', label: '프로덕트 디자이너', Icon: ProductDesignerIcon },
+] as const satisfies readonly { value: ProjectPositionValue; label: string; Icon: ProjectPositionIcon }[];
 
 /** 프로젝트 생성 시 선택 가능한 최대 직군 수 */
 export const PROJECT_POSITIONS_MAX_SELECT = 2;
@@ -38,10 +44,11 @@ export const PROJECT_SORT_OPTIONS = [
   { value: 'OLDEST', label: '오래된 순' },
 ] as const;
 
+/** 트리거(label)와 메뉴(menuLabel) 문구. 메뉴의 ALL은 Figma '전체 보기'를 쓴다. */
 export const PROJECT_LIST_STATUS_OPTIONS = [
-  { value: 'ALL', label: '전체' },
-  { value: 'IN_PROGRESS', label: '진행중' },
-  { value: 'COMPLETED', label: '완료' },
+  { value: 'ALL', label: '전체', menuLabel: '전체 보기' },
+  { value: 'IN_PROGRESS', label: '팀 확정 전', menuLabel: '팀 확정 전' },
+  { value: 'COMPLETED', label: '팀 확정', menuLabel: '팀 확정' },
 ] as const;
 
 /** 백엔드 GET /api/v1/projects의 sort/status 기본값과 일치해야 SSR prefetch와 클라이언트 쿼리 키가 어긋나지 않는다 */

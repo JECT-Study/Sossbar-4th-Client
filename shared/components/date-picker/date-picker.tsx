@@ -1,6 +1,7 @@
 'use client';
 
 import { Popover as PopoverPrimitive } from 'radix-ui';
+import { useEffect, useRef } from 'react';
 
 import { ArrowLeftIcon, ArrowRightIcon, CalendarIcon } from '@/shared/assets/icons';
 import { cn } from '@/shared/lib/cn';
@@ -14,6 +15,7 @@ interface Props {
   defaultValue?: Date | null;
   onChange?: (date: Date | null) => void;
   onBlur?: () => void;
+  onOpenChange?: (open: boolean) => void;
   placeholder?: string;
   disabled?: boolean;
   error?: boolean;
@@ -25,48 +27,71 @@ export const DatePicker = ({
   defaultValue,
   onChange,
   onBlur,
+  onOpenChange,
   placeholder = '날짜를 선택해주세요',
   disabled,
   error = false,
   className,
 }: Props) => {
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const { open, handleOpenChange, handleSelect, goToPrevMonth, goToNextMonth, displayDate, monthLabel, weeks } =
     useDatePicker({ value, defaultValue, onChange });
 
+  const handleRootOpenChange = (next: boolean) => {
+    handleOpenChange(next);
+    onOpenChange?.(next);
+  };
+
+  // 모바일 바텀시트 등에서 달력이 화면 밖으로 잘리지 않도록, 트리거를 스크롤 영역 상단 쪽으로 올린다.
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const frameId = requestAnimationFrame(() => {
+      triggerRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [open]);
+
   return (
-    <PopoverPrimitive.Root open={open} onOpenChange={handleOpenChange}>
+    <PopoverPrimitive.Root open={open} onOpenChange={handleRootOpenChange}>
       <PopoverPrimitive.Trigger asChild>
         <button
+          ref={triggerRef}
           type="button"
           disabled={disabled}
           onBlur={onBlur}
           aria-invalid={error || undefined}
           className={cn(
-            'bg-surface-white border-input-border data-[state=open]:border-border-primary data-[state=open]:ring-border-primary flex w-full items-center gap-2 rounded-md border px-4 py-3 outline-none disabled:cursor-not-allowed data-[state=open]:ring-2 data-[state=open]:ring-inset',
+            'bg-surface-white border-input-border data-[state=open]:border-border-primary data-[state=open]:ring-border-primary flex w-full items-center justify-between gap-2 rounded-md border px-4 py-3 outline-none disabled:cursor-not-allowed data-[state=open]:ring-2 data-[state=open]:ring-inset',
             error &&
               'border-border-error ring-border-error data-[state=open]:border-border-error data-[state=open]:ring-border-error ring-2 ring-inset',
             className,
           )}
         >
-          <CalendarIcon aria-hidden className="text-text-basic size-5 shrink-0" />
           <span
             className={cn(
-              'text-body-sm flex-1 text-left',
+              'text-body-sm min-w-0 flex-1 text-left',
               displayDate !== null ? 'text-text-basic' : 'text-text-disabled',
             )}
           >
             {displayDate ?? placeholder}
           </span>
+          <CalendarIcon aria-hidden className="text-text-basic size-5 shrink-0" />
         </button>
       </PopoverPrimitive.Trigger>
 
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
+          side="bottom"
           align="start"
           sideOffset={4}
-          className="bg-surface-white z-50 flex w-90 max-w-[calc(100vw-32px)] flex-col rounded-2xl shadow-[0px_4px_16px_rgba(96,96,96,0.3)]"
+          avoidCollisions={false}
+          className="bg-surface-white z-[60] flex max-h-[min(360px,calc(100dvh-8rem))] w-90 max-w-[calc(100vw-32px)] flex-col overflow-y-auto overscroll-contain rounded-2xl shadow-[0px_4px_16px_rgba(96,96,96,0.3)]"
         >
-          <div className="border-border-gray-light flex h-22 items-center justify-between border-b px-4">
+          <div className="border-border-gray-light flex h-22 shrink-0 items-center justify-between border-b px-4">
             <button
               type="button"
               aria-label="이전 달"
@@ -86,7 +111,7 @@ export const DatePicker = ({
             </button>
           </div>
 
-          <div className="border-divider-gray-light flex h-8 items-center border-b px-4">
+          <div className="border-divider-gray-light flex h-8 shrink-0 items-center border-b px-4">
             {WEEKDAY_LABELS.map((label) => (
               <span
                 key={label}
@@ -97,7 +122,7 @@ export const DatePicker = ({
             ))}
           </div>
 
-          <div className="flex flex-col gap-1 px-4 py-1">
+          <div className="flex flex-col gap-1 px-4 py-1 pb-3">
             {weeks.map((week) => (
               <div key={week[0].date.toISOString()} className="flex items-center">
                 {week.map((cell) => (

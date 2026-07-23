@@ -21,10 +21,10 @@ export const ProjectsPageContent = () => {
 
   return (
     <PageContainer>
-      <div className="border-border-gray-light mt-15.5 flex flex-row items-start justify-between border-b-[3px] pb-8">
+      <div className="border-border-gray-light mt-8 flex flex-col gap-4 border-b-[3px] pb-8 lg:mt-15.5 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h1 className="text-heading-lg text-text-basic font-bold">프로젝트 관리</h1>
-          <p className="text-heading-xs text-text-subtle mt-2 font-normal">
+          <p className="text-body-sm text-text-subtle lg:text-heading-xs mt-2 font-normal">
             프로젝트를 생성하고 팀원들과 후기를 주고받으세요.
           </p>
         </div>
@@ -32,7 +32,8 @@ export const ProjectsPageContent = () => {
           type="button"
           variant="primary"
           size="medium"
-          leftIcon={<SettingIcon aria-hidden className="size-6" />}
+          leftIcon={<SettingIcon aria-hidden className="size-4 lg:size-6" />}
+          className="h-11 w-full justify-center lg:h-auto lg:w-auto"
           onClick={() => setIsCreateModalOpen(true)}
         >
           새 프로젝트 생성
